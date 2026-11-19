@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maré Miúda: Entre Ilhas | Protótipo</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/interface/index.js"></script>
+</head>
+<body>
+  <a class="pular" href="#jogo">Pular para o jogo</a>
+  <main id="jogo" class="pagina">
+    <header>
+      <p class="etiqueta">Caderno de travessias · Protótipo 01</p>
+      <h1>Maré Miúda: Entre Ilhas</h1>
+      <p class="secundario" lang="en">Tiny Tide: Between Islands</p>
+    </header>
+
+    <nav aria-label="Fases de teste" class="fases">
+      <button type="button" data-fase="1" aria-pressed="true">01 · Onda</button>
+      <button type="button" data-fase="2" aria-pressed="false">02 · Garça</button>
+      <button type="button" data-fase="3" aria-pressed="false">03 · Busca</button>
+    </nav>
+
+    <section class="laboratorio" aria-labelledby="nome-fase">
+      <div class="descricao">
+        <h2 id="nome-fase"></h2>
+        <p id="objetivo"></p>
+      </div>
+      <dl class="indicadores">
+        <div><dt>Maré</dt><dd id="mare"></dd></div>
+        <div><dt>Passos</dt><dd id="passos"></dd></div>
+        <div><dt>Erros</dt><dd id="erros"></dd></div>
+      </dl>
+      <p id="previsao" class="previsao"></p>
+      <div id="moldura" class="moldura">
+        <canvas id="tabuleiro" width="256" height="192" role="img" aria-label="Mapa da fase" aria-describedby="posicao previsao">
+          Texto alternativo do mapa disponível em “Mapa em texto e ajuda”.
+        </canvas>
+      </div>
+      <p id="posicao" class="visualmente-oculto"></p>
+      <p id="fragmento" class="inventario" hidden></p>
+      <p id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
+
+      <div class="acoes">
+        <div class="direcional" role="group" aria-label="Mover o siri">
+          <button type="button" data-direcao="cima" aria-label="Mover para cima">↑</button>
+          <button type="button" data-direcao="esquerda" aria-label="Mover para a esquerda">←</button>
+          <button type="button" data-direcao="baixo" aria-label="Mover para baixo">↓</button>
+          <button type="button" data-direcao="direita" aria-label="Mover para a direita">→</button>
+        </div>
+        <button id="reiniciar" type="button">Reiniciar</button>
+      </div>
+
+      <details id="ajuda">
+        <summary>Mapa em texto e ajuda</summary>
+        <p id="ensino"></p>
+        <p>Use setas, WASD ou toque nos botões. R reinicia. Passos bloqueados não contam.</p>
+        <pre id="grade" aria-label="Representação por símbolos do tabuleiro"></pre>
+        <p>S: início · .: chão firme · =: baixio · #: bloqueio · C: concha · B: fragmento · G: saída.</p>
+      </details>
+    </section>
+
+    <footer>© 2026 Luigi Scofano de Araujo. Todos os direitos reservados.</footer>
+  </main>
+</body>
+</html>

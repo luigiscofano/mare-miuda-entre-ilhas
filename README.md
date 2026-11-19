@@ -2,11 +2,25 @@
 
 *Tiny Tide: Between Islands*
 
-Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. Este repositório é independente do Miudezas: não modifica seu aplicativo, código, recursos, publicações ou saves.
+Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. Este protótipo cinza testa o núcleo em três travessias curtas. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
 
-**Estado deste PR:** fundação documental. A versão jogável virá no PR do protótipo; não há link de jogo publicado.
+**Estado:** Fundação e protótipo, com arte provisória. A campanha, a identidade e o áudio finais são etapas futuras.
 
-[Roteiro](docs/producao/README.md) · [Campanha](docs/campanha/README.md) · [Turnos](src/motor/README.md) · [Fases propostas](src/fases/README.md)
+[Como jogar localmente](#como-jogar-localmente) · [Regras](#regras) · [Produção](docs/producao/README.md) · [Campanha](docs/campanha/README.md) · [Fases e soluções](src/fases/README.md)
+
+## Como jogar localmente
+
+Com Node.js 24 ou posterior, execute na raiz:
+
+```sh
+npm test
+npm run build
+npm run test:offline
+```
+
+Abra `dist/mare-miuda-prototipo.html` no navegador para jogar sem conexão. A outra opção é executar `npm run serve` (requer Python 3) e abrir `http://127.0.0.1:4173`. O protótipo não precisa instalar dependências para compilar ou rodar os testes de motor.
+
+<a id="regras"></a>
 
 ## Documentação
 
@@ -67,7 +81,7 @@ Não iniciadas. Pranchas aparecerão na fatia vertical, marcadas como estudos e 
 <details>
 <summary>Artes do jogo e animação</summary>
 
-Planejada: arte cinza original no protótipo. Ver [guia de arte](docs/arte/README.md).
+No protótipo, a arte cinza lê terreno, maré e previsão de ameaça. O desenho do siri e do fragmento são matrizes de pixels editáveis em TypeScript. Nenhum recurso do jogo original é importado. [Guia de arte](docs/arte/README.md).
 
 </details>
 
@@ -94,7 +108,7 @@ Não implementados nesta entrega. A música e os sinais da maré terão volumes 
 <details>
 <summary>Arquitetura e fluxo</summary>
 
-Fluxo proposto: entrada traduz o comando → motor puro resolve o turno → interface publica o novo estado → Canvas desenha. O índice de fases e o validador usam os mesmos dados e regras. A animação futura será declarativa e não contará turnos. [Contrato do motor](src/motor/README.md).
+Entrada traduz o comando → motor puro resolve o turno → interface publica o novo estado → Canvas desenha. O índice de fases e o validador usam os mesmos dados e regras. A animação futura será declarativa e não contará turnos. [Contrato do motor](src/motor/README.md).
 
 </details>
 
@@ -112,7 +126,7 @@ TypeScript, HTML semântico, CSS e Canvas 2D; Node.js 24 no script de build e no
 <details>
 <summary>Código e estrutura de pastas</summary>
 
-Planejados: - `src/motor/`: estado, regras e eventos.
+- `src/motor/`: estado, regras e eventos.
 - `src/fases/`, `src/validacao/`: mapas, soluções e validação por reprodução.
 - `src/entrada/`, `src/interface/`, `src/render/`: controles, estado perceptível e arte provisória.
 - `tests/`, `scripts/` e `docs/`: testes, build e cadernos de produção.
@@ -125,7 +139,7 @@ Planejados: - `src/motor/`: estado, regras e eventos.
 <details>
 <summary>Como rodar e publicar</summary>
 
-Planejamento: build web estático, arquivo independente para teste local e publicação apenas com autorização e verificações. Não há build ou deploy neste PR.
+Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão modular em `dist/index.html` e um HTML autônomo para teste. Deploy e merge não são disparados pelo build; a publicação é uma etapa deliberada após aprovação. O GitHub Actions roda verificações, sem publicar.
 
 </details>
 
@@ -134,7 +148,7 @@ Planejamento: build web estático, arquivo independente para teste local e publi
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Planejamento: três soluções, passos limítrofes, movimentos inválidos, eventos simultâneos, terceira levada, inventário e reinício. Teclado, toque, foco visível, texto e sinais que não dependam de cor. Validação em motor e navegador no PR do protótipo.
+Os testes de motor cobrem as três soluções, passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário e reinício. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md).
 
 </details>
 

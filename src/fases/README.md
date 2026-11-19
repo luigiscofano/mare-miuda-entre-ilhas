@@ -36,4 +36,4 @@ SG#
 
 **Solução:** ↓ ↓ → ← → ← ↑ ↑ →. A ilha permite andar enquanto a água está alta; a sexta ação baixa a água. Testar volta, coleta não duplicada e reinício limpando a ação intermediária.
 
-As três soluções serão reproduzidas pelo motor no PR do protótipo; não dependem do cronômetro de uma animação.
+Fonte de dados: [index.ts](index.ts). As três soluções são executadas pelo motor nos testes, não pelo cronômetro de uma animação.
