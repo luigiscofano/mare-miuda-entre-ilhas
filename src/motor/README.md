@@ -1,4 +1,4 @@
-# Motor por turnos: especificação
+# Motor por turnos
 
 `iniciar(fase)` devolve a posição inicial, a última casa firme, a contagem de zero e o inventário vazio. A maré é derivada dos passos; o estado não duplica uma informação que pode divergir. Cada `executarPasso` recebe estado anterior imutável e devolve estado e eventos discretos.
 
