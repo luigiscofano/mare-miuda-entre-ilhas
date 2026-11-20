@@ -22,7 +22,7 @@ const praia = (): Progresso => andar({
   concluidas: ['primeira-onda', 'sombra-da-garca', 'busca-e-volta', 'ponta-da-garca'],
 }, 'RRRR');
 
-test('Vinte e seis fases têm testemunhas aceitas pelo motor real', () => {
+test('Todas as fases têm testemunhas aceitas pelo motor real', () => {
   assert.equal(new Set(TODAS_AS_FASES.map(fase => fase.id)).size, TODAS_AS_FASES.length);
   for (const f of TODAS_AS_FASES) assert.ok(validarSolucao(f), f.id);
 });
