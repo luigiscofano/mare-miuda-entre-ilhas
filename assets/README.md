@@ -7,3 +7,5 @@ O build modular copia o PNG sem conversão. A versão autônoma encaixa os mesmo
 A versão em inglês e a opção Corrente de Espuma (B) permanecem no [acervo dos estudos](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/3), sem fazer parte do jogo em português.
 
 © 2026 Luigi Scofano de Araujo. Todos os direitos reservados.
+
+`cabo-baixo-192.png` é o fundo nativo do estudo aprovado, preservado byte por byte (192 × 144). A camada de seleção é desenhada pelo jogo; a proposta de sprite menor recusada não foi copiada para os recursos de produção.

@@ -229,6 +229,59 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def conferir_enseadinha(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+        versao: 1,
+        progresso: {posicao: {coluna: 7, linha: 1}, viuTutorial: true,
+          concluidas: ['primeira-onda', 'sombra-da-garca', 'busca-e-volta', 'ponta-da-garca']},
+        audio: {musica: 0, efeitos: 0},
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#viagem-praia')).to_contain_text('1/2')
+    expect(pagina.locator('#cabo-baixo')).to_have_js_property('naturalWidth', 192)
+    salvar_captura(pagina, f"cabo-baixo-navegavel-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'R', toque, mapa=True)
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#viagem-praia')).to_contain_text('2/2')
+    expect(pagina.locator('#entrar-fase')).to_have_text('Voltar ao Cabo Baixo')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#entrar-fase')).to_have_text('Ir à Enseadinha')
+    tocar(pagina, '#entrar-fase', toque)
+    jogar(pagina, 'RR', toque, mapa=True)  # Segundo avanço bloqueado.
+    expect(pagina.locator('#mensagem-praia')).to_contain_text('Conclua Fio de areia')
+    for indice, (solucao, desvio) in enumerate([
+        ('RRRDUDURR', ('D', 'RDRRRLLLU', 'U')),
+        ('RRDUDULLUDUDLLDUDURRU', ('U', 'RURRRLRDR', 'D')),
+        ('RRDUDRR', ('D', 'UUDRDRRRRUDUDLLUU', 'U')),
+    ]):
+        tocar(pagina, '#entrar-fase', toque)
+        jogar(pagina, solucao, toque)
+        expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+        tocar(pagina, '#voltar-fase', toque)
+        if indice == 0:
+            pagina.reload()
+            tocar(pagina, '#comecar', toque)
+            expect(pagina.locator('#viagem-praia')).to_contain_text('2/2')
+            expect(pagina.locator('#progresso-praia')).to_contain_text('1/3')
+            salvar_captura(pagina, f"enseadinha-prototipo-{pagina.viewport_size['width']}px")
+        if not toque:
+            ida, comandos, volta = desvio
+            jogar(pagina, ida, mapa=True)
+            tocar(pagina, '#entrar-fase')
+            jogar(pagina, comandos)
+            expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+            tocar(pagina, '#voltar-fase')
+            jogar(pagina, volta, mapa=True)
+        jogar(pagina, 'R', toque, mapa=True)
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#viagem-praia')).to_contain_text('1/2')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+
+
 with sync_playwright() as p:
     motor = os.getenv('MARE_BROWSER', 'chromium')
     if motor not in ('chromium', 'webkit'):
@@ -240,6 +293,7 @@ with sync_playwright() as p:
     print('Desktop 1180 × 820: três fases, teclado, erros, reinício, pintura e HTML offline.')
     conferir_praia(desktop, opcional=True)
     conferir_lote(desktop)
+    conferir_enseadinha(navegador.new_page(viewport={'width': 1180, 'height': 820}, offline=(PRIMEIRA_PAGINA == OFFLINE)))
     print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
         aparelho = navegador.new_page(viewport={'width': largura, 'height': 844}, has_touch=True,
@@ -247,5 +301,6 @@ with sync_playwright() as p:
         conferir_jogo(aparelho, toque=True)
         conferir_praia(aparelho, toque=True, opcional=False)
         conferir_lote(aparelho, toque=True, recifes_primeiro=False)
+        conferir_enseadinha(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()

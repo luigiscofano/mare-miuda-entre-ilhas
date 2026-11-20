@@ -47,3 +47,7 @@ A passagem da Enseada abre só depois de `recife-retorno` e `mangue-reuniao`. A 
 A descrição em casas acima é histórica. A seleção atual usa um grafo; um toque ou tecla segue a trilha completa e só para no próximo marco, mesmo se o desenho fizer curvas. Praia, arquipélago, Recifes e Mangue seguem este contrato. Somente as fases usam deslocamento célula a célula. Veja a [revisão de escopo, temas e leitura visual](../producao/escopo-e-leitura.md).
 
 A curva aumenta por etapas: Praia introdutória, lógica leve no segundo mundo, combinação no terceiro e mapas mais amplos, rotas que podem fechar, fuga sinalizada, busca, moedas sob limite e chefes nos últimos. Consulte o [plano revisado](../producao/escopo-e-leitura.md). A prova de moedas da bancada não acrescenta obstáculo à campanha tutorial.
+
+## Praia em duas telas
+
+Cabo Baixo tem quatro marcos principais, contando o encontro existente, e a Ilhota Perolada. Após vencer a Ponta da garça, siga à direita e abra o portal para a Enseadinha. A passagem de volta no início da nova tela devolve o siri ao portal do Cabo. Três desafios principais liberam o novo embarque, sem exigir os três opcionais. O embarque antigo foi mantido para saves anteriores, e o arquipélago ainda desembarca no ponto original do Cabo. O mundo já tem dez fases regulares; os dois chefes completos seguem no plano.

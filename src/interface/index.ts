@@ -1,9 +1,10 @@
 import { executarPasso, iniciar, LIMITE_LEVADAS, mareAlta, passosAteVirada, totalFragmentos, vaiAtacar } from '../motor/index.ts';
 import type { Acao, Direcao, Evento } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
-import { desenhar, desenharPraia, LARGURA } from '../render/index.ts';
+import { desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
 import { conectarTeclado } from '../entrada/index.ts';
 import { abriuEnseada, concluirFase, entradaEm, ehIdFase, moverNoMapa, mundoAtual, nomeDo, podeSairDaPraia, rotaLivre, saidaEm, viajar } from '../campanha/index.ts';
+import { caminhoDoCabo } from '../campanha/cabo-baixo.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
 import { carregar, salvar } from '../persistencia/index.ts';
 import { criarAudio } from '../audio/index.ts';
@@ -32,6 +33,7 @@ function storageLocal() {
 }
 
 const tabuleiro = montarCanvas('#tabuleiro', '#moldura');
+const arteCabo = buscar<HTMLImageElement>('#cabo-baixo');
 const mapaPraia = montarCanvas('#mapa-praia', '#moldura-praia');
 const storage = storageLocal();
 let save = carregar(storage);
@@ -94,19 +96,22 @@ function atualizarPraia(mensagem = ''): void {
   const mundo = mundoAtual(p);
   const entrada = entradaEm(p.posicao, mundo);
   const concluidas = p.concluidas.filter(id =>
-    mundo === 'recifes' ? id.startsWith('recife-') : mundo === 'mangue' ? id.startsWith('mangue-')
+    mundo === 'praia-enseadinha' ? ['praia-fio-de-areia', 'praia-pocas-espelho', 'praia-mirante'].includes(id)
+    : mundo === 'recifes' ? id.startsWith('recife-') : mundo === 'mangue' ? id.startsWith('mangue-')
     : ['primeira-onda', 'sombra-da-garca', 'busca-e-volta', 'ponta-da-garca'].includes(id)).length;
   const perola = p.concluidas.includes('ilhota-perolada');
   const tituloMapa = nomeDo(mundo);
   buscar('#titulo-praia').textContent = tituloMapa;
   buscar('#mapa-praia').setAttribute('aria-label', 'Mapa caminhável: ' + tituloMapa);
   buscar('#orientacao-praia').textContent = mundo === 'praia'
-    ? (concluidas ? 'As passagens se abrem à medida que você resolve as travessias. A ilhota é opcional.'
+    ? (concluidas ? 'As passagens se abrem à medida que você resolve as travessias. Depois da Ponta da garça, siga à direita para a Enseadinha.'
       : 'Faça o primeiro passo para a direita, pare no marco e entre na Primeira onda.')
+    : mundo === 'praia-enseadinha' ? 'Atravesse o braço de areia, explore os desvios ou volte ao Cabo Baixo pelo começo da trilha.'
     : mundo === 'arquipelago' ? 'Visite Recifes Expostos e Mangue dos Dois Siris em qualquer ordem. A Enseada exige ambos.'
     : 'Complete as três travessias. O atalho sul só se abre depois da última.';
   buscar('#progresso-praia').textContent = mundo === 'praia'
     ? `Rota principal: ${concluidas}/4 · Concha Perolada: ${perola ? 'encontrada' : 'não encontrada'}.`
+    : mundo === 'praia-enseadinha' ? `Rota da Enseadinha: ${concluidas}/3. Os três desvios não bloqueiam a saída.`
     : mundo === 'arquipelago'
       ? `Recifes: ${p.concluidas.includes('recife-retorno') ? 'concluídos' : 'a visitar'} · Mangue: ${p.concluidas.includes('mangue-reuniao') ? 'concluído' : 'a visitar'}.`
       : `Travessias concluídas: ${concluidas}/3.`;
@@ -116,6 +121,7 @@ function atualizarPraia(mensagem = ''): void {
     : mundo === 'arquipelago' ? 'Bifurcação das ilhas.' : 'Cais da Praia das Conchas.';
   buscar('#mensagem-praia').textContent = mensagem;
   const entrar = buscar<HTMLButtonElement>('#entrar-fase');
+  buscar('#viagem-praia').textContent = mundo === 'praia' ? '1/2 · Cabo Baixo' : mundo === 'praia-enseadinha' ? '2/2 · Enseadinha (arte provisória)' : '';
   entrar.disabled = !entrada || quadroMapa !== undefined;
   paineis.praia.setAttribute('aria-busy', String(quadroMapa !== undefined));
   const rotas: string[] = [];
@@ -130,11 +136,18 @@ function atualizarPraia(mensagem = ''): void {
     if (saida) rotas.push(`${simbolos[direcao]} ${nome ?? 'Bifurcação ou cais'}${rotaLivre(p, saida.t) ? '' : ' (bloqueada)'}`);
   }
   buscar('#saidas-praia').textContent = rotas.join(' · ');
-  entrar.textContent = podeSairDaPraia(p) ? 'Seguir para o arquipélago' : entrada?.destino
-    ? (entrada.id === 'porto' ? 'Voltar ao arquipélago' : 'Visitar região')
-    : entrada?.id === 'enseada' ? 'Ver passagem' : 'Entrar na fase';
-  desenharPraia(mapaPraia.ctx, p);
+  if (podeSairDaPraia(p)) entrar.textContent = 'Seguir para o arquipélago';
+  else if (entrada?.id === 'porto') entrar.textContent = 'Voltar ao arquipélago';
+  else if (entrada?.id === 'enseada') entrar.textContent = 'Ver passagem';
+  else if (entrada?.destino) entrar.textContent = entrada.id.startsWith('rumo-') ? 'Visitar região' : entrada.nome;
+  else entrar.textContent = 'Entrar na fase';
+  if (podeDesenharCabo(mundo, arteCabo)) desenharCabo(mapaPraia.ctx, p, arteCabo);
+  else desenharPraia(mapaPraia.ctx, p);
 }
+
+arteCabo.addEventListener('load', () => {
+  if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'praia') atualizarPraia();
+});
 
 function abrirPraia(mensagem = ''): void {
   trocarTela('praia');
@@ -257,13 +270,17 @@ function mover(direcao: Direcao): void {
       concluir();
       return;
     }
-    const percurso = prepararTravessia(proximo.caminho);
+    const caminhoVisual = podeDesenharCabo(mundoAtual(save.progresso), arteCabo)
+      ? caminhoDoCabo(save.progresso.posicao, proximo.progresso.posicao) : undefined;
+    const percurso = prepararTravessia(caminhoVisual ?? proximo.caminho);
     let inicio: number | undefined;
     const animar = (agora: number) => {
       inicio ??= agora;
       const fracao = (agora - inicio) / percurso.duracao;
       if (fracao >= 1) { concluir(); return; }
-      desenharPraia(mapaPraia.ctx, save.progresso, percurso.ponto(fracao));
+      const ponto = percurso.ponto(fracao);
+      if (caminhoVisual) desenharCabo(mapaPraia.ctx, save.progresso, arteCabo, ponto);
+      else desenharPraia(mapaPraia.ctx, save.progresso, ponto);
       quadroMapa = window.requestAnimationFrame(animar);
     };
     quadroMapa = window.requestAnimationFrame(animar);
@@ -294,7 +311,7 @@ const voltar = () => {
 
 function abrirCreditos(venceu = false) {
   buscar('#desfecho').textContent = venceu
-    ? 'Você chegou à ponta da praia. A primeira viagem termina aqui; use Continuar viagem para seguir às próximas ilhas.'
+    ? 'Você chegou à ponta da praia. A primeira viagem termina aqui; volte ao mapa para seguir à Enseadinha ou embarcar pelas próximas ilhas.'
     : 'O caminho começa na Praia das Conchas.';
   trocarTela('creditos');
 }
