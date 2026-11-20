@@ -31,6 +31,7 @@ function prepararInterface() {
   const contexto = { fillStyle: '', fillRect(...args) { quadros.push([this.fillStyle, ...args]); } };
   pegar('#tabuleiro').getContext = () => contexto;
   pegar('#moldura').clientWidth = 500;
+  pegar('#moldura-logo').clientWidth = 400;
   pegar('#moldura-praia').clientWidth = 500;
   pegar('#mapa-praia').getContext = () => contexto;
   const fases = Array.from({ length: 3 }, (_, i) => new ElementoFalso({ fase: String(i + 1) }));
@@ -64,11 +65,17 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
   assert.ok(modulo, 'A versão offline precisa embutir seu módulo.');
   assert.ok(html.includes('<style>'));
+  const marca = html.match(/id="marca-praia" src="data:image\/png;base64,([^"]+)"/)?.[1];
+  assert.ok(marca, 'O HTML offline incorpora a marca sem rede.');
+  const png = await readFile(new URL('../assets/logo-placa-de-areia-pt.png', import.meta.url));
+  assert.deepEqual(Buffer.from(marca, 'base64'), png, 'A imagem aprovada não pode ser reamostrada.');
+
   assert.ok(!html.includes("href=\"./styles.css\""));
   const { pegar, quadros, fases, botoes, mapa, tecla, storage } = prepararInterface();
   await import(modulo);
   const ler = id => pegar(id).textContent;
   assert.equal(pegar('#inicio').hidden, false);
+  assert.equal(pegar('#marca-praia').style.width, '360px');
   pegar('#bancada').click();
   assert.equal(ler('#nome-fase'), 'Passagem da primeira onda');
   assert.equal(pegar('#tabuleiro').style.width, '256px');
@@ -105,9 +112,15 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
 
   pegar('#voltar-fase').click();
   pegar('#comecar').click();
+  const bilheteAntes = ler('#progresso-praia');
+  assert.ok(quadros.some(([cor]) => cor === '#dfb050'), 'A plumagem amarela só serve ao render do mapa.');
+  assert.doesNotMatch(bilheteAntes, /bem-te-vi/i);
   const movimento = { U: 'cima', D: 'baixo', L: 'esquerda', R: 'direita' };
   const andar = rota => [...rota].forEach(d => mapa[movimento[d]].click());
   const jogar = rota => [...rota].forEach(d => botoes[movimento[d]].click());
+  andar('D'); // O cenário marítimo não adquiriu uma casa caminhável.
+  assert.match(ler('#mensagem-praia'), /mar aberto/);
+  assert.equal(ler('#progresso-praia'), bilheteAntes);
   const entrar = () => pegar('#entrar-fase').click();
   const voltar = () => pegar('#voltar-fase').click();
   andar('R'); entrar(); jogar('RRR'); voltar();

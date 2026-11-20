@@ -27,6 +27,10 @@ def conferir_jogo(pagina, toque=False):
     falhas = []
     pagina.on('pageerror', lambda erro: falhas.append(str(erro)))
     pagina.goto(OFFLINE)
+    marca = pagina.locator('#marca-praia')
+    assert marca.evaluate("(img) => img.complete && img.naturalWidth === 180 && img.naturalHeight === 94")
+    assert marca.evaluate('(img) => img.clientWidth % img.naturalWidth === 0')
+    salvar_captura(pagina, f"abertura-placa-de-areia-{pagina.viewport_size['width']}px")
     tocar(pagina, '#bancada', toque)
     expect(pagina.locator('#nome-fase')).to_have_text('Passagem da primeira onda')
     expect(pagina.locator('footer')).to_contain_text('Luigi Scofano de Araujo')

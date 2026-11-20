@@ -1,4 +1,4 @@
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { stripTypeScriptTypes } from 'node:module';
 import { dirname, join, posix, sep } from 'node:path';
 
@@ -43,9 +43,14 @@ await mkdir(pasta, { recursive: true });
 await compilarFontes('src');
 const html = await readFile('index.html', 'utf8');
 const css = await readFile('styles.css', 'utf8');
+const logo = 'assets/logo-placa-de-areia-pt.png';
+await mkdir(join(pasta, 'assets'), { recursive: true });
+await copyFile(logo, join(pasta, logo));
+const placaEmbutida = 'data:image/png;base64,' + (await readFile(logo)).toString('base64');
 await writeFile(join(pasta, 'index.html'), html);
 await writeFile(join(pasta, 'styles.css'), css);
 await writeFile(join(pasta, 'mare-miuda-prototipo.html'), html
   .replace('<link rel="stylesheet" href="./styles.css">', `<style>\n${css}</style>`)
-  .replace('./src/interface/index.js', gerarUrl('src/interface/index.js')));
+  .replace('./src/interface/index.js', gerarUrl('src/interface/index.js'))
+  .replace('./' + logo, placaEmbutida));
 console.log('Build em dist/; HTML offline em dist/mare-miuda-prototipo.html');
