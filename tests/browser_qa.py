@@ -119,6 +119,26 @@ def conferir_praia(pagina, toque=False, opcional=False):
     expect(pagina.locator('#posicao-praia')).to_contain_text('Primeira onda')
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#lembrete-fase')).to_be_visible()
+    expect(pagina.locator('#siri-aprovado')).to_have_js_property('naturalWidth', 35)
+    assert pagina.locator('#moldura').evaluate('(moldura) => moldura.scrollWidth === moldura.clientWidth')
+    assert pagina.locator('#tabuleiro').evaluate("""(canvas) => {
+        const alvo = document.querySelector('#siri-aprovado');
+        const esperado = document.createElement('canvas');
+        esperado.width = 35; esperado.height = 27;
+        const origem = esperado.getContext('2d');
+        origem.drawImage(alvo, 0, 0);
+        const rgba = origem.getImageData(0, 0, 35, 27).data;
+        const x = (canvas.width - 4 * 40) / 2 + 20 - 17;
+        const y = (canvas.height - 2 * 40) / 2 + 20 - 15;
+        const atual = canvas.getContext('2d').getImageData(x, y, 35, 27).data;
+        for (let i = 0; i < rgba.length; i += 4) {
+            if (rgba[i+3] === 0) continue;
+            if (rgba[i+3] !== 255 || rgba.slice(i,i+4).some((v,j) => v !== atual[i+j])) return false;
+        }
+        return canvas.clientWidth % canvas.width === 0 && canvas.width === 280;
+    }"""), 'O sprite no tabuleiro precisa coincidir com os pixels nativos do PNG.'
+    salvar_captura(pagina, f"siri-aprovado-em-travessia-{pagina.viewport_size['width']}px")
+
     jogar(pagina, 'RRR', toque)
     tocar(pagina, '#voltar-fase', toque)
     expect(pagina.locator('#progresso-praia')).to_contain_text('1/4')

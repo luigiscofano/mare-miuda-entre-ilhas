@@ -1,7 +1,7 @@
 import { executarPasso, iniciar, LIMITE_LEVADAS, mareAlta, passosAteVirada, totalFragmentos, vaiAtacar } from '../motor/index.ts';
 import type { Acao, Direcao, Evento } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
-import { desenhar, desenharPraia, LARGURA } from '../render/index.ts';
+import { ALTURA, ALTURA_TRAVESSIA, desenhar, desenharPraia, LARGURA, LARGURA_TRAVESSIA } from '../render/index.ts';
 import { conectarTeclado } from '../entrada/index.ts';
 import { abriuEnseada, concluirFase, entradaEm, ehIdFase, moverNoMapa, mundoAtual, nomeDo, podeSairDaPraia, rotaLivre, saidaEm, viajar } from '../campanha/index.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
@@ -20,11 +20,17 @@ function montarCanvas(seletor: string, moldura: string) {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas indisponível neste navegador.');
   function escala() {
-    canvas.style.width = `${LARGURA * Math.max(1, Math.floor(borda.clientWidth / LARGURA))}px`;
+    const largura = canvas.width || LARGURA;
+    canvas.style.width = `${largura * Math.max(1, Math.floor(borda.clientWidth / largura))}px`;
   }
   new ResizeObserver(escala).observe(borda);
   escala();
-  return { ctx, escala };
+  function tamanho(largura: number, altura: number) {
+    if (canvas.width !== largura) canvas.width = largura;
+    if (canvas.height !== altura) canvas.height = altura;
+    escala();
+  }
+  return { ctx, escala, tamanho };
 }
 
 function storageLocal() {
@@ -38,6 +44,7 @@ let save = carregar(storage);
 const audio = criarAudio();
 audio.volumes(save.audio);
 
+const siriAprovado = buscar<HTMLImageElement>('#siri-aprovado');
 const logo = buscar<HTMLImageElement>('#marca-praia');
 const molduraLogo = buscar('#moldura-logo');
 function escalaDaLogo() {
@@ -195,9 +202,17 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   }
   buscar('#feedback').textContent = mensagem || mensagens.join(' ');
   buscar('#seguir-fase').hidden = bancada || fase.id !== 'ponta-da-garca' || estado.situacao !== 'vitoria';
-  desenhar(tabuleiro.ctx, fase, estado, bancada ? false : mundoAtual(save.progresso));
+  pintarTabuleiro();
   audio.eventos(eventos);
 }
+
+function pintarTabuleiro(): void {
+  desenhar(tabuleiro.ctx, fase, estado, bancada ? false : mundoAtual(save.progresso), siriAprovado);
+}
+
+siriAprovado.addEventListener('load', () => {
+  if (tela === 'fase' && !bancada) pintarTabuleiro();
+});
 
 function selecionarFase(novoIndice: number, mensagem?: string, focar = true): void {
   indice = novoIndice;
@@ -212,6 +227,7 @@ function selecionarFase(novoIndice: number, mensagem?: string, focar = true): vo
   buscar<HTMLDetailsElement>('#ajuda').open = false;
   buscar('#voltar-fase').textContent = bancada ? 'Tela inicial' : mundoAtual(save.progresso) === 'praia' ? 'Voltar à praia' : 'Voltar ao mapa';
   niveis.forEach((botao, i) => botao.setAttribute('aria-pressed', String(indice === i)));
+  tabuleiro.tamanho(bancada ? LARGURA : LARGURA_TRAVESSIA, bancada ? ALTURA : ALTURA_TRAVESSIA);
   trocarTela('fase', focar);
   atualizarFase([], mensagem ?? 'Fase selecionada. Maré baixa.');
 }

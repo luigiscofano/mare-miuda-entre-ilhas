@@ -24,3 +24,8 @@ A variante A, Placa de Areia, foi escolhida para a abertura. É usada sem modifi
 ## Primeiro lote: arte de teste, não direção final
 
 Recifes usam mar mais frio, corais chapados e o topo claro da pedra segura; Mangue usa paleta oliva, raízes, placa e portão com formas distintas. Os dois siris têm silhuetas de pinças diferentes e o ativo recebe um traço sob os pés. Os desenhos usam a mesma grade, sem pinceladas ou pixels fora da grade. Mapa e cenário são suficientes para testes de regra, mas **a densidade e a composição estão abertas**. A Placa de Areia continua exatamente igual; os estudos de ampliação visual são trabalho separado.
+
+
+## Siri da travessia
+
+O PNG exato da prévia aprovada é `assets/siri-aprovado-1x.png` (35 × 27, RGBA com alfa binário). A sombra faz parte da arte. A âncora (17, 15) coincide com o centro visual da célula na travessia. Não foi reamostrado nem recolorido. O tabuleiro de campanha usa células de 40 × 40 em quadro lógico 280 × 240, exibido em escala inteira. Uma célula continua sendo uma única casa do motor. A bancada histórica cinza, o segundo siri e o marcador provisório do mapa permanecem distintos. As demais artes não foram substituídas neste PR.
