@@ -31,7 +31,6 @@ export function validarMapa(fase: Fase): void {
     throw new Error(`Mecanismos da gruta inválidos: ${fase.id}.`);
   }
   const balsas = fase.balsas ?? [];
-  if (balsas.length && fase.dupla) throw new Error(`Balsas ainda não aceitam dupla: ${fase.id}.`);
   const agua = balsas.flatMap(balsa => balsa.paradas);
   if (agua.some((pos, i) => lerCelula(fase, pos) !== '~'
     || agua.slice(0, i).some(outra => mesmaCasa(outra, pos)))) {

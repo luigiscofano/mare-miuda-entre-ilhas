@@ -25,3 +25,5 @@ Há 17 soluções de campanha e uma prova opcional da bancada. A expansão da Pr
 O lote da Enseada e das Ilhas tem seis testemunhas, busca independente no motor e prova de que os três puzzles das Ilhas ficam insolúveis sem as respectivas balsas. O teste de simultaneidade confirma que a garça avalia a posição após o transporte. Volta pelo porto, atalho, desbloqueios, recarga local e as 17 soluções anteriores também são cobertos.
 
 `lote3.test.ts` reproduz as três soluções nas Grutas e faz busca exaustiva no motor com cada etapa substituída por chão firme, sem remover a saída ou o portão. Cobre mecanismos fora de ordem, passo bloqueado, reinício de estado e recarga de progresso. `browser_qa.py` também percorre as três fases por teclado e toque emulado.
+
+O teste dos dois desvios comprova as rotas autorizadas, o portão sem gasto de turno, o rasante sobre o siri inativo e o transporte de quem ficou na balsa. Uma busca finita no mesmo motor descarta vitórias sem trocar de siri ou, na Deriva, sem balsa. As duas fases e as conclusões opcionais também passam por ida, volta e recarga.

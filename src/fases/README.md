@@ -94,6 +94,12 @@ As seis travessias da Enseadinha incluem três opcionais. Suas rotas estão no [
 
 A [prova jogável do segundo lote](../../docs/processo-de-criacao/07-campanha-e-lote2/README.md) introduz patrulha e balsas em seis fases. O símbolo `~` indica água funda: só se entra quando a balsa estiver naquele ponto.
 
-### Grutas da Espuma
+### Desvios dos siris duplos
+
+- **Vigia em dupla**, na Enseada: leve um siri à placa e deixe o outro no refúgio antes do rasante; a rota sem levadas é `RRRLXRRRXRRR`.
+- **Encontro nos dois cais**, nas Ilhas: use a balsa com o primeiro, coloque o segundo sobre a placa, atravesse e reúna os dois; rota sem levadas `RRRXRRXRRXDRR`.
+- Nas rotas, `R` = direita, `L` = esquerda, `U` = cima, `D` = baixo e `X` = trocar. As fases são opcionais e aparecem após a terceira travessia dos respectivos mundos.
+
+## Grutas da Espuma
 
 As três fases iniciais estão em `lote3.ts`. `K` é a pérola, `E` o encaixe A, `F` a alavanca B e `O` o portão. `etapasGruta` declara a sequência e o mapa tem uma única casa para cada etapa declarada.

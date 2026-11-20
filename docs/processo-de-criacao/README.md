@@ -11,8 +11,8 @@ Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem subs
 | [05 · Mapa por vértices](05-mapa-por-vertices/README.md) | Navegação discreta, migração de saves e revisão de escopo. |
 | [06 · Praia em duas telas](06-praia-ampliada/README.md) | Seis travessias, novas saídas e preservação do save. |
 | [07 · Campanha e segundo lote](07-campanha-e-lote2/README.md) | Matriz dos oito mundos, fases propostas e referências oficiais provisórias. |
+| [08 · Grutas da Espuma](08-grutas/README.md) | Transporte de pérola e mecanismos em ordem. |
+| [09 · Siris duplos em outros mundos](09-siris-duplos/README.md) | Desvios da Enseada e das Ilhas e testes do revezamento. |
 | [Estudos da identidade visual](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/3) | Placa de Areia e Corrente de Espuma, PT/EN, preservadas em PR separado. A foi aprovada para a abertura; B permanece como estudo. |
 
 As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/`. Esse caminho só será integrado junto dos estudos correspondentes.
-
-- [08 · Grutas da Espuma](08-grutas/README.md): entrega de pérola, mecanismos em ordem e travessia de retorno.

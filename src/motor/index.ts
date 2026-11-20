@@ -198,19 +198,25 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   if (!entrada) {
     return { estado: anterior, eventos: [{ tipo: 'bloqueado' }] };
   }
-  let destino = entrada;
   const passos = anterior.passos + 1;
   const eventos: Evento[] = [];
+  let destino = entrada;
+  let destinoOutro = outro;
   if (passos % PASSOS_POR_MARE === 0) {
     eventos.push({ tipo: 'virada', alta: mareAlta(passos) });
-    const montada = balsasNoTurno(fase, anterior.passos).findIndex(p => mesmaCasa(p, entrada));
-    if (montada >= 0) {
-      destino = balsasNoTurno(fase, passos)[montada];
-      eventos.push({ tipo: 'balsa' });
-    }
+    const balsasAntes = balsasNoTurno(fase, anterior.passos);
+    const balsasDepois = balsasNoTurno(fase, passos);
+    const transportar = (pos: Posicao) => {
+      const indice = balsasAntes.findIndex(parada => mesmaCasa(parada, pos));
+      return balsasDepois[indice] ?? pos;
+    };
+    // A corrente leva os ocupantes das balsas mesmo quando é o outro siri que anda.
+    destino = transportar(entrada);
+    destinoOutro = outro && transportar(outro);
+    if (destino !== entrada || destinoOutro !== outro) eventos.push({ tipo: 'balsa' });
   }
   const celula = lerCelula(fase, destino);
-  const posicoes = outro ? [destino, outro] : [destino];
+  const posicoes = destinoOutro ? [destino, destinoOutro] : [destino];
   const motivos = ameacasNoTurno(fase, posicoes, passos);
 
   if (motivos.length > 0) {
@@ -233,8 +239,8 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   const venceu = resolverObjetivo(fase, celulas, fragmentos.length, eventos);
   // Uma saída segura pode completar a missão exatamente no último passo.
   const perdeu = !venceu && terminouOrcamento(fase, passos, eventos);
-  const posicao = movendoParceiro ? anterior.posicao : destino;
-  const posicaoParceiro = dupla ? (movendoParceiro ? destino : dupla.posicao) : undefined;
+  const posicao = movendoParceiro ? (destinoOutro ?? anterior.posicao) : destino;
+  const posicaoParceiro = dupla ? (movendoParceiro ? destino : destinoOutro) : undefined;
   // Os marcos da dupla sempre vêm de um mesmo turno seguro e não se sobrepõem.
   // Portões móveis não são marcos firmes: podem fechar depois do retorno.
   const firmes = celulas.every(casa => casa !== '=' && casa !== 'D' && casa !== '~');
