@@ -15,7 +15,9 @@
 
 Recifes e Mangue continuam disponíveis em qualquer ordem. Para não exigir salto de dificuldade se o jogador escolher Mangue primeiro, a estreia de cada região ensina sua regra isolada; a combinação tardia na Enseada é o primeiro ponto de convergência. Não force as 10 fases ou os opcionais como condição de saída. Use palcos mais largos só quando a leitura de câmera, retorno e blocos estiver clara no celular.
 
-A dupla reaparece em pontos escolhidos pela regra local, sem aparecer em toda fase. A Enseada testa proteger o siri parado de um rasante; a Deriva combina revezamento e transporte. Em mundos posteriores, reservar aparições pontuais para uma entrega que exija revezamento nas Grutas, uma arena com posições complementares na Ressaca e uma travessia combinada no Farol. Essas aparições futuras são propostas, não fases entregues.
+A dupla reaparece em pontos escolhidos pela regra local, sem aparecer em toda fase. A Enseada testa proteger o siri parado de um rasante; a Deriva combina revezamento e transporte. As Grutas já aplicam a regra em duas fases regulares, do transporte com placa à separação entre câmaras. A Ressaca acrescenta duas fases regulares com patrulha, balsas e revezamento mais exigente. O Farol tem dois desafios avançados planejados; chefes continuam fora desta entrega.
+
+A meta passa a ser pelo menos duas fases de coordenação genuína em cada mundo do 3 ao 8, sem transformar toda a campanha em dupla. Um terceiro siri (amarelo) pode estrear a partir do sexto mundo, em fase específica, se o desenho justificar; trio não substitui as duas fases de dupla por mundo.
 
 ## Padrão de ficha e aceite
 

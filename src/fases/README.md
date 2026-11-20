@@ -103,3 +103,14 @@ A [prova jogável do segundo lote](../../docs/processo-de-criacao/07-campanha-e-
 ## Grutas da Espuma
 
 As três fases iniciais estão em `lote3.ts`. `K` é a pérola, `E` o encaixe A, `F` a alavanca B e `O` o portão. `etapasGruta` declara a sequência e o mapa tem uma única casa para cada etapa declarada.
+
+## Grutas e Ressaca em dupla
+
+| Mundo | Fase | Coordenação | Rota sem levadas |
+| --- | --- | --- | --- |
+| Grutas | A pérola e a placa | Um siri transporta a pérola e sustenta a placa; o outro cruza o portão. | `RRXRRRRXRRR` |
+| Grutas | Revezamento nas câmaras | Encaixe pelo portador, alavanca da outra câmara e reunião após a placa. | `XRRXRLRRXRRRXRRRRXR` |
+| Ressaca | Abrigo dos dois cais | Antecipe o rasante nos cais, use a balsa e a placa, depois reúna a dupla. | `RRRDUDXRRRXURXDRXRR` |
+| Ressaca | Ancoradouros em revezamento | Planeje duas balsas sincronizadas e a fuga em quatro alvos de rasante. | `RRRLRRRXRRRXRXDXRXURRRDRR` |
+
+`R` = direita, `L` = esquerda, `U` = cima, `D` = baixo e `X` = trocar. Todas são regulares; trocar continua sem gastar turno.

@@ -331,7 +331,8 @@ def conferir_grutas(pagina, toque=False):
     jogar(pagina, 'U', toque, mapa=True)
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#titulo-praia')).to_have_text('Grutas da Espuma')
-    for indice, rota in enumerate(['RUDRRRR', 'RRRUDLLRRRR', 'RDUDURRRRLRLLLUDUDRRRRR']):
+    solucoes = ['RUDRRRR', 'RRRUDLLRRRR', 'RDUDURRRRLRLLLUDUDRRRRR', 'RRXRRRRXRRR', 'XRRXRLRRXRRRXRRRRXR']
+    for indice, rota in enumerate(solucoes):
         jogar(pagina, 'R', toque, mapa=True)
         tocar(pagina, '#entrar-fase', toque)
         if indice == 1:
@@ -347,7 +348,23 @@ def conferir_grutas(pagina, toque=False):
         tocar(pagina, '#voltar-fase', toque)
     pagina.reload()
     tocar(pagina, '#comecar', toque)
-    expect(pagina.locator('#progresso-praia')).to_contain_text('3/3')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('5/5')
+    jogar(pagina, 'D', toque, mapa=True)
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
+
+    jogar(pagina, 'R', toque, mapa=True)
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#titulo-praia')).to_have_text('Baía da Ressaca')
+    for rota in ['RRRDUDXRRRXURXDRXRR', 'RRRLRRRXRRRXRXDXRXURRRDRR']:
+        jogar(pagina, 'R', toque, mapa=True)
+        tocar(pagina, '#entrar-fase', toque)
+        expect(pagina.locator('#trocar-siri')).to_be_visible()
+        expect(pagina.locator('#previsao')).to_contain_text('Na virada: Balsa')
+        jogar(pagina, rota, toque)
+        expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+        tocar(pagina, '#voltar-fase', toque)
+    expect(pagina.locator('#progresso-praia')).to_contain_text('2/2')
     jogar(pagina, 'D', toque, mapa=True)
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')

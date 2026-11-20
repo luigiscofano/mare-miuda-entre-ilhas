@@ -24,7 +24,7 @@ export function validarMapa(fase: Fase): void {
   }
   const etapas = fase.etapasGruta;
   const acoesGruta = ['K', 'E', 'F'] as const;
-  if (etapas ? (fase.dupla || contar('O') !== 1 || etapas.length < 2
+  if (etapas ? (contar('O') !== 1 || etapas.length < 2
     || new Set(etapas).size !== etapas.length || etapas.some(acao => !acoesGruta.includes(acao))
     || acoesGruta.some(acao => contar(acao) !== Number(etapas.includes(acao))))
     : /[KEFO]/.test(celulas)) {
