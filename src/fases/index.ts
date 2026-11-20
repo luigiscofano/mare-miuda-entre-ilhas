@@ -1,4 +1,5 @@
 import { FASES_ENSEADINHA } from './praia-enseadinha.ts';
+import { FASES_DERIVA, FASES_ENSEADA } from './lote2.ts';
 import type { Fase } from '../motor/index.ts';
 
 export const FASES: readonly Fase[] = [
@@ -102,7 +103,7 @@ export const FASES_MANGUE: readonly Fase[] = [
   },
 ];
 
-export const TODAS_AS_FASES = [...FASES_PRAIA, ...FASES_ENSEADINHA, ...FASES_RECIFES, ...FASES_MANGUE];
+export const TODAS_AS_FASES = [...FASES_PRAIA, ...FASES_ENSEADINHA, ...FASES_RECIFES, ...FASES_MANGUE, ...FASES_ENSEADA, ...FASES_DERIVA];
 
 export const TRES_MOEDAS: Fase = {
   id: 'laboratorio-tres-moedas', nome: 'Três moedas na restinga',

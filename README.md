@@ -68,7 +68,7 @@ O núcleo combina contagem de passos, leitura espacial e previsão. O jogador n�
 <details>
 <summary>Campanha e mapa-múndi</summary>
 
-Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O arquipélago permite Recifes e Mangue em qualquer ordem depois da Praia. Depois das duas regiões surge a passagem da Enseada, que ainda não tem fases. O plano prevê oito mundos, com pelo menos 10 fases por mundo fora dos dois chefes (15 fases por mundo como meta de expansão). Os ramos são opcionais na rota principal. Cada ilha terá tema tanto no arquipélago como dentro das fases; obstáculos ocupam células inteiras em uma malha legível, sem tamanho máximo por objeto. A arte prevê destacar a célula atual e as vizinhas válidas conforme o motor. [Revisão do roteiro](docs/producao/escopo-e-leitura.md). [Plano dos mundos](docs/campanha/README.md) · [Matriz de game design e level design](docs/campanha/matriz.md).
+Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O arquipélago permite Recifes e Mangue em qualquer ordem depois da Praia. Depois das duas regiões, a Enseada oferece três travessias com patrulha; a última delas abre três fases de balsas nas Ilhas à Deriva. O plano prevê oito mundos, com pelo menos 10 fases por mundo fora dos dois chefes (15 fases por mundo como meta de expansão). Os ramos são opcionais na rota principal. Cada ilha terá tema tanto no arquipélago como dentro das fases; obstáculos ocupam células inteiras em uma malha legível, sem tamanho máximo por objeto. A arte prevê destacar a célula atual e as vizinhas válidas conforme o motor. [Revisão do roteiro](docs/producao/escopo-e-leitura.md). [Plano dos mundos](docs/campanha/README.md) · [Matriz de game design e level design](docs/campanha/matriz.md).
 
 </details>
 
@@ -168,7 +168,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as dezessete soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md).
+Os testes cobrem as 23 soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md).
 
 </details>
 

@@ -5,8 +5,10 @@ export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'p
   | 'praia-bolso-mare' | 'praia-trilha-das-pedras' | 'praia-fragmentos-areal';
 export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
 export type IdFase = IdFasePraia | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
-  | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao';
-export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue';
+  | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
+  | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
+  | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada';
+export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva';
 export type Progresso = Readonly<{
   posicao: Posicao;
   concluidas: readonly IdFase[];
@@ -14,7 +16,7 @@ export type Progresso = Readonly<{
   viuTutorial: boolean;
 }>;
 type Entrada = Readonly<{
-  id: IdFase | 'porto' | 'rumo-praia' | 'rumo-recifes' | 'rumo-mangue' | 'enseada' | 'ida-enseadinha' | 'volta-cabo' | 'saida-enseadinha';
+  id: IdFase | 'porto' | 'rumo-praia' | 'rumo-recifes' | 'rumo-mangue' | 'enseada' | 'ida-enseadinha' | 'volta-cabo' | 'saida-enseadinha' | 'rumo-deriva';
   posicao: Posicao;
   nome: string;
   opcional?: boolean;
@@ -51,7 +53,8 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'rumo-praia', posicao: P(1, 3), nome: 'Praia das Conchas', destino: 'praia' },
     { id: 'rumo-recifes', posicao: P(2, 1), nome: 'Recifes Expostos', destino: 'recifes' },
     { id: 'rumo-mangue', posicao: P(5, 3), nome: 'Mangue dos Dois Siris', destino: 'mangue' },
-    { id: 'enseada', posicao: P(6, 1), nome: 'Passagem da Enseada' },
+    { id: 'enseada', posicao: P(6, 1), nome: 'Enseada da Garça', destino: 'enseada' },
+    { id: 'rumo-deriva', posicao: P(7, 3), nome: 'Ilhas à Deriva', destino: 'deriva' },
   ],
   recifes: [
     PORTO,
@@ -65,6 +68,18 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'mangue-placa', posicao: P(4, 1), nome: 'Um segura, outro passa' },
     { id: 'mangue-reuniao', posicao: P(6, 1), nome: 'Reencontro na ponta do mangue' },
   ],
+  enseada: [
+    PORTO,
+    { id: 'enseada-sombra-restinga', posicao: P(2, 1), nome: 'Sombra na restinga' },
+    { id: 'enseada-abrigo-ondas', posicao: P(4, 1), nome: 'Abrigo entre ondas' },
+    { id: 'enseada-farol-baixo', posicao: P(6, 1), nome: 'Corrida ao farol baixo' },
+  ],
+  deriva: [
+    PORTO,
+    { id: 'deriva-primeira-balsa', posicao: P(2, 1), nome: 'A primeira balsa' },
+    { id: 'deriva-duas-margens', posicao: P(4, 1), nome: 'Duas margens' },
+    { id: 'deriva-corrente-cruzada', posicao: P(6, 1), nome: 'Corrente cruzada' },
+  ],
 };
 
 const MUNDOS = [
@@ -73,6 +88,8 @@ const MUNDOS = [
   { mundo: 'arquipelago', nome: 'Arquipélago' },
   { mundo: 'recifes', nome: 'Recifes Expostos' },
   { mundo: 'mangue', nome: 'Mangue dos Dois Siris' },
+  { mundo: 'enseada', nome: 'Enseada da Garça' },
+  { mundo: 'deriva', nome: 'Ilhas à Deriva' },
 ] as const;
 
 export const mundoValido = (mundo: unknown): mundo is Mundo => MUNDOS.some(i => i.mundo === mundo);
@@ -148,9 +165,13 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
     trilha(CRUZAMENTO, P(5, 3), 'direita', 'esquerda', []),
     trilha(P(2, 1), P(6, 1), 'direita', 'esquerda', [P(3.125, 0.625), P(4.75, 0.75)],
       ['recife-retorno', 'mangue-reuniao'], 'A passagem da Enseada abre ao concluir Recifes Expostos e Mangue dos Dois Siris.'),
+    trilha(P(6, 1), P(7, 3), 'direita', 'esquerda', [P(7.25, 2)],
+      ['enseada-farol-baixo'], 'Conclua o trecho da Enseada da Garça para encontrar as correntes.'),
   ],
   recifes: sustentar('recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno'),
   mangue: sustentar('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao', true),
+  enseada: sustentar('enseada-sombra-restinga', 'enseada-abrigo-ondas', 'enseada-farol-baixo', true),
+  deriva: sustentar('deriva-primeira-balsa', 'deriva-duas-margens', 'deriva-corrente-cruzada'),
 };
 
 export const trilhasDo = (mundo: Mundo) => TRILHAS[mundo];
@@ -197,7 +218,7 @@ export function viajar(p: Progresso, destino: Mundo): Progresso {
   const entrada = entradaEm(p.posicao, origem);
   if (!(destino === 'arquipelago' && podeSairDaPraia(p)) && entrada?.destino !== destino) return p;
   const orientacao: Readonly<Record<Mundo, Posicao>> = {
-    praia: P(1, 3), 'praia-enseadinha': P(1, 3), recifes: P(2, 1), mangue: P(5, 3), arquipelago: P(1, 3),
+    praia: P(1, 3), 'praia-enseadinha': P(1, 3), recifes: P(2, 1), mangue: P(5, 3), enseada: P(6, 1), deriva: P(7, 3), arquipelago: P(1, 3),
   };
   const posicao = destino === 'arquipelago' ? orientacao[origem] : destino === 'praia' ? (origem === 'praia-enseadinha' ? PORTAL_CABO : FIM_PRAIA) : CAIS;
   return { ...p, mundo: destino, posicao };
@@ -208,7 +229,7 @@ export function criarProgresso(): Progresso {
 }
 export function ehIdFase(id: unknown): id is IdFase {
   return Object.values(ENTRADAS).some(entradas => entradas.some(entrada =>
-    entrada.id === id && !entrada.destino && entrada.id !== 'enseada'));
+    entrada.id === id && !entrada.destino));
 }
 export function entradaEm(posicao: Posicao, mundo: Mundo = 'praia'): Entrada | undefined {
   return ENTRADAS[mundo].find(entrada => mesmaCasa(entrada.posicao, posicao));
@@ -221,7 +242,7 @@ export function moverNoMapa(progresso: Progresso, direcao: Direcao) {
   return {
     progresso: { ...progresso, posicao: saida.destino },
     caminho: saida.caminho,
-    mensagem: entrada ? `${entrada.opcional ? 'Desvio opcional: ' : ''}${entrada.nome}. ${entrada.destino ? 'Entre para viajar.' : entrada.id === 'enseada' ? 'Passagem aberta; próximo capítulo.' : 'Entre para jogar.'}` : 'Bifurcação das ilhas.',
+    mensagem: entrada ? `${entrada.opcional ? 'Desvio opcional: ' : ''}${entrada.nome}. ${entrada.destino ? 'Entre para viajar.' : 'Entre para jogar.'}` : 'Bifurcação das ilhas.',
   };
 }
 

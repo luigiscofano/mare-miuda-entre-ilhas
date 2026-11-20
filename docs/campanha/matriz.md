@@ -27,5 +27,5 @@ Por fase registre início, refúgios, terreno, objetivo, pistas antes do primeir
 | Abrigo entre ondas | Cruze um baixio sem cair na próxima posição da garça. | Solo firme intermediário. Só um objetivo e nenhuma coleta. |
 | Corrida ao farol baixo | Leve um fragmento antes de voltar pela trilha exposta. | Duas rotas de recuo. Saída requer o fragmento. |
 | A primeira balsa | Caminhe sobre a plataforma, veja o turno de partida e desembarque. | Cais firme em ambos os lados. Não há queda por permanecer na balsa. |
-| Duas margens | Escolha quando buscar o fragmento na margem oposta. | A mesma corrente também faz o retorno. |
+| Duas margens | Escolha quando buscar o fragmento na margem oposta. | A segunda balsa dá um cais de volta sem acrescentar espera. |
 | Corrente cruzada | Passe por um refúgio de transbordo entre duas balsas. | A ordem de deslocamento é estável, e as balsas podem esperar no cais. |
