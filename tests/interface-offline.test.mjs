@@ -10,11 +10,16 @@ class ElementoFalso {
   open = false;
   style = {};
   atributos = {};
+  value = '';
+  disabled = false;
   eventos = {};
   constructor(dataset = {}) { this.dataset = dataset; }
-  addEventListener(nome, fn) { this.eventos[nome] = fn; }
+  addEventListener(nome, fn) { (this.eventos[nome] ??= []).push(fn); }
   setAttribute(nome, valor) { this.atributos[nome] = valor; }
-  click() { this.eventos.click(); }
+  disparar(nome, evento) { for (const ouvinte of this.eventos[nome] ?? []) ouvinte(evento); }
+  click() { if (!this.disabled) this.disparar('click'); }
+  querySelector() { return this; }
+  focus() {}
 }
 function prepararInterface() {
   const elementos = new Map();
@@ -26,32 +31,45 @@ function prepararInterface() {
   const contexto = { fillStyle: '', fillRect(...args) { quadros.push([this.fillStyle, ...args]); } };
   pegar('#tabuleiro').getContext = () => contexto;
   pegar('#moldura').clientWidth = 500;
+  pegar('#moldura-praia').clientWidth = 500;
+  pegar('#mapa-praia').getContext = () => contexto;
   const fases = Array.from({ length: 3 }, (_, i) => new ElementoFalso({ fase: String(i + 1) }));
   const botoes = Object.fromEntries(
     ['cima', 'baixo', 'esquerda', 'direita'].map(direcao => [direcao, new ElementoFalso({ direcao })]),
   );
-  globalThis.document = {
+  const mapa = Object.fromEntries(
+    ['cima', 'baixo', 'esquerda', 'direita'].map(mapaDirecao => [mapaDirecao, new ElementoFalso({ mapaDirecao })]),
+  );
+  const storage = new Map([['miudezas', 'preservado']]);
+  globalThis.document = Object.assign(new ElementoFalso(), {
     querySelector: pegar,
-    querySelectorAll: seletor => seletor === '[data-fase]' ? fases : Object.values(botoes),
-  };
+    querySelectorAll: seletor => seletor === '[data-fase]' ? fases
+      : Object.values(seletor === '[data-direcao]' ? botoes : mapa),
+  });
   globalThis.window = new ElementoFalso();
+  window.localStorage = {
+    getItem: chave => storage.get(chave) ?? null,
+    setItem: (chave, valor) => storage.set(chave, valor),
+  };
   globalThis.Element = ElementoFalso;
   globalThis.ResizeObserver = class { observe() {} };
   function tecla(key, repeat = false) {
-    window.eventos.keydown({ key, repeat, preventDefault() {} });
+    window.disparar('keydown', { key, repeat, preventDefault() {} });
   }
-  return { pegar, quadros, fases, botoes, tecla };
+  return { pegar, quadros, fases, botoes, mapa, tecla, storage };
 }
 
-test('HTML autônomo executa três fases, indicadores, teclado e cliques sem rede', async () => {
+test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', async () => {
   const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
   const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
   assert.ok(modulo, 'A versão offline precisa embutir seu módulo.');
   assert.ok(html.includes('<style>'));
   assert.ok(!html.includes("href=\"./styles.css\""));
-  const { pegar, quadros, fases, botoes, tecla } = prepararInterface();
+  const { pegar, quadros, fases, botoes, mapa, tecla, storage } = prepararInterface();
   await import(modulo);
   const ler = id => pegar(id).textContent;
+  assert.equal(pegar('#inicio').hidden, false);
+  pegar('#bancada').click();
   assert.equal(ler('#nome-fase'), 'Passagem da primeira onda');
   assert.equal(pegar('#tabuleiro').style.width, '256px');
   assert.ok(quadros.length > 0);
@@ -83,4 +101,31 @@ test('HTML autônomo executa três fases, indicadores, teclado e cliques sem red
   assert.equal(ler('#fragmento'), 'Fragmento ainda na ilha');
   assert.equal(ler('#erros'), '0 / 3');
   assert.equal(ler('#mare'), 'Baixa');
+  assert.equal(storage.size, 1, 'A bancada não grava progresso da praia.');
+
+  pegar('#voltar-fase').click();
+  pegar('#comecar').click();
+  const movimento = { U: 'cima', D: 'baixo', L: 'esquerda', R: 'direita' };
+  const andar = rota => [...rota].forEach(d => mapa[movimento[d]].click());
+  const jogar = rota => [...rota].forEach(d => botoes[movimento[d]].click());
+  const entrar = () => pegar('#entrar-fase').click();
+  const voltar = () => pegar('#voltar-fase').click();
+  andar('R'); entrar(); jogar('RRR'); voltar();
+  assert.match(ler('#progresso-praia'), /1\/4/);
+  andar('RDD'); entrar(); jogar('RLDDRRRRU'); voltar();
+  assert.match(ler('#progresso-praia'), /Concha Perolada: encontrada/);
+  andar('UUR'); entrar(); jogar('RRDURR'); voltar();
+  andar('RR'); entrar(); jogar('DDRLRLUUR'); voltar();
+  andar('R'); entrar(); jogar('RRRDDLRRRU');
+  assert.equal(pegar('#seguir-fase').hidden, false);
+  pegar('#seguir-fase').click();
+  assert.equal(pegar('#creditos').hidden, false);
+  assert.match(ler('#desfecho'), /primeira viagem termina/);
+  pegar('#volume-musica').value = '0';
+  pegar('#volume-musica').disparar('input');
+  pegar('#volume-musica').disparar('change');
+  const registro = JSON.parse(storage.get('mare-miuda-entre-ilhas/praia-v1'));
+  assert.equal(registro.progresso.concluidas.length, 5);
+  assert.equal(registro.audio.musica, 0);
+  assert.equal(storage.get('miudezas'), 'preservado');
 });
