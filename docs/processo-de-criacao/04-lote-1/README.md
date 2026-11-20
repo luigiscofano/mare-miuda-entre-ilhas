@@ -10,3 +10,15 @@ Versão de teste, não lançamento. A Praia abre o arquipélago caminhável; Rec
 [HTML autônomo v0.3.0](mare-miuda-lote-1-v0.3.0.html) corresponde a este marco e não entra no build runtime. Para testar, baixe o arquivo do GitHub privado e abra num navegador. Um arquivo diferente pode ter storage independente, conforme o navegador; a compatibilidade de esquema vale quando o jogo é carregado na mesma origem. O save v0.2 foi testado no motor sem alterar a chave.
 
 A arte de cenários e mapa é provisória, voltada à leitura de trilhas e regras. A revisão de densidade e composição é um estudo separado. Nenhuma marca ou asset do Miudezas foi importado. Sem Pages e sem lote 2.
+
+## Capturas de jogo e verificação
+
+Capturas reais do [run de navegador do primeiro lote](https://github.com/luigiscofano/mare-miuda-entre-ilhas/actions/runs/44647899574), sem cursor, em escala integral. Não são pranchas nem arte definitiva.
+
+![Recifes em Duas poças do recife, com um fragmento recolhido](capturas/recifes-partida-desktop.png)
+
+![Mangue em Um segura, outro passa, com o segundo siri ativo](capturas/mangue-partida-desktop.png)
+
+![Mapa caminhável com as duas regiões concluídas e a Enseada marcada como passagem futura](capturas/arquipelago-desktop.png)
+
+Nesse run, Chromium offline e WebKit via localhost passaram em desktop 1180 px e toque emulado a 320 e 390 px. Foram percorridas as duas ordens das regiões, a dupla, o atalho, a retomada após reload e a sinalização da Enseada. WebKit no Linux não equivale a Safari ou aparelho físico. Testes com jogadores e em iPhone continuam pendentes.
