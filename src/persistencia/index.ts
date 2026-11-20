@@ -1,4 +1,4 @@
-import { criarProgresso, destinoValido, ehIdFase } from '../campanha/index.ts';
+import { criarProgresso, destinoValido, ehIdFase, mundoValido } from '../campanha/index.ts';
 import type { Progresso } from '../campanha/index.ts';
 
 export const CHAVE_SAVE = 'mare-miuda-entre-ilhas/praia-v1';
@@ -16,12 +16,14 @@ export function carregar(storage: Pick<Storage, 'getItem'> | undefined): Save {
     const registro = JSON.parse(bruto);
     if (registro?.versao !== VERSAO) return padrao;
     const salvo = registro.progresso;
+    const legado = mundoValido(salvo?.mundo) ? salvo.mundo : undefined;
     const pos = salvo?.posicao;
-    const posicao = pos && Number.isInteger(pos.coluna) && Number.isInteger(pos.linha) && destinoValido(pos)
+    const posicao = pos && Number.isInteger(pos.coluna) && Number.isInteger(pos.linha) && destinoValido(pos, legado)
       ? { coluna: pos.coluna, linha: pos.linha } : padrao.progresso.posicao;
     return {
       progresso: {
         posicao,
+        ...(legado ? { mundo: legado } : {}),
         concluidas: Array.isArray(salvo?.concluidas)
           ? [...new Set<unknown>(salvo.concluidas)].filter(ehIdFase) : [],
         viuTutorial: salvo?.viuTutorial === true,

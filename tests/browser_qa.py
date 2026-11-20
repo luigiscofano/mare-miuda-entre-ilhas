@@ -6,6 +6,7 @@ from playwright.sync_api import expect, sync_playwright
 
 DIST = Path(__file__).resolve().parents[1] / 'dist'
 OFFLINE = (DIST / 'mare-miuda-prototipo.html').as_uri()
+PRIMEIRA_PAGINA = os.getenv('MARE_QA_URL') or OFFLINE
 KEYS = {'U': 'ArrowUp', 'D': 'ArrowDown', 'L': 'ArrowLeft', 'R': 'ArrowRight'}
 BUTTONS = {'U': 'cima', 'D': 'baixo', 'L': 'esquerda', 'R': 'direita'}
 
@@ -17,7 +18,9 @@ def tocar(pagina, seletor, toque=False):
 
 def jogar(pagina, rota, toque=False, mapa=False):
     for direcao in rota:
-        if toque:
+        if direcao == 'X':
+            tocar(pagina, '#trocar-siri', True) if toque else pagina.keyboard.press('Space')
+        elif toque:
             tocar(pagina, f'[data-{"mapa-" if mapa else ""}direcao="{BUTTONS[direcao]}"]', True)
         else:
             pagina.keyboard.press(KEYS[direcao])
@@ -26,7 +29,7 @@ def jogar(pagina, rota, toque=False, mapa=False):
 def conferir_jogo(pagina, toque=False):
     falhas = []
     pagina.on('pageerror', lambda erro: falhas.append(str(erro)))
-    pagina.goto(OFFLINE)
+    pagina.goto(PRIMEIRA_PAGINA)
     marca = pagina.locator('#marca-praia')
     assert marca.evaluate("(img) => img.complete && img.naturalWidth === 180 && img.naturalHeight === 94")
     assert marca.evaluate('(img) => img.clientWidth % img.naturalWidth === 0')
@@ -85,7 +88,7 @@ def salvar_captura(pagina, nome):
 def conferir_praia(pagina, toque=False, opcional=False):
     erros = []
     pagina.on('pageerror', lambda erro: erros.append(str(erro)))
-    pagina.goto(OFFLINE)
+    pagina.goto(PRIMEIRA_PAGINA)
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#titulo-praia')).to_be_visible()
     jogar(pagina, 'R', toque, mapa=True)
@@ -140,17 +143,82 @@ def conferir_praia(pagina, toque=False, opcional=False):
     assert not erros, erros
 
 
+SOLUCOES = {
+    'Recifes Expostos': ('RRDUDURRR', 'RRRDUDULLLRLLLLDRLRURRU', 'DDDUDURRUDUDDRRLRLLUUDUDLLDUDUUUR'),
+    'Mangue dos Dois Siris': ('RXLL', 'RRXRRXRR', 'RRRLRLXRRRRXRRRXRU'),
+}
+
+
+def conferir_lote(pagina, toque=False, recifes_primeiro=True):
+    tocar(pagina, '#voltar-creditos', toque)
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#entrar-fase')).to_have_text('Seguir para o arquipélago')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
+    ordem = ['Recifes Expostos', 'Mangue dos Dois Siris']
+    if not recifes_primeiro:
+        ordem.reverse()
+    rotas = ['RUU', 'DDRRR'] if recifes_primeiro else ['RRRR', 'LLLUU']
+
+    for indice, (nome, caminho) in enumerate(zip(ordem, rotas)):
+        jogar(pagina, caminho, toque, mapa=True)
+        tocar(pagina, '#entrar-fase', toque)
+        expect(pagina.locator('#titulo-praia')).to_have_text(nome)
+        for fase, solucao in enumerate(SOLUCOES[nome]):
+            jogar(pagina, 'R' if fase == 0 else 'RR', toque, mapa=True)
+            if indice == 0 and fase == 1:
+                pagina.reload()
+                tocar(pagina, '#comecar', toque)
+                expect(pagina.locator('#titulo-praia')).to_have_text(nome)
+                expect(pagina.locator('#progresso-praia')).to_contain_text('1/3')
+            tocar(pagina, '#entrar-fase', toque)
+            if fase == 1 and not toque:
+                quantidade = 3 if nome == 'Recifes Expostos' else 5
+                jogar(pagina, solucao[:quantidade], toque)
+                if nome == 'Recifes Expostos':
+                    expect(pagina.locator('#fragmento')).to_have_text('Fragmentos: 1/2')
+                    salvar_captura(pagina, 'recifes-partida-desktop')
+                else:
+                    expect(pagina.locator('#dupla-ativa')).to_contain_text('Verde')
+                    expect(pagina.locator('#passos')).to_have_text('4')
+                    salvar_captura(pagina, 'mangue-partida-desktop')
+                solucao = solucao[quantidade:]
+            jogar(pagina, solucao, toque)
+            expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+            tocar(pagina, '#voltar-fase', toque)
+        expect(pagina.locator('#progresso-praia')).to_contain_text('3/3')
+        jogar(pagina, 'DDLLLLLUU', toque, mapa=True)
+        tocar(pagina, '#entrar-fase', toque)
+        expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
+        if indice == 0:
+            expect(pagina.locator('#enseada-aberta')).to_be_hidden()
+
+    jogar(pagina, 'LUURR' if recifes_primeiro else 'RRRR', toque, mapa=True)
+    expect(pagina.locator('#enseada-aberta')).to_be_visible()
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#mensagem-praia')).to_contain_text('ainda não disponível')
+    if not toque:
+        salvar_captura(pagina, 'arquipelago-desktop')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+
+
 with sync_playwright() as p:
-    navegador = p.chromium.launch(executable_path=os.getenv('CHROMIUM_PATH'))
-    desktop = navegador.new_page(viewport={'width': 1180, 'height': 820}, offline=True)
+    motor = os.getenv('MARE_BROWSER', 'chromium')
+    if motor not in ('chromium', 'webkit'):
+        raise ValueError('MARE_BROWSER precisa ser chromium ou webkit.')
+    caminho = os.getenv('CHROMIUM_PATH') if motor == 'chromium' else None
+    navegador = getattr(p, motor).launch(executable_path=caminho)
+    desktop = navegador.new_page(viewport={'width': 1180, 'height': 820}, offline=(PRIMEIRA_PAGINA == OFFLINE))
     conferir_jogo(desktop)
     print('Desktop 1180 × 820: três fases, teclado, erros, reinício, pintura e HTML offline.')
     conferir_praia(desktop, opcional=True)
-    print('Desktop: mapa, desvio opcional, atalho, reload, encontro e créditos.')
+    conferir_lote(desktop)
+    print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
         aparelho = navegador.new_page(viewport={'width': largura, 'height': 844}, has_touch=True,
-                                     is_mobile=True, device_scale_factor=2, offline=True)
+                                     is_mobile=True, device_scale_factor=2, offline=(PRIMEIRA_PAGINA == OFFLINE))
         conferir_jogo(aparelho, toque=True)
         conferir_praia(aparelho, toque=True, opcional=False)
-        print(f'Toque emulado {largura} × 844: bancada, rota principal, reload e encaixe integral.')
+        conferir_lote(aparelho, toque=True, recifes_primeiro=False)
+        print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()

@@ -61,3 +61,27 @@ S=....
 **Objetivo:** recuperar o fragmento e alcançar a saída. A garça mira o fragmento nos passos 6, 10, 14… Entrar direto na casa marcada no sexto passo causa erro **sem** coletar. A saída fica firme e não dispara sem o fragmento.
 
 **Rota do abrigo:** → → → ↓ ↓ ← → → → ↑. **Rota alternativa pela parte de cima:** → → → → → ↓ ↓ ← → ↑. As duas chegam sem erro e passam por perigos em momentos diferentes.
+
+## Lote 1 · Recifes Expostos
+
+Legenda adicional: H pedra alta, firme e atravessável; # rocha bloqueada. As sequências usam U↑, D↓, L←, R→, X troca de siri sem consumir passo.
+
+| Fase | Mapa (as barras separam linhas) | Solução |
+| --- | --- | --- |
+| Acima da espuma | `S=H==C / ##.###` | `RRDUDURRR` |
+| Duas poças do recife | `###G### / B=.S.=B / ..#..#.` | `RRRDUDULLLRLLLLDRLRURRU` |
+| A volta do recife | `SG#### / =#.### / H=.### / .#=B.# / ###..#` | `DDDUDURRUDUDDRRLRLLUUDUDLLDUDUUUR` |
+
+Aprendizado: distinguir refúgio de bloqueio → coletar dois fragmentos em janelas diferentes → preparar ida e volta em mais de um ciclo. Observe se os dois fragmentos são lidos como itens distintos e se os bolsões laterais comunicam espaço seguro, sem bordas enganadoras. Reiniciar restaura todos os fragmentos.
+
+## Lote 1 · Mangue dos Dois Siris
+
+Legenda adicional: A início do segundo siri, T raiz-alvo, P placa, D portão. Em dupla, concha e raiz/placa devem estar ocupadas ao mesmo tempo.
+
+| Fase | Mapa (as barras separam linhas) | Solução |
+| --- | --- | --- |
+| Raízes vizinhas | `SC### / ##T.A` | `RXLL` |
+| Um segura, outro passa | `S=HDC / .#### / A.P##` | `RRXRRXRR` |
+| Reencontro na ponta do mangue | `S=H.DC / .#.##T / A=H.P.` | `RRRLRLXRRRRXRRRXRU` |
+
+Aprendizado: troca gratuita e destinos distintos → segurar a placa → proteger ambos na virada, abrir passagem e reunir a dupla. Observe se o formato das pinças e o marcador de atividade identificam o siri ativo sem depender da cor. Erros levam ambos à última combinação segura; reiniciar também redefine o siri ativo e o portão. Nenhuma solução depende do tempo de resposta físico.

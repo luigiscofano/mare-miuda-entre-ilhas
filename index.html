@@ -11,7 +11,7 @@
   <a class="pular" href="#jogo">Pular para o jogo</a>
   <main id="jogo" class="pagina" data-tela="inicio">
     <header>
-      <p class="etiqueta">Caderno de travessias · Praia das Conchas</p>
+      <p class="etiqueta">Caderno de travessias · Primeiro lote</p>
       <h1>Maré Miúda: Entre Ilhas</h1>
       <p class="secundario" lang="en">Tiny Tide: Between Islands</p>
     </header>
@@ -50,6 +50,7 @@
         </div>
         <button type="button" class="principal" id="entrar-fase">Entrar na fase</button>
       </div>
+      <p id="enseada-aberta" class="dica" hidden>A passagem da Enseada se abriu. O próximo capítulo ainda não está disponível.</p>
       <p class="dica">Setas, WASD ou toque para andar. Enter abre o ponto atual. Caminhar aqui não muda a maré.</p>
       <p id="aviso-save" class="dica" hidden>O navegador não permitiu salvar. Você pode jogar, mas o progresso pode se perder ao fechar.</p>
       <button type="button" id="menu-praia">Tela inicial</button>
@@ -79,6 +80,7 @@
       </div>
       <p id="posicao" class="visualmente-oculto"></p>
       <p id="fragmento" class="inventario" hidden></p>
+      <p id="dupla-ativa" class="inventario" hidden></p>
       <p id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
 
       <div class="acoes">
@@ -93,6 +95,7 @@
 
       <div class="botoes">
         <button type="button" id="voltar-fase">Voltar</button>
+        <button type="button" id="trocar-siri" class="principal" hidden>Trocar siri</button>
         <button type="button" id="seguir-fase" class="principal" hidden>Concluir viagem</button>
       </div>
       <details id="ajuda">
@@ -100,7 +103,7 @@
         <p id="ensino"></p>
         <p>Use setas, WASD ou toque nos botões. R reinicia. Passos bloqueados não contam.</p>
         <pre id="grade" aria-label="Representação por símbolos do tabuleiro"></pre>
-        <p>S: início · .: chão firme · =: baixio · #: bloqueio · C: concha · B: fragmento · G: saída.</p>
+        <p>S: início · .: chão firme · =: baixio · #: bloqueio · C: concha · B: fragmento · G: saída · H: pedra alta · A: segundo siri · P: placa · D: portão · T: raiz.</p>
       </details>
     </section>
 
