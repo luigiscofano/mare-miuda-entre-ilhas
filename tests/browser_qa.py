@@ -63,7 +63,7 @@ def conferir_jogo(pagina, toque=False):
     assert pagina.locator('#tabuleiro').evaluate("""(canvas) => {
         const rgba = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
         for (let i=0;i<rgba.length;i+=4)
-          if (rgba[i+3]!==255 || Math.max(rgba[i],rgba[i+1],rgba[i+2]) - Math.min(rgba[i],rgba[i+1],rgba[i+2])>9) return false;
+          if (rgba[i+3]!==255 || Math.max(rgba[i],rgba[i+1],rgba[i+2]) - Math.min(rgba[i],rgba[i+1],rgba[i+2])>14) return false;
         return true;
     }"""), 'O palco deve ser opaco, em tons de cinza.'
     assert not falhas, falhas

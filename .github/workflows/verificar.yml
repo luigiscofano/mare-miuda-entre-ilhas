@@ -28,7 +28,13 @@ jobs:
           python-version: '3.12'
       - run: npm run build
       - run: python -m pip install playwright==1.62.0
-      - run: python -m playwright install --with-deps chromium
+      - name: Preparar Chromium
+        run: |
+          if command -v google-chrome >/dev/null; then
+            echo "CHROMIUM_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          else
+            python -m playwright install --with-deps chromium
+          fi
       - run: python tests/browser_qa.py
         env:
           MARE_CAPTURA_DIR: artifacts/capturas
