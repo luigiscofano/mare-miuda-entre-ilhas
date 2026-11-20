@@ -2,7 +2,7 @@
 
 *Tiny Tide: Between Islands*
 
-Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A Praia das Conchas tem dez fases regulares e um encontro em duas telas conectadas: Cabo Baixo e Enseadinha. O primeiro lote acrescenta seis travessias autorais em Recifes Expostos e Mangue dos Dois Siris. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
+Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A Praia das Conchas tem dez fases regulares e um encontro em duas telas conectadas: Cabo Baixo e Enseadinha. O primeiro lote acrescenta seis travessias autorais em Recifes Expostos e Mangue dos Siris Duplos. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
 
 **Estado:** Fundação e protótipo preservados; fatia vertical Praia das Conchas e primeiro lote de campanha implementados para teste. A abertura usa Placa de Areia aprovada; o restante da arte e do áudio ainda é provisório. Não existe publicação do jogo nesta fase.
 

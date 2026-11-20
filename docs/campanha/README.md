@@ -6,7 +6,7 @@
 | --- | --- |
 | Praia das Conchas | Contar passos → sair antes da subida → dois baixios com refúgio → desvio opcional. |
 | Recifes Expostos | Pedra alta vs. intransitável → refúgio → dois fragmentos → ida e volta em mais de um ciclo. |
-| Mangue dos Dois Siris | Troca de personagem → duas posições → contador compartilhado → reunião por rotas distintas. |
+| Mangue dos Siris Duplos | Troca de personagem → duas posições → contador compartilhado → reunião por rotas distintas. |
 | Enseada da Garça | Ver marca → abrigo → ameaça com maré → dois cruzamentos planejados. |
 | Ilhas à Deriva | Prever posição da balsa → travessia → resgate e retorno → duas balsas com refúgio. |
 | Grutas da Espuma | Transportar item → abrir saída em etapas → mecanismos em lados opostos → ordem de câmaras e retorno. |

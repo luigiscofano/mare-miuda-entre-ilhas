@@ -74,7 +74,7 @@ Legenda adicional: H pedra alta, firme e atravessável; # rocha bloqueada. As se
 
 Aprendizado: distinguir refúgio de bloqueio → coletar dois fragmentos em janelas diferentes → preparar ida e volta em mais de um ciclo. Observe se os dois fragmentos são lidos como itens distintos e se os bolsões laterais comunicam espaço seguro, sem bordas enganadoras. Reiniciar restaura todos os fragmentos.
 
-## Lote 1 · Mangue dos Dois Siris
+## Lote 1 · Mangue dos Siris Duplos
 
 Legenda adicional: A início do segundo siri, T raiz-alvo, P placa, D portão. Em dupla, concha e raiz/placa devem estar ocupadas ao mesmo tempo.
 
