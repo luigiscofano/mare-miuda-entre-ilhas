@@ -119,3 +119,12 @@ As três fases iniciais estão em `lote3.ts`. `K` é a pérola, `E` o encaixe A,
 
 - `enseada-dupla-revezamento`: dois fragmentos sob patrulha alternada, com placa e reunião final (18 passos sem levadas).
 - `deriva-dupla-contramao`: duas balsas em sentidos opostos, placa, dois fragmentos e reunião final (20 passos sem levadas).
+
+## Farol em dupla
+
+| Fase | Sequência testemunha | Passos válidos |
+| --- | --- | --- |
+| O fragmento das duas margens | `RRXRRXRRRRRDURRRXRRRD` | 18 |
+| As duas luzes do farol | `RDUDDRRXRUURRRRRLRXRRXRXRRR` | 23 |
+
+Os dois mapas de `farol.ts` reaproveitam a placa `P`, o portão `D`, o embarque em `~`, os fragmentos `B` e os alvos de chegada. Nenhuma regra nova no motor.

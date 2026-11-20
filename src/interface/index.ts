@@ -98,7 +98,7 @@ function atualizarPraia(mensagem = ''): void {
   const concluidas = p.concluidas.filter(id =>
     mundo === 'praia-enseadinha' ? ['praia-fio-de-areia', 'praia-pocas-espelho', 'praia-mirante'].includes(id)
     : (mundo === 'enseada' || mundo === 'deriva') ? id.startsWith(mundo + '-') && !faseOpcional(mundo, id)
-    : (mundo === 'grutas' || mundo === 'ressaca') ? id.startsWith(mundo + '-') && !faseOpcional(mundo, id)
+    : (mundo === 'grutas' || mundo === 'ressaca' || mundo === 'farol') ? id.startsWith(mundo + '-') && !faseOpcional(mundo, id)
     : mundo === 'recifes' ? id.startsWith('recife-') : mundo === 'mangue' ? id.startsWith('mangue-')
     : ['primeira-onda', 'sombra-da-garca', 'busca-e-volta', 'ponta-da-garca'].includes(id)).length;
   const perola = p.concluidas.includes('ilhota-perolada');
@@ -112,7 +112,7 @@ function atualizarPraia(mensagem = ''): void {
     : mundo === 'arquipelago' ? 'Visite Recifes Expostos e Mangue dos Siris Duplos em qualquer ordem. A Enseada abre depois dos dois; suas três travessias liberam as Ilhas à Deriva. Depois da Corrente cruzada, siga para as Grutas da Espuma e, após o revezamento, para a Baía da Ressaca.'
     : (mundo === 'enseada' || mundo === 'deriva') && concluidas === 3
       ? 'Volte pelo atalho sul ou siga para cima no último marco para visitar o desvio em dupla.'
-      : (mundo === 'grutas' || mundo === 'ressaca')
+      : (mundo === 'grutas' || mundo === 'ressaca' || mundo === 'farol')
         ? 'Siga as travessias na ordem. O atalho para o cais só se abre depois da última.'
         : 'Complete as três travessias. O atalho sul só se abre depois da última.';
   buscar('#progresso-praia').textContent = mundo === 'praia'

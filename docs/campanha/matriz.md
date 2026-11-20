@@ -41,3 +41,5 @@ Por fase registre início, refúgios, terreno, objetivo, pistas antes do primeir
 | Uma pérola para o portão | Recolher e entregar | A saída está atrás do portão; sem a pérola ou o encaixe não há rota. |
 | Duas câmaras, uma ordem | A antes de B | B cedo dá uma pista e não apaga progresso; volte depois de A. |
 | A pérola da maré baixa | Entrega, retorno e maré | O baixio separa as câmaras; chão firme permite ajustar os passos sem espera. |
+
+O Farol abre pelo final regular da Ressaca e já oferece duas travessias em dupla. O fragmento das duas margens exige proteger o siri inativo no baixio antes de cruzar de balsa. As duas luzes do farol exige balsas opostas, o momento certo de ocupar a placa sob patrulha e uma troca dentro da última janela de maré. [Fichas e provas de solução](../processo-de-criacao/11-farol-dupla/README.md).

@@ -10,8 +10,9 @@ export type IdFase = IdFasePraia | 'recife-pedra-firme' | 'recife-duas-pocas' | 
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
-  | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros';
-export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca';
+  | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
+  | 'farol-fragmento-margens' | 'farol-duas-luzes';
+export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
   posicao: Posicao;
   concluidas: readonly IdFase[];
@@ -19,7 +20,7 @@ export type Progresso = Readonly<{
   viuTutorial: boolean;
 }>;
 type Entrada = Readonly<{
-  id: IdFase | 'porto' | 'rumo-praia' | 'rumo-recifes' | 'rumo-mangue' | 'enseada' | 'ida-enseadinha' | 'volta-cabo' | 'saida-enseadinha' | 'rumo-deriva' | 'rumo-grutas' | 'rumo-ressaca';
+  id: IdFase | 'porto' | 'rumo-praia' | 'rumo-recifes' | 'rumo-mangue' | 'enseada' | 'ida-enseadinha' | 'volta-cabo' | 'saida-enseadinha' | 'rumo-deriva' | 'rumo-grutas' | 'rumo-ressaca' | 'rumo-farol';
   posicao: Posicao;
   nome: string;
   opcional?: boolean;
@@ -60,6 +61,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'rumo-deriva', posicao: P(7, 3), nome: 'Ilhas à Deriva', destino: 'deriva' },
     { id: 'rumo-grutas', posicao: P(8, 1), nome: 'Grutas da Espuma', destino: 'grutas' },
     { id: 'rumo-ressaca', posicao: P(9, 3), nome: 'Baía da Ressaca', destino: 'ressaca' },
+    { id: 'rumo-farol', posicao: P(10, 1), nome: 'Arquipélago do Farol', destino: 'farol' },
   ],
   recifes: [
     PORTO,
@@ -102,6 +104,11 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'ressaca-dupla-abrigo', posicao: P(2, 1), nome: 'Abrigo dos dois cais' },
     { id: 'ressaca-dupla-ancoradouros', posicao: P(4, 1), nome: 'Ancoradouros em revezamento' },
   ],
+  farol: [
+    PORTO,
+    { id: 'farol-fragmento-margens', posicao: P(2, 1), nome: 'O fragmento das duas margens' },
+    { id: 'farol-duas-luzes', posicao: P(4, 1), nome: 'As duas luzes do farol' },
+  ],
 };
 
 const MUNDOS = [
@@ -114,6 +121,7 @@ const MUNDOS = [
   { mundo: 'deriva', nome: 'Ilhas à Deriva' },
   { mundo: 'grutas', nome: 'Grutas da Espuma' },
   { mundo: 'ressaca', nome: 'Baía da Ressaca' },
+  { mundo: 'farol', nome: 'Arquipélago do Farol' },
 ] as const;
 
 export const mundoValido = (mundo: unknown): mundo is Mundo => MUNDOS.some(i => i.mundo === mundo);
@@ -195,6 +203,8 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['deriva-corrente-cruzada'], 'Conclua Corrente cruzada para encontrar as Grutas da Espuma.'),
     trilha(P(8, 1), P(9, 3), 'direita', 'esquerda', [P(9, 2)],
       ['grutas-dupla-camaras'], 'Conclua Revezamento nas câmaras para abrir a Baía da Ressaca.'),
+    trilha(P(9, 3), P(10, 1), 'cima', 'baixo', [P(10.125, 2.25)],
+      ['ressaca-dupla-ancoradouros'], 'Conclua Ancoradouros em revezamento para chegar ao Farol.'),
   ],
   recifes: sustentar('recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno'),
   mangue: sustentar('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao', true),
@@ -227,6 +237,13 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['ressaca-dupla-abrigo'], 'Conclua Abrigo dos dois cais para chegar aos ancoradouros.'),
     trilha(CAIS, P(4, 1), 'baixo', 'baixo', [P(2.25, 2.5), P(4.625, 2.25)],
       ['ressaca-dupla-ancoradouros'], 'O atalho abre depois do revezamento nos ancoradouros.'),
+  ],
+  farol: [
+    trilha(CAIS, P(2, 1), 'direita', 'esquerda', []),
+    trilha(P(2, 1), P(4, 1), 'direita', 'esquerda', [P(3, 0.625)],
+      ['farol-fragmento-margens'], 'Recupere o fragmento para chegar às duas luzes.'),
+    trilha(CAIS, P(4, 1), 'baixo', 'baixo', [P(2, 3), P(3.75, 2.5)],
+      ['farol-duas-luzes'], 'O atalho abre quando as duas luzes estiverem acesas.'),
   ],
 };
 
@@ -274,7 +291,7 @@ export function viajar(p: Progresso, destino: Mundo): Progresso {
   const entrada = entradaEm(p.posicao, origem);
   if (!(destino === 'arquipelago' && podeSairDaPraia(p)) && entrada?.destino !== destino) return p;
   const orientacao: Readonly<Record<Mundo, Posicao>> = {
-    praia: P(1, 3), 'praia-enseadinha': P(1, 3), recifes: P(2, 1), mangue: P(5, 3), enseada: P(6, 1), deriva: P(7, 3), grutas: P(8, 1), ressaca: P(9, 3), arquipelago: P(1, 3),
+    praia: P(1, 3), 'praia-enseadinha': P(1, 3), recifes: P(2, 1), mangue: P(5, 3), enseada: P(6, 1), deriva: P(7, 3), grutas: P(8, 1), ressaca: P(9, 3), farol: P(10, 1), arquipelago: P(1, 3),
   };
   const posicao = destino === 'arquipelago' ? orientacao[origem] : destino === 'praia' ? (origem === 'praia-enseadinha' ? PORTAL_CABO : FIM_PRAIA) : CAIS;
   return { ...p, mundo: destino, posicao };
