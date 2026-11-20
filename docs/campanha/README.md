@@ -63,3 +63,5 @@ A indicação antiga da Enseada agora leva a três travessias de patrulha e, dep
 Corrente cruzada libera as Grutas da Espuma. O núcleo jogável atual tem três fases de entrega e mecanismos; são parte da rota principal e não exigem desvios opcionais. Os dois chefes e as demais fases ainda estão no plano.
 
 Os desvios em dupla na Enseada e nas Ilhas reaproveitam as cores, a troca gratuita e o relógio compartilhado. A dupla volta de vez em quando, sem substituir os desafios de um siri só.
+
+As Grutas têm cinco fases regulares, das quais duas em dupla; sua última travessia abre a Baía da Ressaca. A Baía começa com duas travessias em dupla que combinam patrulha anunciada e deslocamento de balsas, sem chefes nesta etapa. Enseada e Ilhas mantêm os desvios existentes. O Farol será o próximo salto de coordenação.

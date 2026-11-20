@@ -9,8 +9,9 @@ export type IdFase = IdFasePraia | 'recife-pedra-firme' | 'recife-duas-pocas' | 
   | 'enseada-dupla-vigia' | 'deriva-dupla-cais'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
-  | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno';
-export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas';
+  | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
+  | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros';
+export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca';
 export type Progresso = Readonly<{
   posicao: Posicao;
   concluidas: readonly IdFase[];
@@ -18,7 +19,7 @@ export type Progresso = Readonly<{
   viuTutorial: boolean;
 }>;
 type Entrada = Readonly<{
-  id: IdFase | 'porto' | 'rumo-praia' | 'rumo-recifes' | 'rumo-mangue' | 'enseada' | 'ida-enseadinha' | 'volta-cabo' | 'saida-enseadinha' | 'rumo-deriva' | 'rumo-grutas';
+  id: IdFase | 'porto' | 'rumo-praia' | 'rumo-recifes' | 'rumo-mangue' | 'enseada' | 'ida-enseadinha' | 'volta-cabo' | 'saida-enseadinha' | 'rumo-deriva' | 'rumo-grutas' | 'rumo-ressaca';
   posicao: Posicao;
   nome: string;
   opcional?: boolean;
@@ -58,6 +59,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'enseada', posicao: P(6, 1), nome: 'Enseada da Garça', destino: 'enseada' },
     { id: 'rumo-deriva', posicao: P(7, 3), nome: 'Ilhas à Deriva', destino: 'deriva' },
     { id: 'rumo-grutas', posicao: P(8, 1), nome: 'Grutas da Espuma', destino: 'grutas' },
+    { id: 'rumo-ressaca', posicao: P(9, 3), nome: 'Baía da Ressaca', destino: 'ressaca' },
   ],
   recifes: [
     PORTO,
@@ -90,6 +92,13 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'grutas-encaixe', posicao: P(2, 1), nome: 'Uma pérola para o portão' },
     { id: 'grutas-ordem', posicao: P(4, 1), nome: 'Duas câmaras, uma ordem' },
     { id: 'grutas-retorno', posicao: P(6, 1), nome: 'A pérola da maré baixa' },
+    { id: 'grutas-dupla-portao', posicao: P(8, 1), nome: 'A pérola e a placa' },
+    { id: 'grutas-dupla-camaras', posicao: P(10, 1), nome: 'Revezamento nas câmaras' },
+  ],
+  ressaca: [
+    PORTO,
+    { id: 'ressaca-dupla-abrigo', posicao: P(2, 1), nome: 'Abrigo dos dois cais' },
+    { id: 'ressaca-dupla-ancoradouros', posicao: P(4, 1), nome: 'Ancoradouros em revezamento' },
   ],
 };
 
@@ -102,6 +111,7 @@ const MUNDOS = [
   { mundo: 'enseada', nome: 'Enseada da Garça' },
   { mundo: 'deriva', nome: 'Ilhas à Deriva' },
   { mundo: 'grutas', nome: 'Grutas da Espuma' },
+  { mundo: 'ressaca', nome: 'Baía da Ressaca' },
 ] as const;
 
 export const mundoValido = (mundo: unknown): mundo is Mundo => MUNDOS.some(i => i.mundo === mundo);
@@ -181,6 +191,8 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['enseada-farol-baixo'], 'Conclua o trecho da Enseada da Garça para encontrar as correntes.'),
     trilha(P(7, 3), P(8, 1), 'cima', 'baixo', [P(8, 2.25)],
       ['deriva-corrente-cruzada'], 'Conclua Corrente cruzada para encontrar as Grutas da Espuma.'),
+    trilha(P(8, 1), P(9, 3), 'direita', 'esquerda', [P(9, 2)],
+      ['grutas-dupla-camaras'], 'Conclua Revezamento nas câmaras para abrir a Baía da Ressaca.'),
   ],
   recifes: sustentar('recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno'),
   mangue: sustentar('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao', true),
@@ -194,7 +206,22 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
     trilha(P(6, 1), P(7, 0), 'cima', 'baixo', [P(6.375, 0.5)],
       ['deriva-corrente-cruzada'], 'Conclua Corrente cruzada para abrir o desvio em dupla.'),
   ],
-  grutas: sustentar('grutas-encaixe', 'grutas-ordem', 'grutas-retorno', true),
+  grutas: [
+    ...sustentar('grutas-encaixe', 'grutas-ordem', 'grutas-retorno', true),
+    trilha(P(6, 1), P(8, 1), 'direita', 'esquerda', [P(7, 0.625)],
+      ['grutas-retorno'], 'Complete a travessia da pérola para chegar ao revezamento.'),
+    trilha(P(8, 1), P(10, 1), 'direita', 'esquerda', [P(9, 1.625)],
+      ['grutas-dupla-portao'], 'Conclua A pérola e a placa para chegar às outras câmaras.'),
+    trilha(CAIS, P(10, 1), 'cima', 'baixo', [P(3, 0.5), P(7, 0.375), P(9, 0.5)],
+      ['grutas-dupla-camaras'], 'Este caminho de volta abre depois do revezamento nas câmaras.'),
+  ],
+  ressaca: [
+    trilha(CAIS, P(2, 1), 'direita', 'esquerda', []),
+    trilha(P(2, 1), P(4, 1), 'direita', 'esquerda', [P(3, 0.625)],
+      ['ressaca-dupla-abrigo'], 'Conclua Abrigo dos dois cais para chegar aos ancoradouros.'),
+    trilha(CAIS, P(4, 1), 'baixo', 'baixo', [P(2.25, 2.5), P(4.625, 2.25)],
+      ['ressaca-dupla-ancoradouros'], 'O atalho abre depois do revezamento nos ancoradouros.'),
+  ],
 };
 
 export const trilhasDo = (mundo: Mundo) => TRILHAS[mundo];
@@ -241,7 +268,7 @@ export function viajar(p: Progresso, destino: Mundo): Progresso {
   const entrada = entradaEm(p.posicao, origem);
   if (!(destino === 'arquipelago' && podeSairDaPraia(p)) && entrada?.destino !== destino) return p;
   const orientacao: Readonly<Record<Mundo, Posicao>> = {
-    praia: P(1, 3), 'praia-enseadinha': P(1, 3), recifes: P(2, 1), mangue: P(5, 3), enseada: P(6, 1), deriva: P(7, 3), grutas: P(8, 1), arquipelago: P(1, 3),
+    praia: P(1, 3), 'praia-enseadinha': P(1, 3), recifes: P(2, 1), mangue: P(5, 3), enseada: P(6, 1), deriva: P(7, 3), grutas: P(8, 1), ressaca: P(9, 3), arquipelago: P(1, 3),
   };
   const posicao = destino === 'arquipelago' ? orientacao[origem] : destino === 'praia' ? (origem === 'praia-enseadinha' ? PORTAL_CABO : FIM_PRAIA) : CAIS;
   return { ...p, mundo: destino, posicao };
@@ -253,6 +280,9 @@ export function criarProgresso(): Progresso {
 export function ehIdFase(id: unknown): id is IdFase {
   return Object.values(ENTRADAS).some(entradas => entradas.some(entrada =>
     entrada.id === id && !entrada.destino));
+}
+export function totalDeFasesRegulares(mundo: Mundo): number {
+  return ENTRADAS[mundo].filter(entrada => !entrada.destino && !entrada.opcional).length;
 }
 export function faseOpcional(mundo: Mundo, id: IdFase): boolean {
   return ENTRADAS[mundo].some(entrada => entrada.id === id && entrada.opcional);

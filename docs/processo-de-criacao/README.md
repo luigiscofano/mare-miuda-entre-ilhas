@@ -13,6 +13,7 @@ Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem subs
 | [07 · Campanha e segundo lote](07-campanha-e-lote2/README.md) | Matriz dos oito mundos, fases propostas e referências oficiais provisórias. |
 | [08 · Grutas da Espuma](08-grutas/README.md) | Transporte de pérola e mecanismos em ordem. |
 | [09 · Siris duplos em outros mundos](09-siris-duplos/README.md) | Desvios da Enseada e das Ilhas e testes do revezamento. |
+| [10 · Duplas nas Grutas e Ressaca](10-duplas-grutas-ressaca/README.md) | Quatro fases regulares, posse da pérola, balsas e patrulha. |
 | [Estudos da identidade visual](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/3) | Placa de Areia e Corrente de Espuma, PT/EN, preservadas em PR separado. A foi aprovada para a abertura; B permanece como estudo. |
 
 As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/`. Esse caminho só será integrado junto dos estudos correspondentes.

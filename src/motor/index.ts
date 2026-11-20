@@ -28,6 +28,7 @@ export type Estado = Readonly<{
   fragmentos: readonly Posicao[];
   dupla?: EstadoDupla;
   etapaGruta?: number;
+  portadorGruta?: 'principal' | 'parceiro';
   situacao: 'jogando' | 'vitoria' | 'derrota';
 }>;
 export type MotivoErro = 'mare' | 'garca';
@@ -36,6 +37,7 @@ export type Evento =
   | Readonly<{ tipo: 'virada'; alta: boolean }>
   | Readonly<{ tipo: 'balsa' }>
   | Readonly<{ tipo: 'gruta-avancou'; etapa: EtapaGruta }>
+  | Readonly<{ tipo: 'gruta-precisa-portador' }>
   | Readonly<{ tipo: 'gruta-fora-da-ordem'; proxima: EtapaGruta }>
   | Readonly<{ tipo: 'levada'; motivos: readonly MotivoErro[] }>
   | Readonly<{ tipo: 'fragmento' }>
@@ -123,6 +125,11 @@ function resolverGruta(fase: Fase, estado: Estado, celula: Celula | undefined, e
   if (atual === undefined || (celula !== 'K' && celula !== 'E' && celula !== 'F')) return atual;
   const proxima = etapas?.[atual];
   if (proxima === celula) {
+    const ativo = estado.dupla?.parceiroAtivo ? 'parceiro' : 'principal';
+    if (celula === 'E' && estado.portadorGruta && estado.portadorGruta !== ativo) {
+      eventos.push({ tipo: 'gruta-precisa-portador' });
+      return atual;
+    }
     eventos.push({ tipo: 'gruta-avancou', etapa: celula });
     return atual + 1;
   }
@@ -236,6 +243,12 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   if (coletou) eventos.push({ tipo: 'fragmento' });
   const celulas = posicoes.map(p => lerCelula(fase, p));
   const etapaGruta = resolverGruta(fase, anterior, celula, eventos);
+  // A pérola não muda de siri numa troca. A alavanca não precisa do portador.
+  let portadorGruta = anterior.portadorGruta;
+  if (dupla && etapaGruta !== anterior.etapaGruta) {
+    if (celula === 'K') portadorGruta = movendoParceiro ? 'parceiro' : 'principal';
+    if (celula === 'E') portadorGruta = undefined;
+  }
   const venceu = resolverObjetivo(fase, celulas, fragmentos.length, eventos);
   // Uma saída segura pode completar a missão exatamente no último passo.
   const perdeu = !venceu && terminouOrcamento(fase, passos, eventos);
@@ -251,6 +264,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
     estado: { ...anterior, posicao, passos, temFragmento: fragmentos.length > 0, fragmentos,
       ultimoFirme: firmes ? posicao : anterior.ultimoFirme,
       ...(etapaGruta === undefined ? {} : { etapaGruta }),
+      ...(dupla && etapaGruta !== undefined ? { portadorGruta } : {}),
       ...(novaDupla ? { dupla: novaDupla } : {}), situacao: venceu ? 'vitoria' : perdeu ? 'derrota' : 'jogando' },
     eventos,
   };

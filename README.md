@@ -32,7 +32,7 @@ Abra `dist/mare-miuda-prototipo.html` no navegador para jogar sem conexão. A ou
 3. [Fatia vertical: Praia das Conchas](docs/processo-de-criacao/03-fatia-vertical/README.md): mapa, trilhas, arte provisória, edição de áudio, salvamento e encontro de encerramento.
 4. [Primeiro lote: Recifes e Mangue](docs/processo-de-criacao/04-lote-1/README.md): arquipélago, pedra alta, dois fragmentos, dupla, placa e porta.
 
-[Siris duplos em outros mundos](docs/processo-de-criacao/09-siris-duplos/README.md) registra os dois desvios jogáveis.
+[Siris duplos em outros mundos](docs/processo-de-criacao/09-siris-duplos/README.md) registra os dois desvios jogáveis. [Grutas e Ressaca em dupla](docs/processo-de-criacao/10-duplas-grutas-ressaca/README.md) acompanha as quatro fases regulares.
 
 [Índice permanente do processo](docs/processo-de-criacao/README.md), com os estudos de identidade mantidos à parte. O material histórico não entra no build.
 
@@ -70,7 +70,7 @@ O núcleo combina contagem de passos, leitura espacial e previsão. O jogador n�
 <details>
 <summary>Campanha e mapa-múndi</summary>
 
-Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O arquipélago permite Recifes e Mangue em qualquer ordem depois da Praia. Depois das duas regiões, a Enseada oferece três travessias com patrulha; a última delas abre três fases de balsas nas Ilhas à Deriva. Corrente cruzada libera as três primeiras travessias das Grutas da Espuma, com pérola, encaixe, alavanca e portão. O plano prevê oito mundos, com pelo menos 10 fases por mundo fora dos dois chefes (15 fases por mundo como meta de expansão). Os ramos são opcionais na rota principal. A dupla de siris de cores diferentes reaparece em desvios da Enseada e das Ilhas sem virar regra de toda fase. Cada ilha terá tema tanto no arquipélago como dentro das fases; obstáculos ocupam células inteiras em uma malha legível, sem tamanho máximo por objeto. A arte prevê destacar a célula atual e as vizinhas válidas conforme o motor. [Revisão do roteiro](docs/producao/escopo-e-leitura.md). [Plano dos mundos](docs/campanha/README.md) · [Matriz de game design e level design](docs/campanha/matriz.md).
+Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O arquipélago permite Recifes e Mangue em qualquer ordem depois da Praia. Depois das duas regiões, a Enseada oferece três travessias com patrulha; a última delas abre três fases de balsas nas Ilhas à Deriva. Corrente cruzada libera as três primeiras travessias das Grutas da Espuma, com pérola, encaixe, alavanca e portão. O plano prevê oito mundos, com pelo menos 10 fases por mundo fora dos dois chefes (15 fases por mundo como meta de expansão). Os ramos são opcionais na rota principal. A dupla de siris de cores diferentes reaparece em desvios da Enseada e das Ilhas e volta em duas travessias regulares nas Grutas e duas na Baía da Ressaca. A primeira metade das Grutas permanece solo. Cada ilha terá tema tanto no arquipélago como dentro das fases; obstáculos ocupam células inteiras em uma malha legível, sem tamanho máximo por objeto. A arte prevê destacar a célula atual e as vizinhas válidas conforme o motor. [Revisão do roteiro](docs/producao/escopo-e-leitura.md). [Plano dos mundos](docs/campanha/README.md) · [Matriz de game design e level design](docs/campanha/matriz.md).
 
 </details>
 
@@ -170,7 +170,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as 28 soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
+Os testes cobrem as 32 soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
 
 </details>
 

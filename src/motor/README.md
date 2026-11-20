@@ -13,6 +13,8 @@ A garça é um padrão de turno anunciado antes da ação. Não há espera por t
 
 Na virada, cada balsa carrega seu ocupante, mesmo se ele não for o siri ativo. O rasante e a vitória usam as posições finais; trocar continua sem contar passo e não transporta ninguém.
 
+Nas Grutas em dupla, K registra quem recolheu a pérola. E só aceita o portador; F é independente. O relógio é compartilhado, mas o item não muda de mãos na troca. O encaixe e a alavanca resolvem depois dos perigos.
+
 **© 2026 Luigi Scofano de Araujo. Todos os direitos reservados.**
 
 O render consulta `destinoPermitido` para destacar vizinhas usando a mesma condição que executa o movimento. A consulta não prevê se um passo legal será prudente após a virada; maré e aviso da garça continuam distintos. No laboratório, o limite opcional de passos é aplicado após ameaças, coleta e vitória. Fases sem limite usam as mesmas condições de antes.
