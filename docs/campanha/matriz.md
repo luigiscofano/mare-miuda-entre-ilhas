@@ -15,6 +15,8 @@
 
 Recifes e Mangue continuam disponíveis em qualquer ordem. Para não exigir salto de dificuldade se o jogador escolher Mangue primeiro, a estreia de cada região ensina sua regra isolada; a combinação tardia na Enseada é o primeiro ponto de convergência. Não force as 10 fases ou os opcionais como condição de saída. Use palcos mais largos só quando a leitura de câmera, retorno e blocos estiver clara no celular.
 
+A dupla reaparece em pontos escolhidos pela regra local, sem aparecer em toda fase. A Enseada testa proteger o siri parado de um rasante; a Deriva combina revezamento e transporte. Em mundos posteriores, reservar aparições pontuais para uma entrega que exija revezamento nas Grutas, uma arena com posições complementares na Ressaca e uma travessia combinada no Farol. Essas aparições futuras são propostas, não fases entregues.
+
 ## Padrão de ficha e aceite
 
 Por fase registre início, refúgios, terreno, objetivo, pistas antes do primeiro erro, mudança de estado, caminho principal, risco de impasse e condição de reinício. Uma solução no motor é requisito, mas não basta: jogadores novos precisam explicar por que deram o passo, interpretar sinais sem depender do som e saber voltar ao mapa. Cada PR prova ao menos uma novidade real antes de ampliar o catálogo.

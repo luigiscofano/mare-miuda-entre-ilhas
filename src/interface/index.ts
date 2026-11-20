@@ -3,7 +3,7 @@ import type { Acao, Direcao, Evento } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
 import { conectarTeclado } from '../entrada/index.ts';
-import { abriuEnseada, concluirFase, entradaEm, ehIdFase, moverNoMapa, mundoAtual, nomeDo, podeSairDaPraia, rotaLivre, saidaEm, viajar } from '../campanha/index.ts';
+import { abriuEnseada, concluirFase, entradaEm, ehIdFase, faseOpcional, moverNoMapa, mundoAtual, nomeDo, podeSairDaPraia, rotaLivre, saidaEm, viajar } from '../campanha/index.ts';
 import { caminhoDoCabo } from '../campanha/cabo-baixo.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
 import { carregar, salvar } from '../persistencia/index.ts';
@@ -97,7 +97,7 @@ function atualizarPraia(mensagem = ''): void {
   const entrada = entradaEm(p.posicao, mundo);
   const concluidas = p.concluidas.filter(id =>
     mundo === 'praia-enseadinha' ? ['praia-fio-de-areia', 'praia-pocas-espelho', 'praia-mirante'].includes(id)
-    : mundo === 'enseada' ? id.startsWith('enseada-') : mundo === 'deriva' ? id.startsWith('deriva-')
+    : (mundo === 'enseada' || mundo === 'deriva') ? id.startsWith(mundo + '-') && !faseOpcional(mundo, id)
     : mundo === 'grutas' ? id.startsWith('grutas-')
     : mundo === 'recifes' ? id.startsWith('recife-') : mundo === 'mangue' ? id.startsWith('mangue-')
     : ['primeira-onda', 'sombra-da-garca', 'busca-e-volta', 'ponta-da-garca'].includes(id)).length;
@@ -110,7 +110,9 @@ function atualizarPraia(mensagem = ''): void {
       : 'Faça o primeiro passo para a direita, pare no marco e entre na Primeira onda.')
     : mundo === 'praia-enseadinha' ? 'Atravesse o braço de areia, explore os desvios ou volte ao Cabo Baixo pelo começo da trilha.'
     : mundo === 'arquipelago' ? 'Visite Recifes Expostos e Mangue dos Siris Duplos em qualquer ordem. A Enseada abre depois dos dois; suas três travessias liberam as Ilhas à Deriva. Depois da Corrente cruzada, siga para as Grutas da Espuma.'
-    : 'Complete as três travessias. O atalho sul só se abre depois da última.';
+    : (mundo === 'enseada' || mundo === 'deriva') && concluidas === 3
+      ? 'Volte pelo atalho sul ou siga para cima no último marco para visitar o desvio em dupla.'
+      : 'Complete as três travessias. O atalho sul só se abre depois da última.';
   buscar('#progresso-praia').textContent = mundo === 'praia'
     ? `Rota principal: ${concluidas}/4 · Concha Perolada: ${perola ? 'encontrada' : 'não encontrada'}.`
     : mundo === 'praia-enseadinha' ? `Rota da Enseadinha: ${concluidas}/3. Os três desvios não bloqueiam a saída.`

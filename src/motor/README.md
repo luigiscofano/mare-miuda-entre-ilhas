@@ -11,6 +11,8 @@ A garça é um padrão de turno anunciado antes da ação. Não há espera por t
 
 **Invariantes:** um comando não soma duas levadas; o terceiro erro é terminal; entrar em baixio coberto no turno que faria a água baixar não é um passo válido. Nos mapas de dupla, ambos compartilham contador e limite de erros; trocar de ativo não gasta turno. Os marcos firmes só se atualizam quando ambos estão em casas firmes distintas, fora de portão. Um erro move os dois aos marcos do mesmo turno seguro; nenhuma coleta ou chegada é concedida junto da levada. A entrada no portão exige outra posição pressionando a placa. Um siri que já passou pelo portão pode sair dele mesmo quando a placa é solta. O relógio de plataformas permanece futuro.
 
+Na virada, cada balsa carrega seu ocupante, mesmo se ele não for o siri ativo. O rasante e a vitória usam as posições finais; trocar continua sem contar passo e não transporta ninguém.
+
 **© 2026 Luigi Scofano de Araujo. Todos os direitos reservados.**
 
 O render consulta `destinoPermitido` para destacar vizinhas usando a mesma condição que executa o movimento. A consulta não prevê se um passo legal será prudente após a virada; maré e aviso da garça continuam distintos. No laboratório, o limite opcional de passos é aplicado após ameaças, coleta e vitória. Fases sem limite usam as mesmas condições de antes.

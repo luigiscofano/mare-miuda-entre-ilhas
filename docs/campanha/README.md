@@ -61,3 +61,5 @@ A [matriz visualizável da campanha](matriz.md) separa roteiro principal, ramifi
 A indicação antiga da Enseada agora leva a três travessias de patrulha e, depois delas, a três fases nas Ilhas à Deriva. A ideia de composição do lote está na matriz, e as fichas executáveis e suas soluções no [processo de criação](../processo-de-criacao/07-campanha-e-lote2/README.md). Chefes, sete regulares adicionais por região e arte de acabamento não entram nesta entrega.
 
 Corrente cruzada libera as Grutas da Espuma. O núcleo jogável atual tem três fases de entrega e mecanismos; são parte da rota principal e não exigem desvios opcionais. Os dois chefes e as demais fases ainda estão no plano.
+
+Os desvios em dupla na Enseada e nas Ilhas reaproveitam as cores, a troca gratuita e o relógio compartilhado. A dupla volta de vez em quando, sem substituir os desafios de um siri só.

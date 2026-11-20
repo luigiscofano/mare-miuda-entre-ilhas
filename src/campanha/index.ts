@@ -6,6 +6,7 @@ export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'p
 export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
 export type IdFase = IdFasePraia | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
+  | 'enseada-dupla-vigia' | 'deriva-dupla-cais'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno';
@@ -75,12 +76,14 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'enseada-sombra-restinga', posicao: P(2, 1), nome: 'Sombra na restinga' },
     { id: 'enseada-abrigo-ondas', posicao: P(4, 1), nome: 'Abrigo entre ondas' },
     { id: 'enseada-farol-baixo', posicao: P(6, 1), nome: 'Corrida ao farol baixo' },
+    { id: 'enseada-dupla-vigia', posicao: P(7, 0), nome: 'Vigia em dupla', opcional: true },
   ],
   deriva: [
     PORTO,
     { id: 'deriva-primeira-balsa', posicao: P(2, 1), nome: 'A primeira balsa' },
     { id: 'deriva-duas-margens', posicao: P(4, 1), nome: 'Duas margens' },
     { id: 'deriva-corrente-cruzada', posicao: P(6, 1), nome: 'Corrente cruzada' },
+    { id: 'deriva-dupla-cais', posicao: P(7, 0), nome: 'Encontro nos dois cais', opcional: true },
   ],
   grutas: [
     PORTO,
@@ -181,8 +184,16 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
   ],
   recifes: sustentar('recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno'),
   mangue: sustentar('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao', true),
-  enseada: sustentar('enseada-sombra-restinga', 'enseada-abrigo-ondas', 'enseada-farol-baixo', true),
-  deriva: sustentar('deriva-primeira-balsa', 'deriva-duas-margens', 'deriva-corrente-cruzada'),
+  enseada: [
+    ...sustentar('enseada-sombra-restinga', 'enseada-abrigo-ondas', 'enseada-farol-baixo', true),
+    trilha(P(6, 1), P(7, 0), 'cima', 'baixo', [P(6.375, 0.5)],
+      ['enseada-farol-baixo'], 'Conclua Corrida ao farol baixo para abrir o desvio em dupla.'),
+  ],
+  deriva: [
+    ...sustentar('deriva-primeira-balsa', 'deriva-duas-margens', 'deriva-corrente-cruzada'),
+    trilha(P(6, 1), P(7, 0), 'cima', 'baixo', [P(6.375, 0.5)],
+      ['deriva-corrente-cruzada'], 'Conclua Corrente cruzada para abrir o desvio em dupla.'),
+  ],
   grutas: sustentar('grutas-encaixe', 'grutas-ordem', 'grutas-retorno', true),
 };
 
@@ -242,6 +253,9 @@ export function criarProgresso(): Progresso {
 export function ehIdFase(id: unknown): id is IdFase {
   return Object.values(ENTRADAS).some(entradas => entradas.some(entrada =>
     entrada.id === id && !entrada.destino));
+}
+export function faseOpcional(mundo: Mundo, id: IdFase): boolean {
+  return ENTRADAS[mundo].some(entrada => entrada.id === id && entrada.opcional);
 }
 export function entradaEm(posicao: Posicao, mundo: Mundo = 'praia'): Entrada | undefined {
   return ENTRADAS[mundo].find(entrada => mesmaCasa(entrada.posicao, posicao));
