@@ -59,7 +59,7 @@ Setas, WASD ou botões de toque movem uma casa. R ou Reiniciar recomeça. Passos
 <details>
 <summary>Game design</summary>
 
-O núcleo combina contagem de passos, leitura espacial e previsão. O jogador não precisa correr: decisões de água e ameaça só andam em passos válidos. A bancada e a praia não têm botão de esperar. Na praia, caminhos são descobertos andando pelo mapa, sem consumir passos de maré. Volta à casa firme e limite de três levadas são hipóteses a testar com jogadores.
+O núcleo combina contagem de passos, leitura espacial e previsão. O jogador não precisa correr: decisões de água e ameaça só andam em passos válidos. A bancada e a praia não têm botão de esperar. No mapa de seleção, cada comando escolhe uma saída e o siri percorre a trilha até o próximo marco, sem consumir passos de maré. A movimentação em grade fica dentro das fases. Volta à casa firme e limite de três levadas são hipóteses a testar com jogadores.
 
 </details>
 
@@ -68,7 +68,7 @@ O núcleo combina contagem de passos, leitura espacial e previsão. O jogador n�
 <details>
 <summary>Campanha e mapa-múndi</summary>
 
-Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O arquipélago permite Recifes e Mangue em qualquer ordem depois da Praia. Depois das duas regiões surge a passagem da Enseada, que ainda não tem fases. O plano completo prevê oito mundos. [Plano dos mundos](docs/campanha/README.md).
+Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O arquipélago permite Recifes e Mangue em qualquer ordem depois da Praia. Depois das duas regiões surge a passagem da Enseada, que ainda não tem fases. O plano prevê oito mundos, com pelo menos 15 fases por mundo fora dos dois chefes (mínimo de 120 fases e 16 chefes). Os ramos são opcionais na rota principal. Cada ilha terá tema tanto no arquipélago como dentro das fases; obstáculos ocupam células inteiras em uma malha legível, sem tamanho máximo por objeto. A arte prevê destacar a célula atual e as vizinhas válidas conforme o motor. [Revisão do roteiro](docs/producao/escopo-e-leitura.md). [Plano dos mundos](docs/campanha/README.md).
 
 </details>
 

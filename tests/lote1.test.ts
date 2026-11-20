@@ -20,7 +20,7 @@ function andar(p: Progresso, string: string): Progresso {
 const praia = (): Progresso => andar({
   ...criarProgresso(),
   concluidas: ['primeira-onda', 'sombra-da-garca', 'busca-e-volta', 'ponta-da-garca'],
-}, 'RRRRRR');
+}, 'RRRR');
 
 test('Onze fases têm testemunhas aceitas pelo motor real', () => {
   assert.equal(TODAS_AS_FASES.length, 11);
@@ -79,10 +79,10 @@ for (const ordem of [['recifes', 'mangue'], ['mangue','recifes']] as const) {
     let p = viajar(praia(), 'arquipelago');
     assert.equal(mundoAtual(p), 'arquipelago');
     const rotaDe = (estava: Mundo, destino: Mundo) => destino === 'recifes'
-      ? (estava === 'mangue' ? 'LLLUU' : 'RUU') : (estava === 'recifes' ? 'DDRRR' : 'RRRR');
+      ? (estava === 'mangue' ? 'LU' : 'RU') : (estava === 'recifes' ? 'DR' : 'RR');
     assert.equal(abriuEnseada(p), false);
     const conferirGate = (a: Progresso, doMundo: Mundo) => {
-      const entrada = andar(a, doMundo === 'mangue' ? 'LUUR' : doMundo === 'recifes' ? 'RRR' : 'RRRUUR');
+      const entrada = andar(a, doMundo === 'mangue' ? 'LU' : doMundo === 'recifes' ? '' : 'RU');
       assert.strictEqual(moverNoMapa(entrada, 'direita').progresso, entrada);
     };
     conferirGate(p, 'arquipelago');
@@ -95,17 +95,17 @@ for (const ordem of [['recifes', 'mangue'], ['mangue','recifes']] as const) {
       const ids = mundo === 'recifes'
         ? ['recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno'] as const
         : ['mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao'] as const;
-      for (const [i, id] of ids.entries()) {
-        p = andar(p, i === 0 ? 'R' : 'RR');
+      for (const id of ids) {
+        p = andar(p, 'R');
         assert.equal(entradaEm(p.posicao, mundo)?.id, id);
         p = concluirFase(p, id);
       }
-      p = viajar(andar(p, 'DDLLLLLUU'), 'arquipelago');
+      p = viajar(andar(p, 'D'), 'arquipelago');
       if (anterior === 'arquipelago') conferirGate(p, mundo);
       anterior = mundo;
     }
     assert.equal(abriuEnseada(p), true);
-    assert.equal(entradaEm(andar(p, anterior === 'mangue' ? 'LUURR' : 'RRRR').posicao, 'arquipelago')?.id, 'enseada');
+    assert.equal(entradaEm(andar(p, anterior === 'mangue' ? 'LUR' : 'R').posicao, 'arquipelago')?.id, 'enseada');
   });
 }
 test('Um save v0.2 sem campo mundo continua na praia; o novo mundo sobrevive ao reload', () => {
@@ -119,7 +119,7 @@ test('Um save v0.2 sem campo mundo continua na praia; o novo mundo sobrevive ao 
   assert.equal(mundoAtual(p.progresso), 'praia');
   assert.equal(p.progresso.concluidas.length, 4);
   const arq = viajar(p.progresso, 'arquipelago');
-  const recife = viajar(andar(arq, 'RUU'), 'recifes');
+  const recife = viajar(andar(arq, 'RU'), 'recifes');
   const registro = { ...p, progresso: andar(recife, 'R') };
   assert.equal(salvar(storage, registro), true);
   assert.deepEqual(carregar(storage), registro);

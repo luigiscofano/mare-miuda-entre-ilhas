@@ -119,16 +119,16 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   const andar = rota => [...rota].forEach(d => mapa[movimento[d]].click());
   const jogar = rota => [...rota].forEach(d => botoes[movimento[d]].click());
   andar('D'); // O cenário marítimo não adquiriu uma casa caminhável.
-  assert.match(ler('#mensagem-praia'), /mar aberto/);
+  assert.match(ler('#mensagem-praia'), /Não há trilha/);
   assert.equal(ler('#progresso-praia'), bilheteAntes);
   const entrar = () => pegar('#entrar-fase').click();
   const voltar = () => pegar('#voltar-fase').click();
   andar('R'); entrar(); jogar('RRR'); voltar();
   assert.match(ler('#progresso-praia'), /1\/4/);
-  andar('RDD'); entrar(); jogar('RLDDRRRRU'); voltar();
+  andar('D'); entrar(); jogar('RLDDRRRRU'); voltar();
   assert.match(ler('#progresso-praia'), /Concha Perolada: encontrada/);
-  andar('UUR'); entrar(); jogar('RRDURR'); voltar();
-  andar('RR'); entrar(); jogar('DDRLRLUUR'); voltar();
+  andar('UR'); entrar(); jogar('RRDURR'); voltar();
+  andar('R'); entrar(); jogar('DDRLRLUUR'); voltar();
   andar('R'); entrar(); jogar('RRRDDLRRRU');
   assert.equal(pegar('#seguir-fase').hidden, false);
   pegar('#seguir-fase').click();

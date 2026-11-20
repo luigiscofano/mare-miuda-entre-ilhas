@@ -18,20 +18,6 @@ type Entrada = Readonly<{
   opcional?: boolean;
   destino?: Mundo;
 }>;
-type Bloqueio = Readonly<{
-  de: Posicao;
-  para: Posicao;
-  precisa: IdFase | readonly IdFase[];
-  motivo: string;
-}>;
-
-export const MAPA_PRAIA = [
-  '#########',
-  '#S1.2.3F#',
-  '###.##.##',
-  '###O#..##',
-  '###...###',
-] as const;
 const CAIS: Posicao = { coluna: 1, linha: 1 };
 const ENTRADAS_PRAIA: readonly Entrada[] = [
   { id: 'primeira-onda', nome: 'Primeira onda', posicao: { coluna: 2, linha: 1 } },
@@ -40,38 +26,9 @@ const ENTRADAS_PRAIA: readonly Entrada[] = [
   { id: 'ilhota-perolada', nome: 'Ilhota perolada', posicao: { coluna: 3, linha: 3 }, opcional: true },
   { id: 'ponta-da-garca', nome: 'Ponta da garça', posicao: { coluna: 7, linha: 1 } },
 ];
-const BLOQUEIOS_PRAIA: readonly Bloqueio[] = [
-  { de: { coluna: 3, linha: 1 }, para: { coluna: 4, linha: 1 }, precisa: 'primeira-onda',
-    motivo: 'Conclua a Primeira onda para abrir a passagem da praia.' },
-  { de: { coluna: 5, linha: 1 }, para: { coluna: 6, linha: 1 }, precisa: 'sombra-da-garca',
-    motivo: 'Afaste-se da garça na travessia anterior para liberar esta passagem.' },
-  { de: { coluna: 6, linha: 1 }, para: { coluna: 7, linha: 1 }, precisa: 'busca-e-volta',
-    motivo: 'Recupere o fragmento em Busca e volta para chegar à Ponta da garça.' },
-  { de: { coluna: 3, linha: 1 }, para: { coluna: 3, linha: 2 }, precisa: 'primeira-onda',
-    motivo: 'A trilha opcional aparece depois da Primeira onda.' },
-  { de: { coluna: 3, linha: 3 }, para: { coluna: 3, linha: 4 }, precisa: 'ilhota-perolada',
-    motivo: 'A Concha Perolada abre este atalho.' },
-  { de: { coluna: 6, linha: 1 }, para: { coluna: 6, linha: 2 }, precisa: 'ilhota-perolada',
-    motivo: 'A Concha Perolada abre este atalho.' },
-  { de: { coluna: 6, linha: 2 }, para: { coluna: 6, linha: 3 }, precisa: 'sombra-da-garca',
-    motivo: 'O atalho é só de volta: conclua primeiro a Sombra da garça.' },
-];
-
 const P = (coluna: number, linha: number): Posicao => ({ coluna, linha });
 const FIM_PRAIA = P(7, 1);
-const ARQUIPELAGO = [
-  '#########',
-  '##R...E##',
-  '##.#.####',
-  '#P...M###',
-  '#########',
-] as const;
-const RECIFES = ['#########', '#S1.2.3##', '#.####.##', '#......##', '#########'] as const;
-const MANGUE = ['#########', '#S1.2.3##', '#.####.##', '#......##', '#########'] as const;
-
-const MAPAS: Readonly<Record<Mundo, readonly string[]>> = {
-  praia: MAPA_PRAIA, arquipelago: ARQUIPELAGO, recifes: RECIFES, mangue: MANGUE,
-};
+const CRUZAMENTO = P(4, 3);
 const PORTO = { id: 'porto', posicao: CAIS, nome: 'Voltar ao arquipélago', destino: 'arquipelago' } as const;
 const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
   praia: ENTRADAS_PRAIA,
@@ -104,28 +61,99 @@ const MUNDOS = [
 
 export const mundoValido = (mundo: unknown): mundo is Mundo => MUNDOS.some(i => i.mundo === mundo);
 export const mundoAtual = (progresso: Progresso): Mundo => progresso.mundo ?? 'praia';
-export const mapaDo = (mundo: Mundo): readonly string[] => MAPAS[mundo];
 export const nomeDo = (mundo: Mundo): string => MUNDOS.find(i => i.mundo === mundo)?.nome ?? '';
 export const abriuEnseada = (p: Progresso) =>
   p.concluidas.includes('recife-retorno') && p.concluidas.includes('mangue-reuniao');
 
-const estruturarMundo = (
-  primeira: IdFase, segunda: IdFase, terceira: IdFase,
-): readonly Bloqueio[] => [
-  { de: P(3, 1), para: P(4, 1), precisa: primeira, motivo: 'Conclua a primeira travessia para seguir.' },
-  { de: P(5, 1), para: P(6, 1), precisa: segunda, motivo: 'Conclua a segunda travessia para seguir.' },
-  { de: P(1, 1), para: P(1, 2), precisa: terceira, motivo: 'O atalho pelo sul se abre ao concluir este mundo.' },
-  { de: P(6, 1), para: P(6, 2), precisa: terceira, motivo: 'O atalho pelo sul se abre ao concluir este mundo.' },
+export type Trilha = Readonly<{
+  de: Posicao;
+  para: Posicao;
+  ida: Direcao;
+  volta: Direcao;
+  curvas: readonly Posicao[];
+  precisa: readonly IdFase[];
+  motivo: string;
+}>;
+
+function trilha(
+  de: Posicao, para: Posicao, ida: Direcao, volta: Direcao, curvas: readonly Posicao[],
+  precisa: readonly IdFase[] = [], motivo = '',
+): Trilha {
+  return { de, para, ida, volta, curvas, precisa, motivo };
+}
+
+const sustentar = (
+  primeira: IdFase, segunda: IdFase, terceira: IdFase, mangue = false,
+): readonly Trilha[] => [
+  trilha(CAIS, P(2, 1), 'direita', 'esquerda', []),
+  trilha(P(2, 1), P(4, 1), 'direita', 'esquerda', [P(2.75, mangue ? 1.5 : 0.625)],
+    [primeira], 'Conclua a primeira travessia para seguir.'),
+  trilha(P(4, 1), P(6, 1), 'direita', 'esquerda', [P(5, mangue ? 0.625 : 1.625)],
+    [segunda], 'Conclua a segunda travessia para seguir.'),
+  trilha(CAIS, P(6, 1), 'baixo', 'baixo', [P(0.875, 2.25), P(2, 3.375), P(4.5, 3.5), P(6.625, 2.25)],
+    [terceira], 'O atalho pelo sul se abre ao concluir este mundo.'),
 ];
-const BLOQUEIOS: Readonly<Record<Mundo, readonly Bloqueio[]>> = {
-  praia: BLOQUEIOS_PRAIA,
-  arquipelago: [
-    { de: P(5, 1), para: P(6, 1), precisa: ['recife-retorno', 'mangue-reuniao'],
-      motivo: 'A passagem da Enseada abre ao concluir Recifes Expostos e Mangue dos Dois Siris.' },
+
+// A tecla representa a saída no nó, não a orientação de cada segmento da curva.
+const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
+  praia: [
+    trilha(CAIS, P(2, 1), 'direita', 'esquerda', []),
+    trilha(P(2, 1), P(4, 1), 'direita', 'esquerda', [P(3.125, 0.625)],
+      ['primeira-onda'], 'Conclua a Primeira onda para abrir a passagem da praia.'),
+    trilha(P(4, 1), P(6, 1), 'direita', 'esquerda', [P(5, 0.625)],
+      ['sombra-da-garca'], 'Afaste-se da garça na travessia anterior para liberar esta passagem.'),
+    trilha(P(6, 1), FIM_PRAIA, 'direita', 'esquerda', [],
+      ['busca-e-volta'], 'Recupere o fragmento em Busca e volta para chegar à Ponta da garça.'),
+    trilha(P(2, 1), P(3, 3), 'baixo', 'cima', [P(2.25, 2), P(2.625, 2.625)],
+      ['primeira-onda'], 'A trilha opcional aparece depois da Primeira onda.'),
+    trilha(P(3, 3), P(6, 1), 'baixo', 'baixo', [P(3.75, 3.75), P(5.125, 3.5), P(6, 2.375)],
+      ['ilhota-perolada', 'sombra-da-garca'], 'O atalho pede a Concha Perolada e a passagem pela Sombra da garça.'),
   ],
-  recifes: estruturarMundo('recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno'),
-  mangue: estruturarMundo('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao'),
+  arquipelago: [
+    trilha(P(1, 3), CRUZAMENTO, 'direita', 'esquerda', [P(2, 3.375), P(3, 3.5)]),
+    trilha(CRUZAMENTO, P(2, 1), 'cima', 'baixo', [P(3.875, 2.125), P(3, 1.625)]),
+    trilha(CRUZAMENTO, P(5, 3), 'direita', 'esquerda', []),
+    trilha(P(2, 1), P(6, 1), 'direita', 'esquerda', [P(3.125, 0.625), P(4.75, 0.75)],
+      ['recife-retorno', 'mangue-reuniao'], 'A passagem da Enseada abre ao concluir Recifes Expostos e Mangue dos Dois Siris.'),
+  ],
+  recifes: sustentar('recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno'),
+  mangue: sustentar('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao', true),
 };
+
+export const trilhasDo = (mundo: Mundo) => TRILHAS[mundo];
+export const rotaLivre = (p: Progresso, t: Trilha) => t.precisa.every(id => p.concluidas.includes(id));
+export function saidaEm(progresso: Progresso, direcao: Direcao) {
+  for (const t of trilhasDo(mundoAtual(progresso))) {
+    const caminho = [t.de, ...t.curvas, t.para];
+    if (mesmaCasa(t.de, progresso.posicao) && t.ida === direcao) return { t, caminho, destino: t.para };
+    if (mesmaCasa(t.para, progresso.posicao) && t.volta === direcao) return { t, caminho: caminho.reverse(), destino: t.de };
+  }
+}
+
+export function nosDo(mundo: Mundo): readonly Posicao[] {
+  return trilhasDo(mundo).flatMap(t => [t.de, t.para]).filter((pos, i, lista) =>
+    lista.findIndex(item => mesmaCasa(item, pos)) === i);
+}
+
+export function normalizarPosicao(
+  mundo: Mundo, posicao: Posicao | undefined, concluidas: readonly IdFase[],
+): Posicao {
+  const inicio = mundo === 'arquipelago' ? P(1, 3) : CAIS;
+  if (!posicao) return inicio;
+  const disponiveis: Posicao[] = [inicio];
+  // Migração de saves de células: não conceda um nó do outro lado de uma passagem trancada.
+  for (let i = 0; i < disponiveis.length; i++) {
+    for (const t of trilhasDo(mundo)) {
+      if (!t.precisa.every(id => concluidas.includes(id))) continue;
+      const atual = disponiveis[i];
+      const outro = mesmaCasa(atual, t.de) ? t.para : mesmaCasa(atual, t.para) ? t.de : undefined;
+      if (outro && !disponiveis.some(n => mesmaCasa(n, outro))) disponiveis.push(outro);
+    }
+  }
+  const distancia = (n: Posicao) => Math.abs(n.coluna - posicao.coluna) + Math.abs(n.linha - posicao.linha);
+  // Empates mantêm a primeira posição visitável na ordem das trilhas declaradas.
+  return disponiveis.reduce((maisProxima, n) => distancia(n) < distancia(maisProxima) ? n : maisProxima);
+}
 
 export function podeSairDaPraia(p: Progresso) {
   return mundoAtual(p) === 'praia' && mesmaCasa(p.posicao, FIM_PRAIA) && p.concluidas.includes('ponta-da-garca');
@@ -142,10 +170,6 @@ export function viajar(p: Progresso, destino: Mundo): Progresso {
   return { ...p, mundo: destino, posicao };
 }
 
-const DELTAS: Readonly<Record<Direcao, readonly [number, number]>> = {
-  direita: [1, 0], esquerda: [-1, 0], cima: [0, -1], baixo: [0, 1],
-};
-
 export function criarProgresso(): Progresso {
   return { posicao: CAIS, concluidas: [], viuTutorial: false };
 }
@@ -156,31 +180,15 @@ export function ehIdFase(id: unknown): id is IdFase {
 export function entradaEm(posicao: Posicao, mundo: Mundo = 'praia'): Entrada | undefined {
   return ENTRADAS[mundo].find(entrada => mesmaCasa(entrada.posicao, posicao));
 }
-export function destinoValido(posicao: Posicao, mundo: Mundo = 'praia'): boolean {
-  const celula = MAPAS[mundo][posicao.linha]?.[posicao.coluna];
-  return celula !== undefined && celula !== '#';
-}
-export function portoes(progresso: Progresso): readonly Bloqueio[] {
-  return BLOQUEIOS[mundoAtual(progresso)].filter(item => {
-    const precisa = typeof item.precisa === 'string' ? [item.precisa] : item.precisa;
-    return !precisa.every(id => progresso.concluidas.includes(id));
-  });
-}
-
-// Bloquear arestas nos dois sentidos impede alcançar uma fase futura via atalho.
 export function moverNoMapa(progresso: Progresso, direcao: Direcao) {
-  const [dx, dy] = DELTAS[direcao];
-  const de = progresso.posicao;
-  const para = { coluna: de.coluna + dx, linha: de.linha + dy };
-  if (!destinoValido(para, mundoAtual(progresso))) return { progresso, mensagem: 'Este trecho é mar aberto.' };
-  const bloqueio = portoes(progresso).find(item =>
-    (mesmaCasa(item.de, de) && mesmaCasa(item.para, para)) ||
-    (mesmaCasa(item.para, de) && mesmaCasa(item.de, para)));
-  if (bloqueio) return { progresso, mensagem: bloqueio.motivo };
-  const entrada = entradaEm(para, mundoAtual(progresso));
+  const saida = saidaEm(progresso, direcao);
+  if (!saida) return { progresso, mensagem: 'Não há trilha nessa direção.' };
+  if (!rotaLivre(progresso, saida.t)) return { progresso, mensagem: saida.t.motivo };
+  const entrada = entradaEm(saida.destino, mundoAtual(progresso));
   return {
-    progresso: { ...progresso, posicao: para },
-    mensagem: entrada ? `${entrada.opcional ? 'Desvio opcional: ' : ''}${entrada.nome}. ${entrada.destino ? 'Entre para viajar.' : entrada.id === 'enseada' ? 'Passagem aberta; próximo capítulo.' : 'Entre para jogar.'}` : '',
+    progresso: { ...progresso, posicao: saida.destino },
+    caminho: saida.caminho,
+    mensagem: entrada ? `${entrada.opcional ? 'Desvio opcional: ' : ''}${entrada.nome}. ${entrada.destino ? 'Entre para viajar.' : entrada.id === 'enseada' ? 'Passagem aberta; próximo capítulo.' : 'Entre para jogar.'}` : 'Bifurcação das ilhas.',
   };
 }
 
