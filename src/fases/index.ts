@@ -28,7 +28,7 @@ export const FASES: readonly Fase[] = [
   },
 ];
 
-// A bancada continua restrita às três travessias históricas.
+// As três travessias históricas não incluem o teste de moedas do laboratório.
 export const FASES_PRAIA: readonly Fase[] = [
   ...FASES,
   {
@@ -102,3 +102,12 @@ export const FASES_MANGUE: readonly Fase[] = [
 ];
 
 export const TODAS_AS_FASES = [...FASES_PRAIA, ...FASES_RECIFES, ...FASES_MANGUE];
+
+export const TRES_MOEDAS: Fase = {
+  id: 'laboratorio-tres-moedas', nome: 'Três moedas na restinga',
+  objetivo: 'Recolha três moedas e retorne à saída em até 14 passos válidos.',
+  ensino: 'As moedas ficam em ramos distintos. Escolha a ordem; um passo inválido não gasta orçamento.',
+  mapa: ['##B##', '##.##', 'B.S.G', '##.##', '##B##'],
+  orcamentoMoedas: 14, solucao: rota('UUDDLLRRDDUURR'),
+};
+export const FASES_BANCADA = [...FASES, TRES_MOEDAS];

@@ -12,6 +12,7 @@ export type Fase = Readonly<{
   mapa: readonly string[];
   solucao: readonly Acao[];
   ameaca?: Ameaca;
+  orcamentoMoedas?: number;
   dupla?: Readonly<{ segundoAlvo: 'T' | 'P' }>;
 }>;
 type EstadoDupla = Readonly<{ posicao: Posicao; ultimoFirme: Posicao; parceiroAtivo: boolean }>;
@@ -34,6 +35,7 @@ export type Evento =
   | Readonly<{ tipo: 'falta-fragmento' }>
   | Readonly<{ tipo: 'falta-parceiro' }>
   | Readonly<{ tipo: 'troca' }>
+  | Readonly<{ tipo: 'orcamento-esgotado' }>
   | Readonly<{ tipo: 'vitoria' }>;
 type Transicao = Readonly<{ estado: Estado; eventos: readonly Evento[] }>;
 
@@ -111,6 +113,27 @@ function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], 
   return true;
 }
 
+export function jogadorAtivo(estado: Estado): Posicao {
+  return estado.dupla?.parceiroAtivo ? estado.dupla.posicao : estado.posicao;
+}
+
+export function destinoPermitido(fase: Fase, estado: Estado, direcao: Direcao): Posicao | undefined {
+  const origem = jogadorAtivo(estado);
+  const outro = estado.dupla && (estado.dupla.parceiroAtivo ? estado.posicao : estado.dupla.posicao);
+  const destino = calcularDestino(origem, direcao);
+  const celula = lerCelula(fase, destino);
+  const placa = outro && lerCelula(fase, outro) === 'P';
+  if (!celula || celula === '#' || (celula === '=' && mareAlta(estado.passos)) ||
+    (celula === 'D' && !placa) || (outro && mesmaCasa(outro, destino))) return;
+  return destino;
+}
+
+function terminouOrcamento(fase: Fase, passos: number, eventos: Evento[]): boolean {
+  if (fase.orcamentoMoedas === undefined || passos < fase.orcamentoMoedas) return false;
+  eventos.push({ tipo: 'orcamento-esgotado' });
+  return true;
+}
+
 // A maré anterior decide se o passo pode começar. A nova, junto das ameaças,
 // decide se os dois siris ficam seguros antes de qualquer coleta ou vitória.
 export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transicao {
@@ -122,17 +145,12 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
       eventos: [{ tipo: 'troca' }] };
   }
   const movendoParceiro = dupla?.parceiroAtivo ?? false;
-  const origem = dupla && movendoParceiro ? dupla.posicao : anterior.posicao;
   const outro = dupla ? (movendoParceiro ? anterior.posicao : dupla.posicao) : undefined;
-  const destino = calcularDestino(origem, acao);
-  const celula = lerCelula(fase, destino);
-  const placaPressionada = lerCelula(fase, anterior.posicao) === 'P' ||
-    (dupla && lerCelula(fase, dupla.posicao) === 'P');
-  if (!celula || celula === '#' || (celula === '=' && mareAlta(anterior.passos)) ||
-    (celula === 'D' && (!placaPressionada || lerCelula(fase, origem) === 'P')) ||
-    (outro && mesmaCasa(outro, destino))) {
+  const destino = destinoPermitido(fase, anterior, acao);
+  if (!destino) {
     return { estado: anterior, eventos: [{ tipo: 'bloqueado' }] };
   }
+  const celula = lerCelula(fase, destino);
 
   const passos = anterior.passos + 1;
   const eventos: Evento[] = [];
@@ -143,10 +161,11 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   if (motivos.length > 0) {
     const levadas = anterior.levadas + 1;
     eventos.push({ tipo: 'levada', motivos });
+    const perdeu = terminouOrcamento(fase, passos, eventos) || levadas >= LIMITE_LEVADAS;
     return {
       estado: { ...anterior, passos, levadas, posicao: anterior.ultimoFirme,
         ...(dupla ? { dupla: { ...dupla, posicao: dupla.ultimoFirme } } : {}),
-        situacao: levadas >= LIMITE_LEVADAS ? 'derrota' : 'jogando' },
+        situacao: perdeu ? 'derrota' : 'jogando' },
       eventos,
     };
   }
@@ -156,6 +175,8 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   if (coletou) eventos.push({ tipo: 'fragmento' });
   const celulas = posicoes.map(p => lerCelula(fase, p));
   const venceu = resolverObjetivo(fase, celulas, fragmentos.length, eventos);
+  // Uma saída segura pode completar a missão exatamente no último passo.
+  const perdeu = !venceu && terminouOrcamento(fase, passos, eventos);
   const posicao = movendoParceiro ? anterior.posicao : destino;
   const posicaoParceiro = dupla ? (movendoParceiro ? destino : dupla.posicao) : undefined;
   // Os marcos da dupla sempre vêm de um mesmo turno seguro e não se sobrepõem.
@@ -167,7 +188,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   return {
     estado: { ...anterior, posicao, passos, temFragmento: fragmentos.length > 0, fragmentos,
       ultimoFirme: firmes ? posicao : anterior.ultimoFirme,
-      ...(novaDupla ? { dupla: novaDupla } : {}), situacao: venceu ? 'vitoria' : 'jogando' },
+      ...(novaDupla ? { dupla: novaDupla } : {}), situacao: venceu ? 'vitoria' : perdeu ? 'derrota' : 'jogando' },
     eventos,
   };
 }

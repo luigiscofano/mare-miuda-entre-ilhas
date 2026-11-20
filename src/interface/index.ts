@@ -1,6 +1,6 @@
 import { executarPasso, iniciar, LIMITE_LEVADAS, mareAlta, passosAteVirada, totalFragmentos, vaiAtacar } from '../motor/index.ts';
 import type { Acao, Direcao, Evento } from '../motor/index.ts';
-import { FASES, TODAS_AS_FASES } from '../fases/index.ts';
+import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { desenhar, desenharPraia, LARGURA } from '../render/index.ts';
 import { conectarTeclado } from '../entrada/index.ts';
 import { abriuEnseada, concluirFase, entradaEm, ehIdFase, moverNoMapa, mundoAtual, nomeDo, podeSairDaPraia, rotaLivre, saidaEm, viajar } from '../campanha/index.ts';
@@ -63,7 +63,7 @@ let tela: Tela = 'inicio';
 let quadroMapa: number | undefined;
 let bancada = false;
 let indice = 0;
-let fase = FASES[0];
+let fase = FASES_BANCADA[0];
 let estado = iniciar(fase);
 
 function gravar() {
@@ -147,8 +147,9 @@ function descricao(evento: Evento): string {
     case 'virada': return evento.alta ? 'A maré subiu.' : 'A maré baixou.';
     case 'levada': return evento.motivos.length > 1 ? 'A onda e a garça te alcançaram!'
       : evento.motivos.includes('mare') ? 'A maré te levou!' : 'A garça te alcançou!';
-    case 'fragmento': return totalFragmentos(fase) > 1 ? 'Fragmento recolhido.' : 'Fragmento recolhido. Volte à saída.';
-    case 'falta-fragmento': return totalFragmentos(fase) > 1
+    case 'orcamento-esgotado': return 'Os passos acabaram. Reinicie e tente outra rota.';
+    case 'fragmento': if (fase.orcamentoMoedas) return 'Moeda recolhida.'; return totalFragmentos(fase) > 1 ? 'Fragmento recolhido.' : 'Fragmento recolhido. Volte à saída.';
+    case 'falta-fragmento': if (fase.orcamentoMoedas) return 'Encontre as três moedas antes de sair.'; return totalFragmentos(fase) > 1
       ? 'Para sair, encontre todos os fragmentos.' : 'Para sair, encontre o fragmento na ilhota.';
     case 'falta-parceiro': return 'O outro siri ainda não está no destino.'; 
     case 'troca': return 'Siri ativo trocado sem avançar a maré.';
@@ -166,8 +167,11 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   buscar('#passos').textContent = String(estado.passos);
   buscar('#erros').textContent = `${estado.levadas} / ${LIMITE_LEVADAS}`;
   const total = totalFragmentos(fase);
+  const limite = buscar('#orcamento');
+  limite.hidden = fase.orcamentoMoedas === undefined;
+  limite.textContent = fase.orcamentoMoedas === undefined ? '' : `Passos restantes: ${fase.orcamentoMoedas - estado.passos}`;
   fragmento.hidden = !total;
-  fragmento.textContent = total > 1 ? `Fragmentos: ${estado.fragmentos.length}/${total}`
+  fragmento.textContent = fase.orcamentoMoedas ? `Moedas: ${estado.fragmentos.length}/3` : total > 1 ? `Fragmentos: ${estado.fragmentos.length}/${total}`
     : estado.temFragmento ? 'Fragmento no inventário' : 'Fragmento ainda na ilha';
   const duplaAtiva = buscar('#dupla-ativa');
   duplaAtiva.hidden = !estado.dupla;
@@ -182,10 +186,10 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
 
   const mensagens = eventos.map(descricao);
   if (eventos.some(evento => evento.tipo === 'levada')) {
-    mensagens.push(estado.situacao === 'derrota' ? 'Três erros: tente de novo.' : 'De volta à última casa firme.');
+    mensagens.push(estado.levadas >= LIMITE_LEVADAS ? 'Três erros: tente de novo.' : 'De volta à última casa firme.');
   }
   if (estado.situacao === 'vitoria') {
-    if (bancada && indice < FASES.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');
+    if (bancada && indice < FASES_BANCADA.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');
     if (!bancada && fase.id === 'ilhota-perolada') mensagens.push('Concha Perolada encontrada. Atalho de volta aberto!');
     else if (!bancada && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');
   }
@@ -197,7 +201,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
 
 function selecionarFase(novoIndice: number, mensagem?: string, focar = true): void {
   indice = novoIndice;
-  fase = (bancada ? FASES : TODAS_AS_FASES)[indice];
+  fase = (bancada ? FASES_BANCADA : TODAS_AS_FASES)[indice];
   estado = iniciar(fase);
   buscar('#nome-fase').textContent = fase.nome;
   buscar('#objetivo').textContent = fase.objetivo;

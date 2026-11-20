@@ -75,6 +75,15 @@ def conferir_jogo(pagina, toque=False):
           if (rgba[i+3]!==255 || Math.max(rgba[i],rgba[i+1],rgba[i+2]) - Math.min(rgba[i],rgba[i+1],rgba[i+2])>14) return false;
         return true;
     }"""), 'O palco deve ser opaco, em tons de cinza.'
+    tocar(pagina, '[data-fase="4"]', toque)
+    expect(pagina.locator('#orcamento')).to_have_text('Passos restantes: 14')
+    jogar(pagina, 'UD' * 7, toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Os passos acabaram')
+    tocar(pagina, '#reiniciar', toque)
+    expect(pagina.locator('#fragmento')).to_have_text('Moedas: 0/3')
+    jogar(pagina, 'UUDDLLRRDDUURR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+    expect(pagina.locator('#orcamento')).to_have_text('Passos restantes: 0')
     assert not falhas, falhas
 
 

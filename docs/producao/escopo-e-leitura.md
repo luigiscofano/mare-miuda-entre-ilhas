@@ -19,3 +19,7 @@ Na seleção das fases e no arquipélago, o siri se move de **marco a marco**. C
 ## Tema da ilha nas duas escalas
 
 Cada região tem linguagem própria **no arquipélago e dentro das fases**: raízes, troncos e sedimento no mangue; recifes, pedras altas e poças nos recifes; cristais e paredes minerais quando couber nas grutas. Preservar areia, mar, maré e a leitura do que fica coberto ou descoberto. As grades de pixel podem diferir entre famílias conforme a direção de arte; cada grade continua uniforme, sólida, sem suavização. A marca Placa de Areia não muda nesta revisão. As ilustrações finais seguem em frente separada.
+
+## Curva de dificuldade da campanha
+
+A Praia começa fácil, com tutorial jogável e uma ideia nova de cada vez. O segundo mundo introduz lógica leve, sem exigir ciclos longos ou penalizar a exploração. O terceiro aumenta a exigência com estado compartilhado, objetivos em mais de uma etapa e antecipação. Nos últimos mundos, invista em mapas maiores e com múltiplas rotas, ações que fecham passagens, busca e fuga de garça previsível, chefes por turnos e objetivos como três moedas distribuídas sob orçamento de passos. A rota de campanha segue sem exigir ramos opcionais. Cada fase desse grupo precisa ter solução reproduzível no motor e análise de recuperação: ensinar o impacto antes de fechar uma passagem, impedir impasses sem aviso e manter reinício e ponto de retomada claros. Comprove a curva com jogadores, não só contando passos ou aumentando a grade.

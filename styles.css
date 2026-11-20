@@ -29,8 +29,8 @@ button[aria-pressed="true"] { background: #292a2f; color: #fff; border-color: #2
 .pular:focus { transform: translateY(0); padding: .4rem; background: #fff; color: #222; z-index: 10; }
 .etiqueta { color: #484a50; font: 700 .74rem/1.2 system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .35rem; }
 .secundario { margin-top: .2rem; color: #55575e; }
-.fases { display: flex; gap: .4rem; margin: .8rem 0 .6rem; }
-.fases button { flex: 1; white-space: nowrap; }
+.fases { display: flex; flex-wrap: wrap; gap: .4rem; margin: .8rem 0 .6rem; }
+.fases button { flex: 1 1 auto; white-space: nowrap; }
 .laboratorio { background: #fff; padding: clamp(.45rem, 2vw, .9rem); border: 1px solid #999ba2; border-radius: .4rem; }
 .descricao p { margin-top: .1rem; }
 .indicadores { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .35rem; margin: .6rem 0 0; }
