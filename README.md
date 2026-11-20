@@ -2,9 +2,9 @@
 
 *Tiny Tide: Between Islands*
 
-Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A fatia vertical Praia das Conchas tem um mapa caminhável com cinco desafios. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
+Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A fatia vertical Praia das Conchas tem um mapa caminhável com cinco desafios. O primeiro lote acrescenta seis travessias autorais em Recifes Expostos e Mangue dos Dois Siris. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
 
-**Estado:** Fundação e protótipo preservados; fatia vertical Praia das Conchas implementada para teste. A abertura usa Placa de Areia aprovada; o restante da arte e do áudio ainda é provisório. Não existe publicação do jogo nesta fase.
+**Estado:** Fundação e protótipo preservados; fatia vertical Praia das Conchas e primeiro lote de campanha implementados para teste. A abertura usa Placa de Areia aprovada; o restante da arte e do áudio ainda é provisório. Não existe publicação do jogo nesta fase.
 
 [Como jogar localmente](#como-jogar-localmente) · [Regras](#regras) · [Produção](docs/producao/README.md) · [Campanha](docs/campanha/README.md) · [Fases e soluções](src/fases/README.md) · [Processo de criação](docs/processo-de-criacao/README.md)
 
@@ -30,6 +30,7 @@ Abra `dist/mare-miuda-prototipo.html` no navegador para jogar sem conexão. A ou
 1. [Fundação](docs/processo-de-criacao/01-fundacao/README.md): regras, decisões de arquitetura e plano dos mundos.
 2. [Protótipo cinza](docs/processo-de-criacao/02-prototipo/README.md): HTML autônomo v0.1.0 preservado, fichas, soluções e alcance dos testes.
 3. [Fatia vertical: Praia das Conchas](docs/processo-de-criacao/03-fatia-vertical/README.md): mapa, trilhas, arte provisória, edição de áudio, salvamento e encontro de encerramento.
+4. [Primeiro lote: Recifes e Mangue](docs/processo-de-criacao/04-lote-1/README.md): arquipélago, pedra alta, dois fragmentos, dupla, placa e porta.
 
 [Índice permanente do processo](docs/processo-de-criacao/README.md), com os estudos de identidade mantidos à parte. O material histórico não entra no build.
 
@@ -67,7 +68,7 @@ O núcleo combina contagem de passos, leitura espacial e previsão. O jogador n�
 <details>
 <summary>Campanha e mapa-múndi</summary>
 
-Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O próximo marco de campanha prevê oito mundos; Recifes e Mangue serão acessíveis em qualquer ordem depois da Praia, mas não estão implementados. [Plano dos mundos](docs/campanha/README.md).
+Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O arquipélago permite Recifes e Mangue em qualquer ordem depois da Praia. Depois das duas regiões surge a passagem da Enseada, que ainda não tem fases. O plano completo prevê oito mundos. [Plano dos mundos](docs/campanha/README.md).
 
 </details>
 
@@ -76,7 +77,7 @@ Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo 
 <details>
 <summary>Level design e soluções</summary>
 
-Passagem da primeira onda, A sombra da garça e Busca e volta. Essas três fases estão na bancada e também na rota da praia. A praia acrescenta O segredo da ilhota e A ponta da garça. Cada mapa tem objetivo, instrução e solução reproduzível no motor. [Diagramas e soluções](src/fases/README.md).
+Passagem da primeira onda, A sombra da garça e Busca e volta. Essas três fases estão na bancada e também na rota da praia. A praia acrescenta O segredo da ilhota e A ponta da garça. Recifes e Mangue têm três fases cada, com novas travessias e uma resolução final. Cada mapa tem objetivo, instrução e solução reproduzível no motor. [Diagramas e soluções](src/fases/README.md).
 
 </details>
 
@@ -94,7 +95,7 @@ Os estudos PT/EN ficam preservados separadamente. A Placa de Areia (A) foi aprov
 <details>
 <summary>Artes do jogo e animação</summary>
 
-Na bancada, a arte cinza lê terreno, maré e previsão de ameaça. O mapa e as fases da Praia usam uma paleta provisória em tons de areia, mar, pedra e carapaça. O desenho do siri e do fragmento são matrizes de pixels editáveis em TypeScript. Nenhum recurso do jogo original é importado. [Guia de arte](docs/arte/README.md).
+Na bancada, a arte cinza lê terreno, maré e previsão de ameaça. A Praia, os Recifes e o Mangue usam paletas experimentais. A densidade do cenário e do arquipélago segue em revisão; a Placa de Areia da abertura foi mantida. O desenho do siri e do fragmento são matrizes de pixels editáveis em TypeScript. Nenhum recurso do jogo original é importado. [Guia de arte](docs/arte/README.md).
 
 </details>
 
@@ -161,7 +162,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as cinco soluções, passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md).
+Os testes cobrem as onze soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md).
 
 </details>
 

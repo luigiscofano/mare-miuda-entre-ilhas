@@ -12,6 +12,7 @@ export function conectarTeclado(
   entrar: () => void,
   voltar: () => void,
   emJogo: () => boolean,
+  trocarSiri: () => void,
 ): void {
   janela.addEventListener('keydown', evento => {
     if (evento.altKey || evento.ctrlKey || evento.metaKey || evento.isComposing) return;
@@ -21,14 +22,15 @@ export function conectarTeclado(
     if (tecla === 'escape') { voltar(); return; }
     if (!emJogo()) return;
     // Enter continua acionando controles nativos com foco, sem disparo duplo.
-    if (tecla === 'enter' && alvo instanceof Element && alvo.closest('button, a, summary')) return;
+    if ((tecla === 'enter' || tecla === ' ') && alvo instanceof Element && alvo.closest('button, a, summary')) return;
     const direcao = TECLAS.get(tecla);
-    if (!direcao && tecla !== 'r' && tecla !== 'enter') return;
+    if (!direcao && tecla !== 'r' && tecla !== 'enter' && tecla !== ' ') return;
     // Uma tecla intencional é um turno, não uma fila de repetições.
     evento.preventDefault();
     if (evento.repeat) return;
     if (direcao) mover(direcao);
     else if (tecla === 'enter') entrar();
+    else if (tecla === ' ') trocarSiri();
     else reiniciar();
   });
 }

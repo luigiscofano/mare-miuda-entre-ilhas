@@ -1,27 +1,28 @@
 // O núcleo não lê tempo, DOM nem storage: reprodução e jogo usam a mesma função.
 export type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita';
-export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G';
+export type Acao = Direcao | 'trocar';
+export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T';
 export type Posicao = Readonly<{ coluna: number; linha: number }>;
-export type Ameaca = Readonly<{
-  alvo: Posicao;
-  primeiroAtaque: number;
-  periodo: number;
-}>;
+export type Ameaca = Readonly<{ alvo: Posicao; primeiroAtaque: number; periodo: number }>;
 export type Fase = Readonly<{
   id: string;
   nome: string;
   objetivo: string;
   ensino: string;
   mapa: readonly string[];
-  solucao: readonly Direcao[];
+  solucao: readonly Acao[];
   ameaca?: Ameaca;
+  dupla?: Readonly<{ segundoAlvo: 'T' | 'P' }>;
 }>;
+type EstadoDupla = Readonly<{ posicao: Posicao; ultimoFirme: Posicao; parceiroAtivo: boolean }>;
 export type Estado = Readonly<{
   posicao: Posicao;
   ultimoFirme: Posicao;
   passos: number;
   levadas: number;
   temFragmento: boolean;
+  fragmentos: readonly Posicao[];
+  dupla?: EstadoDupla;
   situacao: 'jogando' | 'vitoria' | 'derrota';
 }>;
 export type MotivoErro = 'mare' | 'garca';
@@ -31,6 +32,8 @@ export type Evento =
   | Readonly<{ tipo: 'levada'; motivos: readonly MotivoErro[] }>
   | Readonly<{ tipo: 'fragmento' }>
   | Readonly<{ tipo: 'falta-fragmento' }>
+  | Readonly<{ tipo: 'falta-parceiro' }>
+  | Readonly<{ tipo: 'troca' }>
   | Readonly<{ tipo: 'vitoria' }>;
 type Transicao = Readonly<{ estado: Estado; eventos: readonly Evento[] }>;
 
@@ -44,32 +47,40 @@ const DELTAS: Record<Direcao, Posicao> = {
   direita: { coluna: 1, linha: 0 },
 };
 
-export function iniciar(fase: Fase): Estado {
-  const linha = fase.mapa.findIndex(fileira => fileira.includes('S'));
-  if (linha < 0) throw new Error('Fase sem casa inicial.');
-  const posicao = { linha, coluna: fase.mapa[linha].indexOf('S') };
-  return { posicao, ultimoFirme: posicao, passos: 0, levadas: 0, temFragmento: false, situacao: 'jogando' };
+function localizar(fase: Fase, simbolo: 'S' | 'A'): Posicao {
+  const linha = fase.mapa.findIndex(fileira => fileira.includes(simbolo));
+  if (linha < 0) throw new Error(`Fase sem casa inicial ${simbolo}.`);
+  return { linha, coluna: fase.mapa[linha].indexOf(simbolo) };
 }
-
+export function iniciar(fase: Fase): Estado {
+  const posicao = localizar(fase, 'S');
+  let dupla: EstadoDupla | undefined;
+  if (fase.dupla) {
+    const parceiro = localizar(fase, 'A');
+    dupla = { posicao: parceiro, ultimoFirme: parceiro, parceiroAtivo: false };
+  }
+  return { posicao, ultimoFirme: posicao, passos: 0, levadas: 0, temFragmento: false,
+    fragmentos: [], ...(dupla ? { dupla } : {}), situacao: 'jogando' };
+}
 export function mareAlta(passos: number): boolean {
   return Math.floor(passos / PASSOS_POR_MARE) % 2 === 1;
 }
-
 export function passosAteVirada(passos: number): number {
   return PASSOS_POR_MARE - passos % PASSOS_POR_MARE;
 }
-
 export function mesmaCasa(a: Posicao, b: Posicao): boolean {
   return a.coluna === b.coluna && a.linha === b.linha;
 }
-
 export function lerCelula(fase: Fase, posicao: Posicao): Celula | undefined {
   return fase.mapa[posicao.linha]?.[posicao.coluna] as Celula | undefined;
 }
-
 export function vaiAtacar(ameaca: Ameaca | undefined, passo: number): boolean {
   return ameaca !== undefined && passo >= ameaca.primeiroAtaque
     && (passo - ameaca.primeiroAtaque) % ameaca.periodo === 0;
+}
+
+export function totalFragmentos(fase: Fase): number {
+  return fase.mapa.reduce((n, linha) => n + [...linha].filter(celula => celula === 'B').length, 0);
 }
 
 function calcularDestino(posicao: Posicao, direcao: Direcao): Posicao {
@@ -77,51 +88,86 @@ function calcularDestino(posicao: Posicao, direcao: Direcao): Posicao {
   return { coluna: posicao.coluna + delta.coluna, linha: posicao.linha + delta.linha };
 }
 
-// O destino é julgado pela água de antes da jogada. A água nova só afeta quem
-// já chegou, portanto não se entra num baixio coberto no mesmo passo da descida.
-export function executarPasso(fase: Fase, anterior: Estado, direcao: Direcao): Transicao {
+function ameacasNoTurno(fase: Fase, posicoes: readonly Posicao[], passos: number): MotivoErro[] {
+  const motivos: MotivoErro[] = [];
+  if (mareAlta(passos) && posicoes.some(pos => lerCelula(fase, pos) === '=')) motivos.push('mare');
+  const a = fase.ameaca;
+  if (a && vaiAtacar(a, passos) && posicoes.some(pos => mesmaCasa(a.alvo, pos))) motivos.push('garca');
+  return motivos;
+}
+
+function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], fragmentos: number, eventos: Evento[]) {
+  const chegou = celulas.includes('C') || celulas.includes('G');
+  if (!chegou) return false;
+  if (fragmentos < totalFragmentos(fase)) {
+    eventos.push({ tipo: 'falta-fragmento' });
+    return false;
+  }
+  if (fase.dupla && !celulas.includes(fase.dupla.segundoAlvo)) {
+    eventos.push({ tipo: 'falta-parceiro' });
+    return false;
+  }
+  eventos.push({ tipo: 'vitoria' });
+  return true;
+}
+
+// A maré anterior decide se o passo pode começar. A nova, junto das ameaças,
+// decide se os dois siris ficam seguros antes de qualquer coleta ou vitória.
+export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transicao {
   if (anterior.situacao !== 'jogando') return { estado: anterior, eventos: [] };
-  const destino = calcularDestino(anterior.posicao, direcao);
+  const dupla = anterior.dupla;
+  if (acao === 'trocar') {
+    if (!dupla) return { estado: anterior, eventos: [] };
+    return { estado: { ...anterior, dupla: { ...dupla, parceiroAtivo: !dupla.parceiroAtivo } },
+      eventos: [{ tipo: 'troca' }] };
+  }
+  const movendoParceiro = dupla?.parceiroAtivo ?? false;
+  const origem = dupla && movendoParceiro ? dupla.posicao : anterior.posicao;
+  const outro = dupla ? (movendoParceiro ? anterior.posicao : dupla.posicao) : undefined;
+  const destino = calcularDestino(origem, acao);
   const celula = lerCelula(fase, destino);
-  if (!celula || celula === '#' || (celula === '=' && mareAlta(anterior.passos))) {
+  const placaPressionada = lerCelula(fase, anterior.posicao) === 'P' ||
+    (dupla && lerCelula(fase, dupla.posicao) === 'P');
+  if (!celula || celula === '#' || (celula === '=' && mareAlta(anterior.passos)) ||
+    (celula === 'D' && (!placaPressionada || lerCelula(fase, origem) === 'P')) ||
+    (outro && mesmaCasa(outro, destino))) {
     return { estado: anterior, eventos: [{ tipo: 'bloqueado' }] };
   }
 
   const passos = anterior.passos + 1;
   const eventos: Evento[] = [];
   if (passos % PASSOS_POR_MARE === 0) eventos.push({ tipo: 'virada', alta: mareAlta(passos) });
-
-  // Correntes e plataformas entram aqui em marcos futuros, antes de avaliar
-  // as ameaças. Duas ameaças no mesmo passo produzem uma única levada.
-  const motivos: MotivoErro[] = [];
-  if (celula === '=' && mareAlta(passos)) motivos.push('mare');
-  const ameaca = fase.ameaca;
-  if (ameaca && vaiAtacar(ameaca, passos) && mesmaCasa(destino, ameaca.alvo)) motivos.push('garca');
+  const posicoes = outro ? [destino, outro] : [destino];
+  const motivos = ameacasNoTurno(fase, posicoes, passos);
 
   if (motivos.length > 0) {
     const levadas = anterior.levadas + 1;
     eventos.push({ tipo: 'levada', motivos });
     return {
-      estado: {
-        ...anterior, passos, levadas, posicao: anterior.ultimoFirme,
-        situacao: levadas >= LIMITE_LEVADAS ? 'derrota' : 'jogando',
-      },
+      estado: { ...anterior, passos, levadas, posicao: anterior.ultimoFirme,
+        ...(dupla ? { dupla: { ...dupla, posicao: dupla.ultimoFirme } } : {}),
+        situacao: levadas >= LIMITE_LEVADAS ? 'derrota' : 'jogando' },
       eventos,
     };
   }
 
-  const temFragmento = anterior.temFragmento || celula === 'B';
-  const venceu = celula === 'C' || (celula === 'G' && temFragmento);
-  if (celula === 'B' && !anterior.temFragmento) eventos.push({ tipo: 'fragmento' });
-  if (celula === 'G' && !temFragmento) eventos.push({ tipo: 'falta-fragmento' });
-  if (venceu) eventos.push({ tipo: 'vitoria' });
-
+  const coletou = celula === 'B' && !anterior.fragmentos.some(p => mesmaCasa(p, destino));
+  const fragmentos = coletou ? [...anterior.fragmentos, destino] : anterior.fragmentos;
+  if (coletou) eventos.push({ tipo: 'fragmento' });
+  const celulas = posicoes.map(p => lerCelula(fase, p));
+  const venceu = resolverObjetivo(fase, celulas, fragmentos.length, eventos);
+  const posicao = movendoParceiro ? anterior.posicao : destino;
+  const posicaoParceiro = dupla ? (movendoParceiro ? destino : dupla.posicao) : undefined;
+  // Os marcos da dupla sempre vêm de um mesmo turno seguro e não se sobrepõem.
+  // Portões móveis não são marcos firmes: podem fechar depois do retorno.
+  const firmes = celulas.every(casa => casa !== '=' && casa !== 'D');
+  const novaDupla = dupla && posicaoParceiro
+    ? { ...dupla, posicao: posicaoParceiro, ultimoFirme: firmes ? posicaoParceiro : dupla.ultimoFirme }
+    : undefined;
   return {
-    estado: {
-      ...anterior, posicao: destino, passos, temFragmento,
-      ultimoFirme: celula === '=' ? anterior.ultimoFirme : destino,
-      situacao: venceu ? 'vitoria' : 'jogando',
-    },
+    estado: { ...anterior, posicao, passos, temFragmento: fragmentos.length > 0, fragmentos,
+      ultimoFirme: firmes ? posicao : anterior.ultimoFirme,
+      ...(novaDupla ? { dupla: novaDupla } : {}), situacao: venceu ? 'vitoria' : 'jogando' },
     eventos,
   };
 }

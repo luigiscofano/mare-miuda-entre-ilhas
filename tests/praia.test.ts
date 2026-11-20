@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { concluirNaPraia, criarProgresso, entradaEm, moverNaPraia } from '../src/campanha/index.ts';
+import { concluirFase, criarProgresso, entradaEm, moverNoMapa } from '../src/campanha/index.ts';
 import type { IdFasePraia, Progresso } from '../src/campanha/index.ts';
 import { FASES_PRAIA } from '../src/fases/index.ts';
 import { carregar, CHAVE_SAVE, salvar } from '../src/persistencia/index.ts';
@@ -11,7 +11,7 @@ const direcoes: Readonly<Record<string, Direcao>> = { U: 'cima', D: 'baixo', L: 
 function rota(texto: string) { return [...texto].map(letra => direcoes[letra]); }
 function caminhar(p: Progresso, texto: string) {
   return rota(texto).reduce((anterior, direcao) => {
-    const novo = moverNaPraia(anterior, direcao);
+    const novo = moverNoMapa(anterior, direcao);
     assert.notStrictEqual(novo.progresso, anterior, novo.mensagem);
     return novo.progresso;
   }, p);
@@ -35,26 +35,26 @@ test('Rota principal completa sem precisar da ilhota', () => {
   let p = caminhar(criarProgresso(), 'R');
   assert.equal(entradaEm(p.posicao)?.id, 'primeira-onda');
   let beira = caminhar(p, 'R');
-  assert.strictEqual(moverNaPraia(beira, 'direita').progresso, beira);
-  assert.strictEqual(moverNaPraia(beira, 'baixo').progresso, beira);
+  assert.strictEqual(moverNoMapa(beira, 'direita').progresso, beira);
+  assert.strictEqual(moverNoMapa(beira, 'baixo').progresso, beira);
   for (const id of ['primeira-onda', 'sombra-da-garca', 'busca-e-volta'] as const) {
-    p = concluirNaPraia(p, id);
+    p = concluirFase(p, id);
     p = caminhar(p, id === 'busca-e-volta' ? 'R' : 'RR');
   }
   assert.equal(entradaEm(p.posicao)?.id, 'ponta-da-garca');
-  p = concluirNaPraia(p, 'ponta-da-garca');
+  p = concluirFase(p, 'ponta-da-garca');
   assert.equal(p.concluidas.length, 4);
-  assert.strictEqual(concluirNaPraia(p, 'ponta-da-garca'), p);
+  assert.strictEqual(concluirFase(p, 'ponta-da-garca'), p);
 });
 test('A concha abre atalho mas não pula a Sombra da garça', () => {
-  const completar = (p: Progresso, id: IdFasePraia) => concluirNaPraia(p, id);
+  const completar = (p: Progresso, id: IdFasePraia) => concluirFase(p, id);
   const primeira = completar(caminhar(criarProgresso(), 'R'), 'primeira-onda');
   let opcional = caminhar(primeira, 'RDD');
   assert.equal(entradaEm(opcional.posicao)?.id, 'ilhota-perolada');
-  assert.strictEqual(moverNaPraia(opcional, 'baixo').progresso, opcional);
+  assert.strictEqual(moverNoMapa(opcional, 'baixo').progresso, opcional);
   opcional = completar(opcional, 'ilhota-perolada');
   const corredor = caminhar(opcional, 'DRRUR');
-  assert.strictEqual(moverNaPraia(corredor, 'cima').progresso, corredor);
+  assert.strictEqual(moverNoMapa(corredor, 'cima').progresso, corredor);
   const aberto = completar(corredor, 'sombra-da-garca');
   assert.equal(entradaEm(caminhar(aberto, 'UU').posicao)?.id, 'busca-e-volta');
   assert.equal(entradaEm(caminhar(caminhar(aberto, 'UU'), 'DDLDLLU').posicao)?.id, 'ilhota-perolada');
@@ -65,7 +65,7 @@ test('Salvamento versionado recupera ramo, posição e áudio sem tocar outros d
     getItem: (chave: string) => itens.get(chave) ?? null,
     setItem: (chave: string, valor: string) => { itens.set(chave, valor); },
   };
-  const progresso = concluirNaPraia(caminhar(criarProgresso(), 'R'), 'primeira-onda');
+  const progresso = concluirFase(caminhar(criarProgresso(), 'R'), 'primeira-onda');
   const registro = { progresso, audio: { musica: 0, efeitos: 0.7 } };
   assert.equal(salvar(storage, registro), true);
   assert.deepEqual(carregar(storage), registro);

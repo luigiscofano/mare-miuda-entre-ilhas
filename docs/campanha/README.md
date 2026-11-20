@@ -35,3 +35,9 @@ S: cais · 1: Primeira onda · 2: Sombra da garça · 3: Busca e volta · O: Ilh
 - Depois de concluir o encontro, é possível entrar nos créditos ou voltar para explorar. Tentativas são reiniciadas ao entrar na fase; a posição no mapa e as vitórias são persistidas.
 
 A tabela anterior continua sendo o plano da campanha, não indicação de mundos disponíveis.
+
+## Primeiro lote: mapa do arquipélago
+
+A Ponta da Garça da Praia abre a saída para a vista caminhável do arquipélago. Em seguida escolha Recifes ou Mangue, em qualquer ordem. As regiões têm seus próprios mapas locais e três travessias sequenciais. Depois de concluir a última travessia da região, há um atalho pelo sul de volta ao seu porto. O porto retorna ao ponto regional correspondente no arquipélago.
+
+A passagem da Enseada abre só depois de `recife-retorno` e `mangue-reuniao`. A placa no mapa informa que é uma passagem futura; não há nível silenciosamente vazio nem avanço ao lote 2. A Concha Perolada e a trilha opcional da Praia não entram na condição.

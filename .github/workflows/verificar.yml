@@ -43,3 +43,26 @@ jobs:
         with:
           name: capturas-praia-escala-real
           path: artifacts/capturas/*.png
+  navegador-webkit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm run build
+      - run: python -m pip install playwright==1.62.0
+      - run: python -m playwright install --with-deps webkit
+      - name: Rodar testes num servidor local de QA
+        run: |
+          python -m http.server 4173 --bind 127.0.0.1 --directory dist &
+          servidor=$!
+          trap 'kill "$servidor"' EXIT
+          python tests/browser_qa.py
+        env:
+          MARE_BROWSER: webkit
+          MARE_QA_URL: http://127.0.0.1:4173/
