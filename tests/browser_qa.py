@@ -386,6 +386,30 @@ def conferir_grutas(pagina, toque=False):
     expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
 
 
+def conferir_farol(pagina, toque=False):
+    jogar(pagina, 'U', toque, mapa=True)
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago do Farol')
+    for nome, caminho in [
+        ('O fragmento das duas margens', 'RRXRRXRRRRRDURRRXRRRD'),
+        ('As duas luzes do farol', 'RDUDDRRXRUURRRRRLRXRRXRXRRR'),
+    ]:
+        jogar(pagina, 'R', toque, mapa=True)
+        tocar(pagina, '#entrar-fase', toque)
+        expect(pagina.locator('#nome-fase')).to_have_text(nome)
+        expect(pagina.locator('#trocar-siri')).to_be_visible()
+        jogar(pagina, caminho, toque)
+        expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+        expect(pagina.locator('#erros')).to_have_text('0 / 3')
+        tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#progresso-praia')).to_contain_text('2/2')
+    jogar(pagina, 'D', toque, mapa=True)
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
+
+
 with sync_playwright() as p:
     motor = os.getenv('MARE_BROWSER', 'chromium')
     if motor not in ('chromium', 'webkit'):
@@ -399,6 +423,7 @@ with sync_playwright() as p:
     conferir_lote(desktop)
     conferir_lote2(desktop)
     conferir_grutas(desktop)
+    conferir_farol(desktop)
     conferir_enseadinha(navegador.new_page(viewport={'width': 1180, 'height': 820}, offline=(PRIMEIRA_PAGINA == OFFLINE)))
     print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
@@ -409,6 +434,7 @@ with sync_playwright() as p:
         conferir_lote(aparelho, toque=True, recifes_primeiro=False)
         conferir_lote2(aparelho, toque=True)
         conferir_grutas(aparelho, toque=True)
+        conferir_farol(aparelho, toque=True)
         conferir_enseadinha(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()

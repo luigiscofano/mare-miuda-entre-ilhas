@@ -32,7 +32,7 @@ Abra `dist/mare-miuda-prototipo.html` no navegador para jogar sem conexão. A ou
 3. [Fatia vertical: Praia das Conchas](docs/processo-de-criacao/03-fatia-vertical/README.md): mapa, trilhas, arte provisória, edição de áudio, salvamento e encontro de encerramento.
 4. [Primeiro lote: Recifes e Mangue](docs/processo-de-criacao/04-lote-1/README.md): arquipélago, pedra alta, dois fragmentos, dupla, placa e porta.
 
-[Siris duplos em outros mundos](docs/processo-de-criacao/09-siris-duplos/README.md) registra as primeiras provas jogáveis e a ampliação dos desvios da Enseada e da Deriva. [Grutas e Ressaca em dupla](docs/processo-de-criacao/10-duplas-grutas-ressaca/README.md) acompanha as quatro fases regulares.
+[Siris duplos em outros mundos](docs/processo-de-criacao/09-siris-duplos/README.md) registra as primeiras provas jogáveis e a ampliação dos desvios da Enseada e da Deriva. [Grutas e Ressaca em dupla](docs/processo-de-criacao/10-duplas-grutas-ressaca/README.md) acompanha as quatro fases regulares. [Farol em dupla](docs/processo-de-criacao/11-farol-dupla/README.md) registra duas fases regulares e o encaixe entre balsas, baixios e patrulha.
 
 [Índice permanente do processo](docs/processo-de-criacao/README.md), com os estudos de identidade mantidos à parte. O material histórico não entra no build.
 
@@ -170,7 +170,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as 34 soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
+Os testes cobrem as 36 soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
 
 </details>
 

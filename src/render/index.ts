@@ -24,6 +24,7 @@ const CORES_MUNDO: Readonly<Record<Mundo, Tons>> = {
   enseada: TONS_PRAIA,
   deriva: TONS_PRAIA,
   ressaca: TONS_PRAIA,
+  farol: TONS_PRAIA,
   grutas: { agua: '#26414e', margem: '#385966', areia: '#e4c394', areiaSombra: '#9d947f',
     roca: '#616174', linha: '#293143', branco: '#fff5dc', cinza: '#d97e62' },
   arquipelago: { agua: '#3a7280', margem: '#549296', areia: '#efdba3', areiaSombra: '#acbb7c',

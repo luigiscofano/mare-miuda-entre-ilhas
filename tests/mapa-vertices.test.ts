@@ -5,7 +5,7 @@ import { prepararTravessia } from '../src/campanha/travessia.ts';
 import { carregar } from '../src/persistencia/index.ts';
 
 test('Só há uma saída por direção em cada nó e curvas não são casas de parada', () => {
-  for (const mundo of ['praia', 'recifes', 'mangue', 'arquipelago'] as const) {
+  for (const mundo of ['praia', 'recifes', 'mangue', 'farol', 'arquipelago'] as const) {
     const destinos = new Set<string>();
     const nos = nosDo(mundo);
     for (const t of trilhasDo(mundo)) {

@@ -29,3 +29,5 @@ O lote da Enseada e das Ilhas tem seis testemunhas, busca independente no motor 
 O teste dos dois desvios comprova as rotas autorizadas, o portão sem gasto de turno, o rasante sobre o siri inativo e o transporte de quem ficou na balsa. Uma busca finita no mesmo motor descarta vitórias sem trocar de siri ou, na Deriva, sem balsa. As duas fases e as conclusões opcionais também passam por ida, volta e recarga.
 
 A ampliação da dupla checa as duas novas testemunhas sem levadas, a impossibilidade de vitória sem trocar, a necessidade de cada balsa no desvio avançado e a persistência dos dois vértices opcionais. O roteiro Playwright joga ambos, recarrega no desvio concluído e retorna ao porto por teclado e toque emulado.
+
+O Farol verifica a travessia com balsa e placa, a ausência de solução sem troca ou sem qualquer balsa, o portão sem gasto de passo, a patrulha sobre o inativo, a janela de dois passos para a troca no baixio, conclusão e recarga. O teste de navegador joga as duas fases por teclado e por toque emulado.

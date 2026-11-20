@@ -17,3 +17,4 @@ Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem subs
 | [Estudos da identidade visual](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/3) | Placa de Areia e Corrente de Espuma, PT/EN, preservadas em PR separado. A foi aprovada para a abertura; B permanece como estudo. |
 
 As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/`. Esse caminho só será integrado junto dos estudos correspondentes.
+| [11 · Farol em dupla](11-farol-dupla/README.md) | Duas travessias regulares: fragmentos, balsas opostas e janela final de maré. |
