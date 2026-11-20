@@ -1,7 +1,7 @@
 import { FASES_ENSEADINHA } from './praia-enseadinha.ts';
 import { FASES_DERIVA, FASES_ENSEADA } from './lote2.ts';
 import { FASES_GRUTAS } from './lote3.ts';
-import { DUPLA_DERIVA, DUPLA_ENSEADA } from './duplas-opcionais.ts';
+import { DUPLA_DERIVA, DUPLA_DERIVA_CONTRAMAO, DUPLA_ENSEADA, DUPLA_ENSEADA_REVEZAMENTO } from './duplas-opcionais.ts';
 import { GRUTAS_DUPLA, RESSACA_DUPLA } from './duplas-grutas-ressaca.ts';
 import type { Fase } from '../motor/index.ts';
 
@@ -106,7 +106,7 @@ export const FASES_MANGUE: readonly Fase[] = [
   },
 ];
 
-export const TODAS_AS_FASES = [...FASES_PRAIA, ...FASES_ENSEADINHA, ...FASES_RECIFES, ...FASES_MANGUE, ...FASES_ENSEADA, ...FASES_DERIVA, DUPLA_ENSEADA, DUPLA_DERIVA, ...FASES_GRUTAS, ...GRUTAS_DUPLA, ...RESSACA_DUPLA];
+export const TODAS_AS_FASES = [...FASES_PRAIA, ...FASES_ENSEADINHA, ...FASES_RECIFES, ...FASES_MANGUE, ...FASES_ENSEADA, ...FASES_DERIVA, DUPLA_ENSEADA, DUPLA_ENSEADA_REVEZAMENTO, DUPLA_DERIVA, DUPLA_DERIVA_CONTRAMAO, ...FASES_GRUTAS, ...GRUTAS_DUPLA, ...RESSACA_DUPLA];
 
 export const TRES_MOEDAS: Fase = {
   id: 'laboratorio-tres-moedas', nome: 'Três moedas na restinga',

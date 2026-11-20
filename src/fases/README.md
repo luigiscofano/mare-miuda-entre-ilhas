@@ -114,3 +114,8 @@ As três fases iniciais estão em `lote3.ts`. `K` é a pérola, `E` o encaixe A,
 | Ressaca | Ancoradouros em revezamento | Planeje duas balsas sincronizadas e a fuga em quatro alvos de rasante. | `RRRLRRRXRRRXRXDXRXURRRDRR` |
 
 `R` = direita, `L` = esquerda, `U` = cima, `D` = baixo e `X` = trocar. Todas são regulares; trocar continua sem gastar turno.
+
+### Segundo desafio em dupla da Enseada e da Deriva
+
+- `enseada-dupla-revezamento`: dois fragmentos sob patrulha alternada, com placa e reunião final (18 passos sem levadas).
+- `deriva-dupla-contramao`: duas balsas em sentidos opostos, placa, dois fragmentos e reunião final (20 passos sem levadas).
