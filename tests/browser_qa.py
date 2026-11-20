@@ -40,6 +40,7 @@ def conferir_jogo(pagina, toque=False):
     expect(pagina.locator('#nome-fase')).to_have_text('Passagem da primeira onda')
     expect(pagina.locator('footer')).to_contain_text('Luigi Scofano de Araujo')
     expect(pagina.locator('#passos')).to_have_text('0')
+    expect(pagina.locator('#sinal-concha')).to_be_visible()
     jogar(pagina, 'L', toque)
     expect(pagina.locator('#passos')).to_have_text('0')
     jogar(pagina, 'RRR', toque)
@@ -77,6 +78,7 @@ def conferir_jogo(pagina, toque=False):
     }"""), 'O palco deve ser opaco, em tons de cinza.'
     tocar(pagina, '[data-fase="4"]', toque)
     expect(pagina.locator('#orcamento')).to_have_text('Passos restantes: 14')
+    expect(pagina.locator('#sinal-concha')).to_be_hidden()
     jogar(pagina, 'UD' * 7, toque)
     expect(pagina.locator('#feedback')).to_contain_text('Os passos acabaram')
     tocar(pagina, '#reiniciar', toque)

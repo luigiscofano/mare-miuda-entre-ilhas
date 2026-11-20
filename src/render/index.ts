@@ -84,6 +84,7 @@ function desenharCasa(ctx: CanvasRenderingContext2D, celula: string, alta: boole
       if (!alta) bloco(ctx, cor, x + 9, y + linha, 3, 1);
     }
   }
+  if (celula === 'C') conchaObjetivo(ctx, x, y, tons);
   if (celula === '#') {
     bloco(ctx, '#54575e', x + 3, y + 7, 10, 5);
     bloco(ctx, '#94979f', x + 5, y + 5, 6, 2);
@@ -111,10 +112,10 @@ function desenharCasa(ctx: CanvasRenderingContext2D, celula: string, alta: boole
     bloco(ctx, tons.linha, x + 5, y + 8, 6, 2);
     bloco(ctx, tons.branco, x + 7, y + 3, 2, 2);
   }
-  if (celula === 'C' || celula === 'G') {
+  if (celula === 'G') {
     bloco(ctx, tons.linha, x + 4, y + 3, 8, 11);
     bloco(ctx, tons.branco, x + 6, y + 5, 4, 6);
-    if (celula === 'G') bloco(ctx, tons.roca, x + 6, y + 7, 4, 2);
+    bloco(ctx, tons.roca, x + 6, y + 7, 4, 2);
   }
 }
 
@@ -135,6 +136,24 @@ function moeda(ctx: CanvasRenderingContext2D, x: number, y: number, tons: Tons) 
   bloco(ctx, tons.areiaSombra, x + 8, y + 6, 1, 4);
 }
 
+const CONCHA_OBJETIVO = [
+  '...llll...',
+  '..lbbbbl..',
+  '.lbcbcbbl.',
+  'lbcbcbcbbl',
+  'lbbcbcbbl.',
+  '.lbbcbbl..',
+  '..lbbbl...',
+  '...lll....',
+] as const;
+
+function conchaObjetivo(ctx: CanvasRenderingContext2D, x: number, y: number, tons: Tons) {
+  pintarPixels(ctx, CONCHA_OBJETIVO, x + 3, y + 5, paleta(tons));
+  // Brilho fixo na grade: a concha não depende de animação ou cor para ser lida.
+  bloco(ctx, tons.branco, x + 12, y + 2, 1, 3);
+  bloco(ctx, tons.branco, x + 11, y + 3, 3, 1);
+}
+
 function marcarAlvo(ctx: CanvasRenderingContext2D, x: number, y: number, previsto: boolean, tons: Tons) {
   const cor = previsto ? tons.linha : tons.roca;
   for (let d = 0; d < 4; d++) {
@@ -149,6 +168,14 @@ function marcarAlvo(ctx: CanvasRenderingContext2D, x: number, y: number, previst
       bloco(ctx, cor, x + 11 - d, y + 4 + d, 1, 1);
     }
   }
+}
+
+export function marcaBloqueioAdjacente(
+  posicao: Posicao, atual: Posicao, celula: string, alta: boolean, vizinhas: readonly Posicao[],
+): boolean {
+  const distancia = Math.abs(posicao.coluna - atual.coluna) + Math.abs(posicao.linha - atual.linha);
+  return distancia === 1 && (celula === '#' || (celula === '=' && alta) || celula === 'D')
+    && !vizinhas.some(v => mesmaCasa(v, posicao));
 }
 
 export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, tema: Mundo | false = false): void {
@@ -196,8 +223,8 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       if (fase.orcamentoMoedas) moeda(ctx, x, y, tons);
       else pintarPixels(ctx, FRAGMENTO, x + 5, y + 5, cores);
     }
-    // Cantos curtos marcam obstáculos sem desenhar caixas por cima da arte.
-    if (celula === '#' || (celula === 'D' && !placa) || (celula === '=' && alta)) {
+    // Só o obstáculo imediatamente relevante ao próximo passo recebe cantos.
+    if (estado.situacao === 'jogando' && marcaBloqueioAdjacente(pos, atual, celula, alta, vizinhas)) {
       cantos(ctx, x, y, tons.branco, 2, 3);
     }
     if (vizinhas.some(v => mesmaCasa(v, pos))) cantos(ctx, x, y, tons.linha, 2, 3);
@@ -223,29 +250,6 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
 
 const MAPA_X = 56;
 const MAPA_Y = 52;
-const BEM_TE_VI = [
-  '......lll..',
-  '.....lwwll.',
-  '....llwlld.',
-  '..llllyyl..',
-  '.lllllyyyl.',
-  'lllllyyyyl.',
-  '..lllllll..',
-  '....l.l....',
-] as const;
-const CORES_BEM_TE_VI = {
-  l: '#3e4235', w: '#fff0c7', y: '#dfb050', d: '#534324',
-};
-
-function desenharBemTeVi(ctx: CanvasRenderingContext2D) {
-  const x = MAPA_X + 30;
-  const y = MAPA_Y + 48;
-  bloco(ctx, '#71897b', x - 3, y + 10, 19, 5);
-  bloco(ctx, '#b1b49a', x, y + 8, 12, 5);
-  bloco(ctx, '#c6c6a5', x + 2, y + 8, 7, 2);
-  pintarPixels(ctx, BEM_TE_VI, x, y, CORES_BEM_TE_VI);
-}
-
 const centroNo = ({ coluna, linha }: Posicao) => [
   Math.round(MAPA_X + coluna * TAMANHO_TILE + 8),
   Math.round(MAPA_Y + linha * TAMANHO_TILE + 8),
@@ -302,8 +306,6 @@ export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progress
       bloco(ctx, tons.branco, x - 1, y - 1, 2, 2);
     }
   }
-  // Segredo de cenário: não cria nó, caminho ou objetivo.
-  if (mundo === 'praia') desenharBemTeVi(ctx);
   trilhas.forEach((t, i) => {
     if (rotaLivre(progresso, t)) return;
     const [x, y] = centroNo(prepararTravessia(caminhos[i]).ponto(0.5));

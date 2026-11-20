@@ -205,6 +205,8 @@ function selecionarFase(novoIndice: number, mensagem?: string, focar = true): vo
   estado = iniciar(fase);
   buscar('#nome-fase').textContent = fase.nome;
   buscar('#objetivo').textContent = fase.objetivo;
+  const sinalConcha = buscar('#sinal-concha');
+  sinalConcha.hidden = !fase.mapa.some(linha => linha.includes('C'));
   buscar('#ensino').textContent = fase.ensino;
   buscar('#lembrete-fase').textContent = fase.ensino;
   buscar('#lembrete-fase').hidden = bancada;

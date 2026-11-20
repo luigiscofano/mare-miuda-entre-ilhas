@@ -113,7 +113,7 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   pegar('#voltar-fase').click();
   pegar('#comecar').click();
   const bilheteAntes = ler('#progresso-praia');
-  assert.ok(quadros.some(([cor]) => cor === '#dfb050'), 'A plumagem amarela só serve ao render do mapa.');
+  assert.ok(!quadros.some(([cor]) => cor === '#dfb050'), 'A decoração antiga fica só no histórico.');
   assert.doesNotMatch(bilheteAntes, /bem-te-vi/i);
   const movimento = { U: 'cima', D: 'baixo', L: 'esquerda', R: 'direita' };
   const andar = rota => [...rota].forEach(d => mapa[movimento[d]].click());
