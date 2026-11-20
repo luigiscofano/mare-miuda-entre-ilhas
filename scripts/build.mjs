@@ -43,14 +43,18 @@ await mkdir(pasta, { recursive: true });
 await compilarFontes('src');
 const html = await readFile('index.html', 'utf8');
 const css = await readFile('styles.css', 'utf8');
-const logo = 'assets/logo-placa-de-areia-pt.png';
+const imagens = ['assets/logo-placa-de-areia-pt.png', 'assets/siri-aprovado-1x.png'];
 await mkdir(join(pasta, 'assets'), { recursive: true });
-await copyFile(logo, join(pasta, logo));
-const placaEmbutida = 'data:image/png;base64,' + (await readFile(logo)).toString('base64');
+let offline = html
+  .replace('<link rel="stylesheet" href="./styles.css">', `<style>
+${css}</style>`)
+  .replace('./src/interface/index.js', gerarUrl('src/interface/index.js'));
+for (const imagem of imagens) {
+  await copyFile(imagem, join(pasta, imagem));
+  const base64 = (await readFile(imagem)).toString('base64');
+  offline = offline.replace('./' + imagem, 'data:image/png;base64,' + base64);
+}
 await writeFile(join(pasta, 'index.html'), html);
 await writeFile(join(pasta, 'styles.css'), css);
-await writeFile(join(pasta, 'mare-miuda-prototipo.html'), html
-  .replace('<link rel="stylesheet" href="./styles.css">', `<style>\n${css}</style>`)
-  .replace('./src/interface/index.js', gerarUrl('src/interface/index.js'))
-  .replace('./' + logo, placaEmbutida));
+await writeFile(join(pasta, 'mare-miuda-prototipo.html'), offline);
 console.log('Build em dist/; HTML offline em dist/mare-miuda-prototipo.html');

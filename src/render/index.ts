@@ -7,6 +7,10 @@ import { prepararTravessia } from '../campanha/travessia.ts';
 export const LARGURA = 256;
 export const ALTURA = 192;
 const TAMANHO_TILE = 16;
+const TAMANHO_TILE_TRAVESSIA = 40;
+export const LARGURA_TRAVESSIA = 280;
+export const ALTURA_TRAVESSIA = 240;
+const ANCORA_SIRI = { x: 17, y: 15 };
 
 const TONS_CINZA = {
   agua: '#32343a', margem: '#484b52', areia: '#d1d2d4', areiaSombra: '#a8aaae',
@@ -57,12 +61,12 @@ const SIRI = [
 const FRAGMENTO = ['..l..', '.lcl.', 'lcbcl', '.lcl.', '..l..'];
 const paleta = (tons: Tons) => ({ l: tons.linha, c: tons.cinza, b: tons.branco }) as Readonly<Record<string, string>>;
 
-function pintarPixels(ctx: CanvasRenderingContext2D, sprite: readonly string[], x: number, y: number, cores: Readonly<Record<string, string>>) {
+function pintarPixels(ctx: CanvasRenderingContext2D, sprite: readonly string[], x: number, y: number, cores: Readonly<Record<string, string>>, escala = 1) {
   sprite.forEach((linha, dy) => [...linha].forEach((pixel, dx) => {
     const cor = cores[pixel];
     if (!cor) return;
     ctx.fillStyle = cor;
-    ctx.fillRect(x + dx, y + dy, 1, 1);
+    ctx.fillRect(x + dx * escala, y + dy * escala, escala, escala);
   }));
 }
 
@@ -71,55 +75,57 @@ function bloco(ctx: CanvasRenderingContext2D, cor: string, x: number, y: number,
   ctx.fillRect(x, y, largura, altura);
 }
 
-function desenharCasa(ctx: CanvasRenderingContext2D, celula: string, alta: boolean, x: number, y: number, tons: Tons, placa = false) {
-  bloco(ctx, tons.margem, x, y, TAMANHO_TILE, TAMANHO_TILE);
+type Pincel = (cor: string, x: number, y: number, largura: number, altura: number) => void;
+
+function desenharCasa(pintar: Pincel, celula: string, alta: boolean, x: number, y: number, tons: Tons, placa = false) {
+  pintar(tons.margem, x, y, TAMANHO_TILE, TAMANHO_TILE);
   const piso = celula === '=' ? (alta ? tons.agua : tons.areiaSombra)
     : celula === '#' ? tons.roca : tons.areia;
-  bloco(ctx, piso, x + 1, y + 1, 14, 14);
+  pintar(piso, x + 1, y + 1, 14, 14);
   if (celula === '=') {
     const cor = alta ? '#c9cbd0' : '#62646b';
     // Padrões diferentes permitem distinguir a maré sem depender de tonalidade.
     for (let linha = 4; linha <= 12; linha += 4) {
-      bloco(ctx, cor, x + 3, y + linha, alta ? 10 : 3, 1);
-      if (!alta) bloco(ctx, cor, x + 9, y + linha, 3, 1);
+      pintar(cor, x + 3, y + linha, alta ? 10 : 3, 1);
+      if (!alta) pintar(cor, x + 9, y + linha, 3, 1);
     }
   }
   if (celula === '#') {
-    bloco(ctx, '#54575e', x + 3, y + 7, 10, 5);
-    bloco(ctx, '#94979f', x + 5, y + 5, 6, 2);
+    pintar('#54575e', x + 3, y + 7, 10, 5);
+    pintar('#94979f', x + 5, y + 5, 6, 2);
   }
   if (celula === 'H') {
     // Duas faces e o topo claro diferenciam o refúgio transitável da rocha.
-    bloco(ctx, tons.roca, x + 2, y + 8, 12, 5);
-    bloco(ctx, tons.linha, x + 3, y + 7, 10, 3);
-    bloco(ctx, tons.branco, x + 4, y + 4, 8, 4);
-    bloco(ctx, tons.areiaSombra, x + 6, y + 3, 4, 2);
+    pintar(tons.roca, x + 2, y + 8, 12, 5);
+    pintar(tons.linha, x + 3, y + 7, 10, 3);
+    pintar(tons.branco, x + 4, y + 4, 8, 4);
+    pintar(tons.areiaSombra, x + 6, y + 3, 4, 2);
   }
   if (celula === 'P') {
-    bloco(ctx, tons.linha, x + 3, y + 3, 10, 10);
-    bloco(ctx, placa ? '#99b35b' : '#e9ac67', x + 4, y + 4, 8, 8);
-    bloco(ctx, tons.branco, x + 7, y + 5, 2, 6);
+    pintar(tons.linha, x + 3, y + 3, 10, 10);
+    pintar(placa ? '#99b35b' : '#e9ac67', x + 4, y + 4, 8, 8);
+    pintar(tons.branco, x + 7, y + 5, 2, 6);
   }
   if (celula === 'D') {
     const abertura = placa ? 2 : 8;
-    bloco(ctx, tons.linha, x + 7, y + 4, 2, abertura);
-    bloco(ctx, tons.linha, x + 3, y + 4, 2, 8);
-    bloco(ctx, tons.linha, x + 11, y + 4, 2, 8);
+    pintar(tons.linha, x + 7, y + 4, 2, abertura);
+    pintar(tons.linha, x + 3, y + 4, 2, 8);
+    pintar(tons.linha, x + 11, y + 4, 2, 8);
   }
   if (celula === 'T') {
-    bloco(ctx, tons.linha, x + 7, y + 4, 2, 9);
-    bloco(ctx, tons.linha, x + 5, y + 8, 6, 2);
-    bloco(ctx, tons.branco, x + 7, y + 3, 2, 2);
+    pintar(tons.linha, x + 7, y + 4, 2, 9);
+    pintar(tons.linha, x + 5, y + 8, 6, 2);
+    pintar(tons.branco, x + 7, y + 3, 2, 2);
   }
   if (celula === 'C' || celula === 'G') {
-    bloco(ctx, tons.linha, x + 4, y + 3, 8, 11);
-    bloco(ctx, tons.branco, x + 6, y + 5, 4, 6);
-    if (celula === 'G') bloco(ctx, tons.roca, x + 6, y + 7, 4, 2);
+    pintar(tons.linha, x + 4, y + 3, 8, 11);
+    pintar(tons.branco, x + 6, y + 5, 4, 6);
+    if (celula === 'G') pintar(tons.roca, x + 6, y + 7, 4, 2);
   }
 }
 
-function cantos(ctx: CanvasRenderingContext2D, x: number, y: number, cor: string, margem: number, traco: number) {
-  const fim = TAMANHO_TILE - 1 - margem;
+function cantos(ctx: CanvasRenderingContext2D, x: number, y: number, cor: string, margem: number, traco: number, tile: number) {
+  const fim = tile - 1 - margem;
   for (const dy of [margem, fim]) {
     for (const dx of [margem, fim]) {
       bloco(ctx, cor, x + (dx === margem ? dx : dx - traco + 1), y + dy, traco, 1);
@@ -128,37 +134,42 @@ function cantos(ctx: CanvasRenderingContext2D, x: number, y: number, cor: string
   }
 }
 
-function moeda(ctx: CanvasRenderingContext2D, x: number, y: number, tons: Tons) {
-  bloco(ctx, tons.linha, x + 6, y + 4, 4, 8);
-  bloco(ctx, tons.linha, x + 5, y + 5, 6, 6);
-  bloco(ctx, tons.branco, x + 6, y + 5, 4, 6);
-  bloco(ctx, tons.areiaSombra, x + 8, y + 6, 1, 4);
+function moeda(pintar: Pincel, x: number, y: number, tons: Tons) {
+  pintar(tons.linha, x + 6, y + 4, 4, 8);
+  pintar(tons.linha, x + 5, y + 5, 6, 6);
+  pintar(tons.branco, x + 6, y + 5, 4, 6);
+  pintar(tons.areiaSombra, x + 8, y + 6, 1, 4);
 }
 
-function marcarAlvo(ctx: CanvasRenderingContext2D, x: number, y: number, previsto: boolean, tons: Tons) {
+function marcarAlvo(pintar: Pincel, x: number, y: number, previsto: boolean, tons: Tons) {
   const cor = previsto ? tons.linha : tons.roca;
   for (let d = 0; d < 4; d++) {
-    bloco(ctx, cor, x + 2 + d, y + 2, 1, 1);
-    bloco(ctx, cor, x + 10 + d, y + 2, 1, 1);
-    bloco(ctx, cor, x + 2 + d, y + 13, 1, 1);
-    bloco(ctx, cor, x + 10 + d, y + 13, 1, 1);
+    pintar(cor, x + 2 + d, y + 2, 1, 1);
+    pintar(cor, x + 10 + d, y + 2, 1, 1);
+    pintar(cor, x + 2 + d, y + 13, 1, 1);
+    pintar(cor, x + 10 + d, y + 13, 1, 1);
   }
   if (previsto) {
     for (let d = 0; d < 8; d++) {
-      bloco(ctx, cor, x + 4 + d, y + 4 + d, 1, 1);
-      bloco(ctx, cor, x + 11 - d, y + 4 + d, 1, 1);
+      pintar(cor, x + 4 + d, y + 4 + d, 1, 1);
+      pintar(cor, x + 11 - d, y + 4 + d, 1, 1);
     }
   }
 }
 
-export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, tema: Mundo | false = false): void {
+export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, tema: Mundo | false = false, siriAprovado?: HTMLImageElement): void {
   const tons: Tons = tema ? CORES_MUNDO[tema] : TONS_CINZA;
   const cores = paleta(tons);
+  const tile = tema ? TAMANHO_TILE_TRAVESSIA : TAMANHO_TILE;
+  const largura = ctx.canvas?.width ?? LARGURA;
+  const altura = ctx.canvas?.height ?? ALTURA;
+  const escala = tema ? 2 : 1;
+  const margemTile = tema ? 4 : 0;
   ctx.imageSmoothingEnabled = false;
-  bloco(ctx, tons.agua, 0, 0, LARGURA, ALTURA);
+  bloco(ctx, tons.agua, 0, 0, largura, altura);
   // Decoração estática mantém árvores e corais fora da grade navegável.
-  for (let y = 10; y < ALTURA; y += 16) {
-    for (let x = 10 + y % 12; x < LARGURA - 10; x += 35) bloco(ctx, tons.margem, x, y, 12, 1);
+  for (let y = 10; y < altura; y += 16) {
+    for (let x = 10 + y % 12; x < largura - 10; x += 35) bloco(ctx, tons.margem, x, y, 12, 1);
   }
   if (tema === 'recifes' || tema === 'mangue') {
     for (const [x, y] of [[26, 36], [207, 30], [34, 149], [218, 145], [66, 163]]) {
@@ -175,10 +186,10 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       }
     }
   }
-  const gradeLargura = fase.mapa[0].length * TAMANHO_TILE;
-  const gradeAltura = fase.mapa.length * TAMANHO_TILE;
-  const origemX = (LARGURA - gradeLargura) / 2;
-  const origemY = (ALTURA - gradeAltura) / 2;
+  const gradeLargura = fase.mapa[0].length * tile;
+  const gradeAltura = fase.mapa.length * tile;
+  const origemX = (largura - gradeLargura) / 2;
+  const origemY = (altura - gradeAltura) / 2;
   bloco(ctx, tons.margem, origemX - 4, origemY - 4, gradeLargura + 8, gradeAltura + 8);
 
   const alta = mareAlta(estado.passos);
@@ -188,37 +199,48 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     : [];
   const placa = [estado.posicao, estado.dupla?.posicao].some(pos => pos && fase.mapa[pos.linha]?.[pos.coluna] === 'P');
   fase.mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
-    const x = origemX + coluna * TAMANHO_TILE;
-    const y = origemY + linha * TAMANHO_TILE;
-    desenharCasa(ctx, celula, alta, x, y, tons, placa);
+    const x = origemX + coluna * tile;
+    const y = origemY + linha * tile;
+    // Adereços antigos usam 2× inteiro no miolo, sem esticar o novo sprite.
+    const pincel: Pincel = (cor, px, py, w, h) =>
+      bloco(ctx, cor, x + margemTile + px * escala, y + margemTile + py * escala, w * escala, h * escala);
+    const piso = celula === '=' ? (alta ? tons.agua : tons.areiaSombra) : celula === '#' ? tons.roca : tons.areia;
+    if (tema) bloco(ctx, piso, x + 1, y + 1, tile - 2, tile - 2);
+    desenharCasa(pincel, celula, alta, 0, 0, tons, placa);
     const pos = { coluna, linha };
     if (celula === 'B' && !estado.fragmentos.some(coleta => mesmaCasa(pos, coleta))) {
-      if (fase.orcamentoMoedas) moeda(ctx, x, y, tons);
-      else pintarPixels(ctx, FRAGMENTO, x + 5, y + 5, cores);
+      if (fase.orcamentoMoedas) moeda(pincel, 0, 0, tons);
+      else pintarPixels(ctx, FRAGMENTO, x + margemTile + 5 * escala, y + margemTile + 5 * escala, cores, escala);
     }
-    // Cantos curtos marcam obstáculos sem desenhar caixas por cima da arte.
     if (celula === '#' || (celula === 'D' && !placa) || (celula === '=' && alta)) {
-      cantos(ctx, x, y, tons.branco, 2, 3);
+      cantos(ctx, x, y, tons.branco, 2, tema ? 5 : 3, tile);
     }
-    if (vizinhas.some(v => mesmaCasa(v, pos))) cantos(ctx, x, y, tons.linha, 2, 3);
-    if (mesmaCasa(atual, pos)) cantos(ctx, x, y, tons.linha, 1, 5);
-    if (fase.ameaca && mesmaCasa(fase.ameaca.alvo, { coluna, linha })) {
-      marcarAlvo(ctx, x, y, vaiAtacar(fase.ameaca, estado.passos + 1), tons);
+    if (vizinhas.some(v => mesmaCasa(v, pos))) cantos(ctx, x, y, tons.linha, 2, tema ? 5 : 3, tile);
+    if (mesmaCasa(atual, pos)) cantos(ctx, x, y, tons.linha, 1, tema ? 8 : 5, tile);
+    if (fase.ameaca && mesmaCasa(fase.ameaca.alvo, pos)) {
+      marcarAlvo(pincel, 0, 0, vaiAtacar(fase.ameaca, estado.passos + 1), tons);
     }
   }));
 
   if (estado.dupla) {
     const parceiro = estado.dupla.posicao;
-    const x = origemX + parceiro.coluna * TAMANHO_TILE;
-    const y = origemY + parceiro.linha * TAMANHO_TILE;
-    pintarPixels(ctx, PARCEIRO, x + 2, y + 3, { l: tons.linha, c: '#a7b969', b: tons.branco });
-    if (estado.dupla.parceiroAtivo) bloco(ctx, tons.branco, x + 6, y + 14, 4, 1);
+    const x = origemX + parceiro.coluna * tile;
+    const y = origemY + parceiro.linha * tile;
+    pintarPixels(ctx, PARCEIRO, x + margemTile + 2 * escala, y + margemTile + 3 * escala,
+      { l: tons.linha, c: '#a7b969', b: tons.branco }, escala);
+    if (estado.dupla.parceiroAtivo) bloco(ctx, tons.branco, x + tile / 2 - 3, y + tile - 3, 6, 1);
   }
   const { coluna, linha } = estado.posicao;
+  const x = origemX + coluna * tile;
+  const y = origemY + linha * tile;
   if (estado.dupla && !estado.dupla.parceiroAtivo) {
-    bloco(ctx, tons.branco, origemX + coluna * TAMANHO_TILE + 6, origemY + linha * TAMANHO_TILE + 14, 4, 1);
+    bloco(ctx, tons.branco, x + tile / 2 - 3, y + tile - 3, 6, 1);
   }
-  pintarPixels(ctx, SIRI, origemX + coluna * TAMANHO_TILE + 2, origemY + linha * TAMANHO_TILE + 3, cores);
+  if (tema && siriAprovado?.complete && siriAprovado.naturalWidth === 35 && siriAprovado.naturalHeight === 27) {
+    ctx.drawImage(siriAprovado, x + tile / 2 - ANCORA_SIRI.x, y + tile / 2 - ANCORA_SIRI.y);
+  } else {
+    pintarPixels(ctx, SIRI, x + margemTile + 2 * escala, y + margemTile + 3 * escala, cores, escala);
+  }
 }
 
 const MAPA_X = 56;

@@ -70,6 +70,11 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   const png = await readFile(new URL('../assets/logo-placa-de-areia-pt.png', import.meta.url));
   assert.deepEqual(Buffer.from(marca, 'base64'), png, 'A imagem aprovada não pode ser reamostrada.');
 
+  const siri = html.match(/id="siri-aprovado" src="data:image\/png;base64,([^"]+)"/)?.[1];
+  assert.ok(siri, 'O sprite de travessia funciona sem rede.');
+  const imagem = await readFile(new URL('../assets/siri-aprovado-1x.png', import.meta.url));
+  assert.deepEqual(Buffer.from(siri, 'base64'), imagem);
+
   assert.ok(!html.includes("href=\"./styles.css\""));
   const { pegar, quadros, fases, botoes, mapa, tecla, storage } = prepararInterface();
   await import(modulo);
