@@ -136,9 +136,11 @@ function atualizarPraia(mensagem = ''): void {
     if (saida) rotas.push(`${simbolos[direcao]} ${nome ?? 'Bifurcação ou cais'}${rotaLivre(p, saida.t) ? '' : ' (bloqueada)'}`);
   }
   buscar('#saidas-praia').textContent = rotas.join(' · ');
-  entrar.textContent = podeSairDaPraia(p) ? 'Seguir para o arquipélago' : entrada?.destino
-    ? (entrada.id === 'porto' ? 'Voltar ao arquipélago' : 'Visitar região')
-    : entrada?.id === 'enseada' ? 'Ver passagem' : 'Entrar na fase';
+  if (podeSairDaPraia(p)) entrar.textContent = 'Seguir para o arquipélago';
+  else if (entrada?.id === 'porto') entrar.textContent = 'Voltar ao arquipélago';
+  else if (entrada?.id === 'enseada') entrar.textContent = 'Ver passagem';
+  else if (entrada?.destino) entrar.textContent = entrada.id.startsWith('rumo-') ? 'Visitar região' : entrada.nome;
+  else entrar.textContent = 'Entrar na fase';
   if (podeDesenharCabo(mundo, arteCabo)) desenharCabo(mapaPraia.ctx, p, arteCabo);
   else desenharPraia(mapaPraia.ctx, p);
 }
