@@ -1,9 +1,9 @@
 // O núcleo não lê tempo, DOM nem storage: reprodução e jogo usam a mesma função.
 export type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita';
 export type Acao = Direcao | 'trocar';
-export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T';
+export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~';
 export type Posicao = Readonly<{ coluna: number; linha: number }>;
-export type Ameaca = Readonly<{ alvo: Posicao; primeiroAtaque: number; periodo: number }>;
+export type Ameaca = Readonly<{ alvo: Posicao; primeiroAtaque: number; periodo: number; rota?: readonly Posicao[] }>;
 export type Fase = Readonly<{
   id: string;
   nome: string;
@@ -12,6 +12,7 @@ export type Fase = Readonly<{
   mapa: readonly string[];
   solucao: readonly Acao[];
   ameaca?: Ameaca;
+  balsas?: readonly Readonly<{ paradas: readonly [Posicao, Posicao] }>[];
   orcamentoMoedas?: number;
   dupla?: Readonly<{ segundoAlvo: 'T' | 'P' }>;
 }>;
@@ -30,6 +31,7 @@ export type MotivoErro = 'mare' | 'garca';
 export type Evento =
   | Readonly<{ tipo: 'bloqueado' }>
   | Readonly<{ tipo: 'virada'; alta: boolean }>
+  | Readonly<{ tipo: 'balsa' }>
   | Readonly<{ tipo: 'levada'; motivos: readonly MotivoErro[] }>
   | Readonly<{ tipo: 'fragmento' }>
   | Readonly<{ tipo: 'falta-fragmento' }>
@@ -81,6 +83,21 @@ export function vaiAtacar(ameaca: Ameaca | undefined, passo: number): boolean {
     && (passo - ameaca.primeiroAtaque) % ameaca.periodo === 0;
 }
 
+// A mesma função descreve o aviso e resolve o rasante. A rota não tem relógio separado.
+export function alvoDaGarca(ameaca: Ameaca | undefined, passo: number): Posicao | undefined {
+  if (!ameaca || !vaiAtacar(ameaca, passo)) return;
+  if (!ameaca.rota?.length) return ameaca.alvo;
+  const indice = (passo - ameaca.primeiroAtaque) / ameaca.periodo;
+  const ciclo = [ameaca.alvo, ...ameaca.rota];
+  return ciclo[indice % ciclo.length];
+}
+
+export function balsasNoTurno(fase: Fase, passos: number): readonly Posicao[] {
+  const parada = mareAlta(passos) ? 1 : 0;
+  return (fase.balsas ?? []).map(balsa => balsa.paradas[parada]);
+}
+
+
 export function totalFragmentos(fase: Fase): number {
   return fase.mapa.reduce((n, linha) => n + [...linha].filter(celula => celula === 'B').length, 0);
 }
@@ -93,8 +110,8 @@ function calcularDestino(posicao: Posicao, direcao: Direcao): Posicao {
 function ameacasNoTurno(fase: Fase, posicoes: readonly Posicao[], passos: number): MotivoErro[] {
   const motivos: MotivoErro[] = [];
   if (mareAlta(passos) && posicoes.some(pos => lerCelula(fase, pos) === '=')) motivos.push('mare');
-  const a = fase.ameaca;
-  if (a && vaiAtacar(a, passos) && posicoes.some(pos => mesmaCasa(a.alvo, pos))) motivos.push('garca');
+  const alvo = alvoDaGarca(fase.ameaca, passos);
+  if (alvo && posicoes.some(pos => mesmaCasa(alvo, pos))) motivos.push('garca');
   return motivos;
 }
 
@@ -124,6 +141,7 @@ export function destinoPermitido(fase: Fase, estado: Estado, direcao: Direcao): 
   const celula = lerCelula(fase, destino);
   const placa = outro && lerCelula(fase, outro) === 'P';
   if (!celula || celula === '#' || (celula === '=' && mareAlta(estado.passos)) ||
+    (celula === '~' && !balsasNoTurno(fase, estado.passos).some(p => mesmaCasa(p, destino))) ||
     (celula === 'D' && !placa) || (outro && mesmaCasa(outro, destino))) return;
   return destino;
 }
@@ -146,15 +164,22 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   }
   const movendoParceiro = dupla?.parceiroAtivo ?? false;
   const outro = dupla ? (movendoParceiro ? anterior.posicao : dupla.posicao) : undefined;
-  const destino = destinoPermitido(fase, anterior, acao);
-  if (!destino) {
+  const entrada = destinoPermitido(fase, anterior, acao);
+  if (!entrada) {
     return { estado: anterior, eventos: [{ tipo: 'bloqueado' }] };
   }
-  const celula = lerCelula(fase, destino);
-
+  let destino = entrada;
   const passos = anterior.passos + 1;
   const eventos: Evento[] = [];
-  if (passos % PASSOS_POR_MARE === 0) eventos.push({ tipo: 'virada', alta: mareAlta(passos) });
+  if (passos % PASSOS_POR_MARE === 0) {
+    eventos.push({ tipo: 'virada', alta: mareAlta(passos) });
+    const montada = balsasNoTurno(fase, anterior.passos).findIndex(p => mesmaCasa(p, entrada));
+    if (montada >= 0) {
+      destino = balsasNoTurno(fase, passos)[montada];
+      eventos.push({ tipo: 'balsa' });
+    }
+  }
+  const celula = lerCelula(fase, destino);
   const posicoes = outro ? [destino, outro] : [destino];
   const motivos = ameacasNoTurno(fase, posicoes, passos);
 
@@ -181,7 +206,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   const posicaoParceiro = dupla ? (movendoParceiro ? destino : dupla.posicao) : undefined;
   // Os marcos da dupla sempre vêm de um mesmo turno seguro e não se sobrepõem.
   // Portões móveis não são marcos firmes: podem fechar depois do retorno.
-  const firmes = celulas.every(casa => casa !== '=' && casa !== 'D');
+  const firmes = celulas.every(casa => casa !== '=' && casa !== 'D' && casa !== '~');
   const novaDupla = dupla && posicaoParceiro
     ? { ...dupla, posicao: posicaoParceiro, ultimoFirme: firmes ? posicaoParceiro : dupla.ultimoFirme }
     : undefined;

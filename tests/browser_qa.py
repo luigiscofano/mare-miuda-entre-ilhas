@@ -222,8 +222,6 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
 
     jogar(pagina, 'LUR' if recifes_primeiro else 'R', toque, mapa=True)
     expect(pagina.locator('#enseada-aberta')).to_be_visible()
-    tocar(pagina, '#entrar-fase', toque)
-    expect(pagina.locator('#mensagem-praia')).to_contain_text('ainda não disponível')
     if not toque:
         salvar_captura(pagina, 'arquipelago-desktop')
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
@@ -282,6 +280,40 @@ def conferir_enseadinha(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def conferir_lote2(pagina, toque=False):
+    fases = {
+        'Enseada da Garça': ['RRDURR', 'RRRDUDURR', 'RRDUDUDRRLLUL'],
+        'Ilhas à Deriva': ['RRRRR', 'RRRRRUUDLDRLLUUUULLLL', 'RRRRDURLRR'],
+    }
+    jogar(pagina, 'R', toque, mapa=True)
+    expect(pagina.locator('#mensagem-praia')).to_contain_text('Conclua o trecho')
+    for mundo, solucoes in fases.items():
+        tocar(pagina, '#entrar-fase', toque)
+        expect(pagina.locator('#titulo-praia')).to_have_text(mundo)
+        for indice, solucao in enumerate(solucoes):
+            jogar(pagina, 'R', toque, mapa=True)
+            tocar(pagina, '#entrar-fase', toque)
+            if indice == 0:
+                jogar(pagina, solucao[:2], toque)
+                aviso = 'Garça no próximo passo' if mundo.startswith('Enseada') else 'Na virada: Balsa 1'
+                expect(pagina.locator('#previsao')).to_contain_text(aviso)
+                if not toque:
+                    salvar_captura(pagina, f"lote2-{'garca' if mundo.startswith('Enseada') else 'balsa'}-desktop")
+                solucao = solucao[2:]
+            jogar(pagina, solucao, toque)
+            expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+            tocar(pagina, '#voltar-fase', toque)
+        pagina.reload()
+        tocar(pagina, '#comecar', toque)
+        expect(pagina.locator('#progresso-praia')).to_contain_text('3/3')
+        jogar(pagina, 'D', toque, mapa=True)
+        tocar(pagina, '#entrar-fase', toque)
+        expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
+        if mundo.startswith('Enseada'):
+            jogar(pagina, 'R', toque, mapa=True)
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+
+
 with sync_playwright() as p:
     motor = os.getenv('MARE_BROWSER', 'chromium')
     if motor not in ('chromium', 'webkit'):
@@ -293,6 +325,7 @@ with sync_playwright() as p:
     print('Desktop 1180 × 820: três fases, teclado, erros, reinício, pintura e HTML offline.')
     conferir_praia(desktop, opcional=True)
     conferir_lote(desktop)
+    conferir_lote2(desktop)
     conferir_enseadinha(navegador.new_page(viewport={'width': 1180, 'height': 820}, offline=(PRIMEIRA_PAGINA == OFFLINE)))
     print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
@@ -301,6 +334,7 @@ with sync_playwright() as p:
         conferir_jogo(aparelho, toque=True)
         conferir_praia(aparelho, toque=True, opcional=False)
         conferir_lote(aparelho, toque=True, recifes_primeiro=False)
+        conferir_lote2(aparelho, toque=True)
         conferir_enseadinha(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()

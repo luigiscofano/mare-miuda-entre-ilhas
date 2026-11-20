@@ -1,4 +1,4 @@
-import { executarPasso, iniciar, LIMITE_LEVADAS, mareAlta, passosAteVirada, totalFragmentos, vaiAtacar } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, executarPasso, iniciar, LIMITE_LEVADAS, mareAlta, passosAteVirada, totalFragmentos } from '../motor/index.ts';
 import type { Acao, Direcao, Evento } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
@@ -97,6 +97,7 @@ function atualizarPraia(mensagem = ''): void {
   const entrada = entradaEm(p.posicao, mundo);
   const concluidas = p.concluidas.filter(id =>
     mundo === 'praia-enseadinha' ? ['praia-fio-de-areia', 'praia-pocas-espelho', 'praia-mirante'].includes(id)
+    : mundo === 'enseada' ? id.startsWith('enseada-') : mundo === 'deriva' ? id.startsWith('deriva-')
     : mundo === 'recifes' ? id.startsWith('recife-') : mundo === 'mangue' ? id.startsWith('mangue-')
     : ['primeira-onda', 'sombra-da-garca', 'busca-e-volta', 'ponta-da-garca'].includes(id)).length;
   const perola = p.concluidas.includes('ilhota-perolada');
@@ -107,7 +108,7 @@ function atualizarPraia(mensagem = ''): void {
     ? (concluidas ? 'As passagens se abrem à medida que você resolve as travessias. Depois da Ponta da garça, siga à direita para a Enseadinha.'
       : 'Faça o primeiro passo para a direita, pare no marco e entre na Primeira onda.')
     : mundo === 'praia-enseadinha' ? 'Atravesse o braço de areia, explore os desvios ou volte ao Cabo Baixo pelo começo da trilha.'
-    : mundo === 'arquipelago' ? 'Visite Recifes Expostos e Mangue dos Dois Siris em qualquer ordem. A Enseada exige ambos.'
+    : mundo === 'arquipelago' ? 'Visite Recifes Expostos e Mangue dos Dois Siris em qualquer ordem. A Enseada abre depois dos dois; suas três travessias liberam as Ilhas à Deriva.'
     : 'Complete as três travessias. O atalho sul só se abre depois da última.';
   buscar('#progresso-praia').textContent = mundo === 'praia'
     ? `Rota principal: ${concluidas}/4 · Concha Perolada: ${perola ? 'encontrada' : 'não encontrada'}.`
@@ -138,7 +139,6 @@ function atualizarPraia(mensagem = ''): void {
   buscar('#saidas-praia').textContent = rotas.join(' · ');
   if (podeSairDaPraia(p)) entrar.textContent = 'Seguir para o arquipélago';
   else if (entrada?.id === 'porto') entrar.textContent = 'Voltar ao arquipélago';
-  else if (entrada?.id === 'enseada') entrar.textContent = 'Ver passagem';
   else if (entrada?.destino) entrar.textContent = entrada.id.startsWith('rumo-') ? 'Visitar região' : entrada.nome;
   else entrar.textContent = 'Entrar na fase';
   if (podeDesenharCabo(mundo, arteCabo)) desenharCabo(mapaPraia.ctx, p, arteCabo);
@@ -157,6 +157,7 @@ function abrirPraia(mensagem = ''): void {
 function descricao(evento: Evento): string {
   switch (evento.tipo) {
     case 'bloqueado': return 'Passo bloqueado. A maré não avançou.';
+    case 'balsa': return 'A balsa levou o siri ao outro cais.';
     case 'virada': return evento.alta ? 'A maré subiu.' : 'A maré baixou.';
     case 'levada': return evento.motivos.length > 1 ? 'A onda e a garça te alcançaram!'
       : evento.motivos.includes('mare') ? 'A maré te levou!' : 'A garça te alcançou!';
@@ -190,11 +191,15 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   duplaAtiva.hidden = !estado.dupla;
   duplaAtiva.textContent = `Siri ativo: ${estado.dupla?.parceiroAtivo ? 'Verde, pinças baixas' : 'Coral, pinças erguidas'} (Espaço para trocar)`;
   buscar('#trocar-siri').hidden = !estado.dupla || finalizada;
-  const ameaca = fase.ameaca;
-  const sinalGarca = ameaca && vaiAtacar(ameaca, estado.passos + 1)
-    ? ` Garça no próximo passo: coluna ${ameaca.alvo.coluna + 1}, linha ${ameaca.alvo.linha + 1}.` : '';
+  const coordenadas = (p: { coluna: number; linha: number }) => `coluna ${p.coluna + 1}, linha ${p.linha + 1}`;
+  const alvo = alvoDaGarca(fase.ameaca, estado.passos + 1);
+  const sinalGarca = alvo ? ` Garça no próximo passo: ${coordenadas(alvo)}.` : '';
+  const cais = balsasNoTurno(fase, estado.passos);
+  const destinos = balsasNoTurno(fase, estado.passos + faltam);
+  const previsoes = cais.map((atual, i) => `Balsa ${i + 1}: ${coordenadas(atual)} → ${coordenadas(destinos[i])}`);
+  const sinalBalsa = previsoes.length ? ` Na virada: ${previsoes.join('; ')}.` : '';
   buscar('#previsao').textContent = finalizada ? 'Tentativa encerrada.'
-    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}`;
+    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}`;
   buscar('#posicao').textContent = `Siri na coluna ${estado.posicao.coluna + 1}, linha ${estado.posicao.linha + 1}.`;
 
   const mensagens = eventos.map(descricao);
@@ -236,10 +241,6 @@ function entrarFase(): void {
   const p = save.progresso;
   const entrada = entradaEm(p.posicao, mundoAtual(p));
   if (!entrada) return;
-  if (entrada.id === 'enseada') {
-    atualizarPraia('Passagem da Enseada aberta. Próximo capítulo ainda não disponível.');
-    return;
-  }
   const destino = podeSairDaPraia(p) ? 'arquipelago' : entrada.destino;
   if (destino) {
     const proximo = viajar(p, destino);

@@ -1,4 +1,4 @@
-import { DIRECOES, destinoPermitido, jogadorAtivo, mareAlta, mesmaCasa, vaiAtacar } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, jogadorAtivo, mareAlta, mesmaCasa } from '../motor/index.ts';
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
@@ -21,6 +21,8 @@ const TONS_PRAIA: Tons = {
 const CORES_MUNDO: Readonly<Record<Mundo, Tons>> = {
   praia: TONS_PRAIA,
   'praia-enseadinha': TONS_PRAIA,
+  enseada: TONS_PRAIA,
+  deriva: TONS_PRAIA,
   arquipelago: { agua: '#3a7280', margem: '#549296', areia: '#efdba3', areiaSombra: '#acbb7c',
     roca: '#68796b', linha: '#27434c', branco: '#fff6d9', cinza: '#d77050' },
   recifes: { agua: '#205468', margem: '#38828c', areia: '#e9d49f', areiaSombra: '#7bad9f',
@@ -75,7 +77,7 @@ function bloco(ctx: CanvasRenderingContext2D, cor: string, x: number, y: number,
 
 function desenharCasa(ctx: CanvasRenderingContext2D, celula: string, alta: boolean, x: number, y: number, tons: Tons, placa = false) {
   bloco(ctx, tons.margem, x, y, TAMANHO_TILE, TAMANHO_TILE);
-  const piso = celula === '=' ? (alta ? tons.agua : tons.areiaSombra)
+  const piso = celula === '~' ? tons.agua : celula === '=' ? (alta ? tons.agua : tons.areiaSombra)
     : celula === '#' ? tons.roca : tons.areia;
   bloco(ctx, piso, x + 1, y + 1, 14, 14);
   if (celula === '=') {
@@ -176,7 +178,7 @@ export function marcaBloqueioAdjacente(
   posicao: Posicao, atual: Posicao, celula: string, alta: boolean, vizinhas: readonly Posicao[],
 ): boolean {
   const distancia = Math.abs(posicao.coluna - atual.coluna) + Math.abs(posicao.linha - atual.linha);
-  return distancia === 1 && (celula === '#' || (celula === '=' && alta) || celula === 'D')
+  return distancia === 1 && (celula === '#' || (celula === '=' && alta) || celula === 'D' || celula === '~')
     && !vizinhas.some(v => mesmaCasa(v, posicao));
 }
 
@@ -215,6 +217,8 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   const vizinhas = estado.situacao === 'jogando'
     ? DIRECOES.map(d => destinoPermitido(fase, estado, d)).filter(v => v !== undefined)
     : [];
+  const alvo = alvoDaGarca(fase.ameaca, estado.passos + 1);
+  const balsas = balsasNoTurno(fase, estado.passos);
   const placa = [estado.posicao, estado.dupla?.posicao].some(pos => pos && fase.mapa[pos.linha]?.[pos.coluna] === 'P');
   fase.mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
     const x = origemX + coluna * TAMANHO_TILE;
@@ -231,9 +235,13 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     }
     if (vizinhas.some(v => mesmaCasa(v, pos))) cantos(ctx, x, y, tons.linha, 2, 3);
     if (mesmaCasa(atual, pos)) cantos(ctx, x, y, tons.linha, 1, 5);
-    if (fase.ameaca && mesmaCasa(fase.ameaca.alvo, { coluna, linha })) {
-      marcarAlvo(ctx, x, y, vaiAtacar(fase.ameaca, estado.passos + 1), tons);
+    if (balsas.some(balsa => mesmaCasa(balsa, pos))) {
+      bloco(ctx, tons.linha, x + 2, y + 3, 12, 10);
+      bloco(ctx, '#bb965f', x + 3, y + 4, 10, 8);
+      for (const h of [5, 8, 11]) bloco(ctx, '#eadab0', x + 4, y + h, 8, 1);
     }
+    if (alvo && mesmaCasa(alvo, pos)) marcarAlvo(ctx, x, y, true, tons);
+    else if (fase.ameaca && !fase.ameaca.rota?.length && mesmaCasa(fase.ameaca.alvo, pos)) marcarAlvo(ctx, x, y, false, tons);
   }));
 
   if (estado.dupla) {

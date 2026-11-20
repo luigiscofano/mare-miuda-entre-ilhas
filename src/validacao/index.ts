@@ -1,11 +1,11 @@
-import { executarPasso, iniciar, lerCelula } from '../motor/index.ts';
+import { executarPasso, iniciar, lerCelula, mesmaCasa } from '../motor/index.ts';
 import type { Acao, Fase } from '../motor/index.ts';
 
 export function validarMapa(fase: Fase): void {
   const largura = fase.mapa[0]?.length ?? 0;
   const celulas = fase.mapa.join('');
   const contar = (simbolo: string) => [...celulas].filter(valor => valor === simbolo).length;
-  if (!largura || fase.mapa.some(linha => linha.length !== largura) || /[^S.=#CBGHAPDT]/.test(celulas)) {
+  if (!largura || fase.mapa.some(linha => linha.length !== largura) || /[^S.=#CBGHAPDT~]/.test(celulas)) {
     throw new Error(`Mapa retangular inválido: ${fase.id}.`);
   }
   if (contar('S') !== 1 || contar('C') + contar('G') !== 1 ||
@@ -22,10 +22,17 @@ export function validarMapa(fase: Fase): void {
     (!Number.isSafeInteger(fase.orcamentoMoedas) || fase.orcamentoMoedas < 1 || contar('B') !== 3)) {
     throw new Error(`Orçamento de três moedas inválido: ${fase.id}.`);
   }
+  const balsas = fase.balsas ?? [];
+  if (balsas.length && fase.dupla) throw new Error(`Balsas ainda não aceitam dupla: ${fase.id}.`);
+  const agua = balsas.flatMap(balsa => balsa.paradas);
+  if (agua.some((pos, i) => lerCelula(fase, pos) !== '~'
+    || agua.slice(0, i).some(outra => mesmaCasa(outra, pos)))) {
+    throw new Error(`Parada de balsa inválida ou repetida: ${fase.id}.`);
+  }
   if (!fase.ameaca) return;
   const { alvo, primeiroAtaque, periodo } = fase.ameaca;
-  const terreno = lerCelula(fase, alvo);
-  if (!terreno || terreno === '#' || !Number.isInteger(periodo) || periodo < 1
+  const alvos = [alvo, ...(fase.ameaca.rota ?? [])];
+  if (alvos.some(pos => !lerCelula(fase, pos) || lerCelula(fase, pos) === '#') || !Number.isInteger(periodo) || periodo < 1
     || !Number.isInteger(primeiroAtaque) || primeiroAtaque < 1) {
     throw new Error(`Ameaça inválida: ${fase.id}.`);
   }
