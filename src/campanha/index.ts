@@ -1,10 +1,12 @@
 import { mesmaCasa } from '../motor/index.ts';
 import type { Direcao, Posicao } from '../motor/index.ts';
 
-export type IdFasePraia = 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
+export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'praia-mirante'
+  | 'praia-bolso-mare' | 'praia-trilha-das-pedras' | 'praia-fragmentos-areal';
+export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
 export type IdFase = IdFasePraia | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao';
-export type Mundo = 'praia' | 'arquipelago' | 'recifes' | 'mangue';
+export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue';
 export type Progresso = Readonly<{
   posicao: Posicao;
   concluidas: readonly IdFase[];
@@ -12,12 +14,13 @@ export type Progresso = Readonly<{
   viuTutorial: boolean;
 }>;
 type Entrada = Readonly<{
-  id: IdFase | 'porto' | 'rumo-praia' | 'rumo-recifes' | 'rumo-mangue' | 'enseada';
+  id: IdFase | 'porto' | 'rumo-praia' | 'rumo-recifes' | 'rumo-mangue' | 'enseada' | 'ida-enseadinha' | 'volta-cabo' | 'saida-enseadinha';
   posicao: Posicao;
   nome: string;
   opcional?: boolean;
   destino?: Mundo;
 }>;
+const P = (coluna: number, linha: number): Posicao => ({ coluna, linha });
 const CAIS: Posicao = { coluna: 1, linha: 1 };
 const ENTRADAS_PRAIA: readonly Entrada[] = [
   { id: 'primeira-onda', nome: 'Primeira onda', posicao: { coluna: 2, linha: 1 } },
@@ -25,13 +28,25 @@ const ENTRADAS_PRAIA: readonly Entrada[] = [
   { id: 'busca-e-volta', nome: 'Busca e volta', posicao: { coluna: 6, linha: 1 } },
   { id: 'ilhota-perolada', nome: 'Ilhota perolada', posicao: { coluna: 3, linha: 3 }, opcional: true },
   { id: 'ponta-da-garca', nome: 'Ponta da garça', posicao: { coluna: 7, linha: 1 } },
+  { id: 'ida-enseadinha', nome: 'Ir à Enseadinha', posicao: P(8, 1), destino: 'praia-enseadinha' },
 ];
-const P = (coluna: number, linha: number): Posicao => ({ coluna, linha });
 const FIM_PRAIA = P(7, 1);
+const PORTAL_CABO = P(8, 1);
+const SAIDA_ENSEADINHA = P(8, 1);
 const CRUZAMENTO = P(4, 3);
 const PORTO = { id: 'porto', posicao: CAIS, nome: 'Voltar ao arquipélago', destino: 'arquipelago' } as const;
 const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
   praia: ENTRADAS_PRAIA,
+  'praia-enseadinha': [
+    { id: 'volta-cabo', nome: 'Voltar ao Cabo Baixo', posicao: CAIS, destino: 'praia' },
+    { id: 'praia-fio-de-areia', nome: 'Fio de areia', posicao: P(2, 1) },
+    { id: 'praia-pocas-espelho', nome: 'Poças em espelho', posicao: P(4, 1) },
+    { id: 'praia-mirante', nome: 'Da praia ao mirante', posicao: P(6, 1) },
+    { id: 'praia-bolso-mare', nome: 'Bolso da maré', posicao: P(3, 3), opcional: true },
+    { id: 'praia-trilha-das-pedras', nome: 'Trilha das pedras', posicao: P(4, 0), opcional: true },
+    { id: 'praia-fragmentos-areal', nome: 'Fragmentos do areal', posicao: P(7, 3), opcional: true },
+    { id: 'saida-enseadinha', nome: 'Embarcar para o arquipélago', posicao: SAIDA_ENSEADINHA, destino: 'arquipelago' },
+  ],
   arquipelago: [
     { id: 'rumo-praia', posicao: P(1, 3), nome: 'Praia das Conchas', destino: 'praia' },
     { id: 'rumo-recifes', posicao: P(2, 1), nome: 'Recifes Expostos', destino: 'recifes' },
@@ -54,6 +69,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
 
 const MUNDOS = [
   { mundo: 'praia', nome: 'Praia das Conchas' },
+  { mundo: 'praia-enseadinha', nome: 'Praia das Conchas · Enseadinha' },
   { mundo: 'arquipelago', nome: 'Arquipélago' },
   { mundo: 'recifes', nome: 'Recifes Expostos' },
   { mundo: 'mangue', nome: 'Mangue dos Dois Siris' },
@@ -108,6 +124,23 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['primeira-onda'], 'A trilha opcional aparece depois da Primeira onda.'),
     trilha(P(3, 3), P(6, 1), 'baixo', 'baixo', [P(3.75, 3.75), P(5.125, 3.5), P(6, 2.375)],
       ['ilhota-perolada', 'sombra-da-garca'], 'O atalho pede a Concha Perolada e a passagem pela Sombra da garça.'),
+    trilha(FIM_PRAIA, PORTAL_CABO, 'direita', 'esquerda', [],
+      ['ponta-da-garca'], 'Conclua a Ponta da garça para chegar à Enseadinha.'),
+  ],
+  'praia-enseadinha': [
+    trilha(CAIS, P(2, 1), 'direita', 'esquerda', []),
+    trilha(P(2, 1), P(4, 1), 'direita', 'esquerda', [P(3, 1.625)],
+      ['praia-fio-de-areia'], 'Conclua Fio de areia para atravessar as poças.'),
+    trilha(P(4, 1), P(6, 1), 'direita', 'esquerda', [P(5, 0.625)],
+      ['praia-pocas-espelho'], 'Recupere os fragmentos de Poças em espelho para ir ao mirante.'),
+    trilha(P(6, 1), SAIDA_ENSEADINHA, 'direita', 'esquerda', [P(7, 0.625)],
+      ['praia-mirante'], 'Complete a travessia do mirante para chegar ao embarque.'),
+    trilha(P(2, 1), P(3, 3), 'baixo', 'cima', [P(2.375, 2.375)],
+      ['praia-fio-de-areia'], 'Fio de areia abre o desvio da maré.'),
+    trilha(P(4, 1), P(4, 0), 'cima', 'baixo', [],
+      ['praia-pocas-espelho'], 'A trilha das pedras é um desvio após as poças.'),
+    trilha(P(6, 1), P(7, 3), 'baixo', 'cima', [P(6.5, 2.375)],
+      ['praia-mirante'], 'O areal é um desvio após o mirante.'),
   ],
   arquipelago: [
     trilha(P(1, 3), CRUZAMENTO, 'direita', 'esquerda', [P(2, 3.375), P(3, 3.5)]),
@@ -164,9 +197,9 @@ export function viajar(p: Progresso, destino: Mundo): Progresso {
   const entrada = entradaEm(p.posicao, origem);
   if (!(destino === 'arquipelago' && podeSairDaPraia(p)) && entrada?.destino !== destino) return p;
   const orientacao: Readonly<Record<Mundo, Posicao>> = {
-    praia: P(1, 3), recifes: P(2, 1), mangue: P(5, 3), arquipelago: P(1, 3),
+    praia: P(1, 3), 'praia-enseadinha': P(1, 3), recifes: P(2, 1), mangue: P(5, 3), arquipelago: P(1, 3),
   };
-  const posicao = destino === 'arquipelago' ? orientacao[origem] : destino === 'praia' ? FIM_PRAIA : CAIS;
+  const posicao = destino === 'arquipelago' ? orientacao[origem] : destino === 'praia' ? (origem === 'praia-enseadinha' ? PORTAL_CABO : FIM_PRAIA) : CAIS;
   return { ...p, mundo: destino, posicao };
 }
 

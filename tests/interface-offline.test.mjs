@@ -70,6 +70,10 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   const png = await readFile(new URL('../assets/logo-placa-de-areia-pt.png', import.meta.url));
   assert.deepEqual(Buffer.from(marca, 'base64'), png, 'A imagem aprovada não pode ser reamostrada.');
 
+  const cabo = html.match(/id="cabo-baixo" src="data:image\/png;base64,([^"]+)"/)?.[1];
+  assert.ok(cabo);
+  assert.deepEqual(Buffer.from(cabo, 'base64'), await readFile(new URL('../assets/cabo-baixo-192.png', import.meta.url)));
+
   assert.ok(!html.includes("href=\"./styles.css\""));
   const { pegar, quadros, fases, botoes, mapa, tecla, storage } = prepararInterface();
   await import(modulo);

@@ -12,4 +12,4 @@
 
 ## Revisão do plano
 
-A campanha tem **oito mundos com no mínimo quinze fases autorais e dois chefes por mundo**. Estrutura de produção, entrega começando pela Praia, navegação por marcos e requisitos de leitura/tema nas fases: [escopo e decisão de navegação](escopo-e-leitura.md).
+A campanha tem **oito mundos com no mínimo dez fases autorais (quinze como meta de expansão) e dois chefes por mundo**. Estrutura de produção, entrega começando pela Praia, navegação por marcos e requisitos de leitura/tema nas fases: [escopo e decisão de navegação](escopo-e-leitura.md).

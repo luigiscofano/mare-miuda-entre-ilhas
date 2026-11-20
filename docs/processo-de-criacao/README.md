@@ -9,6 +9,7 @@ Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem subs
 | [03 · Praia das Conchas](03-fatia-vertical/README.md) | Primeira fatia vertical: mapa, desvio, encontro, arte, som e salvamento. |
 | [04 · Primeiro lote](04-lote-1/README.md) | Recifes e Mangue: navegação, regras de dupla, travessias e soluções. |
 | [05 · Mapa por vértices](05-mapa-por-vertices/README.md) | Navegação discreta, migração de saves e revisão de escopo. |
+| [06 · Praia em duas telas](06-praia-ampliada/README.md) | Seis travessias, novas saídas e preservação do save. |
 | [Estudos da identidade visual](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/3) | Placa de Areia e Corrente de Espuma, PT/EN, preservadas em PR separado. A foi aprovada para a abertura; B permanece como estudo. |
 
 As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/`. Esse caminho só será integrado junto dos estudos correspondentes.

@@ -2,7 +2,7 @@
 
 *Tiny Tide: Between Islands*
 
-Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A fatia vertical Praia das Conchas tem um mapa caminhável com cinco desafios. O primeiro lote acrescenta seis travessias autorais em Recifes Expostos e Mangue dos Dois Siris. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
+Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A Praia das Conchas tem dez fases regulares e um encontro em duas telas conectadas: Cabo Baixo e Enseadinha. O primeiro lote acrescenta seis travessias autorais em Recifes Expostos e Mangue dos Dois Siris. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
 
 **Estado:** Fundação e protótipo preservados; fatia vertical Praia das Conchas e primeiro lote de campanha implementados para teste. A abertura usa Placa de Areia aprovada; o restante da arte e do áudio ainda é provisório. Não existe publicação do jogo nesta fase.
 
@@ -68,7 +68,7 @@ O núcleo combina contagem de passos, leitura espacial e previsão. O jogador n�
 <details>
 <summary>Campanha e mapa-múndi</summary>
 
-Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O arquipélago permite Recifes e Mangue em qualquer ordem depois da Praia. Depois das duas regiões surge a passagem da Enseada, que ainda não tem fases. O plano prevê oito mundos, com pelo menos 15 fases por mundo fora dos dois chefes (mínimo de 120 fases e 16 chefes). Os ramos são opcionais na rota principal. Cada ilha terá tema tanto no arquipélago como dentro das fases; obstáculos ocupam células inteiras em uma malha legível, sem tamanho máximo por objeto. A arte prevê destacar a célula atual e as vizinhas válidas conforme o motor. [Revisão do roteiro](docs/producao/escopo-e-leitura.md). [Plano dos mundos](docs/campanha/README.md).
+Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O arquipélago permite Recifes e Mangue em qualquer ordem depois da Praia. Depois das duas regiões surge a passagem da Enseada, que ainda não tem fases. O plano prevê oito mundos, com pelo menos 10 fases por mundo fora dos dois chefes (15 fases por mundo como meta de expansão). Os ramos são opcionais na rota principal. Cada ilha terá tema tanto no arquipélago como dentro das fases; obstáculos ocupam células inteiras em uma malha legível, sem tamanho máximo por objeto. A arte prevê destacar a célula atual e as vizinhas válidas conforme o motor. [Revisão do roteiro](docs/producao/escopo-e-leitura.md). [Plano dos mundos](docs/campanha/README.md).
 
 </details>
 
@@ -168,7 +168,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as onze soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md).
+Os testes cobrem as dezessete soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md).
 
 </details>
 

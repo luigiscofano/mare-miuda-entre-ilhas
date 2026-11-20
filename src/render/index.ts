@@ -2,6 +2,7 @@ import { DIRECOES, destinoPermitido, jogadorAtivo, mareAlta, mesmaCasa, vaiAtaca
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
+import { caminhoDoCabo, marcadorCabo } from '../campanha/cabo-baixo.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
 
 export const LARGURA = 256;
@@ -19,6 +20,7 @@ const TONS_PRAIA: Tons = {
 };
 const CORES_MUNDO: Readonly<Record<Mundo, Tons>> = {
   praia: TONS_PRAIA,
+  'praia-enseadinha': TONS_PRAIA,
   arquipelago: { agua: '#3a7280', margem: '#549296', areia: '#efdba3', areiaSombra: '#acbb7c',
     roca: '#68796b', linha: '#27434c', branco: '#fff6d9', cinza: '#d77050' },
   recifes: { agua: '#205468', margem: '#38828c', areia: '#e9d49f', areiaSombra: '#7bad9f',
@@ -271,6 +273,58 @@ function riscar(ctx: CanvasRenderingContext2D, cor: string, tamanho: number, pon
       if (passo > -dy) { erro -= dy; x += sx; }
       if (passo < dx) { erro += dx; y += sy; }
     }
+  }
+}
+
+const DIGITOS: Readonly<Record<string, readonly string[]>> = {
+  '1': ['.b.', 'bb.', '.b.', '.b.', 'bbb'],
+  '2': ['bb.', '..b', '.b.', 'b..', 'bbb'],
+  '3': ['bb.', '..b', '.b.', '..b', 'bb.'],
+  '4': ['b.b', 'b.b', 'bbb', '..b', '..b'],
+  '*': ['..b..', '.bbb.', 'bbbbb', '.bbb.', '.b.b.'],
+  '>': ['b..', '.b.', '..b', '.b.', 'b..'],
+};
+const CABO_X = 32;
+const CABO_Y = 24;
+
+export function podeDesenharCabo(mundo: Mundo, arte: HTMLImageElement): boolean {
+  return mundo === 'praia' && arte.complete && arte.naturalWidth === 192;
+}
+
+export function desenharCabo(
+  ctx: CanvasRenderingContext2D, progresso: Progresso, arte: HTMLImageElement, transito?: Posicao,
+): void {
+  ctx.imageSmoothingEnabled = false;
+  bloco(ctx, '#138782', 0, 0, LARGURA, ALTURA);
+  ctx.drawImage(arte, CABO_X, CABO_Y, 192, 144);
+  for (const ponto of nosDo('praia')) {
+    const marco = marcadorCabo(ponto);
+    if (!marco?.simbolo) continue;
+    const [x, y] = marco.ponto;
+    const entrada = entradaEm(ponto);
+    const concluida = progresso.concluidas.some(f => f === entrada?.id);
+    const cor = concluida ? '#5f805a' : entrada?.opcional ? '#8d6549' : '#486c6b';
+    bloco(ctx, '#293b4a', CABO_X + x - 5, CABO_Y + y - 10, 11, 10);
+    bloco(ctx, cor, CABO_X + x - 4, CABO_Y + y - 9, 9, 8);
+    bloco(ctx, '#293b4a', CABO_X + x - 1, CABO_Y + y, 3, 2);
+    const desenho = DIGITOS[marco.simbolo];
+    pintarPixels(ctx, desenho, CABO_X + x - Math.floor(desenho[0].length / 2), CABO_Y + y - 7, { b: '#f5dcaa' });
+  }
+  for (const trecho of trilhasDo('praia')) {
+    if (rotaLivre(progresso, trecho)) continue;
+    const pontos = caminhoDoCabo(trecho.de, trecho.para);
+    if (!pontos) continue;
+    const meio = prepararTravessia(pontos).ponto(.5);
+    bloco(ctx, '#293b4a', CABO_X + Math.round(meio.coluna) - 2, CABO_Y + Math.round(meio.linha), 5, 3);
+  }
+  const atual = marcadorCabo(progresso.posicao)?.ponto;
+  const x = transito?.coluna ?? atual?.[0];
+  const y = transito?.linha ?? atual?.[1];
+  // Cursor neutro durante a revisão da arte do siri deste seletor.
+  if (x !== undefined && y !== undefined) {
+    const cx = CABO_X + Math.round(x), cy = CABO_Y + Math.round(y);
+    bloco(ctx, '#623645', cx - 4, cy + 2, 9, 5);
+    bloco(ctx, '#fff1bc', cx - 3, cy + 3, 7, 3);
   }
 }
 

@@ -89,3 +89,5 @@ Aprendizado: troca gratuita e destinos distintos → segurar a placa → protege
 ## Laboratório: Três moedas na restinga
 
 Experimental, fora da campanha e da contagem das onze fases. As três moedas estão em ramos diferentes; colete cada uma uma única vez e chegue à saída em até 14 passos válidos. A vitória em passo 14 vale; se o objetivo não for cumprido, o mesmo passo encerra a tentativa. Testemunha: ↑↑↓↓←←→→↓↓↑↑→→. Reiniciar limpa contador e moedas.
+
+As seis travessias da Enseadinha incluem três opcionais. Suas rotas estão no [registro da Praia ampliada](../../docs/processo-de-criacao/06-praia-ampliada/README.md). Não substituem as fases existentes.

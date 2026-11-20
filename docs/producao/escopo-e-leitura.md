@@ -4,10 +4,10 @@ Esta revisão complementa o [roteiro](README.md) sem substituir os registros his
 
 ## Escopo de campanha
 
-Oito mundos, **no mínimo 15 fases autorais por mundo sem contar chefes** (mínimo de 120 fases) e **dois encontros de chefe por mundo** (16 ao todo). A ordem introdutória sugerida é aproximadamente cinco fases até o primeiro chefe, um segundo trecho antes do chefe final e ramos opcionais distribuídos pelos dois blocos. Não se exige vencer todas as quinze fases para terminar um mundo. Colecionáveis, desafios extras e ramificações não viram chaves obrigatórias da rota principal. Os chefes ensinam e combinam as regras no ritmo dos turnos, não em tempo real.
+Oito mundos, **no mínimo 10 fases autorais por mundo sem contar chefes**, com 15 como meta de expansão e **dois encontros de chefe por mundo** (16 ao todo). A ordem introdutória sugerida é aproximadamente cinco fases até o primeiro chefe, um segundo trecho antes do chefe final e ramos opcionais distribuídos pelos dois blocos. Não se exige vencer todas as quinze fases para terminar um mundo. Colecionáveis, desafios extras e ramificações não viram chaves obrigatórias da rota principal. Os chefes ensinam e combinam as regras no ritmo dos turnos, não em tempo real.
 
 - **Agora:** validar a navegação e a legibilidade das 11 fases existentes. Continuam pendentes: teste com jogadores novos, controles em celular físico e acabamento visual.
-- **Depois, começar pela Praia:** definir as aproximadamente cinco fases e o primeiro chefe; montar uma rota curta que prove desbloqueio e retorno. Em seguida completar o segundo trecho, o segundo chefe e ramos até pelo menos 15 fases. Não basta um mapa ser solucionável: as pistas precisam ser compreendidas sem ajuda.
+- **Depois, começar pela Praia:** definir as aproximadamente cinco fases e o primeiro chefe; montar uma rota curta que prove desbloqueio e retorno. Em seguida completar o segundo trecho, o segundo chefe e ramos até pelo menos 10 fases, com 15 como meta de expansão. Não basta um mapa ser solucionável: as pistas precisam ser compreendidas sem ajuda.
 - **Demais mundos, por lotes:** aproveitar as fases já feitas de Recifes e Mangue; validar o incremento de cada região antes de abrir o lote seguinte. Para cada etapa, exigir solução reproduzível no motor, validação da campanha sem opcionais, retornos e estabilidade do save. Este número é escopo de produção, não promessa de desafios já implementados.
 
 ## Seleção = grafo, fase = malha ortogonal
@@ -27,3 +27,5 @@ A Praia começa fácil, com tutorial jogável e uma ideia nova de cada vez. O se
 ## Grades visuais do arquipélago e dos seletores
 
 Separar o **arquipélago e os seletores locais dos oito mundos**, com pixels menores em grade uniforme para geografia e detalhes, da **Travessia**, que conserva a grade aprovada, os pixels e a âncora do siri original. A identidade dos biomas muda entre regiões, não o padrão de alinhamento interno. Não aplicar recursos provisórios da seleção por cima dos sprites ou da Travessia. Conservar a logo A exatamente. Assinalar apenas obstáculos ortogonais imediatamente adjacentes ao siri ativo, célula por célula conforme ocupação real; concha tem brilho sólido e identificação textual. O bem-te-vi deixa o jogo atual e as artes novas; capturas e arquivos anteriores permanecem como registro histórico.
+
+O chamado Cabo Baixo orienta a seleção dos mundos. Um mundo pode ter mais de uma tela; passagens explícitas interligam páginas do mesmo grafo de campanha. Praia começa com Cabo Baixo e Enseadinha. Cada tela mantém o caminho caminhável, com desvios visíveis e retorno claro.
