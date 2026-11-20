@@ -7,8 +7,9 @@ export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca'
 export type IdFase = IdFasePraia | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
-  | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada';
-export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva';
+  | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
+  | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno';
+export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas';
 export type Progresso = Readonly<{
   posicao: Posicao;
   concluidas: readonly IdFase[];
@@ -16,7 +17,7 @@ export type Progresso = Readonly<{
   viuTutorial: boolean;
 }>;
 type Entrada = Readonly<{
-  id: IdFase | 'porto' | 'rumo-praia' | 'rumo-recifes' | 'rumo-mangue' | 'enseada' | 'ida-enseadinha' | 'volta-cabo' | 'saida-enseadinha' | 'rumo-deriva';
+  id: IdFase | 'porto' | 'rumo-praia' | 'rumo-recifes' | 'rumo-mangue' | 'enseada' | 'ida-enseadinha' | 'volta-cabo' | 'saida-enseadinha' | 'rumo-deriva' | 'rumo-grutas';
   posicao: Posicao;
   nome: string;
   opcional?: boolean;
@@ -55,6 +56,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'rumo-mangue', posicao: P(5, 3), nome: 'Mangue dos Dois Siris', destino: 'mangue' },
     { id: 'enseada', posicao: P(6, 1), nome: 'Enseada da Garça', destino: 'enseada' },
     { id: 'rumo-deriva', posicao: P(7, 3), nome: 'Ilhas à Deriva', destino: 'deriva' },
+    { id: 'rumo-grutas', posicao: P(8, 1), nome: 'Grutas da Espuma', destino: 'grutas' },
   ],
   recifes: [
     PORTO,
@@ -80,6 +82,12 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'deriva-duas-margens', posicao: P(4, 1), nome: 'Duas margens' },
     { id: 'deriva-corrente-cruzada', posicao: P(6, 1), nome: 'Corrente cruzada' },
   ],
+  grutas: [
+    PORTO,
+    { id: 'grutas-encaixe', posicao: P(2, 1), nome: 'Uma pérola para o portão' },
+    { id: 'grutas-ordem', posicao: P(4, 1), nome: 'Duas câmaras, uma ordem' },
+    { id: 'grutas-retorno', posicao: P(6, 1), nome: 'A pérola da maré baixa' },
+  ],
 };
 
 const MUNDOS = [
@@ -90,6 +98,7 @@ const MUNDOS = [
   { mundo: 'mangue', nome: 'Mangue dos Dois Siris' },
   { mundo: 'enseada', nome: 'Enseada da Garça' },
   { mundo: 'deriva', nome: 'Ilhas à Deriva' },
+  { mundo: 'grutas', nome: 'Grutas da Espuma' },
 ] as const;
 
 export const mundoValido = (mundo: unknown): mundo is Mundo => MUNDOS.some(i => i.mundo === mundo);
@@ -167,11 +176,14 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['recife-retorno', 'mangue-reuniao'], 'A passagem da Enseada abre ao concluir Recifes Expostos e Mangue dos Dois Siris.'),
     trilha(P(6, 1), P(7, 3), 'direita', 'esquerda', [P(7.25, 2)],
       ['enseada-farol-baixo'], 'Conclua o trecho da Enseada da Garça para encontrar as correntes.'),
+    trilha(P(7, 3), P(8, 1), 'cima', 'baixo', [P(8, 2.25)],
+      ['deriva-corrente-cruzada'], 'Conclua Corrente cruzada para encontrar as Grutas da Espuma.'),
   ],
   recifes: sustentar('recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno'),
   mangue: sustentar('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao', true),
   enseada: sustentar('enseada-sombra-restinga', 'enseada-abrigo-ondas', 'enseada-farol-baixo', true),
   deriva: sustentar('deriva-primeira-balsa', 'deriva-duas-margens', 'deriva-corrente-cruzada'),
+  grutas: sustentar('grutas-encaixe', 'grutas-ordem', 'grutas-retorno', true),
 };
 
 export const trilhasDo = (mundo: Mundo) => TRILHAS[mundo];
@@ -218,7 +230,7 @@ export function viajar(p: Progresso, destino: Mundo): Progresso {
   const entrada = entradaEm(p.posicao, origem);
   if (!(destino === 'arquipelago' && podeSairDaPraia(p)) && entrada?.destino !== destino) return p;
   const orientacao: Readonly<Record<Mundo, Posicao>> = {
-    praia: P(1, 3), 'praia-enseadinha': P(1, 3), recifes: P(2, 1), mangue: P(5, 3), enseada: P(6, 1), deriva: P(7, 3), arquipelago: P(1, 3),
+    praia: P(1, 3), 'praia-enseadinha': P(1, 3), recifes: P(2, 1), mangue: P(5, 3), enseada: P(6, 1), deriva: P(7, 3), grutas: P(8, 1), arquipelago: P(1, 3),
   };
   const posicao = destino === 'arquipelago' ? orientacao[origem] : destino === 'praia' ? (origem === 'praia-enseadinha' ? PORTAL_CABO : FIM_PRAIA) : CAIS;
   return { ...p, mundo: destino, posicao };

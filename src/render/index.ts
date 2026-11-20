@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, jogadorAtivo, mareAlta, mesmaCasa } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, jogadorAtivo, mareAlta, mesmaCasa, portaoDaGrutaAberto } from '../motor/index.ts';
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
@@ -23,6 +23,8 @@ const CORES_MUNDO: Readonly<Record<Mundo, Tons>> = {
   'praia-enseadinha': TONS_PRAIA,
   enseada: TONS_PRAIA,
   deriva: TONS_PRAIA,
+  grutas: { agua: '#26414e', margem: '#385966', areia: '#e4c394', areiaSombra: '#9d947f',
+    roca: '#616174', linha: '#293143', branco: '#fff5dc', cinza: '#d97e62' },
   arquipelago: { agua: '#3a7280', margem: '#549296', areia: '#efdba3', areiaSombra: '#acbb7c',
     roca: '#68796b', linha: '#27434c', branco: '#fff6d9', cinza: '#d77050' },
   recifes: { agua: '#205468', margem: '#38828c', areia: '#e9d49f', areiaSombra: '#7bad9f',
@@ -178,8 +180,33 @@ export function marcaBloqueioAdjacente(
   posicao: Posicao, atual: Posicao, celula: string, alta: boolean, vizinhas: readonly Posicao[],
 ): boolean {
   const distancia = Math.abs(posicao.coluna - atual.coluna) + Math.abs(posicao.linha - atual.linha);
-  return distancia === 1 && (celula === '#' || (celula === '=' && alta) || celula === 'D' || celula === '~')
+  return distancia === 1 && (celula === '#' || (celula === '=' && alta) || celula === 'D' || celula === '~' || celula === 'O')
     && !vizinhas.some(v => mesmaCasa(v, posicao));
+}
+
+const MARCAS_GRUTA = {
+  K: ['.lll.', 'lbbbl', 'lbbbl', 'lbcbl', '.lll.'],
+  E: ['.lll.', 'll.ll', 'lllll', 'll.ll', 'll.ll'],
+  F: ['llll.', 'll.ll', 'llll.', 'll.ll', 'llll.'],
+} as const;
+
+function desenharMecanismoDaGruta(
+  ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, celula: string, x: number, y: number, tons: Tons,
+) {
+  if (celula === 'O') {
+    const aberto = portaoDaGrutaAberto(fase, estado);
+    bloco(ctx, tons.linha, x + 2, y + 2, 2, 12);
+    bloco(ctx, tons.linha, x + 12, y + 2, 2, 12);
+    if (!aberto) for (const altura of [4, 7, 10]) bloco(ctx, tons.linha, x + 4, y + altura, 8, 2);
+  }
+  if (celula !== 'K' && celula !== 'E' && celula !== 'F') return;
+  const indice = fase.etapasGruta?.indexOf(celula) ?? -1;
+  if (indice === -1) return;
+  const concluida = indice < (estado.etapaGruta ?? 0);
+  if (celula === 'K' && concluida) return;
+  bloco(ctx, tons.branco, x + 4, y + 4, 7, 7);
+  pintarPixels(ctx, MARCAS_GRUTA[celula], x + 5, y + 5, paleta(tons));
+  if (concluida) bloco(ctx, tons.linha, x + 5, y + 12, 5, 1);
 }
 
 export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, tema: Mundo | false = false): void {
@@ -229,6 +256,7 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       if (fase.orcamentoMoedas) moeda(ctx, x, y, tons);
       else pintarPixels(ctx, FRAGMENTO, x + 5, y + 5, cores);
     }
+    desenharMecanismoDaGruta(ctx, fase, estado, celula, x, y, tons);
     // Só o obstáculo imediatamente relevante ao próximo passo recebe cantos.
     if (estado.situacao === 'jogando' && marcaBloqueioAdjacente(pos, atual, celula, alta, vizinhas)) {
       cantos(ctx, x, y, tons.branco, 2, 3);

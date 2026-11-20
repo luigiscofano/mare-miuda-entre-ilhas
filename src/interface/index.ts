@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, executarPasso, iniciar, LIMITE_LEVADAS, mareAlta, passosAteVirada, totalFragmentos } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, executarPasso, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, passosAteVirada, totalFragmentos } from '../motor/index.ts';
 import type { Acao, Direcao, Evento } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
@@ -98,6 +98,7 @@ function atualizarPraia(mensagem = ''): void {
   const concluidas = p.concluidas.filter(id =>
     mundo === 'praia-enseadinha' ? ['praia-fio-de-areia', 'praia-pocas-espelho', 'praia-mirante'].includes(id)
     : mundo === 'enseada' ? id.startsWith('enseada-') : mundo === 'deriva' ? id.startsWith('deriva-')
+    : mundo === 'grutas' ? id.startsWith('grutas-')
     : mundo === 'recifes' ? id.startsWith('recife-') : mundo === 'mangue' ? id.startsWith('mangue-')
     : ['primeira-onda', 'sombra-da-garca', 'busca-e-volta', 'ponta-da-garca'].includes(id)).length;
   const perola = p.concluidas.includes('ilhota-perolada');
@@ -108,7 +109,7 @@ function atualizarPraia(mensagem = ''): void {
     ? (concluidas ? 'As passagens se abrem à medida que você resolve as travessias. Depois da Ponta da garça, siga à direita para a Enseadinha.'
       : 'Faça o primeiro passo para a direita, pare no marco e entre na Primeira onda.')
     : mundo === 'praia-enseadinha' ? 'Atravesse o braço de areia, explore os desvios ou volte ao Cabo Baixo pelo começo da trilha.'
-    : mundo === 'arquipelago' ? 'Visite Recifes Expostos e Mangue dos Dois Siris em qualquer ordem. A Enseada abre depois dos dois; suas três travessias liberam as Ilhas à Deriva.'
+    : mundo === 'arquipelago' ? 'Visite Recifes Expostos e Mangue dos Dois Siris em qualquer ordem. A Enseada abre depois dos dois; suas três travessias liberam as Ilhas à Deriva. Depois da Corrente cruzada, siga para as Grutas da Espuma.'
     : 'Complete as três travessias. O atalho sul só se abre depois da última.';
   buscar('#progresso-praia').textContent = mundo === 'praia'
     ? `Rota principal: ${concluidas}/4 · Concha Perolada: ${perola ? 'encontrada' : 'não encontrada'}.`
@@ -157,6 +158,9 @@ function abrirPraia(mensagem = ''): void {
 function descricao(evento: Evento): string {
   switch (evento.tipo) {
     case 'bloqueado': return 'Passo bloqueado. A maré não avançou.';
+    case 'gruta-avancou': return evento.etapa === 'K' ? 'Pérola no inventário.'
+      : evento.etapa === 'E' ? 'Encaixe A acionado.' : 'Alavanca B acionada.';
+    case 'gruta-fora-da-ordem': return `Ainda não. Próxima etapa: ${nomeDaEtapaGruta(evento.proxima)}.`;
     case 'balsa': return 'A balsa levou o siri ao outro cais.';
     case 'virada': return evento.alta ? 'A maré subiu.' : 'A maré baixou.';
     case 'levada': return evento.motivos.length > 1 ? 'A onda e a garça te alcançaram!'
@@ -187,6 +191,15 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   fragmento.hidden = !total;
   fragmento.textContent = fase.orcamentoMoedas ? `Moedas: ${estado.fragmentos.length}/3` : total > 1 ? `Fragmentos: ${estado.fragmentos.length}/${total}`
     : estado.temFragmento ? 'Fragmento no inventário' : 'Fragmento ainda na ilha';
+  if (fase.etapasGruta) {
+    fragmento.hidden = false;
+    const etapa = estado.etapaGruta ?? 0;
+    const proxima = fase.etapasGruta[etapa];
+    const levando = etapa === 1 && fase.etapasGruta[0] === 'K';
+    fragmento.textContent = proxima
+      ? `${levando ? 'Pérola no inventário · ' : ''}Próxima etapa: ${nomeDaEtapaGruta(proxima)}`
+      : 'Portão aberto';
+  }
   const duplaAtiva = buscar('#dupla-ativa');
   duplaAtiva.hidden = !estado.dupla;
   duplaAtiva.textContent = `Siri ativo: ${estado.dupla?.parceiroAtivo ? 'Verde, pinças baixas' : 'Coral, pinças erguidas'} (Espaço para trocar)`;

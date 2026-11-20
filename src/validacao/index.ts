@@ -5,7 +5,7 @@ export function validarMapa(fase: Fase): void {
   const largura = fase.mapa[0]?.length ?? 0;
   const celulas = fase.mapa.join('');
   const contar = (simbolo: string) => [...celulas].filter(valor => valor === simbolo).length;
-  if (!largura || fase.mapa.some(linha => linha.length !== largura) || /[^S.=#CBGHAPDT~]/.test(celulas)) {
+  if (!largura || fase.mapa.some(linha => linha.length !== largura) || /[^S.=#CBGHAPDT~KEFO]/.test(celulas)) {
     throw new Error(`Mapa retangular inválido: ${fase.id}.`);
   }
   if (contar('S') !== 1 || contar('C') + contar('G') !== 1 ||
@@ -21,6 +21,14 @@ export function validarMapa(fase: Fase): void {
   if (fase.orcamentoMoedas !== undefined &&
     (!Number.isSafeInteger(fase.orcamentoMoedas) || fase.orcamentoMoedas < 1 || contar('B') !== 3)) {
     throw new Error(`Orçamento de três moedas inválido: ${fase.id}.`);
+  }
+  const etapas = fase.etapasGruta;
+  const acoesGruta = ['K', 'E', 'F'] as const;
+  if (etapas ? (fase.dupla || contar('O') !== 1 || etapas.length < 2
+    || new Set(etapas).size !== etapas.length || etapas.some(acao => !acoesGruta.includes(acao))
+    || acoesGruta.some(acao => contar(acao) !== Number(etapas.includes(acao))))
+    : /[KEFO]/.test(celulas)) {
+    throw new Error(`Mecanismos da gruta inválidos: ${fase.id}.`);
   }
   const balsas = fase.balsas ?? [];
   if (balsas.length && fase.dupla) throw new Error(`Balsas ainda não aceitam dupla: ${fase.id}.`);

@@ -9,7 +9,7 @@
 | Mangue dos Dois Siris | Troca gratuita, ciclo compartilhado e placa; olhar ambos antes de mover. | 6 regulares; introduzir os dois, abrir a passagem, reunir em segurança. | 4 regulares; duas rotas, desvios e raízes incomuns. | Guardião da Raiz (duas posições); Dupla no Mangue (revezamento com ameaça anunciada). |
 | Enseada da Garça | Aviso da próxima casa, abrigo, patrulha previsível e fuga no próprio ritmo. | 6 regulares de perseguição; começar com padrão a dois pontos, combinar com maré. | 4 regulares de coleta, atalhos ou sequência alternativa. | Garça da Restinga (travessia); Vigia das Falésias (duas metas na arena). |
 | Ilhas à Deriva | Balsa montável anda na virada da maré, com destino anunciado. | 6 regulares; uma balsa e dois cais, resgate, duas trajetórias e refúgio. | 4 regulares; caminhos costeiros, itens não obrigatórios e desvios com tempo. | Mestre das Correntes (dois ancoradouros); Passagem das Balsas (transferência e saída). |
-| Grutas da Espuma | Transporte, ordem de mecanismos e portas que fecham após ação. | 6 regulares; ida e volta e armadilhas somente após sinal. | 4 regulares com câmaras laterais e rotas de precisão. | Sentinela da Gruta (válvula e refúgio); Cofre das Espumas (transporte em etapas). |
+| Grutas da Espuma | Transporte e ordem de mecanismos. As três travessias iniciais usam um portão que permanece aberto durante a tentativa. | 6 regulares; ida e volta e armadilhas somente após sinal. | 4 regulares com câmaras laterais e rotas de precisão. | Sentinela da Gruta (válvula e refúgio); Cofre das Espumas (transporte em etapas). |
 | Baía da Ressaca | Combina ameaça cíclica, teto de passos, refúgios e três moedas. | 6 regulares; coleta, interrupção, sobrevivência e volta. | 4 regulares com orçamento justo e soluções alternativas. | Vento Sul (três ancoradouros); Ressaca Alta (posições sucessivas anunciadas). |
 | Arquipélago do Farol | Domínio da campanha: múltiplos caminhos e combinações já ensinadas. | 6 regulares; ligações, dupla e balsa em trechos claros; farol na rota normal. | 4 regulares; farol secreto, desafios maiores e revisitas. | Guardião do Farol (travessia cambiante); Última Virada (ativar e escapar). |
 
@@ -29,3 +29,11 @@ Por fase registre início, refúgios, terreno, objetivo, pistas antes do primeir
 | A primeira balsa | Caminhe sobre a plataforma, veja o turno de partida e desembarque. | Cais firme em ambos os lados. Não há queda por permanecer na balsa. |
 | Duas margens | Escolha quando buscar o fragmento na margem oposta. | A segunda balsa dá um cais de volta sem acrescentar espera. |
 | Corrente cruzada | Passe por um refúgio de transbordo entre duas balsas. | A ordem de deslocamento é estável, e as balsas podem esperar no cais. |
+
+### Primeiras fichas das Grutas da Espuma
+
+| Fase | Regra em foco | Prova de level design |
+| --- | --- | --- |
+| Uma pérola para o portão | Recolher e entregar | A saída está atrás do portão; sem a pérola ou o encaixe não há rota. |
+| Duas câmaras, uma ordem | A antes de B | B cedo dá uma pista e não apaga progresso; volte depois de A. |
+| A pérola da maré baixa | Entrega, retorno e maré | O baixio separa as câmaras; chão firme permite ajustar os passos sem espera. |

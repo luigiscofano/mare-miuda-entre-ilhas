@@ -1,7 +1,8 @@
 // O núcleo não lê tempo, DOM nem storage: reprodução e jogo usam a mesma função.
 export type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita';
 export type Acao = Direcao | 'trocar';
-export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~';
+export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~' | EtapaGruta | 'O';
+export type EtapaGruta = 'K' | 'E' | 'F';
 export type Posicao = Readonly<{ coluna: number; linha: number }>;
 export type Ameaca = Readonly<{ alvo: Posicao; primeiroAtaque: number; periodo: number; rota?: readonly Posicao[] }>;
 export type Fase = Readonly<{
@@ -14,6 +15,7 @@ export type Fase = Readonly<{
   ameaca?: Ameaca;
   balsas?: readonly Readonly<{ paradas: readonly [Posicao, Posicao] }>[];
   orcamentoMoedas?: number;
+  etapasGruta?: readonly EtapaGruta[];
   dupla?: Readonly<{ segundoAlvo: 'T' | 'P' }>;
 }>;
 type EstadoDupla = Readonly<{ posicao: Posicao; ultimoFirme: Posicao; parceiroAtivo: boolean }>;
@@ -25,6 +27,7 @@ export type Estado = Readonly<{
   temFragmento: boolean;
   fragmentos: readonly Posicao[];
   dupla?: EstadoDupla;
+  etapaGruta?: number;
   situacao: 'jogando' | 'vitoria' | 'derrota';
 }>;
 export type MotivoErro = 'mare' | 'garca';
@@ -32,6 +35,8 @@ export type Evento =
   | Readonly<{ tipo: 'bloqueado' }>
   | Readonly<{ tipo: 'virada'; alta: boolean }>
   | Readonly<{ tipo: 'balsa' }>
+  | Readonly<{ tipo: 'gruta-avancou'; etapa: EtapaGruta }>
+  | Readonly<{ tipo: 'gruta-fora-da-ordem'; proxima: EtapaGruta }>
   | Readonly<{ tipo: 'levada'; motivos: readonly MotivoErro[] }>
   | Readonly<{ tipo: 'fragmento' }>
   | Readonly<{ tipo: 'falta-fragmento' }>
@@ -64,7 +69,7 @@ export function iniciar(fase: Fase): Estado {
     dupla = { posicao: parceiro, ultimoFirme: parceiro, parceiroAtivo: false };
   }
   return { posicao, ultimoFirme: posicao, passos: 0, levadas: 0, temFragmento: false,
-    fragmentos: [], ...(dupla ? { dupla } : {}), situacao: 'jogando' };
+    fragmentos: [], ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}), situacao: 'jogando' };
 }
 export function mareAlta(passos: number): boolean {
   return Math.floor(passos / PASSOS_POR_MARE) % 2 === 1;
@@ -100,6 +105,31 @@ export function balsasNoTurno(fase: Fase, passos: number): readonly Posicao[] {
 
 export function totalFragmentos(fase: Fase): number {
   return fase.mapa.reduce((n, linha) => n + [...linha].filter(celula => celula === 'B').length, 0);
+}
+
+export function portaoDaGrutaAberto(fase: Fase, estado: Estado): boolean {
+  return fase.etapasGruta !== undefined && estado.etapaGruta === fase.etapasGruta.length;
+}
+
+export function nomeDaEtapaGruta(etapa: EtapaGruta): string {
+  return { K: 'Pérola', E: 'Encaixe A', F: 'Alavanca B' }[etapa];
+}
+
+// A cadeia só avança após um passo seguro. Um acionamento fora da ordem
+// avisa o que falta, sem apagar etapas anteriores nem gerar um turno extra.
+function resolverGruta(fase: Fase, estado: Estado, celula: Celula | undefined, eventos: Evento[]) {
+  const etapas = fase.etapasGruta;
+  const atual = estado.etapaGruta;
+  if (atual === undefined || (celula !== 'K' && celula !== 'E' && celula !== 'F')) return atual;
+  const proxima = etapas?.[atual];
+  if (proxima === celula) {
+    eventos.push({ tipo: 'gruta-avancou', etapa: celula });
+    return atual + 1;
+  }
+  if (proxima && etapas?.slice(atual + 1).includes(celula)) {
+    eventos.push({ tipo: 'gruta-fora-da-ordem', proxima });
+  }
+  return atual;
 }
 
 function calcularDestino(posicao: Posicao, direcao: Direcao): Posicao {
@@ -142,7 +172,7 @@ export function destinoPermitido(fase: Fase, estado: Estado, direcao: Direcao): 
   const placa = outro && lerCelula(fase, outro) === 'P';
   if (!celula || celula === '#' || (celula === '=' && mareAlta(estado.passos)) ||
     (celula === '~' && !balsasNoTurno(fase, estado.passos).some(p => mesmaCasa(p, destino))) ||
-    (celula === 'D' && !placa) || (outro && mesmaCasa(outro, destino))) return;
+    (celula === 'D' && !placa) || (celula === 'O' && !portaoDaGrutaAberto(fase, estado)) || (outro && mesmaCasa(outro, destino))) return;
   return destino;
 }
 
@@ -199,6 +229,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   const fragmentos = coletou ? [...anterior.fragmentos, destino] : anterior.fragmentos;
   if (coletou) eventos.push({ tipo: 'fragmento' });
   const celulas = posicoes.map(p => lerCelula(fase, p));
+  const etapaGruta = resolverGruta(fase, anterior, celula, eventos);
   const venceu = resolverObjetivo(fase, celulas, fragmentos.length, eventos);
   // Uma saída segura pode completar a missão exatamente no último passo.
   const perdeu = !venceu && terminouOrcamento(fase, passos, eventos);
@@ -213,6 +244,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   return {
     estado: { ...anterior, posicao, passos, temFragmento: fragmentos.length > 0, fragmentos,
       ultimoFirme: firmes ? posicao : anterior.ultimoFirme,
+      ...(etapaGruta === undefined ? {} : { etapaGruta }),
       ...(novaDupla ? { dupla: novaDupla } : {}), situacao: venceu ? 'vitoria' : perdeu ? 'derrota' : 'jogando' },
     eventos,
   };
