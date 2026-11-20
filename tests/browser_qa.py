@@ -28,6 +28,46 @@ def jogar(pagina, rota, toque=False, mapa=False):
             expect(pagina.locator('#praia')).to_have_attribute('aria-busy', 'false')
 
 
+def conferir_siri_canonico(pagina, seletor, cinza=False):
+    assert pagina.locator(seletor).evaluate("""(canvas, cinza) => {
+        const logo = document.querySelector('#marca-praia');
+        if (!logo.complete) return false;
+        const w = 31, h = 23;
+        const recorte = document.createElement('canvas');
+        recorte.width = w;
+        recorte.height = h;
+        const ctx = recorte.getContext('2d');
+        ctx.drawImage(logo, 75, 3, w, h, 0, 0, w, h);
+        const fonte = ctx.getImageData(0, 0, w, h).data;
+        const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+        const pontos = [];
+        for (let i = 0; i < fonte.length; i += 4) {
+          if (fonte[i + 3] === 255) pontos.push([i, Math.floor(i / 4) % w, Math.floor(i / (4 * w))]);
+          else if (fonte[i + 3] !== 0) return false;
+        }
+        if (pontos.length !== 447 || canvas.width !== 512 || canvas.height !== 384) return false;
+        if ((2 * canvas.clientWidth) % canvas.width !== 0) return false;
+        for (let y = 0; y <= canvas.height - h; y++) for (let x = 0; x <= canvas.width - w; x++) {
+          if (!pontos.every(([i, dx, dy]) => {
+            const p = 4 * ((y + dy) * canvas.width + x + dx);
+            return fonte[i] === pixels[p] && fonte[i + 1] === pixels[p + 1]
+              && fonte[i + 2] === pixels[p + 2] && pixels[p + 3] === 255;
+          })) continue;
+          if (!cinza) return true;
+          // Só o recorte oficial tem cor; o terreno da bancada continua neutro.
+          for (let i = 0; i < pixels.length; i += 4) {
+            const col = (i / 4) % canvas.width, linha = Math.floor(i / (4 * canvas.width));
+            if (pixels[i + 3] !== 255) return false;
+            if (col >= x && col < x + w && linha >= y && linha < y + h) continue;
+            if (Math.max(pixels[i], pixels[i + 1], pixels[i + 2])
+              - Math.min(pixels[i], pixels[i + 1], pixels[i + 2]) > 14) return false;
+          }
+          return true;
+        }
+        return false;
+    }""", cinza), 'O siri precisa ser o recorte exato da logo na tela visível.'
+
+
 def conferir_jogo(pagina, toque=False):
     falhas = []
     pagina.on('pageerror', lambda erro: falhas.append(str(erro)))
@@ -69,13 +109,7 @@ def conferir_jogo(pagina, toque=False):
     expect(pagina.locator('#mare')).to_have_text('Baixa')
     expect(pagina.locator('#erros')).to_have_text('0 / 3')
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth'), 'A página transbordou.'
-    assert pagina.locator('#tabuleiro').evaluate('(canvas) => canvas.clientWidth % canvas.width === 0')
-    assert pagina.locator('#tabuleiro').evaluate("""(canvas) => {
-        const rgba = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
-        for (let i=0;i<rgba.length;i+=4)
-          if (rgba[i+3]!==255 || Math.max(rgba[i],rgba[i+1],rgba[i+2]) - Math.min(rgba[i],rgba[i+1],rgba[i+2])>14) return false;
-        return true;
-    }"""), 'O palco deve ser opaco, em tons de cinza.'
+    conferir_siri_canonico(pagina, '#tabuleiro', cinza=True)
     tocar(pagina, '[data-fase="4"]', toque)
     expect(pagina.locator('#orcamento')).to_have_text('Passos restantes: 14')
     expect(pagina.locator('#sinal-concha')).to_be_hidden()
@@ -105,6 +139,7 @@ def conferir_praia(pagina, toque=False, opcional=False):
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#titulo-praia')).to_be_visible()
     expect(pagina.locator('#saidas-praia')).to_contain_text('→ Primeira onda')
+    conferir_siri_canonico(pagina, '#mapa-praia')
     # Injeção síncrona: as entradas seguintes chegam na mesma janela de travessia.
     pagina.evaluate("""() => {
         const direita = document.querySelector('[data-mapa-direcao="direita"]');
@@ -182,6 +217,7 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
     expect(pagina.locator('#entrar-fase')).to_have_text('Seguir para o arquipélago')
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
+    conferir_siri_canonico(pagina, '#mapa-praia')
     ordem = ['Recifes Expostos', 'Mangue dos Siris Duplos']
     if not recifes_primeiro:
         ordem.reverse()

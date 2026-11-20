@@ -1,7 +1,7 @@
 import { alvoDaGarca, balsasNoTurno, executarPasso, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, passosAteVirada, totalFragmentos } from '../motor/index.ts';
 import type { Acao, Direcao, Evento } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
-import { desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
+import { ALTURA, DENSIDADE, desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
 import { conectarTeclado } from '../entrada/index.ts';
 import { abriuEnseada, concluirFase, entradaEm, ehIdFase, faseOpcional, moverNoMapa, mundoAtual, nomeDo, podeSairDaPraia, rotaLivre, saidaEm, totalDeFasesRegulares, viajar } from '../campanha/index.ts';
 import { caminhoDoCabo } from '../campanha/cabo-baixo.ts';
@@ -18,8 +18,11 @@ function buscar<T extends HTMLElement = HTMLElement>(seletor: string): T {
 function montarCanvas(seletor: string, moldura: string) {
   const canvas = buscar<HTMLCanvasElement>(seletor);
   const borda = buscar(moldura);
+  canvas.width = LARGURA * DENSIDADE;
+  canvas.height = ALTURA * DENSIDADE;
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas indisponível neste navegador.');
+  ctx.setTransform(DENSIDADE, 0, 0, DENSIDADE, 0, 0);
   function escala() {
     canvas.style.width = `${LARGURA * Math.max(1, Math.floor(borda.clientWidth / LARGURA))}px`;
   }
@@ -146,9 +149,14 @@ function atualizarPraia(mensagem = ''): void {
   else if (entrada?.id === 'porto') entrar.textContent = 'Voltar ao arquipélago';
   else if (entrada?.destino) entrar.textContent = entrada.id.startsWith('rumo-') ? 'Visitar região' : entrada.nome;
   else entrar.textContent = 'Entrar na fase';
-  if (podeDesenharCabo(mundo, arteCabo)) desenharCabo(mapaPraia.ctx, p, arteCabo);
-  else desenharPraia(mapaPraia.ctx, p);
+  if (podeDesenharCabo(mundo, arteCabo)) desenharCabo(mapaPraia.ctx, p, arteCabo, logo);
+  else desenharPraia(mapaPraia.ctx, p, logo);
 }
+
+logo.addEventListener('load', () => {
+  if (tela === 'praia' && quadroMapa === undefined) atualizarPraia();
+  if (tela === 'fase') desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso));
+});
 
 arteCabo.addEventListener('load', () => {
   if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'praia') atualizarPraia();
@@ -234,7 +242,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   }
   buscar('#feedback').textContent = mensagem || mensagens.join(' ');
   buscar('#seguir-fase').hidden = bancada || fase.id !== 'ponta-da-garca' || estado.situacao !== 'vitoria';
-  desenhar(tabuleiro.ctx, fase, estado, bancada ? false : mundoAtual(save.progresso));
+  desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso));
   audio.eventos(eventos);
 }
 
@@ -301,8 +309,8 @@ function mover(direcao: Direcao): void {
       const fracao = (agora - inicio) / percurso.duracao;
       if (fracao >= 1) { concluir(); return; }
       const ponto = percurso.ponto(fracao);
-      if (caminhoVisual) desenharCabo(mapaPraia.ctx, save.progresso, arteCabo, ponto);
-      else desenharPraia(mapaPraia.ctx, save.progresso, ponto);
+      if (caminhoVisual) desenharCabo(mapaPraia.ctx, save.progresso, arteCabo, logo, ponto);
+      else desenharPraia(mapaPraia.ctx, save.progresso, logo, ponto);
       quadroMapa = window.requestAnimationFrame(animar);
     };
     quadroMapa = window.requestAnimationFrame(animar);

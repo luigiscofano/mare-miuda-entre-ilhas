@@ -103,7 +103,7 @@ Os estudos PT/EN ficam preservados separadamente. A Placa de Areia (A) foi aprov
 A concha tem um brilho de pixels chapados e identificação textual. Os cantos de bloqueio marcam apenas vizinhos ortogonais, sem cobrir o cenário inteiro. A [direção futura dos mapas de seleção](docs/producao/escopo-e-leitura.md#grades-visuais-do-arquipélago-e-dos-seletores) é independente da grade de travessia.
 
 
-Na bancada, a arte cinza lê terreno, maré e previsão de ameaça. A Praia, os Recifes e o Mangue usam paletas experimentais. A densidade do cenário e do arquipélago segue em revisão; a Placa de Areia da abertura foi mantida. O desenho do siri e do fragmento são matrizes de pixels editáveis em TypeScript. Nenhum recurso do jogo original é importado. [Guia de arte](docs/arte/README.md).
+Na bancada, a arte cinza lê terreno, maré e previsão de ameaça. A Praia, os Recifes e o Mangue usam paletas experimentais. A densidade do cenário e do arquipélago segue em revisão; a Placa de Areia da abertura foi mantida. O siri principal é o recorte nativo da Placa de Areia na Travessia, na bancada e nos seletores, sem trocar a arte dos mapas. O parceiro verde continua distinguível pela cor e pela silhueta. Os fragmentos permanecem em matrizes de pixels editáveis em TypeScript. Nenhum recurso do jogo original é importado. [Guia de arte](docs/arte/README.md).
 
 </details>
 
