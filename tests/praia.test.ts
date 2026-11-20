@@ -34,12 +34,12 @@ test('Encontro final permite duas abordagens e não coleta na marca da garça', 
 test('Rota principal completa sem precisar da ilhota', () => {
   let p = caminhar(criarProgresso(), 'R');
   assert.equal(entradaEm(p.posicao)?.id, 'primeira-onda');
-  let beira = caminhar(p, 'R');
+  const beira = p;
   assert.strictEqual(moverNoMapa(beira, 'direita').progresso, beira);
   assert.strictEqual(moverNoMapa(beira, 'baixo').progresso, beira);
   for (const id of ['primeira-onda', 'sombra-da-garca', 'busca-e-volta'] as const) {
     p = concluirFase(p, id);
-    p = caminhar(p, id === 'busca-e-volta' ? 'R' : 'RR');
+    p = caminhar(p, 'R');
   }
   assert.equal(entradaEm(p.posicao)?.id, 'ponta-da-garca');
   p = concluirFase(p, 'ponta-da-garca');
@@ -49,15 +49,14 @@ test('Rota principal completa sem precisar da ilhota', () => {
 test('A concha abre atalho mas não pula a Sombra da garça', () => {
   const completar = (p: Progresso, id: IdFasePraia) => concluirFase(p, id);
   const primeira = completar(caminhar(criarProgresso(), 'R'), 'primeira-onda');
-  let opcional = caminhar(primeira, 'RDD');
+  let opcional = caminhar(primeira, 'D');
   assert.equal(entradaEm(opcional.posicao)?.id, 'ilhota-perolada');
   assert.strictEqual(moverNoMapa(opcional, 'baixo').progresso, opcional);
   opcional = completar(opcional, 'ilhota-perolada');
-  const corredor = caminhar(opcional, 'DRRUR');
-  assert.strictEqual(moverNoMapa(corredor, 'cima').progresso, corredor);
-  const aberto = completar(corredor, 'sombra-da-garca');
-  assert.equal(entradaEm(caminhar(aberto, 'UU').posicao)?.id, 'busca-e-volta');
-  assert.equal(entradaEm(caminhar(caminhar(aberto, 'UU'), 'DDLDLLU').posicao)?.id, 'ilhota-perolada');
+  assert.strictEqual(moverNoMapa(opcional, 'baixo').progresso, opcional);
+  const aberto = completar(opcional, 'sombra-da-garca');
+  assert.equal(entradaEm(caminhar(aberto, 'D').posicao)?.id, 'busca-e-volta');
+  assert.equal(entradaEm(caminhar(caminhar(aberto, 'D'), 'D').posicao)?.id, 'ilhota-perolada');
 });
 test('Salvamento versionado recupera ramo, posição e áudio sem tocar outros dados', () => {
   const itens = new Map([['miudezas', 'inalterado']]);

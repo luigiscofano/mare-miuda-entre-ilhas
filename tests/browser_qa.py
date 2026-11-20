@@ -24,6 +24,8 @@ def jogar(pagina, rota, toque=False, mapa=False):
             tocar(pagina, f'[data-{"mapa-" if mapa else ""}direcao="{BUTTONS[direcao]}"]', True)
         else:
             pagina.keyboard.press(KEYS[direcao])
+        if mapa:
+            expect(pagina.locator('#praia')).to_have_attribute('aria-busy', 'false')
 
 
 def conferir_jogo(pagina, toque=False):
@@ -91,29 +93,43 @@ def conferir_praia(pagina, toque=False, opcional=False):
     pagina.goto(PRIMEIRA_PAGINA)
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#titulo-praia')).to_be_visible()
-    jogar(pagina, 'R', toque, mapa=True)
+    expect(pagina.locator('#saidas-praia')).to_contain_text('→ Primeira onda')
+    # Injeção síncrona: as entradas seguintes chegam na mesma janela de travessia.
+    pagina.evaluate("""() => {
+        const direita = document.querySelector('[data-mapa-direcao="direita"]');
+        const esquerda = document.querySelector('[data-mapa-direcao="esquerda"]');
+        window.dispatchEvent(new KeyboardEvent('keydown', {key:'ArrowRight', repeat:true}));
+        if (document.querySelector('#praia').getAttribute('aria-busy') !== 'false') throw Error('Repetição iniciou viagem');
+        direita.click();
+        if (document.querySelector('#praia').getAttribute('aria-busy') !== 'true') throw Error('Não iniciou viagem');
+        if (!document.querySelector('#entrar-fase').disabled) throw Error('Abriu entrada em movimento');
+        esquerda.click();
+        direita.click();
+    }""")
+    expect(pagina.locator('#praia')).to_have_attribute('aria-busy', 'false')
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Primeira onda')
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#lembrete-fase')).to_be_visible()
     jogar(pagina, 'RRR', toque)
     tocar(pagina, '#voltar-fase', toque)
     expect(pagina.locator('#progresso-praia')).to_contain_text('1/4')
     if opcional:
-        jogar(pagina, 'RDD', toque, mapa=True)
+        jogar(pagina, 'D', toque, mapa=True)
         tocar(pagina, '#entrar-fase', toque)
         jogar(pagina, 'RLDDRRRRU', toque)
         expect(pagina.locator('#feedback')).to_contain_text('Atalho de volta aberto')
         tocar(pagina, '#voltar-fase', toque)
         salvar_captura(pagina, 'praia-ramo-perolado-desktop')
-        jogar(pagina, 'UUR', toque, mapa=True)
+        jogar(pagina, 'UR', toque, mapa=True)
     else:
-        jogar(pagina, 'RR', toque, mapa=True)
+        jogar(pagina, 'R', toque, mapa=True)
     tocar(pagina, '#entrar-fase', toque)
     jogar(pagina, 'RRDURR', toque)
     tocar(pagina, '#voltar-fase', toque)
     if opcional:
-        jogar(pagina, 'LDDDRRURUU', toque, mapa=True)
+        jogar(pagina, 'LDD', toque, mapa=True)
     else:
-        jogar(pagina, 'RR', toque, mapa=True)
+        jogar(pagina, 'R', toque, mapa=True)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Busca e volta')
     tocar(pagina, '#entrar-fase', toque)
     jogar(pagina, 'DDRLRLUUR', toque)
@@ -158,14 +174,14 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
     ordem = ['Recifes Expostos', 'Mangue dos Dois Siris']
     if not recifes_primeiro:
         ordem.reverse()
-    rotas = ['RUU', 'DDRRR'] if recifes_primeiro else ['RRRR', 'LLLUU']
+    rotas = ['RU', 'DR'] if recifes_primeiro else ['RR', 'LU']
 
     for indice, (nome, caminho) in enumerate(zip(ordem, rotas)):
         jogar(pagina, caminho, toque, mapa=True)
         tocar(pagina, '#entrar-fase', toque)
         expect(pagina.locator('#titulo-praia')).to_have_text(nome)
         for fase, solucao in enumerate(SOLUCOES[nome]):
-            jogar(pagina, 'R' if fase == 0 else 'RR', toque, mapa=True)
+            jogar(pagina, 'R' if fase == 0 else 'R', toque, mapa=True)
             if indice == 0 and fase == 1:
                 pagina.reload()
                 tocar(pagina, '#comecar', toque)
@@ -187,13 +203,13 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
             expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
             tocar(pagina, '#voltar-fase', toque)
         expect(pagina.locator('#progresso-praia')).to_contain_text('3/3')
-        jogar(pagina, 'DDLLLLLUU', toque, mapa=True)
+        jogar(pagina, 'D', toque, mapa=True)
         tocar(pagina, '#entrar-fase', toque)
         expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
         if indice == 0:
             expect(pagina.locator('#enseada-aberta')).to_be_hidden()
 
-    jogar(pagina, 'LUURR' if recifes_primeiro else 'RRRR', toque, mapa=True)
+    jogar(pagina, 'LUR' if recifes_primeiro else 'R', toque, mapa=True)
     expect(pagina.locator('#enseada-aberta')).to_be_visible()
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#mensagem-praia')).to_contain_text('ainda não disponível')

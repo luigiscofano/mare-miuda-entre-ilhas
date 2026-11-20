@@ -41,3 +41,7 @@ A tabela anterior continua sendo o plano da campanha, não indicação de mundos
 A Ponta da Garça da Praia abre a saída para a vista caminhável do arquipélago. Em seguida escolha Recifes ou Mangue, em qualquer ordem. As regiões têm seus próprios mapas locais e três travessias sequenciais. Depois de concluir a última travessia da região, há um atalho pelo sul de volta ao seu porto. O porto retorna ao ponto regional correspondente no arquipélago.
 
 A passagem da Enseada abre só depois de `recife-retorno` e `mangue-reuniao`. A placa no mapa informa que é uma passagem futura; não há nível silenciosamente vazio nem avanço ao lote 2. A Concha Perolada e a trilha opcional da Praia não entram na condição.
+
+## Atualização: trilhas de marco a marco
+
+A descrição em casas acima é histórica. A seleção atual usa um grafo; um toque ou tecla segue a trilha completa e só para no próximo marco, mesmo se o desenho fizer curvas. Praia, arquipélago, Recifes e Mangue seguem este contrato. Somente as fases usam deslocamento célula a célula. Veja a [revisão de escopo, temas e leitura visual](../producao/escopo-e-leitura.md).

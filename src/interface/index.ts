@@ -3,7 +3,8 @@ import type { Acao, Direcao, Evento } from '../motor/index.ts';
 import { FASES, TODAS_AS_FASES } from '../fases/index.ts';
 import { desenhar, desenharPraia, LARGURA } from '../render/index.ts';
 import { conectarTeclado } from '../entrada/index.ts';
-import { abriuEnseada, concluirFase, entradaEm, ehIdFase, moverNoMapa, mundoAtual, nomeDo, podeSairDaPraia, viajar } from '../campanha/index.ts';
+import { abriuEnseada, concluirFase, entradaEm, ehIdFase, moverNoMapa, mundoAtual, nomeDo, podeSairDaPraia, rotaLivre, saidaEm, viajar } from '../campanha/index.ts';
+import { prepararTravessia } from '../campanha/travessia.ts';
 import { carregar, salvar } from '../persistencia/index.ts';
 import { criarAudio } from '../audio/index.ts';
 
@@ -59,6 +60,7 @@ const volumes = {
   efeitos: buscar<HTMLInputElement>('#volume-efeitos'),
 };
 let tela: Tela = 'inicio';
+let quadroMapa: number | undefined;
 let bancada = false;
 let indice = 0;
 let fase = FASES[0];
@@ -69,6 +71,10 @@ function gravar() {
 }
 
 function trocarTela(destino: Tela, focar = true): void {
+  if (destino !== 'praia' && quadroMapa !== undefined) {
+    window.cancelAnimationFrame(quadroMapa);
+    quadroMapa = undefined;
+  }
   tela = destino;
   buscar('#jogo').setAttribute('data-tela', destino);
   for (const [nome, painel] of Object.entries(paineis)) painel.hidden = nome !== destino;
@@ -107,10 +113,23 @@ function atualizarPraia(mensagem = ''): void {
   buscar('#enseada-aberta').hidden = mundo !== 'arquipelago' || !abriuEnseada(p);
   buscar('#posicao-praia').textContent = entrada
     ? `${entrada.nome}${entrada.opcional ? ' · opcional' : ''}${p.concluidas.some(id => id === entrada.id) ? ' · concluída' : ''}.`
-    : `Trilha na coluna ${p.posicao.coluna + 1}, linha ${p.posicao.linha + 1}.`;
+    : mundo === 'arquipelago' ? 'Bifurcação das ilhas.' : 'Cais da Praia das Conchas.';
   buscar('#mensagem-praia').textContent = mensagem;
   const entrar = buscar<HTMLButtonElement>('#entrar-fase');
-  entrar.disabled = !entrada;
+  entrar.disabled = !entrada || quadroMapa !== undefined;
+  paineis.praia.setAttribute('aria-busy', String(quadroMapa !== undefined));
+  const rotas: string[] = [];
+  const simbolos = { cima: '↑', baixo: '↓', esquerda: '←', direita: '→' };
+  for (const botao of controlesDoMapa) {
+    const direcao = botao.dataset.mapaDirecao as Direcao;
+    const saida = saidaEm(p, direcao);
+    const nome = saida && entradaEm(saida.destino, mundo)?.nome;
+    const dica = !saida ? 'sem trilha' : !rotaLivre(p, saida.t) ? saida.t.motivo : nome ?? 'para a bifurcação';
+    botao.setAttribute('aria-label', `${direcao}: ${dica}`);
+    botao.setAttribute('title', dica);
+    if (saida) rotas.push(`${simbolos[direcao]} ${nome ?? 'Bifurcação ou cais'}${rotaLivre(p, saida.t) ? '' : ' (bloqueada)'}`);
+  }
+  buscar('#saidas-praia').textContent = rotas.join(' · ');
   entrar.textContent = podeSairDaPraia(p) ? 'Seguir para o arquipélago' : entrada?.destino
     ? (entrada.id === 'porto' ? 'Voltar ao arquipélago' : 'Visitar região')
     : entrada?.id === 'enseada' ? 'Ver passagem' : 'Entrar na fase';
@@ -194,7 +213,7 @@ function selecionarFase(novoIndice: number, mensagem?: string, focar = true): vo
 }
 
 function entrarFase(): void {
-  if (tela !== 'praia') return;
+  if (tela !== 'praia' || quadroMapa !== undefined) return;
   const p = save.progresso;
   const entrada = entradaEm(p.posicao, mundoAtual(p));
   if (!entrada) return;
@@ -218,12 +237,31 @@ function entrarFase(): void {
 
 function mover(direcao: Direcao): void {
   if (tela === 'praia') {
+    if (quadroMapa !== undefined) return;
     const proximo = moverNoMapa(save.progresso, direcao);
-    if (save.progresso !== proximo.progresso) {
+    if (!proximo.caminho) { atualizarPraia(proximo.mensagem); return; }
+    const concluir = () => {
+      quadroMapa = undefined;
       save = { ...save, progresso: proximo.progresso };
       gravar();
+      atualizarPraia(proximo.mensagem);
+    };
+    // Com movimento reduzido, o mesmo nó é confirmado sem animação.
+    if (!window.requestAnimationFrame || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      concluir();
+      return;
     }
-    atualizarPraia(proximo.mensagem);
+    const percurso = prepararTravessia(proximo.caminho);
+    let inicio: number | undefined;
+    const animar = (agora: number) => {
+      inicio ??= agora;
+      const fracao = (agora - inicio) / percurso.duracao;
+      if (fracao >= 1) { concluir(); return; }
+      desenharPraia(mapaPraia.ctx, save.progresso, percurso.ponto(fracao));
+      quadroMapa = window.requestAnimationFrame(animar);
+    };
+    quadroMapa = window.requestAnimationFrame(animar);
+    atualizarPraia('Percorrendo a trilha…');
     return;
   }
   jogarAcao(direcao);

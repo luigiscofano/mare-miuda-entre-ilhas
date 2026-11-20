@@ -1,7 +1,8 @@
 import { mareAlta, mesmaCasa, vaiAtacar } from '../motor/index.ts';
-import type { Estado, Fase } from '../motor/index.ts';
-import { entradaEm, mapaDo, mundoAtual, portoes } from '../campanha/index.ts';
+import type { Estado, Fase, Posicao } from '../motor/index.ts';
+import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
+import { prepararTravessia } from '../campanha/travessia.ts';
 
 export const LARGURA = 256;
 export const ALTURA = 192;
@@ -214,59 +215,71 @@ function desenharBemTeVi(ctx: CanvasRenderingContext2D) {
   pintarPixels(ctx, BEM_TE_VI, x, y, CORES_BEM_TE_VI);
 }
 
-export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progresso): void {
+const centroNo = ({ coluna, linha }: Posicao) => [
+  Math.round(MAPA_X + coluna * TAMANHO_TILE + 8),
+  Math.round(MAPA_Y + linha * TAMANHO_TILE + 8),
+] as const;
+
+// O mesmo caminho dirige o siri e desenha a areia; rasterizamos sem antialiasing.
+function riscar(ctx: CanvasRenderingContext2D, cor: string, tamanho: number, pontos: readonly Posicao[]) {
+  const raio = Math.floor(tamanho / 2);
+  for (let i = 1; i < pontos.length; i++) {
+    let [x, y] = centroNo(pontos[i - 1]);
+    const [fimX, fimY] = centroNo(pontos[i]);
+    const dx = Math.abs(fimX - x), dy = Math.abs(fimY - y);
+    const sx = Math.sign(fimX - x), sy = Math.sign(fimY - y);
+    let erro = dx - dy;
+    for (;;) {
+      bloco(ctx, cor, x - raio, y - raio, tamanho, tamanho);
+      if (x === fimX && y === fimY) break;
+      const passo = 2 * erro;
+      if (passo > -dy) { erro -= dy; x += sx; }
+      if (passo < dx) { erro += dx; y += sy; }
+    }
+  }
+}
+
+export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progresso, transito = progresso.posicao): void {
   const mundo = mundoAtual(progresso);
   const tons = CORES_MUNDO[mundo];
-  const mapa = mapaDo(mundo);
+  const trilhas = trilhasDo(mundo);
   ctx.imageSmoothingEnabled = false;
   bloco(ctx, tons.agua, 0, 0, LARGURA, ALTURA);
-  // Faixas curtas e sólidas criam textura sem borrar o contorno das rotas.
   for (let y = 13; y < ALTURA - 7; y += 11) {
     for (let x = 9 + y % 13; x < LARGURA - 18; x += 31) {
       bloco(ctx, tons.margem, x, y, 12, 1);
       if ((x + y) % 3 === 0) bloco(ctx, '#6fa393', x + 7, y - 1, 4, 1);
     }
   }
-  mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
-    if (celula === '#') return;
-    const x = MAPA_X + coluna * TAMANHO_TILE;
-    const y = MAPA_Y + linha * TAMANHO_TILE;
-    const coresDeAreia = linha > 2 ? '#d8bb89' : tons.areia;
-    bloco(ctx, tons.margem, x - 4, y - 4, TAMANHO_TILE + 8, TAMANHO_TILE + 8);
-    bloco(ctx, '#f3e4bb', x - 2, y - 2, TAMANHO_TILE + 4, TAMANHO_TILE + 4);
-    bloco(ctx, coresDeAreia, x, y, TAMANHO_TILE, TAMANHO_TILE);
-  }));
-
-  mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
-    if (celula === '#') return;
-    const x = MAPA_X + coluna * TAMANHO_TILE;
-    const y = MAPA_Y + linha * TAMANHO_TILE;
-    const entrada = entradaEm({ coluna, linha }, mundo);
-    if (entrada) {
-      const concluida = progresso.concluidas.some(id => id === entrada.id);
-      bloco(ctx, tons.linha, x + 3, y + 3, 10, 10);
-      bloco(ctx, concluida ? '#5e8664' : entrada.opcional ? '#bc715d' : '#bd9665', x + 4, y + 4, 8, 8);
-      if (concluida) {
-        bloco(ctx, tons.branco, x + 5, y + 8, 3, 2);
-        bloco(ctx, tons.branco, x + 7, y + 6, 3, 2);
-      } else {
-        bloco(ctx, tons.branco, x + 7, y + 5, 2, 6);
-        bloco(ctx, tons.branco, x + 5, y + 7, 6, 2);
-      }
-    } else {
-      bloco(ctx, '#c9a97b', x + 5, y + 7, 6, 2);
-    }
-  }));
-
-  // Segredo de cenário, sem presença na grade de navegação ou no motor.
-  if (mundo === 'praia') desenharBemTeVi(ctx);
-  for (const portao of portoes(progresso)) {
-    const x = MAPA_X + (portao.de.coluna + portao.para.coluna) * TAMANHO_TILE / 2 + 8;
-    const y = MAPA_Y + (portao.de.linha + portao.para.linha) * TAMANHO_TILE / 2 + 8;
-    const vertical = portao.de.linha === portao.para.linha;
-    bloco(ctx, tons.linha, x - (vertical ? 1 : 5), y - (vertical ? 5 : 1), vertical ? 2 : 10, vertical ? 10 : 2);
-    bloco(ctx, '#be745c', x - (vertical ? 2 : 4), y - (vertical ? 4 : 2), vertical ? 4 : 8, vertical ? 8 : 4);
+  const caminhos = trilhas.map(t => [t.de, ...t.curvas, t.para]);
+  for (const [cor, tamanho] of [[tons.margem, 13], ['#f3e4bb', 11], [tons.areia, 7]] as const) {
+    for (const pontos of caminhos) riscar(ctx, cor, tamanho, pontos);
   }
-  const { coluna, linha } = progresso.posicao;
-  pintarPixels(ctx, SIRI, MAPA_X + coluna * TAMANHO_TILE + 2, MAPA_Y + linha * TAMANHO_TILE + 3, paleta(tons));
+  for (const posicao of nosDo(mundo)) {
+    const [x, y] = centroNo(posicao);
+    const entrada = entradaEm(posicao, mundo);
+    bloco(ctx, tons.linha, x - 5, y - 5, 10, 10);
+    const concluida = progresso.concluidas.some(id => id === entrada?.id);
+    bloco(ctx, concluida ? '#5e8664' : entrada?.opcional ? '#bc715d' : '#bd9665', x - 4, y - 4, 8, 8);
+    if (concluida) {
+      bloco(ctx, tons.branco, x - 3, y, 3, 2);
+      bloco(ctx, tons.branco, x - 1, y - 2, 3, 2);
+    } else if (entrada) {
+      bloco(ctx, tons.branco, x - 1, y - 3, 2, 6);
+      bloco(ctx, tons.branco, x - 3, y - 1, 6, 2);
+    } else {
+      bloco(ctx, tons.branco, x - 1, y - 1, 2, 2);
+    }
+  }
+  // Segredo de cenário: não cria nó, caminho ou objetivo.
+  if (mundo === 'praia') desenharBemTeVi(ctx);
+  trilhas.forEach((t, i) => {
+    if (rotaLivre(progresso, t)) return;
+    const [x, y] = centroNo(prepararTravessia(caminhos[i]).ponto(0.5));
+    bloco(ctx, tons.linha, x - 4, y - 4, 8, 8);
+    bloco(ctx, '#be745c', x - 3, y - 3, 6, 6);
+    bloco(ctx, tons.branco, x - 2, y, 4, 1);
+  });
+  const [x, y] = centroNo(transito);
+  pintarPixels(ctx, SIRI, x - 6, y - 5, paleta(tons));
 }
