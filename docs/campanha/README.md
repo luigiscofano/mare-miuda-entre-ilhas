@@ -51,3 +51,7 @@ A curva aumenta por etapas: Praia introdutória, lógica leve no segundo mundo, 
 ## Praia em duas telas
 
 Cabo Baixo tem quatro marcos principais, contando o encontro existente, e a Ilhota Perolada. Após vencer a Ponta da garça, siga à direita e abra o portal para a Enseadinha. A passagem de volta no início da nova tela devolve o siri ao portal do Cabo. Três desafios principais liberam o novo embarque, sem exigir os três opcionais. O embarque antigo foi mantido para saves anteriores, e o arquipélago ainda desembarca no ponto original do Cabo. O mundo já tem dez fases regulares; os dois chefes completos seguem no plano.
+
+## Planejamento completo
+
+A [matriz visualizável da campanha](matriz.md) separa roteiro principal, ramificações, chefes e requisitos de aceite. As fichas iniciais da Enseada da Garça e Ilhas à Deriva são os próximos incrementos testáveis. O plano não altera a disponibilidade do catálogo já implementado.
