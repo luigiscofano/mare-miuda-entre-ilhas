@@ -1,4 +1,4 @@
-import { mareAlta, mesmaCasa, vaiAtacar } from '../motor/index.ts';
+import { DIRECOES, destinoPermitido, jogadorAtivo, mareAlta, mesmaCasa, vaiAtacar } from '../motor/index.ts';
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
@@ -72,7 +72,7 @@ function bloco(ctx: CanvasRenderingContext2D, cor: string, x: number, y: number,
 }
 
 function desenharCasa(ctx: CanvasRenderingContext2D, celula: string, alta: boolean, x: number, y: number, tons: Tons, placa = false) {
-  bloco(ctx, tons.linha, x, y, TAMANHO_TILE, TAMANHO_TILE);
+  bloco(ctx, tons.margem, x, y, TAMANHO_TILE, TAMANHO_TILE);
   const piso = celula === '=' ? (alta ? tons.agua : tons.areiaSombra)
     : celula === '#' ? tons.roca : tons.areia;
   bloco(ctx, piso, x + 1, y + 1, 14, 14);
@@ -116,6 +116,23 @@ function desenharCasa(ctx: CanvasRenderingContext2D, celula: string, alta: boole
     bloco(ctx, tons.branco, x + 6, y + 5, 4, 6);
     if (celula === 'G') bloco(ctx, tons.roca, x + 6, y + 7, 4, 2);
   }
+}
+
+function cantos(ctx: CanvasRenderingContext2D, x: number, y: number, cor: string, margem: number, traco: number) {
+  const fim = TAMANHO_TILE - 1 - margem;
+  for (const dy of [margem, fim]) {
+    for (const dx of [margem, fim]) {
+      bloco(ctx, cor, x + (dx === margem ? dx : dx - traco + 1), y + dy, traco, 1);
+      bloco(ctx, cor, x + dx, y + (dy === margem ? dy : dy - traco + 1), 1, traco);
+    }
+  }
+}
+
+function moeda(ctx: CanvasRenderingContext2D, x: number, y: number, tons: Tons) {
+  bloco(ctx, tons.linha, x + 6, y + 4, 4, 8);
+  bloco(ctx, tons.linha, x + 5, y + 5, 6, 6);
+  bloco(ctx, tons.branco, x + 6, y + 5, 4, 6);
+  bloco(ctx, tons.areiaSombra, x + 8, y + 6, 1, 4);
 }
 
 function marcarAlvo(ctx: CanvasRenderingContext2D, x: number, y: number, previsto: boolean, tons: Tons) {
@@ -165,12 +182,26 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   bloco(ctx, tons.margem, origemX - 4, origemY - 4, gradeLargura + 8, gradeAltura + 8);
 
   const alta = mareAlta(estado.passos);
+  const atual = jogadorAtivo(estado);
+  const vizinhas = estado.situacao === 'jogando'
+    ? DIRECOES.map(d => destinoPermitido(fase, estado, d)).filter(v => v !== undefined)
+    : [];
   const placa = [estado.posicao, estado.dupla?.posicao].some(pos => pos && fase.mapa[pos.linha]?.[pos.coluna] === 'P');
   fase.mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
     const x = origemX + coluna * TAMANHO_TILE;
     const y = origemY + linha * TAMANHO_TILE;
     desenharCasa(ctx, celula, alta, x, y, tons, placa);
-    if (celula === 'B' && !estado.fragmentos.some(pos => mesmaCasa({ coluna, linha }, pos))) pintarPixels(ctx, FRAGMENTO, x + 5, y + 5, cores);
+    const pos = { coluna, linha };
+    if (celula === 'B' && !estado.fragmentos.some(coleta => mesmaCasa(pos, coleta))) {
+      if (fase.orcamentoMoedas) moeda(ctx, x, y, tons);
+      else pintarPixels(ctx, FRAGMENTO, x + 5, y + 5, cores);
+    }
+    // Cantos curtos marcam obstáculos sem desenhar caixas por cima da arte.
+    if (celula === '#' || (celula === 'D' && !placa) || (celula === '=' && alta)) {
+      cantos(ctx, x, y, tons.branco, 2, 3);
+    }
+    if (vizinhas.some(v => mesmaCasa(v, pos))) cantos(ctx, x, y, tons.linha, 2, 3);
+    if (mesmaCasa(atual, pos)) cantos(ctx, x, y, tons.linha, 1, 5);
     if (fase.ameaca && mesmaCasa(fase.ameaca.alvo, { coluna, linha })) {
       marcarAlvo(ctx, x, y, vaiAtacar(fase.ameaca, estado.passos + 1), tons);
     }

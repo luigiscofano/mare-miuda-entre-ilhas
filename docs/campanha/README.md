@@ -45,3 +45,5 @@ A passagem da Enseada abre só depois de `recife-retorno` e `mangue-reuniao`. A 
 ## Atualização: trilhas de marco a marco
 
 A descrição em casas acima é histórica. A seleção atual usa um grafo; um toque ou tecla segue a trilha completa e só para no próximo marco, mesmo se o desenho fizer curvas. Praia, arquipélago, Recifes e Mangue seguem este contrato. Somente as fases usam deslocamento célula a célula. Veja a [revisão de escopo, temas e leitura visual](../producao/escopo-e-leitura.md).
+
+A curva aumenta por etapas: Praia introdutória, lógica leve no segundo mundo, combinação no terceiro e mapas mais amplos, rotas que podem fechar, fuga sinalizada, busca, moedas sob limite e chefes nos últimos. Consulte o [plano revisado](../producao/escopo-e-leitura.md). A prova de moedas da bancada não acrescenta obstáculo à campanha tutorial.

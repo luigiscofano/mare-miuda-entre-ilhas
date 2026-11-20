@@ -18,6 +18,10 @@ export function validarMapa(fase: Fase): void {
   if ((!fase.dupla && /[APDT]/.test(celulas)) || (contar('D') && contar('P') !== 1)) {
     throw new Error(`Mecanismo sem dupla ou placa: ${fase.id}.`);
   }
+  if (fase.orcamentoMoedas !== undefined &&
+    (!Number.isSafeInteger(fase.orcamentoMoedas) || fase.orcamentoMoedas < 1 || contar('B') !== 3)) {
+    throw new Error(`Orçamento de três moedas inválido: ${fase.id}.`);
+  }
   if (!fase.ameaca) return;
   const { alvo, primeiroAtaque, periodo } = fase.ameaca;
   const terreno = lerCelula(fase, alvo);

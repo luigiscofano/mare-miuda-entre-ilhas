@@ -85,3 +85,7 @@ Legenda adicional: A início do segundo siri, T raiz-alvo, P placa, D portão. E
 | Reencontro na ponta do mangue | `S=H.DC / .#.##T / A=H.P.` | `RRRLRLXRRRRXRRRXRU` |
 
 Aprendizado: troca gratuita e destinos distintos → segurar a placa → proteger ambos na virada, abrir passagem e reunir a dupla. Observe se o formato das pinças e o marcador de atividade identificam o siri ativo sem depender da cor. Erros levam ambos à última combinação segura; reiniciar também redefine o siri ativo e o portão. Nenhuma solução depende do tempo de resposta físico.
+
+## Laboratório: Três moedas na restinga
+
+Experimental, fora da campanha e da contagem das onze fases. As três moedas estão em ramos diferentes; colete cada uma uma única vez e chegue à saída em até 14 passos válidos. A vitória em passo 14 vale; se o objetivo não for cumprido, o mesmo passo encerra a tentativa. Testemunha: ↑↑↓↓←←→→↓↓↑↑→→. Reiniciar limpa contador e moedas.

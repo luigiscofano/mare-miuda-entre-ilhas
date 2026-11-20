@@ -77,6 +77,9 @@ Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo 
 <details>
 <summary>Level design e soluções</summary>
 
+A campanha parte de um tutorial acessível na Praia, passa por lógica leve e combinação de regras, e chega a mapas maiores com escolhas consequentes, fuga e chefes por turnos. A bancada inclui uma prova independente de três moedas com orçamento de passos. [Curva de dificuldade](docs/producao/escopo-e-leitura.md#curva-de-dificuldade-da-campanha).
+
+
 Passagem da primeira onda, A sombra da garça e Busca e volta. Essas três fases estão na bancada e também na rota da praia. A praia acrescenta O segredo da ilhota e A ponta da garça. Recifes e Mangue têm três fases cada, com novas travessias e uma resolução final. Cada mapa tem objetivo, instrução e solução reproduzível no motor. [Diagramas e soluções](src/fases/README.md).
 
 </details>
