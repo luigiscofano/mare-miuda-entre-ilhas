@@ -5,7 +5,7 @@ import { destinoPermitido, DIRECOES, executarPasso, iniciar } from '../src/motor
 import { reproduzir, validarMapa, validarSolucao } from '../src/validacao/index.ts';
 
 test('As três moedas são exclusivas do laboratório e é possível vencer no último passo', () => {
-  assert.equal(TODAS_AS_FASES.length, 26);
+  assert.ok(TODAS_AS_FASES.every(desafio => desafio.id !== fase.id && desafio.orcamentoMoedas === undefined));
   assert.ok(validarSolucao(fase));
   const final = reproduzir(fase, fase.solucao);
   assert.equal(final.passos, fase.orcamentoMoedas);
