@@ -16,3 +16,30 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run test:offline
+  navegador:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm run build
+      - run: python -m pip install playwright==1.62.0
+      - name: Preparar Chromium
+        run: |
+          if command -v google-chrome >/dev/null; then
+            echo "CHROMIUM_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          else
+            python -m playwright install --with-deps chromium
+          fi
+      - run: python tests/browser_qa.py
+        env:
+          MARE_CAPTURA_DIR: artifacts/capturas
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: capturas-praia-escala-real
+          path: artifacts/capturas/*.png

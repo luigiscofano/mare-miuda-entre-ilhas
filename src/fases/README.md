@@ -37,3 +37,27 @@ SG#
 **Solução:** ↓ ↓ → ← → ← ↑ ↑ →. A ilha permite andar enquanto a água está alta; a sexta ação baixa a água. Testar volta, coleta não duplicada e reinício limpando a ação intermediária.
 
 Fonte de dados: [index.ts](index.ts). As três soluções são executadas pelo motor nos testes, não pelo cronômetro de uma animação.
+
+## 04 · O segredo da ilhota (opcional)
+
+```
+S=.##
+.##=C
+...=.
+```
+
+**Objetivo:** encontrar a Concha Perolada. Voltar do baixio inicial dá tempo de atravessar o banco por baixo quando descer. A alcova superior é deliberadamente sem saída; reveja no teste se fica clara como rota de preparação.
+
+**Solução:** → ← ↓ ↓ → → → → ↑. Vitória abre atalho no mapa, sem bloquear a rota principal.
+
+## 05 · A ponta da garça
+
+```
+S=....
+###.#G
+....B.
+```
+
+**Objetivo:** recuperar o fragmento e alcançar a saída. A garça mira o fragmento nos passos 6, 10, 14… Entrar direto na casa marcada no sexto passo causa erro **sem** coletar. A saída fica firme e não dispara sem o fragmento.
+
+**Rota do abrigo:** → → → ↓ ↓ ← → → → ↑. **Rota alternativa pela parte de cima:** → → → → → ↓ ↓ ← → ↑. As duas chegam sem erro e passam por perigos em momentos diferentes.

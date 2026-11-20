@@ -2,11 +2,11 @@
 
 *Tiny Tide: Between Islands*
 
-Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. Este protótipo cinza testa o núcleo em três travessias curtas. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
+Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A fatia vertical Praia das Conchas tem um mapa caminhável com cinco desafios. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
 
-**Estado:** Fundação e protótipo, com arte provisória. A campanha, a identidade e o áudio finais são etapas futuras.
+**Estado:** Fundação e protótipo preservados; fatia vertical Praia das Conchas implementada para teste. Arte, identidade e áudio finais são etapas futuras. Não existe publicação do jogo nesta fase.
 
-[Como jogar localmente](#como-jogar-localmente) · [Regras](#regras) · [Produção](docs/producao/README.md) · [Campanha](docs/campanha/README.md) · [Fases e soluções](src/fases/README.md)
+[Como jogar localmente](#como-jogar-localmente) · [Regras](#regras) · [Produção](docs/producao/README.md) · [Campanha](docs/campanha/README.md) · [Fases e soluções](src/fases/README.md) · [Processo de criação](docs/processo-de-criacao/README.md)
 
 ## Como jogar localmente
 
@@ -23,6 +23,19 @@ Abra `dist/mare-miuda-prototipo.html` no navegador para jogar sem conexão. A ou
 <a id="regras"></a>
 
 ## Documentação
+
+<details>
+<summary>Processo de criação</summary>
+
+1. [Fundação](docs/processo-de-criacao/01-fundacao/README.md): regras, decisões de arquitetura e plano dos mundos.
+2. [Protótipo cinza](docs/processo-de-criacao/02-prototipo/README.md): HTML autônomo v0.1.0 preservado, fichas, soluções e alcance dos testes.
+3. [Fatia vertical: Praia das Conchas](docs/processo-de-criacao/03-fatia-vertical/README.md): mapa, trilhas, arte provisória, edição de áudio, salvamento e encontro de encerramento.
+
+[Índice permanente do processo](docs/processo-de-criacao/README.md), com os estudos de identidade mantidos à parte. O material histórico não entra no build.
+
+</details>
+
+---
 
 <details>
 <summary>Sobre e origem</summary>
@@ -45,7 +58,7 @@ Setas, WASD ou botões de toque movem uma casa. R ou Reiniciar recomeça. Passos
 <details>
 <summary>Game design</summary>
 
-O núcleo combina contagem de passos, leitura espacial e previsão. O jogador não precisa correr: decisões de água e ameaça só andam em passos válidos. O protótipo não tem botão de esperar. Volta à casa firme e limite de três levadas são hipóteses a testar com jogadores.
+O núcleo combina contagem de passos, leitura espacial e previsão. O jogador não precisa correr: decisões de água e ameaça só andam em passos válidos. A bancada e a praia não têm botão de esperar. Na praia, caminhos são descobertos andando pelo mapa, sem consumir passos de maré. Volta à casa firme e limite de três levadas são hipóteses a testar com jogadores.
 
 </details>
 
@@ -54,7 +67,7 @@ O núcleo combina contagem de passos, leitura espacial e previsão. O jogador n�
 <details>
 <summary>Campanha e mapa-múndi</summary>
 
-Planejado: oito mundos, mapa caminhável ramificado, ilhas opcionais e retorno por atalhos. Nenhum progresso da campanha foi implementado no protótipo. A transição da Praia abre Recifes e Mangue em qualquer ordem. [Plano dos mundos](docs/campanha/README.md).
+Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O próximo marco de campanha prevê oito mundos; Recifes e Mangue serão acessíveis em qualquer ordem depois da Praia, mas não estão implementados. [Plano dos mundos](docs/campanha/README.md).
 
 </details>
 
@@ -63,7 +76,7 @@ Planejado: oito mundos, mapa caminhável ramificado, ilhas opcionais e retorno p
 <details>
 <summary>Level design e soluções</summary>
 
-Passagem da primeira onda, A sombra da garça e Busca e volta. Cada mapa tem objetivo, instrução e solução reproduzível no motor. [Diagramas e soluções](src/fases/README.md).
+Passagem da primeira onda, A sombra da garça e Busca e volta. Essas três fases estão na bancada e também na rota da praia. A praia acrescenta O segredo da ilhota e A ponta da garça. Cada mapa tem objetivo, instrução e solução reproduzível no motor. [Diagramas e soluções](src/fases/README.md).
 
 </details>
 
@@ -72,7 +85,7 @@ Passagem da primeira onda, A sombra da garça e Busca e volta. Cada mapa tem obj
 <details>
 <summary>Artes conceituais</summary>
 
-Não iniciadas. Pranchas aparecerão na fatia vertical, marcadas como estudos e diferenciadas de capturas do jogo.
+Os primeiros estudos de marca PT/EN são revisados separadamente da arte jogável e não estão aplicados ao jogo. Estudos e capturas reais têm rótulos distintos no Processo de criação.
 
 </details>
 
@@ -81,7 +94,7 @@ Não iniciadas. Pranchas aparecerão na fatia vertical, marcadas como estudos e 
 <details>
 <summary>Artes do jogo e animação</summary>
 
-No protótipo, a arte cinza lê terreno, maré e previsão de ameaça. O desenho do siri e do fragmento são matrizes de pixels editáveis em TypeScript. Nenhum recurso do jogo original é importado. [Guia de arte](docs/arte/README.md).
+Na bancada, a arte cinza lê terreno, maré e previsão de ameaça. O mapa e as fases da Praia usam uma paleta provisória em tons de areia, mar, pedra e carapaça. O desenho do siri e do fragmento são matrizes de pixels editáveis em TypeScript. Nenhum recurso do jogo original é importado. [Guia de arte](docs/arte/README.md).
 
 </details>
 
@@ -99,7 +112,7 @@ Planejada: pixel art com bordas duras, paleta própria e variações de logo PT/
 <details>
 <summary>Áudio e trilha</summary>
 
-Não implementados nesta entrega. A música e os sinais da maré terão volumes separados; forma, padrões e texto informarão as regras sem depender de som.
+A praia usa um tema original provisório sintetizado por Web Audio e sinais diferentes de subida/descida, erro, coleta e vitória. Música e efeitos têm volumes independentes e persistentes. Forma, padrões e texto ensinam as regras sem depender de áudio. Ver [áudio](src/audio/README.md).
 
 </details>
 
@@ -130,7 +143,7 @@ TypeScript, HTML semântico, CSS e Canvas 2D; Node.js 24 no script de build e no
 - `src/fases/`, `src/validacao/`: mapas, soluções e validação por reprodução.
 - `src/entrada/`, `src/interface/`, `src/render/`: controles, estado perceptível e arte provisória.
 - `tests/`, `scripts/` e `docs/`: testes, build e cadernos de produção.
-- Mapa, persistência e áudio terão módulos separados na fatia vertical em vez de se acoplarem ao motor.
+- `src/campanha/`, `src/persistencia/` e `src/audio/` implementam a praia, o save isolado e o tema/sinais. Não dependem do Miudezas.
 
 </details>
 
@@ -139,7 +152,7 @@ TypeScript, HTML semântico, CSS e Canvas 2D; Node.js 24 no script de build e no
 <details>
 <summary>Como rodar e publicar</summary>
 
-Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão modular em `dist/index.html` e um HTML autônomo para teste. Deploy e merge não são disparados pelo build; a publicação é uma etapa deliberada após aprovação. O GitHub Actions roda verificações, sem publicar.
+Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão modular em `dist/index.html` e um HTML autônomo para teste. Deploy e merge não são disparados pelo build; a publicação é uma etapa deliberada após aprovação. O GitHub Actions roda verificações e produz capturas como artefatos quando os testes de navegador passam, sem publicar.
 
 </details>
 
@@ -148,7 +161,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes de motor cobrem as três soluções, passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário e reinício. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md).
+Os testes cobrem as cinco soluções, passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md).
 
 </details>
 
@@ -175,7 +188,7 @@ Fundação → protótipo → fatia vertical → campanha em lotes → lançamen
 <details>
 <summary>Créditos e direitos autorais</summary>
 
-Projeto de Luigi Scofano de Araujo. O protótipo não incorpora sprites, código, fontes baixadas ou sons de terceiros. O navegador usa a fonte de sistema. Documentar autoria, origem e licenças ao incorporar recursos.
+Projeto de Luigi Scofano de Araujo. O protótipo e a fatia vertical não incorporam sprites, código, fontes baixadas ou sons de terceiros. O navegador usa a fonte de sistema. Documentar autoria, origem e licenças ao incorporar recursos.
 
 </details>
 

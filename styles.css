@@ -57,3 +57,39 @@ footer { font-size: .77rem; margin: .64rem 0 .1rem; color: #4b4c52; }
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip-path: inset(50%); white-space: nowrap;
 }
+
+body { background: #eae8df; }
+.painel {
+  background: #fffaf0;
+  color: #253f41;
+  padding: clamp(.6rem, 2.4vw, 1.2rem);
+  border: 1px solid #9caa9c;
+  border-radius: .35rem;
+  margin-block: .65rem;
+}
+.painel p + p, .painel > p + button { margin-top: .45rem; }
+.painel h2 { margin-bottom: .35rem; }
+.painel .moldura { background: #24585e; margin-top: .6rem; }
+.painel .feedback { min-height: 2.1rem; margin-top: .25rem; }
+.cartao-abertura {
+  height: 2.85rem;
+  background: #24585e;
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  padding-left: 1rem;
+  margin-bottom: .55rem;
+}
+.cartao-abertura i { display: block; height: 2px; width: 48px; background: #6fa393; }
+.cartao-abertura i:nth-child(even) { margin-left: 12px; width: 40px; }
+.principal { color: #fff; border-color: #204c4f; background: #24585e; }
+button:disabled { cursor: default; opacity: .64; }
+.botoes { display: flex; flex-wrap: wrap; gap: .46rem; margin-top: .52rem; }
+.configuracao label { font-weight: 650; margin-top: .3rem; display: block; }
+.configuracao input { width: min(100%, 220px); min-height: 30px; accent-color: #24585e; }
+.dica { color: #465b5a; font-size: .83rem; margin-top: .4rem; }
+#posicao-praia { font-weight: 620; margin-top: .45rem; }
+.direcional [data-mapa-direcao="cima"] { grid-column: 2; }
+.direcional [data-mapa-direcao="esquerda"] { grid-row: 2; grid-column: 1; }
+.direcional [data-mapa-direcao="baixo"] { grid-row: 2; grid-column: 2; }
+.direcional [data-mapa-direcao="direita"] { grid-row: 2; grid-column: 3; }

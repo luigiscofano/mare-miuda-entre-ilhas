@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Maré Miúda: Entre Ilhas | Protótipo</title>
+  <title>Maré Miúda: Entre Ilhas | Praia das Conchas</title>
   <link rel="stylesheet" href="./styles.css">
   <script type="module" src="./src/interface/index.js"></script>
 </head>
@@ -11,21 +11,57 @@
   <a class="pular" href="#jogo">Pular para o jogo</a>
   <main id="jogo" class="pagina">
     <header>
-      <p class="etiqueta">Caderno de travessias · Protótipo 01</p>
+      <p class="etiqueta">Caderno de travessias · Praia das Conchas</p>
       <h1>Maré Miúda: Entre Ilhas</h1>
       <p class="secundario" lang="en">Tiny Tide: Between Islands</p>
     </header>
 
-    <nav aria-label="Fases de teste" class="fases">
+    <section id="inicio" class="painel" aria-labelledby="titulo-inicio">
+      <div class="cartao-abertura" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <h2 id="titulo-inicio" tabindex="-1">Um siri, uma praia, seis passos por ciclo.</h2>
+      <p>A água sobe em três passos e desce nos três seguintes. Atravesse a praia, escute a maré e descubra o caminho da ilhota.</p>
+      <div class="botoes">
+        <button type="button" class="principal" id="comecar">Começar viagem</button>
+        <button type="button" id="bancada">Bancada de testes</button>
+        <button type="button" id="creditos-inicio">Créditos</button>
+      </div>
+    </section>
+
+    <section id="praia" class="painel" aria-labelledby="titulo-praia" hidden>
+      <h2 id="titulo-praia" tabindex="-1">Praia das Conchas</h2>
+      <p id="orientacao-praia"></p>
+      <p id="progresso-praia"></p>
+      <div id="moldura-praia" class="moldura">
+        <canvas id="mapa-praia" width="256" height="192" role="img" aria-label="Mapa caminhável da Praia das Conchas" aria-describedby="posicao-praia orientacao-praia">
+          A posição, as entradas e os bloqueios também são informados em texto.
+        </canvas>
+      </div>
+      <p id="posicao-praia"></p>
+      <p id="mensagem-praia" class="feedback" role="status" aria-live="polite"></p>
+      <div class="acoes">
+        <div class="direcional" role="group" aria-label="Andar no mapa">
+          <button type="button" data-mapa-direcao="cima" aria-label="Andar no mapa para cima">↑</button>
+          <button type="button" data-mapa-direcao="esquerda" aria-label="Andar no mapa para a esquerda">←</button>
+          <button type="button" data-mapa-direcao="baixo" aria-label="Andar no mapa para baixo">↓</button>
+          <button type="button" data-mapa-direcao="direita" aria-label="Andar no mapa para a direita">→</button>
+        </div>
+        <button type="button" class="principal" id="entrar-fase">Entrar na fase</button>
+      </div>
+      <p class="dica">Setas, WASD ou toque para andar. Enter abre o ponto atual. Caminhar aqui não muda a maré.</p>
+      <p id="aviso-save" class="dica" hidden>O navegador não permitiu salvar. Você pode jogar, mas o progresso pode se perder ao fechar.</p>
+      <button type="button" id="menu-praia">Tela inicial</button>
+    </section>
+
+    <nav aria-label="Fases de teste" id="fases-teste" class="fases" hidden>
       <button type="button" data-fase="1" aria-pressed="true">01 · Onda</button>
       <button type="button" data-fase="2" aria-pressed="false">02 · Garça</button>
       <button type="button" data-fase="3" aria-pressed="false">03 · Busca</button>
     </nav>
 
-    <section class="laboratorio" aria-labelledby="nome-fase">
+    <section class="laboratorio" id="fase" aria-labelledby="nome-fase" hidden>
       <div class="descricao">
-        <h2 id="nome-fase"></h2>
-        <p id="objetivo"></p>
+        <h2 id="nome-fase" tabindex="-1"></h2>
+        <p id="objetivo"></p><p id="lembrete-fase" class="dica" hidden></p>
       </div>
       <dl class="indicadores">
         <div><dt>Maré</dt><dd id="mare"></dd></div>
@@ -52,6 +88,10 @@
         <button id="reiniciar" type="button">Reiniciar</button>
       </div>
 
+      <div class="botoes">
+        <button type="button" id="voltar-fase">Voltar</button>
+        <button type="button" id="seguir-fase" class="principal" hidden>Concluir viagem</button>
+      </div>
       <details id="ajuda">
         <summary>Mapa em texto e ajuda</summary>
         <p id="ensino"></p>
@@ -60,6 +100,23 @@
         <p>S: início · .: chão firme · =: baixio · #: bloqueio · C: concha · B: fragmento · G: saída.</p>
       </details>
     </section>
+
+    <section id="creditos" class="painel" aria-labelledby="titulo-creditos" hidden>
+      <h2 id="titulo-creditos" tabindex="-1">Créditos</h2>
+      <p id="desfecho">O caminho continua a partir da Praia das Conchas.</p>
+      <p><strong>Jogo e direção:</strong> Luigi Scofano de Araujo.</p>
+      <p>Inspirado na mecânica do Maré Miúda de Miudezas, com código, arte provisória e áudio próprios.</p>
+      <button type="button" class="principal" id="voltar-creditos">Voltar à tela inicial</button>
+    </section>
+
+    <details class="painel configuracao">
+      <summary>Som e música</summary>
+      <label for="volume-musica">Música</label>
+      <input id="volume-musica" type="range" min="0" max="100" step="1" value="35">
+      <label for="volume-efeitos">Efeitos</label>
+      <input id="volume-efeitos" type="range" min="0" max="100" step="1" value="55">
+      <p class="dica">O jogo inicia o áudio depois da primeira interação.</p>
+    </details>
 
     <footer>© 2026 Luigi Scofano de Araujo. Todos os direitos reservados.</footer>
   </main>

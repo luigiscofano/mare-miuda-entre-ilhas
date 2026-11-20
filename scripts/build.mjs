@@ -48,4 +48,4 @@ await writeFile(join(pasta, 'styles.css'), css);
 await writeFile(join(pasta, 'mare-miuda-prototipo.html'), html
   .replace('<link rel="stylesheet" href="./styles.css">', `<style>\n${css}</style>`)
   .replace('./src/interface/index.js', gerarUrl('src/interface/index.js')));
-console.log('Build em dist/; versão offline: dist/mare-miuda-prototipo.html');
+console.log('Build em dist/; HTML offline em dist/mare-miuda-prototipo.html');

@@ -14,3 +14,24 @@
 | Arquipélago do Farol | Travessia de revisão → dupla, plataforma e vigia → rota principal e segredo → farol. |
 
 Cada etapa autoral terá objetivo, regra nova, mapa, solução, sequência de ensino, pontos confusos e condições de reinício. Ao adicionar persistência, use chaves de armazenamento exclusivas do projeto e IDs de progressão versionados.
+
+## Implementado na fatia vertical
+
+Mapa em casas ortogonais, com símbolos de entrada e portões nas extremidades das arestas:
+
+```
+#########
+#S1.2.3F#
+###.##.##
+###O#..##
+###...###
+```
+
+S: cais · 1: Primeira onda · 2: Sombra da garça · 3: Busca e volta · O: Ilhota Perolada · F: encontro final · #: água fora da rota.
+
+- A vitória na Primeira onda abre a bifurcação e a travessia seguinte.
+- A vitória na Ilhota dá a Concha Perolada e abre os portões do atalho, sem substituir o desbloqueio concedido pela Sombra da garça.
+- As vitórias 2 e 3 são necessárias para alcançar a ponta da praia. A concha não atrasa a rota principal.
+- Depois de concluir o encontro, é possível entrar nos créditos ou voltar para explorar. Tentativas são reiniciadas ao entrar na fase; a posição no mapa e as vitórias são persistidas.
+
+A tabela anterior continua sendo o plano da campanha, não indicação de mundos disponíveis.
