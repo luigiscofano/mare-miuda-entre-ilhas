@@ -9,4 +9,6 @@ A praia junta tutorial, navegação a pé, trilha principal, um ramo opcional co
 - [Estado de jogo e persistência](../../../src/persistencia/README.md)
 - [Testes e reprodução do navegador](../../../tests/README.md)
 
-Não confundir o primeiro mundo de teste com campanha completa. Antes de avançar, testar com pessoas novas a leitura da virada e do sinal da garça, a chegada ao ramo opcional e a compreensão do objetivo. O som é provisório. Os estudos da identidade PT/EN não foram aplicados ao jogo.
+Não confundir o primeiro mundo de teste com campanha completa. Antes de avançar, testar com pessoas novas a leitura da virada e do sinal da garça, a chegada ao ramo opcional e a compreensão do objetivo. O som é provisório. Na revisão visual desta etapa, foi aplicada somente a Placa de Areia PT; a variante EN segue no acervo e não há seletor de idioma.
+
+Uma pequena surpresa visual foi adicionada ao cenário na revisão da abertura: o bem-te-vi, em pixels sólidos. Sua presença é restrita ao render do mapa e não afeta o que o jogador pode fazer.

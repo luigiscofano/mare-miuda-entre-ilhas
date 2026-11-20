@@ -121,6 +121,28 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
 
 const MAPA_X = 56;
 const MAPA_Y = 52;
+const BEM_TE_VI = [
+  '......lll..',
+  '.....lwwll.',
+  '....llwlld.',
+  '..llllyyl..',
+  '.lllllyyyl.',
+  'lllllyyyyl.',
+  '..lllllll..',
+  '....l.l....',
+] as const;
+const CORES_BEM_TE_VI = {
+  l: '#3e4235', w: '#fff0c7', y: '#dfb050', d: '#534324',
+};
+
+function desenharBemTeVi(ctx: CanvasRenderingContext2D) {
+  const x = MAPA_X + 30;
+  const y = MAPA_Y + 48;
+  bloco(ctx, '#71897b', x - 3, y + 10, 19, 5);
+  bloco(ctx, '#b1b49a', x, y + 8, 12, 5);
+  bloco(ctx, '#c6c6a5', x + 2, y + 8, 7, 2);
+  pintarPixels(ctx, BEM_TE_VI, x, y, CORES_BEM_TE_VI);
+}
 
 export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progresso): void {
   const tons = TONS_PRAIA;
@@ -164,6 +186,8 @@ export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progress
     }
   }));
 
+  // Segredo de cenário, sem presença na grade de navegação ou no motor.
+  desenharBemTeVi(ctx);
   for (const portao of portoes(progresso)) {
     const x = MAPA_X + (portao.de.coluna + portao.para.coluna) * TAMANHO_TILE / 2 + 8;
     const y = MAPA_Y + (portao.de.linha + portao.para.linha) * TAMANHO_TILE / 2 + 8;

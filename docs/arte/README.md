@@ -12,3 +12,11 @@ A próxima etapa testará a densidade de sprites e fundos em conjunto, três dir
 ## Palco colorido de teste
 
 A praia usa `#24585e` (mar), `#32747a` (ondulações), `#f4d398` (areia), `#243c41` (contorno), `#df7756` (carapaça) e variações chapadas. As trilhas e entradas usam o mesmo módulo de 16 pixels. Portões não dependem só de cor: têm uma barra transversal. A fase mantém marca em X e aviso textual ao prever o ataque. A paleta cinza histórica não é substituída.
+
+### Pequenas surpresas de cenário
+
+O mapa da Praia ganha um bem-te-vi original, na mesma escala de pixels que o siri. A silhueta tem bico curto, faixa branca e barriga amarela. É decoração: não é a garça de ameaça e não participa de turnos, colisões ou objetivos.
+
+### Marca na abertura
+
+A variante A, Placa de Areia, foi escolhida para a abertura. É usada sem modificações nos pixels, com o PNG lógico carregado em escala inteira. [Fonte e verificações](../../assets/README.md). A alternativa B, a marca em inglês e as versões compactas continuam nos estudos.

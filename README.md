@@ -4,7 +4,7 @@
 
 Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A fatia vertical Praia das Conchas tem um mapa caminhável com cinco desafios. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
 
-**Estado:** Fundação e protótipo preservados; fatia vertical Praia das Conchas implementada para teste. Arte, identidade e áudio finais são etapas futuras. Não existe publicação do jogo nesta fase.
+**Estado:** Fundação e protótipo preservados; fatia vertical Praia das Conchas implementada para teste. A abertura usa Placa de Areia aprovada; o restante da arte e do áudio ainda é provisório. Não existe publicação do jogo nesta fase.
 
 [Como jogar localmente](#como-jogar-localmente) · [Regras](#regras) · [Produção](docs/producao/README.md) · [Campanha](docs/campanha/README.md) · [Fases e soluções](src/fases/README.md) · [Processo de criação](docs/processo-de-criacao/README.md)
 
@@ -85,7 +85,7 @@ Passagem da primeira onda, A sombra da garça e Busca e volta. Essas três fases
 <details>
 <summary>Artes conceituais</summary>
 
-Os primeiros estudos de marca PT/EN são revisados separadamente da arte jogável e não estão aplicados ao jogo. Estudos e capturas reais têm rótulos distintos no Processo de criação.
+Os estudos PT/EN ficam preservados separadamente. A Placa de Areia (A) foi aprovada para a abertura em português; a Corrente de Espuma (B) continua no acervo como estudo. Estudos e capturas reais têm rótulos distintos no Processo de criação.
 
 </details>
 
@@ -103,7 +103,7 @@ Na bancada, a arte cinza lê terreno, maré e previsão de ameaça. O mapa e as 
 <details>
 <summary>Identidade visual</summary>
 
-Planejada: pixel art com bordas duras, paleta própria e variações de logo PT/EN e compacta. A grade final será escolhida na fatia vertical depois de conferir a leitura no tamanho real.
+Placa de Areia (opção A) na abertura, em grade original de 180 × 94 pixels, com escala inteira sem suavização. A variante inglesa e as versões compactas ficam no acervo dos estudos; o jogo ainda não tem seleção de idioma. A paleta e a grade das demais artes ainda são provisórias.
 
 </details>
 

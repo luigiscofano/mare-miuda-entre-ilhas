@@ -71,17 +71,20 @@ body { background: #eae8df; }
 .painel h2 { margin-bottom: .35rem; }
 .painel .moldura { background: #24585e; margin-top: .6rem; }
 .painel .feedback { min-height: 2.1rem; margin-top: .25rem; }
-.cartao-abertura {
-  height: 2.85rem;
-  background: #24585e;
-  display: grid;
-  align-content: center;
-  gap: 4px;
-  padding-left: 1rem;
+.moldura-logo {
+  display: flex;
+  justify-content: safe center;
+  overflow-x: auto;
+  padding-block: .35rem;
   margin-bottom: .55rem;
+  background: #dce7dc;
 }
-.cartao-abertura i { display: block; height: 2px; width: 48px; background: #6fa393; }
-.cartao-abertura i:nth-child(even) { margin-left: 12px; width: 40px; }
+.moldura-logo img { display: block; flex: 0 0 auto; height: auto; image-rendering: pixelated; }
+.pagina[data-tela="inicio"] header h1,
+.pagina[data-tela="inicio"] .secundario {
+  position: absolute; width: 1px; height: 1px;
+  clip-path: inset(50%); overflow: hidden; white-space: nowrap;
+}
 .principal { color: #fff; border-color: #204c4f; background: #24585e; }
 button:disabled { cursor: default; opacity: .64; }
 .botoes { display: flex; flex-wrap: wrap; gap: .46rem; margin-top: .52rem; }

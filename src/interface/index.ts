@@ -37,6 +37,15 @@ let save = carregar(storage);
 const audio = criarAudio();
 audio.volumes(save.audio);
 
+const logo = buscar<HTMLImageElement>('#marca-praia');
+const molduraLogo = buscar('#moldura-logo');
+function escalaDaLogo() {
+  const larguraNativa = 180; // Grade original da placa, sem reamostragem.
+  const inteiro = Math.max(1, Math.floor(molduraLogo.clientWidth / larguraNativa));
+  logo.style.width = `${larguraNativa * inteiro}px`;
+}
+new ResizeObserver(escalaDaLogo).observe(molduraLogo);
+
 type Tela = 'inicio' | 'praia' | 'fase' | 'creditos';
 const paineis: Record<Tela, HTMLElement> = {
   inicio: buscar('#inicio'), praia: buscar('#praia'), fase: buscar('#fase'), creditos: buscar('#creditos'),
@@ -61,10 +70,12 @@ function gravar() {
 
 function trocarTela(destino: Tela, focar = true): void {
   tela = destino;
+  buscar('#jogo').setAttribute('data-tela', destino);
   for (const [nome, painel] of Object.entries(paineis)) painel.hidden = nome !== destino;
   listaTestes.hidden = destino !== 'fase' || !bancada;
   audio.ambiente(!document.hidden && (destino === 'praia' || destino === 'fase'));
   if (destino === 'inicio') {
+    escalaDaLogo();
     buscar('#comecar').textContent = save.progresso.viuTutorial ? 'Continuar viagem' : 'Começar viagem';
   }
   if (destino === 'fase') tabuleiro.escala();
