@@ -172,7 +172,7 @@ def conferir_praia(pagina, toque=False, opcional=False):
 
 SOLUCOES = {
     'Recifes Expostos': ('RRDUDURRR', 'RRRDUDULLLRLLLLDRLRURRU', 'DDDUDURRUDUDDRRLRLLUUDUDLLDUDUUUR'),
-    'Mangue dos Dois Siris': ('RXLL', 'RRXRRXRR', 'RRRLRLXRRRRXRRRXRU'),
+    'Mangue dos Siris Duplos': ('RXLL', 'RRXRRXRR', 'RRRLRLXRRRRXRRRXRU'),
 }
 
 
@@ -182,7 +182,7 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
     expect(pagina.locator('#entrar-fase')).to_have_text('Seguir para o arquipélago')
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
-    ordem = ['Recifes Expostos', 'Mangue dos Dois Siris']
+    ordem = ['Recifes Expostos', 'Mangue dos Siris Duplos']
     if not recifes_primeiro:
         ordem.reverse()
     rotas = ['RU', 'DR'] if recifes_primeiro else ['RR', 'LU']
