@@ -28,7 +28,13 @@ function prepararInterface() {
     return elementos.get(chave);
   };
   const quadros = [];
-  const contexto = { fillStyle: '', fillRect(...args) { quadros.push([this.fillStyle, ...args]); } };
+  const recortes = [];
+  const contexto = {
+    fillStyle: '', save() {}, restore() {}, setTransform() {},
+    drawImage(_imagem, ...args) { recortes.push(args); },
+    fillRect(...args) { quadros.push([this.fillStyle, ...args]); },
+  };
+  Object.assign(pegar('#marca-praia'), { complete: true, naturalWidth: 180, naturalHeight: 94 });
   pegar('#tabuleiro').getContext = () => contexto;
   pegar('#moldura').clientWidth = 500;
   pegar('#moldura-logo').clientWidth = 400;
@@ -57,7 +63,7 @@ function prepararInterface() {
   function tecla(key, repeat = false) {
     window.disparar('keydown', { key, repeat, preventDefault() {} });
   }
-  return { pegar, quadros, fases, botoes, mapa, tecla, storage };
+  return { pegar, quadros, recortes, fases, botoes, mapa, tecla, storage };
 }
 
 test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', async () => {
@@ -75,7 +81,7 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   assert.deepEqual(Buffer.from(cabo, 'base64'), await readFile(new URL('../assets/cabo-baixo-192.png', import.meta.url)));
 
   assert.ok(!html.includes("href=\"./styles.css\""));
-  const { pegar, quadros, fases, botoes, mapa, tecla, storage } = prepararInterface();
+  const { pegar, quadros, recortes, fases, botoes, mapa, tecla, storage } = prepararInterface();
   await import(modulo);
   const ler = id => pegar(id).textContent;
   assert.equal(pegar('#inicio').hidden, false);
@@ -83,6 +89,12 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   pegar('#bancada').click();
   assert.equal(ler('#nome-fase'), 'Passagem da primeira onda');
   assert.equal(pegar('#tabuleiro').style.width, '256px');
+  assert.equal(pegar('#tabuleiro').width, 512);
+  assert.equal(pegar('#tabuleiro').height, 384);
+  const recorte = recortes.at(-1);
+  assert.deepEqual(recorte.slice(0, 4), [75, 3, 31, 23]);
+  assert.deepEqual(recorte.slice(6), [31, 23]);
+  assert.ok(recorte.every(Number.isInteger));
   assert.ok(quadros.length > 0);
   assert.ok(quadros.every(([cor, ...pos]) => /^#[0-9a-f]{6}$/i.test(cor) && pos.every(Number.isInteger)));
   tecla('ArrowRight', true);

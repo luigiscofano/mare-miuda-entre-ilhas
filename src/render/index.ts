@@ -7,6 +7,8 @@ import { prepararTravessia } from '../campanha/travessia.ts';
 
 export const LARGURA = 256;
 export const ALTURA = 192;
+export const DENSIDADE = 2;
+const RECORTE_SIRI = { x: 75, y: 3, largura: 31, altura: 23 } as const;
 const TAMANHO_TILE = 16;
 
 const TONS_CINZA = {
@@ -48,20 +50,18 @@ const PARCEIRO = [
 
 
 
-// Cada caractere é uma célula quadrada: sem opacidade parcial ou suavização.
-const SIRI = [
-  '............',
-  '.l........l.',
-  '.bl......lb.',
-  '..l.l..l.l..',
-  '...lcllcl...',
-  '..lcccccc.l.',
-  '.lccccccccl.',
-  '..lcccccl...',
-  '.l.lccc.l.l.',
-  '.l..lll..l..',
-  '............',
-];
+// A placa da abertura é a única fonte do protagonista. O recorte usa pixels
+// nativos, enquanto o terreno permanece na grade lógica de 16 pixels por casa.
+function desenharSiri(ctx: CanvasRenderingContext2D, logo: HTMLImageElement, centroX: number, baseY: number) {
+  if (!logo.complete || logo.naturalWidth !== 180 || logo.naturalHeight !== 94) return;
+  const { x, y, largura, altura } = RECORTE_SIRI;
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.drawImage(logo, x, y, largura, altura,
+    Math.round(centroX * DENSIDADE - largura / 2), Math.round(baseY * DENSIDADE) - altura, largura, altura);
+  ctx.restore();
+}
+
 const FRAGMENTO = ['..l..', '.lcl.', 'lcbcl', '.lcl.', '..l..'];
 const paleta = (tons: Tons) => ({ l: tons.linha, c: tons.cinza, b: tons.branco }) as Readonly<Record<string, string>>;
 
@@ -211,7 +211,7 @@ function desenharMecanismoDaGruta(
   if (concluida) bloco(ctx, tons.linha, x + 5, y + 12, 5, 1);
 }
 
-export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, tema: Mundo | false = false): void {
+export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, logo: HTMLImageElement, tema: Mundo | false = false): void {
   const tons: Tons = tema ? CORES_MUNDO[tema] : TONS_CINZA;
   const cores = paleta(tons);
   ctx.imageSmoothingEnabled = false;
@@ -285,7 +285,7 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   if (estado.dupla && !estado.dupla.parceiroAtivo) {
     bloco(ctx, tons.branco, origemX + coluna * TAMANHO_TILE + 6, origemY + linha * TAMANHO_TILE + 14, 4, 1);
   }
-  pintarPixels(ctx, SIRI, origemX + coluna * TAMANHO_TILE + 2, origemY + linha * TAMANHO_TILE + 3, cores);
+  desenharSiri(ctx, logo, origemX + coluna * TAMANHO_TILE + 8, origemY + linha * TAMANHO_TILE + 13);
 }
 
 const MAPA_X = 56;
@@ -330,7 +330,7 @@ export function podeDesenharCabo(mundo: Mundo, arte: HTMLImageElement): boolean 
 }
 
 export function desenharCabo(
-  ctx: CanvasRenderingContext2D, progresso: Progresso, arte: HTMLImageElement, transito?: Posicao,
+  ctx: CanvasRenderingContext2D, progresso: Progresso, arte: HTMLImageElement, logo: HTMLImageElement, transito?: Posicao,
 ): void {
   ctx.imageSmoothingEnabled = false;
   bloco(ctx, '#138782', 0, 0, LARGURA, ALTURA);
@@ -358,15 +358,14 @@ export function desenharCabo(
   const atual = marcadorCabo(progresso.posicao)?.ponto;
   const x = transito?.coluna ?? atual?.[0];
   const y = transito?.linha ?? atual?.[1];
-  // Cursor neutro durante a revisão da arte do siri deste seletor.
+  // Ancora os pés junto ao marco sem encobrir o número da fase.
   if (x !== undefined && y !== undefined) {
     const cx = CABO_X + Math.round(x), cy = CABO_Y + Math.round(y);
-    bloco(ctx, '#623645', cx - 4, cy + 2, 9, 5);
-    bloco(ctx, '#fff1bc', cx - 3, cy + 3, 7, 3);
+    desenharSiri(ctx, logo, cx, cy + 14);
   }
 }
 
-export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progresso, transito = progresso.posicao): void {
+export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progresso, logo: HTMLImageElement, transito = progresso.posicao): void {
   const mundo = mundoAtual(progresso);
   const tons = CORES_MUNDO[mundo];
   const trilhas = trilhasDo(mundo);
@@ -406,5 +405,5 @@ export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progress
     bloco(ctx, tons.branco, x - 2, y, 4, 1);
   });
   const [x, y] = centroNo(transito);
-  pintarPixels(ctx, SIRI, x - 6, y - 5, paleta(tons));
+  desenharSiri(ctx, logo, x, y - 1);
 }
