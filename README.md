@@ -72,7 +72,7 @@ Passagem da primeira onda, A sombra da garça e Busca e volta. Cada mapa tem obj
 <details>
 <summary>Artes conceituais</summary>
 
-Pranchas são registradas como estudos, separadas das capturas do jogo. A [segunda rodada ortogonal](docs/processo-de-criacao/identidade-visual/16-estudo-ortogonal-v2/README.md) explora relevo, luz e uma grade mais detalhada. Veja o [estudo ortogonal do Caminho das Conchas e da Travessia](docs/processo-de-criacao/identidade-visual/15-estudo-ortogonal/README.md).
+Pranchas são registradas como estudos, separadas das capturas do jogo. A [terceira rodada ortogonal](docs/processo-de-criacao/identidade-visual/17-estudo-ortogonal-v3/README.md) detalha texturas, relevo e luz. A [segunda rodada ortogonal](docs/processo-de-criacao/identidade-visual/16-estudo-ortogonal-v2/README.md) explora relevo, luz e uma grade mais detalhada. Veja o [estudo ortogonal do Caminho das Conchas e da Travessia](docs/processo-de-criacao/identidade-visual/15-estudo-ortogonal/README.md).
 
 </details>
 
