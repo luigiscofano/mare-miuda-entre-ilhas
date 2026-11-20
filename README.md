@@ -72,7 +72,7 @@ Passagem da primeira onda, A sombra da garça e Busca e volta. Cada mapa tem obj
 <details>
 <summary>Artes conceituais</summary>
 
-Não iniciadas. Pranchas aparecerão na fatia vertical, marcadas como estudos e diferenciadas de capturas do jogo.
+Pranchas são registradas como estudos, separadas das capturas do jogo. Veja o [estudo ortogonal do Caminho das Conchas e da Travessia](docs/processo-de-criacao/identidade-visual/15-estudo-ortogonal/README.md).
 
 </details>
 
