@@ -54,8 +54,10 @@ Cabo Baixo tem quatro marcos principais, contando o encontro existente, e a Ilho
 
 ## Planejamento completo
 
-A [matriz visualizável da campanha](matriz.md) separa roteiro principal, ramificações, chefes e requisitos de aceite. As fichas iniciais da Enseada da Garça e Ilhas à Deriva são os próximos incrementos testáveis. O plano não altera a disponibilidade do catálogo já implementado.
+A [matriz visualizável da campanha](matriz.md) separa roteiro principal, ramificações, chefes e requisitos de aceite. As fichas iniciais da Enseada da Garça, Ilhas à Deriva e Grutas da Espuma descrevem incrementos já jogáveis no protótipo. O plano não altera a disponibilidade do catálogo já implementado.
 
 ## Segundo lote jogável
 
 A indicação antiga da Enseada agora leva a três travessias de patrulha e, depois delas, a três fases nas Ilhas à Deriva. A ideia de composição do lote está na matriz, e as fichas executáveis e suas soluções no [processo de criação](../processo-de-criacao/07-campanha-e-lote2/README.md). Chefes, sete regulares adicionais por região e arte de acabamento não entram nesta entrega.
+
+Corrente cruzada libera as Grutas da Espuma. O núcleo jogável atual tem três fases de entrega e mecanismos; são parte da rota principal e não exigem desvios opcionais. Os dois chefes e as demais fases ainda estão no plano.

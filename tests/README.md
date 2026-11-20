@@ -23,3 +23,5 @@ Os cantos da travessia só realçam células bloqueadas ortogonais; a suíte ver
 Há 17 soluções de campanha e uma prova opcional da bancada. A expansão da Praia acrescenta testes do embarque legado, ida e volta entre telas, todos os bloqueios da nova rota, projeção de trilhas no Cabo Baixo e salva/carrega. O navegador verifica as seis fases novas em desktop e a rota principal em celular emulado, além de capturar as duas telas sem cursor. O teste humano e em aparelho físico continua pendente.
 
 O lote da Enseada e das Ilhas tem seis testemunhas, busca independente no motor e prova de que os três puzzles das Ilhas ficam insolúveis sem as respectivas balsas. O teste de simultaneidade confirma que a garça avalia a posição após o transporte. Volta pelo porto, atalho, desbloqueios, recarga local e as 17 soluções anteriores também são cobertos.
+
+`lote3.test.ts` reproduz as três soluções nas Grutas e faz busca exaustiva no motor com cada etapa substituída por chão firme, sem remover a saída ou o portão. Cobre mecanismos fora de ordem, passo bloqueado, reinício de estado e recarga de progresso. `browser_qa.py` também percorre as três fases por teclado e toque emulado.

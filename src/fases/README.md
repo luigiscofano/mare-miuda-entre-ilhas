@@ -93,3 +93,7 @@ Experimental, fora da campanha e da contagem das onze fases. As três moedas est
 As seis travessias da Enseadinha incluem três opcionais. Suas rotas estão no [registro da Praia ampliada](../../docs/processo-de-criacao/06-praia-ampliada/README.md). Não substituem as fases existentes.
 
 A [prova jogável do segundo lote](../../docs/processo-de-criacao/07-campanha-e-lote2/README.md) introduz patrulha e balsas em seis fases. O símbolo `~` indica água funda: só se entra quando a balsa estiver naquele ponto.
+
+### Grutas da Espuma
+
+As três fases iniciais estão em `lote3.ts`. `K` é a pérola, `E` o encaixe A, `F` a alavanca B e `O` o portão. `etapasGruta` declara a sequência e o mapa tem uma única casa para cada etapa declarada.

@@ -16,3 +16,7 @@ A garça é um padrão de turno anunciado antes da ação. Não há espera por t
 O render consulta `destinoPermitido` para destacar vizinhas usando a mesma condição que executa o movimento. A consulta não prevê se um passo legal será prudente após a virada; maré e aviso da garça continuam distintos. No laboratório, o limite opcional de passos é aplicado após ameaças, coleta e vitória. Fases sem limite usam as mesmas condições de antes.
 
 A patrulha alterna alvos seguindo a mesma sequência usada pelo aviso do próximo passo. Nas fases com balsas, a posição antiga autoriza embarcar; na virada (3 ou 6 do ciclo), as balsas se movem e levam quem termina o passo a bordo. Só depois são avaliados riscos na posição final, coleta e vitória. Água funda sem balsa é bloqueada e não vira ponto de retorno. Sem ação de esperar, incluindo em balsa. Paradas repetidas e balsa com dupla são rejeitadas neste lote.
+
+### Cadeia de mecanismos das Grutas
+
+Após a resolução da maré e dos perigos, um passo seguro sobre a próxima etapa avança o estado. A pérola entra no inventário ao passar sobre ela e é consumida no encaixe. Uma etapa futura pisada cedo só mostra uma pista. O portão permanece fechado até completar a cadeia; bater nele não gasta passo. Reiniciar recria a tentativa e limpa a sequência.

@@ -314,6 +314,32 @@ def conferir_lote2(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def conferir_grutas(pagina, toque=False):
+    jogar(pagina, 'U', toque, mapa=True)
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#titulo-praia')).to_have_text('Grutas da Espuma')
+    for indice, rota in enumerate(['RUDRRRR', 'RRRUDLLRRRR', 'RDUDURRRRLRLLLUDUDRRRRR']):
+        jogar(pagina, 'R', toque, mapa=True)
+        tocar(pagina, '#entrar-fase', toque)
+        if indice == 1:
+            jogar(pagina, 'R', toque)
+            expect(pagina.locator('#feedback')).to_contain_text('Próxima etapa: Encaixe A')
+            jogar(pagina, 'L', toque)
+        if indice == 0:
+            jogar(pagina, rota[:2], toque)
+            expect(pagina.locator('#fragmento')).to_contain_text('Pérola no inventário')
+            rota = rota[2:]
+        jogar(pagina, rota, toque)
+        expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+        tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#progresso-praia')).to_contain_text('3/3')
+    jogar(pagina, 'D', toque, mapa=True)
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
+
+
 with sync_playwright() as p:
     motor = os.getenv('MARE_BROWSER', 'chromium')
     if motor not in ('chromium', 'webkit'):
@@ -326,6 +352,7 @@ with sync_playwright() as p:
     conferir_praia(desktop, opcional=True)
     conferir_lote(desktop)
     conferir_lote2(desktop)
+    conferir_grutas(desktop)
     conferir_enseadinha(navegador.new_page(viewport={'width': 1180, 'height': 820}, offline=(PRIMEIRA_PAGINA == OFFLINE)))
     print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
@@ -335,6 +362,7 @@ with sync_playwright() as p:
         conferir_praia(aparelho, toque=True, opcional=False)
         conferir_lote(aparelho, toque=True, recifes_primeiro=False)
         conferir_lote2(aparelho, toque=True)
+        conferir_grutas(aparelho, toque=True)
         conferir_enseadinha(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()
