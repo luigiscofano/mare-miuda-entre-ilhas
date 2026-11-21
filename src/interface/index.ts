@@ -20,6 +20,34 @@ function buscar<T extends HTMLElement = HTMLElement>(seletor: string): T {
   return elemento;
 }
 
+function observarEscalaInteira(elemento: HTMLElement, moldura: HTMLElement, larguraNativa: number) {
+  function larguraNova() {
+    const largura = moldura.clientWidth;
+    if (!largura) return; // Molduras ocultas não têm dimensão útil.
+    const inteira = larguraNativa * Math.max(1, Math.floor(largura / larguraNativa));
+    const css = `${inteira}px`;
+    if (elemento.style.width !== css) return css;
+  }
+
+  function escala() {
+    const css = larguraNova();
+    if (css !== undefined) elemento.style.width = css;
+  }
+
+  let pendente = false;
+  new ResizeObserver(() => {
+    if (pendente || larguraNova() === undefined) return;
+    pendente = true;
+    // O filho pode mudar a altura da moldura. Escreva no quadro seguinte,
+    // fora da entrega do observer, e não reagende para a mesma escala.
+    window.requestAnimationFrame(() => {
+      pendente = false;
+      escala();
+    });
+  }).observe(moldura);
+  return escala;
+}
+
 function montarCanvas(seletor: string, moldura: string) {
   const canvas = buscar<HTMLCanvasElement>(seletor);
   const borda = buscar(moldura);
@@ -28,10 +56,7 @@ function montarCanvas(seletor: string, moldura: string) {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas indisponível neste navegador.');
   ctx.setTransform(DENSIDADE, 0, 0, DENSIDADE, 0, 0);
-  function escala() {
-    canvas.style.width = `${LARGURA * Math.max(1, Math.floor(borda.clientWidth / LARGURA))}px`;
-  }
-  new ResizeObserver(escala).observe(borda);
+  const escala = observarEscalaInteira(canvas, borda, LARGURA);
   escala();
   return { ctx, escala };
 }
@@ -50,13 +75,8 @@ const audio = criarAudio();
 audio.volumes(save.audio);
 
 const logo = buscar<HTMLImageElement>('#marca-praia');
-const molduraLogo = buscar('#moldura-logo');
-function escalaDaLogo() {
-  const larguraNativa = 180; // Grade original da placa, sem reamostragem.
-  const inteiro = Math.max(1, Math.floor(molduraLogo.clientWidth / larguraNativa));
-  logo.style.width = `${larguraNativa * inteiro}px`;
-}
-new ResizeObserver(escalaDaLogo).observe(molduraLogo);
+// Grade original da placa, sem reamostragem.
+const escalaDaLogo = observarEscalaInteira(logo, buscar('#moldura-logo'), 180);
 
 type Tela = 'inicio' | 'praia' | 'fase' | 'creditos' | 'mare-a-mao';
 const paineis: Record<Tela, HTMLElement> = {
@@ -124,7 +144,6 @@ function trocarTela(destino: Tela, focar = true): void {
     buscar('#comecar').textContent = save.progresso.viuTutorial ? 'Continuar viagem' : 'Começar viagem';
   }
   if (destino === 'fase') tabuleiro.escala();
-  if (destino === 'praia' && mundoAtual(save.progresso) === 'arquipelago') mapaPraia.escala();
   if (focar) paineis[destino].querySelector('h2')?.focus();
 }
 
@@ -172,6 +191,7 @@ function atualizarPraia(mensagem = ''): void {
     if (saida) rotas.push(`${simbolos[direcao]} ${nome ?? 'Bifurcação ou cais'}${rotaLivre(p, saida.t) ? '' : ' (bloqueada)'}`);
   }
   buscar('#saidas-praia').textContent = rotas.join(' · ');
+  mapaPraia.escala();
   desenharPraia(mapaPraia.ctx, p, logo, undefined, arteArquipelago);
 }
 

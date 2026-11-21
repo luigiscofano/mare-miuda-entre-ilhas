@@ -54,7 +54,6 @@ function prepararInterface() {
   );
   const storage = new Map([['miudezas', 'preservado']]);
   globalThis.document = Object.assign(new ElementoFalso(), {
-    createElement: () => new ElementoFalso(),
     querySelector: pegar,
     createElement: () => new ElementoFalso(),
     querySelectorAll: seletor => seletor === '[data-fase]' ? fases
@@ -66,7 +65,12 @@ function prepararInterface() {
     setItem: (chave, valor) => storage.set(chave, valor),
   };
   globalThis.Element = ElementoFalso;
-  globalThis.ResizeObserver = class { observe() {} };
+  const observadores = new Map();
+  globalThis.ResizeObserver = class {
+    constructor(notificar) { this.notificar = notificar; }
+    observe(moldura) { observadores.set(moldura, this.notificar); }
+  };
+  const executarResize = seletor => observadores.get(pegar(seletor))();
   function tecla(key, repeat = false) {
     window.disparar('keydown', { key, repeat, preventDefault() {} });
   }
@@ -79,7 +83,7 @@ function prepararInterface() {
     assert.ok(marco, id);
     marco.click();
   };
-  return { pegar, quadros, recortes, fases, botoes, mapa, tecla, storage, buscarMarco, abrirMarco };
+  return { pegar, quadros, recortes, fases, botoes, mapa, tecla, storage, buscarMarco, abrirMarco, executarResize };
 }
 
 test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', async () => {
@@ -417,4 +421,45 @@ test('Ilha de Improviso gera, reinicia, avança e recupera a semente fora da cam
   opcoes[1].filhos[0].click();
   assert.equal(recarregada.pegar('#grade').textContent, prova.mapa.join('\n'));
   assert.equal(recarregada.storage.get(chaveCampanha), saveCampanha);
+});
+
+
+test('escala inteira adia notificações de resize e evita reescrever largura', async () => {
+  const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
+  const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
+  assert.ok(modulo);
+  const { pegar, executarResize } = prepararInterface();
+  const quadros = [];
+  window.requestAnimationFrame = callback => quadros.push(callback);
+  await import(modulo + '#resize-sem-loop');
+
+  for (const [moldura, arte, nativa] of [
+    ['#moldura', '#tabuleiro', 256],
+    ['#moldura-praia', '#mapa-praia', 256],
+    ['#moldura-logo', '#marca-praia', 180],
+  ]) {
+    let largura = pegar(arte).style.width;
+    let escritas = 0;
+    Object.defineProperty(pegar(arte).style, 'width', {
+      get: () => largura,
+      set(valor) { largura = valor; escritas++; },
+    });
+    pegar(moldura).clientWidth = nativa * 3 + 2;
+    executarResize(moldura);
+    executarResize(moldura);
+    assert.equal(escritas, 0, 'Não escreva dentro do ResizeObserver.');
+    assert.equal(quadros.length, 1, 'Agrupe notificações no mesmo quadro.');
+    quadros.shift()();
+    assert.equal(largura, `${nativa * 3}px`);
+    assert.equal(escritas, 1);
+
+    pegar(moldura).clientWidth = nativa * 3 + 5;
+    executarResize(moldura);
+    assert.equal(quadros.length, 0);
+    assert.equal(escritas, 1, 'Uma largura que resulta na mesma escala não reescreve.');
+    pegar(moldura).clientWidth = 0;
+    executarResize(moldura);
+    assert.equal(quadros.length, 0);
+    assert.equal(escritas, 1, 'Uma moldura oculta não altera a arte.');
+  }
 });
