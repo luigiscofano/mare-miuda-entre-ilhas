@@ -2,11 +2,15 @@
 
 *Tiny Tide: Between Islands*
 
-Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A Praia das Conchas tem dez fases autorais (seis principais e quatro opcionais) e o encontro Ponta da garça em duas telas conectadas: Cabo Baixo e Enseadinha. Na Enseadinha, suba depois de Fio de areia para enfrentar [Vigia das ondas](docs/processo-de-criacao/22-vigia-das-ondas/README.md) e, depois, [Ponta da Ressaca](docs/processo-de-criacao/23-ponta-da-ressaca/README.md). Os dois chefes são opcionais. Recifes Expostos tem dez travessias regulares, dois desvios e [dois chefes opcionais](docs/processo-de-criacao/24-chefes-recifes/README.md). O Mangue dos Siris Duplos tem dez travessias regulares, todas em dupla. A Enseada da Garça e as Ilhas à Deriva têm dez regulares e dois desvios em dupla cada. As Ilhas à Deriva também têm [duas arenas opcionais](docs/processo-de-criacao/27-chefes-deriva/README.md). As Grutas da Espuma têm dez regulares, cinco em dupla, e [duas arenas opcionais](docs/processo-de-criacao/28-chefes-grutas/README.md): Sentinela da Gruta e Cofre das Espumas. A Baía da Ressaca tem dez regulares, seis em dupla, e dois chefes opcionais: Vento Sul e Ressaca Alta. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
+![Logo aprovada Placa de Areia: Maré Miúda, Entre Ilhas](assets/logo-placa-de-areia-pt.png)
 
-**Estado desta base de teste:** oito mundos implementados, com 77 entradas não opcionais, 16 arenas opcionais de chefe e 13 bônus/alternativas não-chefes (106 IDs no catálogo). A abertura usa a Placa de Areia aprovada, o Cabo Baixo mantém seu fundo aprovado e as travessias da Praia usam a direção V32. As travessias dos outros sete mundos e os demais seletores têm propostas jogáveis em revisão, não aprovação final presumida. O áudio segue provisório. Esta leitura corresponde ao PR #72, ainda sem merge ou publicação na conferência. Veja o [estado documentado, critérios de contagem e distinção entre arte aprovada e preliminar](docs/processo-de-criacao/estado-atual.md).
+Um siri cruza um arquipélago em um quebra-cabeça de aventura por turnos. A cada três passos válidos a maré vira: a água cobre atalhos, revela caminhos e muda como você atravessa cada ilha. O jogo é independente do Miudezas: não carrega seu código, seus recursos nem suas partidas salvas.
 
-[Como jogar localmente](#como-jogar-localmente) · [Regras](#regras) · [Produção](docs/producao/README.md) · [Campanha](docs/campanha/README.md) · [Fases e soluções](src/fases/README.md) · [Processo de criação](docs/processo-de-criacao/README.md)
+**Prévia privada, ainda não lançada · 8 mundos · 106 desafios no catálogo da campanha · 8 arranjos da trilha aprovada.**
+
+[Baixar ZIP privado](https://github.com/luigiscofano/mare-miuda-entre-ilhas/actions/runs/44938701024/artifacts/14721380432) · [Como jogar localmente](#como-jogar-localmente) · [Visuais](#visuais-do-jogo) · [Documentação](#documentação) · [Processo de criação](docs/processo-de-criacao/README.md)
+
+O ZIP foi gerado no [PR #77](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/77), a partir do commit `7eef68a`. Entre no GitHub para baixar até **5 de dezembro de 2026**. Depois disso, procure um ZIP mais recente nas execuções de **Verificar protótipo** ou gere o jogo localmente. O Safari em iPhone físico e o VoiceOver ainda precisam de validação. [Roteiro manual](tests/qa-manual.md).
 
 ## Como jogar localmente
 
@@ -23,6 +27,18 @@ Abra `dist/mare-miuda-prototipo.html` no navegador para jogar sem conexão. A ou
 <a id="regras"></a>
 
 A trilha **Siri na Areia — Notas Claras** acompanha os oito mundos. O áudio começa após interação, tem volumes separados de Música e Efeitos e também está incluído no HTML offline. [Como funciona o áudio](src/audio/README.md) · [Partitura e exportação](scripts/trilha/README.md).
+
+## Visuais do jogo
+
+Quadros do renderizador em **512 × 384**, sem cursor, nos estados jogáveis indicados. Não são capturas de aparelho nem pranchas conceituais.
+
+| Seleção de mundos · proposta em revisão | Cabo Baixo · fundo aprovado |
+| --- | --- |
+| ![Arquipélago Meia-Lua com os portos da campanha](docs/processo-de-criacao/33-seletor-arquipelago/inicio.png) | ![Seletor de fases da Praia com o desvio disponível](docs/processo-de-criacao/34-seletores-praia/cabo-desvio.png) |
+| **Trilha das pedras · maré baixa** | **Trilha das pedras · maré alta** |
+| ![Baixios expostos na Praia das Conchas](docs/processo-de-criacao/29-travessia-praia/pedras-baixa.png) | ![Baixios submersos sinalizados pelos cantos](docs/processo-de-criacao/29-travessia-praia/pedras-alta.png) |
+
+[Guia de arte e fontes](docs/arte/README.md) · [Fauna e sprites](docs/arte/fauna/README.md) · [Pranchas e versões históricas](docs/processo-de-criacao/acervo-visual/README.md)
 
 ## Documentação
 
@@ -64,7 +80,15 @@ O jogo parte da ideia de maré do minigame Maré Miúda. Neste repositório, o e
 <details>
 <summary>Regras e controles</summary>
 
-Setas, WASD ou botões de toque movem uma casa. R ou Reiniciar recomeça. Passos bloqueados, pausa e seleção não mudam a maré. Três passos válidos sobem a maré; mais três descem. Baixio coberto bloqueia. A água e a garça são avaliadas antes da coleta e da vitória. Um erro leva o siri à última casa firme, sem rebobinar o ciclo; a terceira levada encerra a tentativa. Um turno nunca soma dois erros. [Contrato do motor](src/motor/README.md).
+| Ação | Teclado | Toque |
+| --- | --- | --- |
+| Mover uma casa na travessia / seguir para o próximo marco no mapa | Setas ou WASD | Direcionais |
+| Entrar no marco | Enter | Entrar na fase ou ação do mapa |
+| Alternar siri quando a fase tem dupla ou trio | Espaço | Trocar siri |
+| Reiniciar a tentativa | R | Reiniciar |
+| Voltar | Esc | Voltar |
+
+ Passos bloqueados, troca de siri e navegação no mapa não mudam a maré. Três passos válidos sobem a maré; mais três descem. Baixio coberto bloqueia. A água e a garça são avaliadas antes da coleta e da vitória. Um erro leva o siri à última casa firme, sem rebobinar o ciclo; a terceira levada encerra a tentativa. Um turno nunca soma dois erros. [Contrato do motor](src/motor/README.md).
 
 </details>
 
@@ -82,7 +106,22 @@ O núcleo combina contagem de passos, leitura espacial e previsão. O jogador n�
 <details>
 <summary>Campanha e mapa-múndi</summary>
 
-Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo da Ilhota Perolada abrem trilhas no mapa. O arquipélago permite Recifes e Mangue em qualquer ordem depois da Praia. Depois das duas regiões, a rota inicial da Enseada oferece três travessias com patrulha; a última delas abre as Ilhas à Deriva. Sete regulares novas da Enseada ficam em um ramo distinto, com uma conclusão em dupla. [Fichas da Enseada ampliada](docs/processo-de-criacao/11-enseada-ampliada/README.md). Depois de Corrida ao farol baixo, o [desvio dos chefes da Enseada](docs/processo-de-criacao/26-chefes-enseada/README.md) abre duas arenas opcionais com rasantes; a rota para a Deriva não muda. As Ilhas à Deriva têm um ramo de sete regulares com cais de ida e volta, balsas alternadas e uma travessia em dupla. [Fichas da Deriva ampliada](docs/processo-de-criacao/12-deriva-ampliada/README.md). Após Corrente cruzada, siga à direita para Mestre das Correntes e desça, depois de vencê-lo, para Passagem das Balsas. O [caderno das arenas da Deriva](docs/processo-de-criacao/27-chefes-deriva/README.md) reúne capturas, rotas e regras. Corrente cruzada continua a liberar as três primeiras travessias das Grutas da Espuma, com pérola, encaixe, alavanca e portão. O plano prevê oito mundos, com pelo menos 10 fases por mundo fora dos dois chefes (15 fases por mundo como meta de expansão). Os ramos são opcionais na rota principal. A dupla de siris de cores diferentes reaparece em dois desvios regulares da Enseada e dois das Ilhas e volta nas Grutas e na Baía da Ressaca. Nas Grutas, o ramo novo parte da primeira travessia e acrescenta dois desafios solo e três em dupla, sem condicionar a abertura da Baía. [Fichas das Grutas ampliadas](docs/processo-de-criacao/13-grutas-ampliadas/README.md). O desvio [Três refúgios](docs/processo-de-criacao/18-trio-grutas/README.md) estreia o trio sem alterar as dez regulares e a passagem para a Baía. O Farol agora tem dez regulares, sete em dupla. Depois de As duas luzes do farol, a bifurcação separa os quatro desafios da costa norte da rota dos guardiões e da travessia final. [Fichas do Farol ampliado](docs/processo-de-criacao/15-farol-ampliado/README.md). Na Baía, o ramo norte acrescenta quatro solos e quatro duplas, incluindo dois desafios de três moedas no limite de passos. O embarque para o Farol segue a rota original. [Fichas da Ressaca ampliada](docs/processo-de-criacao/14-ressaca-ampliada/README.md). Depois de Cofre da vazante, siga à esquerda para [Vento Sul](docs/processo-de-criacao/16-vento-sul/README.md), uma arena de ondas em faixas e ancoradouros que só firmam na baixa. Vencer Vento Sul libera [Ressaca Alta](docs/processo-de-criacao/17-ressaca-alta/README.md), em que a dupla precisa sobreviver a três ondas seguidas e ocupar dois destinos. O trio também aparece em [Eco dos três cais e Três luzes em revezamento](docs/processo-de-criacao/19-trio-avancado/README.md), dois desvios que aumentam a dificuldade de 23 a 40 passos. Concluir **A luz das duas marés** encerra a história mesmo com 6/10 regulares no Farol. Use **Ver desfecho** após a vitória ou **Rever desfecho** no mapa do Farol. Os chefes, os desvios e a exploração continuam opcionais. Ao vencer o Guardião do Farol, o trio pode enfrentar a [Última Virada](docs/processo-de-criacao/21-ultima-virada/README.md), em que cada lente depende de outro siri na placa correspondente. Cada ilha terá tema tanto no arquipélago como dentro das fases; obstáculos ocupam células inteiras em uma malha legível, sem tamanho máximo por objeto. A arte prevê destacar a célula atual e as vizinhas válidas conforme o motor. [Revisão do roteiro](docs/producao/escopo-e-leitura.md). [Plano dos mundos](docs/campanha/README.md) · [Matriz de game design e level design](docs/campanha/matriz.md).
+A Praia das Conchas tem dois seletores, **Cabo Baixo** e **Enseadinha**. Depois da Praia, Recifes e Mangue podem ser visitados em qualquer ordem. As duas rotas principais abrem a Enseada, e o percurso segue por Deriva, Grutas, Baía e Farol. O desfecho é revisitável: **A luz das duas marés** encerra a campanha sem exigir chefes nem bônus.
+
+| Mundo | Entradas não opcionais | Mecânica e progressão |
+| --- | ---: | --- |
+| Praia das Conchas | 7 | Começa com o ciclo de maré, travessias curtas e a primeira ameaça anunciada. Inclui o encontro Ponta da garça. |
+| Recifes Expostos | 10 | Introduz pedra alta, rotas de baixa e coletas em mais de uma etapa. |
+| Mangue dos Siris Duplos | 10 | Apresenta a troca de siri, o contador compartilhado e os primeiros objetivos em dupla. |
+| Enseada da Garça | 10 | Combina previsão do rasante, abrigo e virada da água; a dupla reaparece. |
+| Ilhas à Deriva | 10 | Balsas, correntes e desembarques planejados; há travessias solo e em dupla. |
+| Grutas da Espuma | 10 | Pérola, encaixe, alavanca e portão. O trio estreia no desvio Três refúgios. |
+| Baía da Ressaca | 10 | Ondas em faixas, moedas com limite de passos e coordenação em dupla ou trio. |
+| Arquipélago do Farol | 10 | Pontes de luz, lentes e combinações avançadas antes do desfecho. |
+
+**Como contar os 106 desafios:** 77 entradas não opcionais, 16 arenas opcionais de chefe (duas por mundo) e 13 bônus ou alternativas sem chefe. Nem toda entrada não opcional é necessária na rota mais curta até os créditos. A bancada tem quatro testes, três reaproveitados da campanha e um exclusivo, e não soma quatro ao total.
+
+[Mapa e progressão](docs/campanha/README.md) · [Matriz de game design e level design](docs/campanha/matriz.md) · [Fichas e soluções](src/fases/README.md) · [Critérios de contagem](docs/processo-de-criacao/estado-atual.md)
 
 </details>
 
@@ -142,7 +181,7 @@ A Praia conserva a faixa Notas Claras aprovada. As outras sete regiões usam o m
 <details>
 <summary>Arquitetura e fluxo</summary>
 
-Entrada traduz o comando → motor puro resolve o turno → interface publica o novo estado → Canvas desenha. O índice de fases e o validador usam os mesmos dados e regras. A animação futura será declarativa e não contará turnos. [Contrato do motor](src/motor/README.md).
+Entrada traduz o comando → motor puro resolve o turno → interface publica o novo estado → Canvas desenha. O índice de fases e o validador usam os mesmos dados e regras. O motor decide a consequência, não a animação nem a trilha. A campanha controla as conexões; o save local versionado guarda progresso e volumes, sem conta ou servidor de jogo. [Contrato do motor](src/motor/README.md).
 
 </details>
 
@@ -164,7 +203,7 @@ TypeScript, HTML semântico, CSS e Canvas 2D; Node.js 24 no script de build e no
 - `src/fases/`, `src/validacao/`: mapas, soluções e validação por reprodução.
 - `src/entrada/`, `src/interface/`, `src/render/`: controles, estado perceptível e arte provisória.
 - `tests/`, `scripts/` e `docs/`: testes, build e cadernos de produção.
-- `src/campanha/`, `src/persistencia/` e `src/audio/` implementam a praia, o save isolado e o tema/sinais. Não dependem do Miudezas.
+- `src/campanha/`, `src/persistencia/` e `src/audio/` implementam os oito mundos, o save isolado e a trilha com seus sinais de jogo. Não dependem do Miudezas.
 
 </details>
 
@@ -191,7 +230,7 @@ Os testes cobrem as 106 soluções da campanha, incluindo 16 arenas opcionais de
 <details>
 <summary>Produção e roteiro</summary>
 
-Fundação → protótipo → fatia vertical → campanha em lotes → lançamento. Não há geração procedural ou coop simultânea no escopo inicial. [Critérios de passagem](docs/producao/README.md).
+Fundação → protótipo → fatia vertical → campanha em lotes → lançamento. A campanha está implementada em PRs de rascunho, não lançada. O [CI da prévia](https://github.com/luigiscofano/mare-miuda-entre-ilhas/actions/runs/44938701024) passou no build, nos testes de motor, no HTML offline, no Chromium e no WebKit. O próximo marco é a validação no Safari em iPhone físico, incluindo toque, VoiceOver, save e retorno do áudio após sair e voltar. Revisão de lançamento, integração e publicação são etapas separadas. Não há geração procedural ou coop simultânea no escopo inicial. [Critérios de passagem](docs/producao/README.md).
 
 </details>
 
