@@ -10,6 +10,7 @@ export type OrientacaoFarol = Readonly<{
   nome: string;
   plataformas: readonly Posicao[];
   lente: Posicao;
+  placa?: Posicao;
 }>;
 export type Fase = Readonly<{
   id: string;
@@ -56,7 +57,7 @@ export type Evento =
   | Readonly<{ tipo: 'falta-fragmento' }>
   | Readonly<{ tipo: 'falta-parceiro' | 'faltam-siris' }>
   | Readonly<{ tipo: 'ancorou' | 'ancora-na-alta' | 'faltam-ancoradouros' }>
-  | Readonly<{ tipo: 'faltam-ondas' | 'lente-acesa' | 'lente-fora-do-feixe' | 'faltam-lentes' }>
+  | Readonly<{ tipo: 'faltam-ondas' | 'lente-acesa' | 'lente-fora-do-feixe' | 'lente-sem-placa' | 'faltam-lentes' }>
   | Readonly<{ tipo: 'troca' }>
   | Readonly<{ tipo: 'orcamento-esgotado' }>
   | Readonly<{ tipo: 'vitoria' }>;
@@ -163,12 +164,19 @@ function ponteIluminada(fase: Fase, posicao: Posicao, passos: number): boolean {
 }
 
 function acenderLente(fase: Fase, anteriores: Estado['lentesAcesas'], destino: Posicao,
-  casa: Celula | undefined, passos: number, eventos: Evento[],
+  casa: Celula | undefined, passos: number, posicoes: readonly Posicao[], eventos: Evento[],
 ): Estado['lentesAcesas'] {
   if (!anteriores || casa !== 'L' || anteriores.some(pos => mesmaCasa(pos, destino))) return anteriores;
-  const iluminada = feixeNoTurno(fase, passos)?.lente;
-  if (!iluminada || !mesmaCasa(iluminada, destino)) {
+  const feixe = feixeNoTurno(fase, passos);
+  if (!feixe || !mesmaCasa(feixe.lente, destino)) {
     eventos.push({ tipo: 'lente-fora-do-feixe' });
+    return anteriores;
+  }
+  // A placa correspondente precisa estar ocupada no fim do mesmo turno.
+  // O siri na lente não pode também ocupar a placa.
+  const placa = feixe.placa;
+  if (placa && !posicoes.some(pos => mesmaCasa(pos, placa))) {
+    eventos.push({ tipo: 'lente-sem-placa' });
     return anteriores;
   }
   eventos.push({ tipo: 'lente-acesa' });
@@ -370,7 +378,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   // dupla aos marcos e reinicia a sequência sem rebobinar a maré.
   const ondasSeguras = anterior.ondasSeguras !== undefined && faixaRessacaNoTurno(fase, passos)
     ? Math.min(anterior.ondasSeguras + 1, fase.ressaca?.faixas.length ?? 0) : anterior.ondasSeguras;
-  const lentesAcesas = acenderLente(fase, anterior.lentesAcesas, destino, celula, passos, eventos);
+  const lentesAcesas = acenderLente(fase, anterior.lentesAcesas, destino, celula, passos, posicoes, eventos);
   const venceu = resolverObjetivo(fase, celulas, fragmentos.length, ancoradouros, ondasSeguras, lentesAcesas, eventos);
   // Uma saída segura pode completar a missão exatamente no último passo.
   const perdeu = !venceu && terminouOrcamento(fase, passos, eventos);

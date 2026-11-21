@@ -121,7 +121,7 @@ function atualizarPraia(mensagem = ''): void {
     : mundo === 'grutas' ? 'A rota do cais leva à Baía da Ressaca. Suba depois de Uma pérola para o portão para explorar as câmaras ao norte.'
       : mundo === 'ressaca' ? 'A rota do cais leva ao Farol. Suba depois de Abrigo dos dois cais para explorar o ramo norte. Desça depois de Cais em paralelo para o trio. Depois do Cofre da vazante, siga à esquerda para Vento Sul.'
       : mundo === 'farol'
-        ? 'Explore a costa norte ou siga pela rota dos guardiões. Depois de A luz das duas marés, vá à esquerda para o desafio em trio.'
+        ? 'Explore a costa norte ou siga pela rota dos guardiões. Depois de A luz das duas marés, vá à esquerda para o trio ou desça para o Guardião. Vencê-lo abre a Última Virada.'
         : 'Complete as três travessias. O atalho sul só se abre depois da última.';
   buscar('#progresso-praia').textContent = mundo === 'praia'
     ? `Rota principal: ${concluidas}/4 · Concha Perolada: ${perola ? 'encontrada' : 'não encontrada'}.`
@@ -199,6 +199,7 @@ function descricao(evento: Evento): string {
     case 'ancora-na-alta': return 'Volte a este ancoradouro na maré baixa.';
     case 'lente-acesa': return 'Lente acesa!';
     case 'lente-fora-do-feixe': return 'A lente só acende se você chegar enquanto o feixe estiver voltado para ela.';
+    case 'lente-sem-placa': return 'Outro siri precisa ocupar a placa indicada para esta lente.';
     case 'faltam-lentes': return 'Acenda todas as lentes antes de sair.';
     case 'faltam-ondas': return 'Sobreviva ao ciclo inteiro antes de reunir a dupla nos destinos.';
     case 'faltam-ancoradouros': return 'Firme os três ancoradouros para usar a saída.';
@@ -274,10 +275,14 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   const atualFarol = feixeNoTurno(fase, estado.passos);
   const passosDoFeixe = passosAteTrocaFeixe(fase, estado.passos);
   const proximoFarol = feixeNoTurno(fase, estado.passos + passosDoFeixe);
-  const descreverFeixe = (feixe: OrientacaoFarol) =>
-    `${feixe.nome}; lente em ${coordenadas(feixe.lente)}; pontes em ${feixe.plataformas.map(coordenadas).join('; ')}.`;
+  const descreverFeixe = (feixe: OrientacaoFarol, agora = false) => {
+    const placa = feixe.placa;
+    const ocupada = placa && posicoesDosSiris(estado).some(pos => mesmaCasa(pos, placa));
+    const comando = placa ? ` Placa em ${coordenadas(placa)}${agora ? (ocupada ? ' (ocupada)' : ' (livre)') : ''}.` : '';
+    return `${feixe.nome}; lente em ${coordenadas(feixe.lente)}; pontes em ${feixe.plataformas.map(coordenadas).join('; ')}.${comando}`;
+  };
   const sinalFarol = atualFarol && proximoFarol
-    ? ` Feixe atual: ${descreverFeixe(atualFarol)} Em ${passosDoFeixe} ${passosDoFeixe === 1 ? 'passo' : 'passos'}: ` +
+    ? ` Feixe atual: ${descreverFeixe(atualFarol, true)} Em ${passosDoFeixe} ${passosDoFeixe === 1 ? 'passo' : 'passos'}: ` +
       descreverFeixe(proximoFarol) : '';
   buscar('#previsao').textContent = finalizada ? 'Tentativa encerrada.'
     : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}${sinalRessaca}${sinalFarol}`;
@@ -290,7 +295,8 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     mensagens.push(estado.levadas >= LIMITE_LEVADAS ? 'Três erros: tente de novo.' : 'De volta à última casa firme.');
   }
   if (estado.situacao === 'vitoria') {
-    if (fase.farol) mensagens.push('Guardião do Farol vencido. Volte ao mapa.');
+    if (fase.farol?.orientacoes.some(o => o.placa)) mensagens.push(`Arena vencida: ${fase.nome}. Volte ao mapa.`);
+    else if (fase.farol) mensagens.push('Guardião do Farol vencido. Volte ao mapa.');
     if (fase.ressaca?.objetivo === 'sobreviver') mensagens.push('Ressaca Alta vencida. Volte à Baía.');
     else if (fase.ressaca) mensagens.push(`${fase.nome} vencido. Volte à Baía.`);
     if (bancada && indice < FASES_BANCADA.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');

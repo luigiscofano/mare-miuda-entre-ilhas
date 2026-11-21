@@ -168,3 +168,7 @@ A arena opcional da Baía abre após Cofre da vazante. `N` é um ancoradouro que
 ## Trio na Baía e no Farol
 
 `trio-avancado.ts` reúne **Eco dos três cais**, com duas balsas, placa e fragmento, e **Três luzes em revezamento**, com duas balsas, placa e pérola até a Alavanca B. Reaproveitam os símbolos `M` e `Y` do trio das Grutas e o mesmo relógio. [Fichas, grades e rotas](../../docs/processo-de-criacao/19-trio-avancado/README.md).
+
+## Última Virada
+
+Em `ultima-virada.ts`, cada orientação do feixe tem sua própria `placa`. A lente só acende se a equipe terminar um passo seguro com outro siri nessa placa. A arena reaproveita `P`, `I` e `L` e não muda o funcionamento das fases com uma única placa de portão. [Ficha e solução](../../docs/processo-de-criacao/21-ultima-virada/README.md).

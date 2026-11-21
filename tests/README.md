@@ -79,3 +79,7 @@ Os testes verificam troca gratuita, ocupação das casas, placa mantida por um i
 ## Fauna
 
 A suíte confere os hashes dos cinco quadros entregues e da folha, além dos bytes embutidos no HTML offline. O Playwright confere os pixels opacos de cada siri no Canvas, as insígnias e a mudança de patrulha para rasante no turno previsto, com teclado e toque emulado. O teste não substitui aparelho físico ou leitor de tela real.
+
+## Última Virada
+
+`ultima-virada.test.ts` confirma 48 passos sem levadas, contra 42 sem exigir placa, e cobre o risco antes da recompensa e a retomada do save. A busca reversa verifica 949.104 combinações de posições firmes em menos de um segundo localmente. O roteiro Playwright cobre a recusa da lente com a placa livre, a indicação da placa ocupada e o fechamento com os três siris por teclado e toque emulado.

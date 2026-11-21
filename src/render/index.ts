@@ -268,6 +268,10 @@ function desenharFeixe(
     } else {
       for (const coluna of [4, 7, 10]) bloco(ctx, permanece ? tons.branco : tons.margem, x + coluna, y + 8, 1, 1);
     }
+  } else if (celula === 'P' && feixe?.placa && mesmaCasa(feixe.placa, pos)) {
+    bloco(ctx, tons.linha, x + 2, y + 3, 12, 1);
+    bloco(ctx, tons.branco, x + 2, y + 2, 4, 1);
+    bloco(ctx, tons.branco, x + 7, y + 2, 4, 1);
   } else if (celula === 'L') {
     bloco(ctx, tons.linha, x + 4, y + 4, 8, 8);
     if (estado.lentesAcesas?.some(p => mesmaCasa(p, pos))) {
@@ -323,12 +327,14 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   const feixe = feixeNoTurno(fase, estado.passos);
   const pertoDaTroca = passosAteTrocaFeixe(fase, estado.passos);
   const seguinte = pertoDaTroca === 1 ? feixeNoTurno(fase, estado.passos + 1) : feixe;
-  const placa = posicoesDosSiris(estado).some(pos => fase.mapa[pos.linha]?.[pos.coluna] === 'P');
+  const siris = posicoesDosSiris(estado);
+  const algumaPlaca = siris.some(pos => fase.mapa[pos.linha]?.[pos.coluna] === 'P');
   fase.mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
     const x = origemX + coluna * TAMANHO_TILE;
     const y = origemY + linha * TAMANHO_TILE;
-    desenharCasa(ctx, celula, alta, x, y, tons, placa);
     const pos = { coluna, linha };
+    const placaOcupada = celula === 'P' ? siris.some(siri => mesmaCasa(siri, pos)) : algumaPlaca;
+    desenharCasa(ctx, celula, alta, x, y, tons, placaOcupada);
     if (celula === 'B' && !estado.fragmentos.some(coleta => mesmaCasa(pos, coleta))) {
       if (fase.orcamentoMoedas) moeda(ctx, x, y, tons);
       else pintarPixels(ctx, FRAGMENTO, x + 5, y + 5, cores);

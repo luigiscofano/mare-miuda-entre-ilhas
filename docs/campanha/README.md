@@ -111,3 +111,7 @@ Depois da introdução em Três refúgios, **Eco dos três cais** combina duas b
 ## Guardião do Farol
 
 O primeiro chefe opcional do Farol abre abaixo de A luz das duas marés. O feixe muda de orientação, abre pontes diferentes e indica qual lente pode ser acesa. A passagem do trio à esquerda e o embarque para o arquipélago não dependem do Guardião. [Ficha](../processo-de-criacao/20-guardiao-farol/README.md).
+
+## Última Virada
+
+O segundo chefe opcional do Farol abre à esquerda do Guardião depois de vencê-lo. As três lentes usam placas distintas: para acender uma, o siri chega enquanto o feixe aponta para ela e outro sustenta o controle. A arena não bloqueia o desvio do trio nem a rota das regulares. [Ficha e solução](../processo-de-criacao/21-ultima-virada/README.md).

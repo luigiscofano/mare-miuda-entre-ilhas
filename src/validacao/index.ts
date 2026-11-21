@@ -41,7 +41,11 @@ export function validarMapa(fase: Fase): void {
     const { passosPorOrientacao, orientacoes } = farol;
     const lentes = new Set(orientacoes.map(({ lente }) => chave(lente)));
     const pontes = new Set(orientacoes.flatMap(({ plataformas }) => plataformas.map(chave)));
-    if (!Number.isInteger(passosPorOrientacao) || passosPorOrientacao < 2 || orientacoes.length < 2
+    const placas = orientacoes.flatMap(o => o.placa ? [o.placa] : []);
+    const sintoniaInvalida = placas.length > 0 && (!temTrio || placas.length !== orientacoes.length
+      || new Set(placas.map(chave)).size !== placas.length || contar('P') !== placas.length
+      || placas.some(pos => lerCelula(fase, pos) !== 'P'));
+    if (sintoniaInvalida || !Number.isInteger(passosPorOrientacao) || passosPorOrientacao < 2 || orientacoes.length < 2
       || new Set(orientacoes.map(o => o.nome)).size !== orientacoes.length || contar('C') !== 1
       || lentes.size !== orientacoes.length || lentes.size !== contar('L') || pontes.size !== contar('I')
       || orientacoes.some(o => !o.nome || !o.plataformas.length

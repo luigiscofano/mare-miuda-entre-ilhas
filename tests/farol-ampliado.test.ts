@@ -48,7 +48,7 @@ function menorVitoriaSemLevadas(fase: Fase): number | undefined {
 test('o Farol tem dez regulares; as oito novas encerram sem levadas', () => {
   assert.equal(totalDeFasesRegulares('farol'), 10);
   assert.equal(FASES_FAROL_AMPLIADO.filter(f => 'dupla' in f).length, 5);
-  assert.equal(TODAS_AS_FASES.length, 93);
+  assert.equal(TODAS_AS_FASES.length, 94);
   assert.equal(new Set(TODAS_AS_FASES.map(f => f.id)).size, TODAS_AS_FASES.length);
   for (const fase of TODAS_AS_FASES) assert.ok(validarSolucao(fase), fase.id);
 });
@@ -110,9 +110,10 @@ test('os ramais preservam o save e o último desafio não obriga a rota norte', 
   assert.equal(moverNoMapa(norte, 'baixo').progresso, norte);
   const completo = { ...norte, concluidas: [...new Set([...norte.concluidas, ...corrente.concluidas])] };
   reabrir(completo);
-  assert.equal(nosDo('farol').length, 13);
+  assert.equal(nosDo('farol').length, 14);
+  const todosOsMarcos = concluirFase(completo, 'farol-chefe-guardiao');
   for (const t of trilhasDo('farol')) {
-    assert.deepEqual(moverNoMapa({ ...completo, posicao: t.de }, t.ida).progresso.posicao, t.para);
-    assert.deepEqual(moverNoMapa({ ...completo, posicao: t.para }, t.volta).progresso.posicao, t.de);
+    assert.deepEqual(moverNoMapa({ ...todosOsMarcos, posicao: t.de }, t.ida).progresso.posicao, t.para);
+    assert.deepEqual(moverNoMapa({ ...todosOsMarcos, posicao: t.para }, t.volta).progresso.posicao, t.de);
   }
 });
