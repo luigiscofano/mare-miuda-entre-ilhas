@@ -123,3 +123,7 @@ A fixture do desfecho parte do Salão das lanternas com cinco regulares concluí
 ### Prévia das travessias das Grutas, da Baía e do Farol
 
 `arte-grutas-ressaca-farol.test.ts` verifica o uso de pixels nativos, as oito paletas de travessia e a leitura da coleta da pérola, do fim do aviso da onda e da ponte depois que apaga. No navegador, **Uma pérola para o portão**, **Ressaca Alta** e **Guardião do Farol** verificam esses sinais com teclado e toque emulado. Com `MARE_CAPTURA_DIR`, geram capturas sem cursor. A bancada e os seletores não usam as paletas novas.
+
+### Prévia do seletor de mundos Meia-Lua
+
+`seletor-arquipelago.test.ts` verifica pintura nativa sem interpolação, recorte e posição do siri idênticos com ou sem o fundo e os mesmos nove marcos e oito trechos. O marco da Enseada só deixa de mostrar o cadeado após os dois percursos necessários. Playwright percorre o mapa nas duas ordens (Recifes primeiro ou Mangue primeiro) e confere o pixel do marco antes e depois da abertura. O teste offline compara os bytes do fundo copiado e embutido ao PNG original. O quadro de fallback usa o mapa anterior.

@@ -47,6 +47,10 @@ Para verificar em movimento, rode `npm run build` e abra a **Passagem da primeir
 
 [Caderno com as duas marés e mecanismos](../processo-de-criacao/32-travessias-grutas-ressaca-farol/README.md). As [matrizes de pixel](../../src/render/costas-grutas-ressaca-farol.ts) propõem cavernas de ardósia, mar de tempestade e penhascos em azul-índigo. O fundo não imita o ícone da pérola, a sinalização da onda ou os segmentos claros da ponte. Conchas de objetivo têm forma e paleta próprias; sprites e sinais da regra não são recriados pela camada de arte.
 
+## Seletor de mundos: Meia-Lua
+
+[Quadros e fontes editáveis do seletor](../processo-de-criacao/33-seletor-arquipelago/README.md). O fundo nativo não inclui caminho, cadeados ou personagem. A camada dinâmica usa os oito destinos e a bifurcação já definidos na campanha. A forma das marcas muda quando o acesso é liberado, e o siri canônico é desenhado na mesma posição da versão anterior. A pintura é exclusiva do mapa de mundos.
+
 ## Fauna
 
 [Sprites do trio, duas poses da garça, capturas e fontes](fauna/README.md).
