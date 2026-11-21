@@ -1,3 +1,5 @@
+import { FASES_GRUTAS_AMPLIADAS } from '../fases/grutas-ampliadas.ts';
+import type { IdFaseGrutasAmpliadas } from '../fases/grutas-ampliadas.ts';
 import { FASES_DERIVA_AMPLIADA } from '../fases/deriva-ampliada.ts';
 import type { IdFaseDerivaAmpliada } from '../fases/deriva-ampliada.ts';
 import { FASES_ENSEADA_AMPLIADA } from '../fases/enseada-ampliada.ts';
@@ -12,7 +14,7 @@ import type { Direcao, Posicao } from '../motor/index.ts';
 export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'praia-mirante'
   | 'praia-bolso-mare' | 'praia-trilha-das-pedras' | 'praia-fragmentos-areal';
 export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
-export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | IdFaseDerivaAmpliada | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
+export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | IdFaseDerivaAmpliada | IdFaseGrutasAmpliadas | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
   | 'enseada-dupla-vigia' | 'enseada-dupla-revezamento' | 'deriva-dupla-cais' | 'deriva-dupla-contramao'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
@@ -76,6 +78,12 @@ const NOS_DERIVA = [
 const ENTRADAS_DERIVA: readonly Entrada[] = FASES_DERIVA_AMPLIADA.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_DERIVA[i],
 }));
+const NOS_GRUTAS = [
+  P(2, 0), P(4, -1), P(6, -1), P(8, -1), P(10, -1),
+] as const;
+const ENTRADAS_GRUTAS: readonly Entrada[] = FASES_GRUTAS_AMPLIADAS.map((fase, i) => ({
+  id: fase.id, nome: fase.nome, posicao: NOS_GRUTAS[i],
+}));
 const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
   praia: ENTRADAS_PRAIA,
   'praia-enseadinha': [
@@ -137,6 +145,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'grutas-retorno', posicao: P(6, 1), nome: 'A pérola da maré baixa' },
     { id: 'grutas-dupla-portao', posicao: P(8, 1), nome: 'A pérola e a placa' },
     { id: 'grutas-dupla-camaras', posicao: P(10, 1), nome: 'Revezamento nas câmaras' },
+    ...ENTRADAS_GRUTAS,
   ],
   ressaca: [
     PORTO,
@@ -333,6 +342,16 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['grutas-dupla-portao'], 'Conclua A pérola e a placa para chegar às outras câmaras.'),
     trilha(CAIS, P(10, 1), 'cima', 'baixo', [P(3, 0.5), P(7, 0.375), P(9, 0.5)],
       ['grutas-dupla-camaras'], 'Este caminho de volta abre depois do revezamento nas câmaras.'),
+    trilha(P(2, 1), NOS_GRUTAS[0], 'cima', 'baixo', [],
+      ['grutas-encaixe'], 'Conclua Uma pérola para o portão para explorar o ramo norte.'),
+    trilha(NOS_GRUTAS[0], NOS_GRUTAS[1], 'direita', 'esquerda', [P(3, 0), P(3, -1)],
+      ['grutas-alavanca-da-entrada'], 'Conclua A alavanca da entrada para chegar à dobra.'),
+    trilha(NOS_GRUTAS[1], NOS_GRUTAS[2], 'direita', 'esquerda', [],
+      ['grutas-dobra-da-camara', 'grutas-dupla-portao'], 'Conclua Dobra da câmara e A pérola e a placa para o ramo em dupla.'),
+    trilha(NOS_GRUTAS[2], NOS_GRUTAS[3], 'direita', 'esquerda', [],
+      ['grutas-coral-portador'], 'Leve a pérola com o siri coral para visitar a outra margem.'),
+    trilha(NOS_GRUTAS[3], NOS_GRUTAS[4], 'direita', 'esquerda', [],
+      ['grutas-alavanca-distante'], 'Acione A alavanca distante para abrir a boca do labirinto.'),
   ],
   ressaca: [
     trilha(CAIS, P(2, 1), 'direita', 'esquerda', []),

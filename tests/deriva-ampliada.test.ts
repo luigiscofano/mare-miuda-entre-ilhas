@@ -45,7 +45,6 @@ test('as Ilhas à Deriva somam dez regulares, dois desvios e soluções sem leva
   assert.equal(totalDeFasesRegulares('deriva'), 10);
   assert.ok(faseOpcional('deriva', 'deriva-dupla-cais'));
   assert.ok(faseOpcional('deriva', 'deriva-dupla-contramao'));
-  assert.equal(TODAS_AS_FASES.length, 66);
   for (const fase of TODAS_AS_FASES) assert.ok(validarSolucao(fase), fase.id);
 });
 

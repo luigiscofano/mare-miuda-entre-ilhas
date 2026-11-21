@@ -117,7 +117,8 @@ function atualizarPraia(mensagem = ''): void {
     : mundo === 'mangue' ? 'O caminho em frente é a rota para a Enseada. Depois de Raízes vizinhas, siga para cima para explorar o ramo dos siris.'
     : mundo === 'enseada' ? 'A rota do cais leva às Ilhas à Deriva. Suba depois de Sombra na restinga para explorar o ramo; os dois desvios em dupla continuam no último marco da rota original.'
     : mundo === 'deriva' ? 'Siga pela rota do cais para as Grutas. Suba depois de A primeira balsa para abrir o ramo norte; os desvios em dupla continuam no último marco da rota original.'
-      : (mundo === 'grutas' || mundo === 'ressaca' || mundo === 'farol')
+    : mundo === 'grutas' ? 'A rota do cais leva à Baía da Ressaca. Suba depois de Uma pérola para o portão para explorar as câmaras ao norte.'
+      : (mundo === 'ressaca' || mundo === 'farol')
         ? 'Siga as travessias na ordem. O atalho para o cais só se abre depois da última.'
         : 'Complete as três travessias. O atalho sul só se abre depois da última.';
   buscar('#progresso-praia').textContent = mundo === 'praia'
@@ -210,13 +211,14 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     fragmento.hidden = false;
     const etapa = estado.etapaGruta ?? 0;
     const proxima = fase.etapasGruta[etapa];
+    const coleta = total ? ` · ${fragmento.textContent}` : '';
     const levando = etapa === 1 && fase.etapasGruta[0] === 'K';
     const inventario = estado.portadorGruta === 'parceiro' ? 'Pérola com o siri verde · '
       : estado.portadorGruta === 'principal' ? 'Pérola com o siri coral · '
       : levando ? 'Pérola no inventário · ' : '';
     fragmento.textContent = proxima
-      ? `${inventario}Próxima etapa: ${nomeDaEtapaGruta(proxima)}`
-      : 'Portão aberto';
+      ? `${inventario}Próxima etapa: ${nomeDaEtapaGruta(proxima)}${coleta}`
+      : `Portão aberto${coleta}`;
   }
   const duplaAtiva = buscar('#dupla-ativa');
   duplaAtiva.hidden = !estado.dupla;

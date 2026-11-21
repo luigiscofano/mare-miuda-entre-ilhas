@@ -83,3 +83,7 @@ A Enseada passa a dez regulares mais dois desvios históricos em dupla. O ramo n
 ## Ampliação das Ilhas à Deriva
 
 O mundo tem dez travessias regulares e dois desvios em dupla. A rota curta original, o embarque para as Grutas e os saves permanecem. O novo ramo apresenta sete desafios de balsa, incluindo uma travessia regular em dupla. [Fichas e soluções](../processo-de-criacao/12-deriva-ampliada/README.md).
+
+## Ampliação das Grutas da Espuma
+
+O mundo tem dez regulares: dois solos e três desafios em dupla novos, além das cinco fases anteriores. O ramo parte do primeiro marco; o caminho histórico continua a liberar a Baía da Ressaca. [Fichas e soluções](../processo-de-criacao/13-grutas-ampliadas/README.md).

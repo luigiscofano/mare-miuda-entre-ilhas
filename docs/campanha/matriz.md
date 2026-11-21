@@ -59,3 +59,7 @@ Depois do primeiro rasante, o ramo ensina a escolher a margem, combinar previsõ
 ### Ampliação jogável: Ilhas à Deriva
 
 A rota nova ensina a direção da corrente, o embarque na alta, a escolha de rampa, o transbordo e a volta por um cais diferente. Combina três balsas em Dois ancoradouros; em Tripulação partilhada, a carona do siri inativo reduz de 13 para 9 passos a melhor rota sem levadas. Não exige os desvios, chefes ou alteração de semântica da campanha. [Fichas e soluções](../processo-de-criacao/12-deriva-ampliada/README.md).
+
+### Ampliação jogável: Grutas da Espuma
+
+O ramo ensina a voltar à primeira alavanca, contornar a maré entre câmaras, alternar qual siri carrega a pérola e deixar o outro na placa ou na alavanca. Boca do labirinto combina as etapas com portão, fragmento e reencontro. Não altera as regras nem a condição de saída para a Baía. [Fichas e soluções](../processo-de-criacao/13-grutas-ampliadas/README.md).
