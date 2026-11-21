@@ -1,0 +1,965 @@
+{
+  "nome": "Siri na Areia",
+  "periodo": 29.690721649484537,
+  "notas": [
+    {
+      "inicio": 0.019794,
+      "midi": 48,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 0.098969,
+      "midi": 72,
+      "forca": 0.65,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 0.420619,
+      "midi": 76,
+      "forca": 0.67,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 0.575258,
+      "midi": 52,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 0.596289,
+      "midi": 55,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 0.760825,
+      "midi": 79,
+      "forca": 0.74,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 0.921649,
+      "midi": 0,
+      "forca": 0.33,
+      "voz": "escova",
+      "duracao": 0.079
+    },
+    {
+      "inicio": 1.212371,
+      "midi": 76,
+      "forca": 0.62,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 1.269278,
+      "midi": 55,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 1.602062,
+      "midi": 52,
+      "forca": 0.32,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 1.623093,
+      "midi": 55,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 1.707216,
+      "midi": 74,
+      "forca": 0.65,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 2.115464,
+      "midi": 72,
+      "forca": 0.7,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 2.494021,
+      "midi": 48,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 2.703093,
+      "midi": 69,
+      "forca": 0.58,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 3.049485,
+      "midi": 55,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 3.070515,
+      "midi": 57,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 3.228866,
+      "midi": 72,
+      "forca": 0.7,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 3.40701,
+      "midi": 0,
+      "forca": 0.33,
+      "voz": "escova",
+      "duracao": 0.079
+    },
+    {
+      "inicio": 3.612371,
+      "midi": 74,
+      "forca": 0.66,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 3.743505,
+      "midi": 55,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 4.076289,
+      "midi": 76,
+      "forca": 0.71,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 4.076289,
+      "midi": 55,
+      "forca": 0.32,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 4.09732,
+      "midi": 57,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 4.385567,
+      "midi": 0,
+      "forca": 0.27,
+      "voz": "escova",
+      "duracao": 0.074
+    },
+    {
+      "inicio": 4.57732,
+      "midi": 79,
+      "forca": 0.61,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 4.968247,
+      "midi": 43,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 5.035052,
+      "midi": 77,
+      "forca": 0.69,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 5.498969,
+      "midi": 74,
+      "forca": 0.63,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 5.826804,
+      "midi": 53,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 5.847835,
+      "midi": 59,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 5.870103,
+      "midi": 0,
+      "forca": 0.33,
+      "voz": "escova",
+      "duracao": 0.079
+    },
+    {
+      "inicio": 5.950515,
+      "midi": 71,
+      "forca": 0.6,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 6.217732,
+      "midi": 50,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 6.352577,
+      "midi": 74,
+      "forca": 0.65,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 6.872165,
+      "midi": 67,
+      "forca": 0.52,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 7.442474,
+      "midi": 48,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 7.521649,
+      "midi": 72,
+      "forca": 0.7,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 7.997938,
+      "midi": 52,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 8.018969,
+      "midi": 55,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 8.041237,
+      "midi": 76,
+      "forca": 0.66,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 8.437113,
+      "midi": 74,
+      "forca": 0.61,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 8.691959,
+      "midi": 55,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 9.024742,
+      "midi": 52,
+      "forca": 0.32,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 9.043299,
+      "midi": 72,
+      "forca": 0.72,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 9.045773,
+      "midi": 55,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 9.916701,
+      "midi": 41,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 10.014433,
+      "midi": 72,
+      "forca": 0.61,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 10.410309,
+      "midi": 77,
+      "forca": 0.68,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 10.472165,
+      "midi": 53,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 10.493196,
+      "midi": 57,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 10.818557,
+      "midi": 0,
+      "forca": 0.33,
+      "voz": "escova",
+      "duracao": 0.079
+    },
+    {
+      "inicio": 10.874227,
+      "midi": 81,
+      "forca": 0.72,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 11.166186,
+      "midi": 48,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 11.257732,
+      "midi": 79,
+      "forca": 0.63,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 11.498969,
+      "midi": 53,
+      "forca": 0.32,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 11.52,
+      "midi": 57,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 11.783505,
+      "midi": 77,
+      "forca": 0.62,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 12.390928,
+      "midi": 48,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 12.457732,
+      "midi": 76,
+      "forca": 0.68,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 12.934021,
+      "midi": 79,
+      "forca": 0.72,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 13.249485,
+      "midi": 52,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 13.270515,
+      "midi": 55,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 13.303918,
+      "midi": 0,
+      "forca": 0.33,
+      "voz": "escova",
+      "duracao": 0.079
+    },
+    {
+      "inicio": 13.317526,
+      "midi": 76,
+      "forca": 0.63,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 13.640412,
+      "midi": 55,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 13.824742,
+      "midi": 72,
+      "forca": 0.6,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 14.270103,
+      "midi": 74,
+      "forca": 0.61,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 14.282474,
+      "midi": 0,
+      "forca": 0.27,
+      "voz": "escova",
+      "duracao": 0.074
+    },
+    {
+      "inicio": 14.865155,
+      "midi": 45,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 15.018557,
+      "midi": 76,
+      "forca": 0.66,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 15.402062,
+      "midi": 72,
+      "forca": 0.59,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 15.420619,
+      "midi": 52,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 15.441649,
+      "midi": 60,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 15.76701,
+      "midi": 0,
+      "forca": 0.33,
+      "voz": "escova",
+      "duracao": 0.079
+    },
+    {
+      "inicio": 15.841237,
+      "midi": 69,
+      "forca": 0.62,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 16.114639,
+      "midi": 52,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 16.218557,
+      "midi": 72,
+      "forca": 0.61,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 16.447423,
+      "midi": 52,
+      "forca": 0.32,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 16.468454,
+      "midi": 60,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 16.775258,
+      "midi": 76,
+      "forca": 0.67,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 17.339381,
+      "midi": 43,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 17.449485,
+      "midi": 74,
+      "forca": 0.64,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 17.894845,
+      "midi": 53,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 17.913402,
+      "midi": 77,
+      "forca": 0.65,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 17.915876,
+      "midi": 59,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 18.358763,
+      "midi": 74,
+      "forca": 0.6,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 18.588866,
+      "midi": 50,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 18.742268,
+      "midi": 71,
+      "forca": 0.58,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 18.921649,
+      "midi": 53,
+      "forca": 0.32,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 18.94268,
+      "midi": 59,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 19.31134,
+      "midi": 67,
+      "forca": 0.5,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 19.813608,
+      "midi": 48,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 19.892784,
+      "midi": 72,
+      "forca": 0.66,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 20.214433,
+      "midi": 76,
+      "forca": 0.68,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 20.554639,
+      "midi": 79,
+      "forca": 0.75,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 20.672165,
+      "midi": 52,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 20.693196,
+      "midi": 55,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 20.715464,
+      "midi": 0,
+      "forca": 0.33,
+      "voz": "escova",
+      "duracao": 0.079
+    },
+    {
+      "inicio": 21.006186,
+      "midi": 76,
+      "forca": 0.61,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 21.063093,
+      "midi": 55,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 21.501031,
+      "midi": 74,
+      "forca": 0.63,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 21.909278,
+      "midi": 72,
+      "forca": 0.71,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 22.287835,
+      "midi": 48,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 22.496907,
+      "midi": 69,
+      "forca": 0.58,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 22.843299,
+      "midi": 55,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 22.86433,
+      "midi": 57,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 23.02268,
+      "midi": 72,
+      "forca": 0.69,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 23.200825,
+      "midi": 0,
+      "forca": 0.33,
+      "voz": "escova",
+      "duracao": 0.079
+    },
+    {
+      "inicio": 23.406186,
+      "midi": 74,
+      "forca": 0.66,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 23.53732,
+      "midi": 55,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 23.870103,
+      "midi": 76,
+      "forca": 0.72,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 23.870103,
+      "midi": 55,
+      "forca": 0.32,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 23.891134,
+      "midi": 57,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 24.179381,
+      "midi": 0,
+      "forca": 0.27,
+      "voz": "escova",
+      "duracao": 0.074
+    },
+    {
+      "inicio": 24.371134,
+      "midi": 81,
+      "forca": 0.64,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 24.762062,
+      "midi": 43,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 24.841237,
+      "midi": 79,
+      "forca": 0.67,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 25.292784,
+      "midi": 77,
+      "forca": 0.64,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 25.317526,
+      "midi": 53,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 25.338557,
+      "midi": 59,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 25.663918,
+      "midi": 0,
+      "forca": 0.33,
+      "voz": "escova",
+      "duracao": 0.079
+    },
+    {
+      "inicio": 25.68866,
+      "midi": 74,
+      "forca": 0.59,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 26.011546,
+      "midi": 50,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 26.072165,
+      "midi": 71,
+      "forca": 0.61,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 26.34433,
+      "midi": 53,
+      "forca": 0.32,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 26.365361,
+      "midi": 59,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 26.641237,
+      "midi": 74,
+      "forca": 0.57,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 27.236289,
+      "midi": 48,
+      "forca": 0.49,
+      "voz": "baixo",
+      "duracao": 0.57
+    },
+    {
+      "inicio": 27.327835,
+      "midi": 76,
+      "forca": 0.68,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 27.785567,
+      "midi": 74,
+      "forca": 0.62,
+      "voz": "tema",
+      "duracao": 0.37
+    },
+    {
+      "inicio": 28.094845,
+      "midi": 52,
+      "forca": 0.37,
+      "voz": "apoio",
+      "duracao": 0.38
+    },
+    {
+      "inicio": 28.115876,
+      "midi": 55,
+      "forca": 0.28,
+      "voz": "apoio",
+      "duracao": 0.31
+    },
+    {
+      "inicio": 28.305155,
+      "midi": 72,
+      "forca": 0.7,
+      "voz": "tema",
+      "duracao": 0.52
+    },
+    {
+      "inicio": 28.485773,
+      "midi": 55,
+      "forca": 0.31,
+      "voz": "baixo",
+      "duracao": 0.46
+    },
+    {
+      "inicio": 28.843299,
+      "midi": 67,
+      "forca": 0.49,
+      "voz": "tema",
+      "duracao": 0.43
+    },
+    {
+      "inicio": 29.208247,
+      "midi": 72,
+      "forca": 0.54,
+      "voz": "tema",
+      "duracao": 0.37
+    }
+  ]
+}

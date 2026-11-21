@@ -347,3 +347,15 @@ test('Build autônomo conserva os bytes dos fundos nativos de todos os seletores
     assert.deepEqual(copiado, original, id);
   }
 });
+
+test('cada faixa offline é idêntica ao arquivo servido, sem referência remota', async () => {
+  const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
+  const blocos = [...html.matchAll(/type="application\/octet-stream" id="trilha-offline-([a-z]+)">([^<]+)</g)];
+  assert.deepEqual(blocos.map(([, faixa]) => faixa), ['praia', 'recifes', 'mangue', 'enseada', 'deriva', 'grutas', 'ressaca', 'farol']);
+  for (const [, faixa, base64] of blocos) {
+    const origem = await readFile(new URL(`../assets/audio/trilha/${faixa}.mp3`, import.meta.url));
+    const servido = await readFile(new URL(`../dist/assets/audio/trilha/${faixa}.mp3`, import.meta.url));
+    assert.deepEqual(Buffer.from(base64, 'base64'), origem, faixa);
+    assert.deepEqual(servido, origem, faixa);
+  }
+});

@@ -98,6 +98,11 @@ function gravar() {
   buscar('#aviso-save').hidden = salvar(storage, save);
 }
 
+function atualizarAmbiente() {
+  const mundo = tela === 'fase' && bancada ? 'praia' : mundoAtual(save.progresso);
+  audio.ambiente(mundo, !document.hidden);
+}
+
 function trocarTela(destino: Tela, focar = true): void {
   if (destino !== 'praia' && quadroMapa !== undefined) {
     window.cancelAnimationFrame(quadroMapa);
@@ -107,7 +112,7 @@ function trocarTela(destino: Tela, focar = true): void {
   buscar('#jogo').setAttribute('data-tela', destino);
   for (const [nome, painel] of Object.entries(paineis)) painel.hidden = nome !== destino;
   listaTestes.hidden = destino !== 'fase' || !bancada;
-  audio.ambiente(!document.hidden && (destino === 'praia' || destino === 'fase'));
+  atualizarAmbiente();
   if (destino === 'inicio') {
     escalaDaLogo();
     buscar('#comecar').textContent = save.progresso.viuTutorial ? 'Continuar viagem' : 'Começar viagem';
@@ -531,9 +536,20 @@ for (const canal of ['musica', 'efeitos'] as const) {
 }
 
 conectarTeclado(window, mover, reiniciar, entrarFase, voltar, () => tela === 'praia' || tela === 'fase', () => jogarAcao('trocar'));
-window.addEventListener('pointerdown', () => { void audio.habilitar(); }, { once: true });
-window.addEventListener('keydown', () => { void audio.habilitar(); }, { once: true });
-document.addEventListener('visibilitychange', () => {
-  audio.ambiente(!document.hidden && (tela === 'praia' || tela === 'fase'));
+// No toque a ativação acontece no fim do gesto. Clique também cobre o
+// acionamento por tecnologia assistiva, sem depender de mouse ou gesto anterior.
+window.addEventListener('pointerdown', evento => {
+  if (evento.isTrusted && evento.pointerType === 'mouse' && evento.button === 0) void audio.habilitar();
 });
+window.addEventListener('pointerup', evento => {
+  if (evento.isTrusted && evento.pointerType !== 'mouse' && evento.isPrimary && evento.button === 0) void audio.habilitar();
+});
+window.addEventListener('click', evento => {
+  if (evento.isTrusted) void audio.habilitar();
+}, true);
+window.addEventListener('keydown', evento => {
+  if (evento.isTrusted && !evento.repeat
+    && !['', 'Shift', 'Control', 'Meta', 'Alt', 'CapsLock', 'Tab', 'Escape'].includes(evento.key)) void audio.habilitar();
+}, true);
+document.addEventListener('visibilitychange', atualizarAmbiente);
 trocarTela('inicio', false);

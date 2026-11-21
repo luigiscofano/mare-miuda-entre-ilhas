@@ -143,3 +143,7 @@ Os testes Node conferem grade inteira, recorte do siri, fallback sem imagem e os
 ## Seletores das Grutas, da Baía e do Farol
 
 `seletores-mundos-finais.test.ts` verifica os vértices e ligações, o recorte do Siri, o fundo de contingência e a mudança de estado visual dos três acessos entre arenas. O Playwright valida essas passagens antes e depois da primeira arena de cada mundo, em desktop e toque emulado, e mantém a cobertura de desfecho e créditos. Os seis quadros do [caderno 37](../docs/processo-de-criacao/37-seletores-mundos-finais/README.md) são renderizações nativas, não substitutos de captura do navegador.
+
+O módulo de áudio tem testes de carregamento sob demanda, cancelamento de pedidos, cruzamento, retomada, ganhos separados e falha. Os testes do HTML offline comparam as oito faixas incorporadas com seus arquivos originais. O teste automatizado não substitui a audição da emenda e a retomada em iPhone físico.
+
+O CI chama os testes nativos de áudio ao final de `tests/browser_qa.py`: Chromium decodifica as oito faixas no HTML sem rede; Chromium e WebKit testam MP3 ausente, recuperação por gesto, transição entre mundos e continuação no mesmo mapa/fase. Os testes servidos usam `MARE_QA_URL`, se indicada, ou um servidor descartável em localhost. Para rodar só essa etapa, use `python3 tests/browser_audio_qa.py` com Playwright instalado; `MARE_BROWSER=webkit` testa toque emulado, e `CHROMIUM_PATH` indica um Chromium instalado. O teste não equivale a ouvir a transição num iPhone físico.

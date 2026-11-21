@@ -1,6 +1,7 @@
 import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { stripTypeScriptTypes } from 'node:module';
 import { dirname, join, posix, sep } from 'node:path';
+import { TRILHAS, caminhoDaFaixa } from '../src/audio/trilha.ts';
 
 const pasta = 'dist';
 const modulos = new Map();
@@ -56,6 +57,17 @@ for (const imagem of imagens) {
   const embutida = 'data:image/png;base64,' + (await readFile(imagem)).toString('base64');
   htmlOffline = htmlOffline.replace('./' + imagem, embutida);
 }
+// Blocos inertes: o HTML local só converte a faixa solicitada em bytes.
+const trilhasOffline = [];
+for (const faixa of TRILHAS) {
+  const origem = caminhoDaFaixa(faixa);
+  const destino = join(pasta, origem);
+  await mkdir(dirname(destino), { recursive: true });
+  await copyFile(origem, destino);
+  const bytes = (await readFile(origem)).toString('base64');
+  trilhasOffline.push(`<script type="application/octet-stream" id="trilha-offline-${faixa}">${bytes}</script>`);
+}
+htmlOffline = htmlOffline.replace('</body>', `${trilhasOffline.join('\n')}\n</body>`);
 await writeFile(join(pasta, 'index.html'), html);
 await writeFile(join(pasta, 'styles.css'), css);
 await writeFile(join(pasta, 'mare-miuda-prototipo.html'), htmlOffline
