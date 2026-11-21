@@ -10,7 +10,7 @@ A rota das Grutas parte das Ilhas à Deriva, subindo no arquipélago após Corre
 
 Na Enseada e na Deriva, ↑ no marco da terceira travessia abre o desvio opcional em dupla após a conclusão. ↓ volta ao marco. O porto e a saída após o núcleo principal não exigem esses desvios.
 
-Nas Grutas, as três travessias anteriores dão acesso a dois nós regulares, e o segundo abre a Baía da Ressaca no arquipélago. A Baía tem dois nós em sequência, porto e atalho após a conclusão. IDs e nós anteriores continuam válidos no save.
+Nas Grutas, as três travessias anteriores dão acesso a dois nós regulares, e o segundo abre a Baía da Ressaca no arquipélago. A rota inicial da Baía tem dois nós em sequência, porto e atalho após a conclusão. IDs e nós anteriores continuam válidos no save.
 
 No arquipélago, Ancoradouros em revezamento abre a saída de cima na Baía da Ressaca. O Farol tem dois nós regulares, porto e atalho após a segunda travessia, sem exigir qualquer desvio.
 
@@ -33,3 +33,7 @@ Suba depois de A primeira balsa para sete regulares. Duas rampas e Duas margens 
 ## Grutas da Espuma ampliadas
 
 Suba depois de Uma pérola para o portão para cinco novas regulares. A pérola e a placa, na rota de origem, é pré-requisito das três novas em dupla; nenhuma fase nova condiciona o retorno ao porto ou a abertura da Baía da Ressaca. IDs, marcos e saves anteriores permanecem.
+
+## Baía da Ressaca ampliada
+
+Suba depois de Abrigo dos dois cais para acessar oito travessias novas. Cais em paralelo exige Balsas da ponta e Ancoradouros em revezamento, mas nenhuma fase nova condiciona o atalho ao porto ou a saída para o Farol. Os nós já salvos permanecem válidos.

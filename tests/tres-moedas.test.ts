@@ -4,8 +4,8 @@ import { TRES_MOEDAS as fase, TODAS_AS_FASES } from '../src/fases/index.ts';
 import { destinoPermitido, DIRECOES, executarPasso, iniciar } from '../src/motor/index.ts';
 import { reproduzir, validarMapa, validarSolucao } from '../src/validacao/index.ts';
 
-test('As três moedas são exclusivas do laboratório e é possível vencer no último passo', () => {
-  assert.ok(TODAS_AS_FASES.every(desafio => desafio.id !== fase.id && desafio.orcamentoMoedas === undefined));
+test('A fase de laboratório fica fora da campanha e pode ser vencida no último passo', () => {
+  assert.ok(TODAS_AS_FASES.every(desafio => desafio.id !== fase.id));
   assert.ok(validarSolucao(fase));
   const final = reproduzir(fase, fase.solucao);
   assert.equal(final.passos, fase.orcamentoMoedas);

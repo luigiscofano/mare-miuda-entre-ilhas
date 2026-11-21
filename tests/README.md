@@ -18,7 +18,7 @@ Roteiro para 3–5 jogadores que ainda não conhecem o jogo (pendente): apresent
 
 A revisão do mapa testa a unicidade das direções, curvas sem parada, ida e volta pelas mesmas trilhas, migração de posições antigas, portas, atalhos e acesso em ordens diferentes. O roteiro automatizado no navegador testa tecla repetida e cliques em trânsito, atualização do destino e das dicas, além da campanha existente. Aparelho físico e sessão com novos jogadores continuam pendentes.
 
-A prova de moedas cobre vitória no passo final, derrota por orçamento, encerramento único, coleta sem duplicação e reinício. A interface automatizada joga a prova nas mesmas teclas e botões do jogador. A consulta visual de vizinhas é conferida contra o resultado real do motor nas soluções das doze fases (onze de campanha mais o teste).
+A prova de moedas cobre vitória no passo final, derrota por orçamento, encerramento único, coleta sem duplicação e reinício. A interface automatizada joga a prova nas mesmas teclas e botões do jogador. A consulta visual de vizinhas é conferida contra o resultado real do motor nas soluções da campanha e da bancada.
 
 Os cantos da travessia só realçam células bloqueadas ortogonais; a suíte verifica que não se espalham às diagonais ou a objetos distantes. A concha tem identificação apenas nas fases com essa meta. O processo de criação mantém os snapshots anteriores intactos.
 
@@ -50,4 +50,8 @@ As 66 soluções vencem sem levadas. A busca usa o motor e confirma que remover 
 
 ## Grutas da Espuma ampliadas
 
-As 71 soluções encerram sem levadas. A busca usa o motor e demonstra que omitir qualquer etapa impede vencer nas cinco novas travessias e que nenhuma das três duplas vence sem troca ou placa. O teste confirma que o siri que recolhe é o mesmo que encaixa, e que a alavanca exige o parceiro nas duas fases com as três etapas. O Playwright percorre coleta, encaixe, alavanca, fragmento e saída na fase final, com teclado e toque emulado; os resultados constam da CI.
+As soluções da campanha encerram sem levadas. A busca usa o motor e demonstra que omitir qualquer etapa impede vencer nas cinco novas travessias e que nenhuma das três duplas vence sem troca ou placa. O teste confirma que o siri que recolhe é o mesmo que encaixa, e que a alavanca exige o parceiro nas duas fases com as três etapas. O Playwright percorre coleta, encaixe, alavanca, fragmento e saída na fase final, com teclado e toque emulado; os resultados constam da CI.
+
+## Baía da Ressaca ampliada
+
+O motor reproduz as 79 rotas da campanha sem levadas. `ressaca-ampliada.test.ts` verifica dependência das balsas, troca e placa, e comprova os limites sem levadas de 20 e 22 passos nos desafios de três moedas. Verifica também as trilhas de ida e volta, a retomada de saves e a abertura do Farol pela rota anterior. O Playwright percorre o Cofre da vazante com teclado e toque emulado e confirma a vitória no último passo e o progresso após recarregar.

@@ -447,6 +447,44 @@ def conferir_grutas_ampliadas(pagina, toque=False):
     expect(pagina.locator('#progresso-praia')).to_contain_text('7/10')
 
 
+
+def conferir_ressaca_ampliada(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    # Retoma o último marco para verificar a travessia cronometrada na interface.
+    pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+        versao: 1, progresso: {mundo: 'ressaca', posicao: {coluna: 8, linha: 3},
+            viuTutorial: true, concluidas: ['ressaca-dupla-abrigo', 'ressaca-dupla-ancoradouros',
+              'ressaca-refugio-de-pedra', 'ressaca-bolsos-opostos', 'ressaca-vigia-da-placa',
+              'ressaca-balsas-da-ponta', 'ressaca-cais-em-paralelo',
+              'ressaca-tres-moedas-do-cais', 'ressaca-atracadouro-torto']},
+        audio: {musica: 0, efeitos: 0},
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Cofre da vazante')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('9/10')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#orcamento')).to_contain_text('Passos restantes: 22')
+    expect(pagina.locator('#fragmento')).to_contain_text('Moedas: 0/3')
+    jogar(pagina, 'RX', toque)
+    expect(pagina.locator('#dupla-ativa')).to_contain_text('Verde')
+    expect(pagina.locator('#orcamento')).to_contain_text('Passos restantes: 21')
+    jogar(pagina, 'RRRURRXRRRRRXRRRXRRRXU', toque)
+    expect(pagina.locator('#fragmento')).to_contain_text('Moedas: 3/3')
+    expect(pagina.locator('#orcamento')).to_contain_text('Passos restantes: 3')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+    salvar_captura(pagina, f"ressaca-cofre-da-vazante-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'DRR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    expect(pagina.locator('#orcamento')).to_contain_text('Passos restantes: 0')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Cofre da vazante · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('10/10')
+
+
 def conferir_enseadinha(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
@@ -600,7 +638,7 @@ def conferir_grutas(pagina, toque=False):
         jogar(pagina, rota, toque)
         expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
         tocar(pagina, '#voltar-fase', toque)
-    expect(pagina.locator('#progresso-praia')).to_contain_text('2/2')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('2/10')
     jogar(pagina, 'D', toque, mapa=True)
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
@@ -650,6 +688,7 @@ with sync_playwright() as p:
     conferir_enseada_ampliada(desktop)
     conferir_deriva_ampliada(desktop)
     conferir_grutas_ampliadas(desktop)
+    conferir_ressaca_ampliada(desktop)
     print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
         aparelho = navegador.new_page(viewport={'width': largura, 'height': 844}, has_touch=True,
@@ -666,5 +705,6 @@ with sync_playwright() as p:
         conferir_enseada_ampliada(aparelho, toque=True)
         conferir_deriva_ampliada(aparelho, toque=True)
         conferir_grutas_ampliadas(aparelho, toque=True)
+        conferir_ressaca_ampliada(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()
