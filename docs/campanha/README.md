@@ -127,3 +127,7 @@ Ao vencer Vigia das ondas, suba no marco dele para encarar a segunda arena opcio
 ## Chefes dos Recifes Expostos
 
 A volta do recife abre o ramo direito: Guardião das Poças primeiro e Vigia do Recife abaixo. A saída da região e os dez marcos regulares não mudam. [Fichas e rotas](../processo-de-criacao/24-chefes-recifes/README.md).
+
+## Chefes do Mangue
+
+O Guardião da Raiz, à direita de Reencontro na ponta do mangue, exige a troca entre duas placas ligadas a raízes específicas. Sua conclusão abre Dupla no Mangue, em que uma garça ameaça inclusive o siri que ficou parado na placa. Os dois são opcionais; o acesso à Enseada permanece na rota curta. [Fichas e soluções](../processo-de-criacao/25-chefes-mangue/README.md).

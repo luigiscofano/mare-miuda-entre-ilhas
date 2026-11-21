@@ -59,3 +59,7 @@ Depois de vencer Guardião do Farol, siga à esquerda para a segunda arena. Dire
 Na Enseadinha, ↑ no marco de Fio de areia abre Vigia das ondas após a conclusão do primeiro. ↓ volta ao mesmo marco. O embarque e os três desvios anteriores continuam independentes.
 
 Acima de Vigia das ondas, ↑ abre Ponta da Ressaca após vencê-lo. ↓ volta ao Vigia e mais ↓ retorna ao Fio de areia. O segundo chefe é opcional, preserva as posições existentes e não muda o embarque.
+
+## Chefes do Mangue
+
+De Reencontro na ponta do mangue, → abre o Guardião da Raiz; vencê-lo libera Dupla no Mangue por ↓. As direções opostas voltam aos marcos anteriores. As arenas não entram no contador nem no embarque da Enseada.

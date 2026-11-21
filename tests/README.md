@@ -95,3 +95,7 @@ O teste reproduz a alternância das faixas, a proteção na pedra alta e as duas
 ## Chefes dos Recifes
 
 `chefes-recifes.test.ts` audita as soluções de 19 e 31 passos, a recuperação após levadas, a ida/volta das comportas e o ramo opcional. O cenário de navegador cobre as duas vitórias, a mudança da passagem e a persistência sem alterar o contador regular. Consulte a CI para a evidência de teclado e toque emulado.
+
+## Chefes do Mangue
+
+`chefes-mangue.test.ts` valida as duas rotas, ligações específicas, rasante no siri inativo e recuperação de todos os estados firmes alcançáveis. O Playwright verifica o par certo de placa e raiz, aviso e levada, reinício, vitória, retorno e save por teclado e toque emulado.

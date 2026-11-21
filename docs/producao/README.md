@@ -19,3 +19,5 @@ A Baía da Ressaca alcança dez fases regulares, com seis em dupla. O Arquipéla
 O Farol tem duas arenas opcionais. O Guardião ensina pontes temporárias e três lentes; a Última Virada acrescenta três posições e controles dependentes. As arenas dos demais mundos e a revisão de lançamento continuam pendentes.
 
 A Praia tem duas arenas opcionais: [Vigia das ondas](../processo-de-criacao/22-vigia-das-ondas/README.md) ensina a primeira faixa; [Ponta da Ressaca](../processo-de-criacao/23-ponta-da-ressaca/README.md) alterna norte e sul entre duas janelas da maré. Ponta da garça continua como encontro legado.
+
+O Mangue tem duas arenas opcionais: Guardião da Raiz e Dupla no Mangue. A saída para a Enseada não depende delas.

@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passagemDoRecifeFechada, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passagemDoRecifeFechada, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, portaoLiberado, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
@@ -351,14 +351,22 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   const seguinte = pertoDaTroca === 1 ? feixeNoTurno(fase, estado.passos + 1) : feixe;
   const siris = posicoesDosSiris(estado);
   const recife = fase.recife;
-  const algumaPlaca = siris.some(pos => fase.mapa[pos.linha]?.[pos.coluna] === 'P');
   fase.mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
     const x = origemX + coluna * TAMANHO_TILE;
     const y = origemY + linha * TAMANHO_TILE;
     const pos = { coluna, linha };
-    const placaOcupada = celula === 'P' ? siris.some(siri => mesmaCasa(siri, pos)) : algumaPlaca;
+    const placaOcupada = celula === 'P' ? siris.some(siri => mesmaCasa(siri, pos))
+      : celula === 'D' && portaoLiberado(fase, pos, siris);
     const comportaFechada = passagemDoRecifeFechada(fase, pos, estado.temFragmento);
     desenharCasa(ctx, comportaFechada ? '~' : celula, alta, x, y, tons, placaOcupada);
+    if (celula === 'P' || celula === 'D') {
+      const indice = fase.portoesVinculados?.findIndex(item => mesmaCasa(item.placa, pos) || mesmaCasa(item.portao, pos)) ?? -1;
+      const numero = DIGITOS[String(indice + 1)];
+      if (indice >= 0 && numero) {
+        bloco(ctx, tons.linha, x + 10, y + 1, 5, 7);
+        pintarPixels(ctx, numero, x + 11, y + 2, { b: tons.branco });
+      }
+    }
     if (recife && 'abrigos' in recife && recife.abrigos.some(abrigo => mesmaCasa(abrigo, pos))) {
       const visitado = estado.abrigosVisitados?.some(abrigo => mesmaCasa(abrigo, pos));
       desenharSinalDoRecife(ctx, x, y, tons, visitado ? 'refugio-visitado' : 'refugio');

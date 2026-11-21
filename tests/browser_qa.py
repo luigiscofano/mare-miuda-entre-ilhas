@@ -390,6 +390,55 @@ def conferir_mangue_ampliado(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def conferir_chefes_mangue(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+        versao: 1, progresso: {mundo: 'mangue', posicao: {coluna: 6, linha: 1},
+            viuTutorial: true, concluidas: ['mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao']},
+        audio: {musica: 0, efeitos: 0},
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    jogar(pagina, 'R', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Guardião da Raiz · chefe opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('Raiz 1 (fechada)')
+    expect(pagina.locator('#previsao')).to_contain_text('Raiz 2 (fechada)')
+    jogar(pagina, 'XRRR', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('Raiz 1 (aberta)')
+    expect(pagina.locator('#previsao')).to_contain_text('Raiz 2 (fechada)')
+    salvar_captura(pagina, f"mangue-guardiao-raiz-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'XRLRRRRRRRXRRXRR', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('Raiz 1 (fechada)')
+    expect(pagina.locator('#previsao')).to_contain_text('Raiz 2 (aberta)')
+    jogar(pagina, 'XRRXRRRXRRLRRRR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+    expect(pagina.locator('#passos')).to_have_text('28')
+    tocar(pagina, '#voltar-fase', toque)
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Dupla no Mangue · chefe opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    jogar(pagina, 'XRRRRRRRXRRR', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('Garça no próximo passo: coluna 8, linha 4')
+    salvar_captura(pagina, f"mangue-dupla-aviso-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'L', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('A garça te alcançou!')
+    expect(pagina.locator('#erros')).to_have_text('1 / 3')
+    tocar(pagina, '#reiniciar', toque)
+    jogar(pagina, 'XRRRXRRRRRRXRRRRXRRXRDURRRRXRDURRDUDURRXR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+    expect(pagina.locator('#passos')).to_have_text('34')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Dupla no Mangue · chefe opcional · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('3/10')
+    jogar(pagina, 'UL', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Reencontro na ponta do mangue')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+
+
 def conferir_enseada_ampliada(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
@@ -1075,6 +1124,7 @@ with sync_playwright() as p:
     conferir_recifes_ampliados(desktop)
     conferir_chefes_recifes(desktop)
     conferir_mangue_ampliado(desktop)
+    conferir_chefes_mangue(desktop)
     conferir_enseada_ampliada(desktop)
     conferir_deriva_ampliada(desktop)
     conferir_grutas_ampliadas(desktop)
@@ -1097,6 +1147,7 @@ with sync_playwright() as p:
         conferir_recifes_ampliados(aparelho, toque=True)
         conferir_chefes_recifes(aparelho, toque=True)
         conferir_mangue_ampliado(aparelho, toque=True)
+        conferir_chefes_mangue(aparelho, toque=True)
         conferir_enseada_ampliada(aparelho, toque=True)
         conferir_deriva_ampliada(aparelho, toque=True)
         conferir_grutas_ampliadas(aparelho, toque=True)
