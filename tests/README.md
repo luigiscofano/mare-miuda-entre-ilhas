@@ -107,3 +107,7 @@ O teste reproduz a alternância das faixas, a proteção na pedra alta e as duas
 `chefes-grutas.test.ts` verifica o relógio de cada peça, a exigência de mover os dois siris no Cofre, a recusa com a placa livre e a recuperação após até duas levadas. O mapa preserva o acesso à Baía, dez regulares e recarga. O roteiro Playwright cobre as duas arenas com teclado e toque emulado, incluindo recusa, reinício, conclusão, save e capturas sem cursor.
 
 A fixture do desfecho parte do Salão das lanternas com cinco regulares concluídas. Ela testa a vitória em 34 passos, o desfecho com 6/10, a revisita após recarga, o retorno ao mesmo marco e a ausência de desfecho na preliminar. O HTML offline cobre o save v1 e igualdade da preferência de áudio; o roteiro Playwright acrescenta foco, teclado e toque emulado.
+
+### Arte da Travessia da Praia
+
+`arte-travessia-praia.test.ts` executa o renderizador com coordenadas inteiras e cores opacas. Verifica o escopo (Cabo Baixo e Enseadinha, não bancada ou Recifes), a areia molhada na baixa, os quatro cantos de um pixel na alta, a espuma e a concha. O teste de navegador percorre a primeira travessia com teclado e toque emulado, confere o recorte exato do siri e compara os pixels da maré. Com `MARE_CAPTURA_DIR` preenchido, salva os dois estados sem cursor. Aparelho físico não entra nessa verificação.
