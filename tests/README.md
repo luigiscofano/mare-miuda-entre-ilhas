@@ -119,3 +119,7 @@ A fixture do desfecho parte do Salão das lanternas com cinco regulares concluí
 ### Prévia das travessias da Enseada e da Deriva
 
 `arte-enseada-deriva.test.ts` verifica grade e cores nativas, quatro cantos dos baixios na alta, X de risco acima da areia, posição da balsa nas duas marés e conchas diferentes por tema. Em **Um passo antes da sombra** e **Balsas alternadas**, a verificação Playwright combina os pixels com o aviso da garça e o transporte na virada. Com `MARE_CAPTURA_DIR`, gera capturas sem cursor. Toque emulado não substitui teste em aparelho físico.
+
+### Prévia das travessias das Grutas, da Baía e do Farol
+
+`arte-grutas-ressaca-farol.test.ts` verifica o uso de pixels nativos, as oito paletas de travessia e a leitura da coleta da pérola, do fim do aviso da onda e da ponte depois que apaga. No navegador, **Uma pérola para o portão**, **Ressaca Alta** e **Guardião do Farol** verificam esses sinais com teclado e toque emulado. Com `MARE_CAPTURA_DIR`, geram capturas sem cursor. A bancada e os seletores não usam as paletas novas.

@@ -960,7 +960,20 @@ def conferir_ressaca_alta(pagina, toque=False):
     expect(pagina.locator('#ancoradouros')).to_be_hidden()
     expect(pagina.locator('#ondas-seguras')).to_have_text('Ondas seguras seguidas: 0/3')
     expect(pagina.locator('#previsao')).to_contain_text('linha 1, colunas 1 a 13')
-    jogar(pagina, 'RRR', toque)
+    assert pixel_da_travessia(pagina, 0, 0) == [41, 61, 80, 255]
+    jogar(pagina, 'RR', toque)
+    expect(pagina.locator('#passos')).to_have_text('2')
+    # Leia a crista em células vazias dos dois lados do Coral, não sob seu sprite.
+    espuma = [255, 241, 210, 255]
+    cristas = (38, 70, 198, 326)
+    excecoes = (134, 166, 454)  # Refúgio, rocha e concha fora do alcance.
+    assert all(pixel_da_travessia(pagina, x, 118) == espuma for x in cristas)
+    assert all(pixel_da_travessia(pagina, x, 118) != espuma for x in excecoes)
+    salvar_captura(pagina, f'ressaca-travessia-faixa-{pagina.viewport_size["width"]}px')
+    jogar(pagina, 'R', toque)
+    expect(pagina.locator('#passos')).to_have_text('3')
+    assert all(pixel_da_travessia(pagina, x, 118) == [197, 160, 120, 255] for x in cristas)
+    salvar_captura(pagina, f'ressaca-travessia-alta-{pagina.viewport_size["width"]}px')
     expect(pagina.locator('#ondas-seguras')).to_have_text('Ondas seguras seguidas: 1/3')
     expect(pagina.locator('#previsao')).to_contain_text('linha 5, colunas 1 a 13')
     jogar(pagina, 'LRLRLR', toque)
@@ -1174,9 +1187,13 @@ def conferir_grutas(pagina, toque=False):
             expect(pagina.locator('#feedback')).to_contain_text('Próxima etapa: Encaixe A')
             jogar(pagina, 'L', toque)
         if indice == 0:
-            jogar(pagina, rota[:2], toque)
+            assert pixel_da_travessia(pagina, 0, 0) == [51, 54, 75, 255]
+            assert pixel_da_travessia(pagina, 200, 168) == [255, 245, 220, 255]
+            salvar_captura(pagina, f'grutas-travessia-perola-{pagina.viewport_size["width"]}px')
+            jogar(pagina, rota[:3], toque)
             expect(pagina.locator('#fragmento')).to_contain_text('Pérola no inventário')
-            rota = rota[2:]
+            assert pixel_da_travessia(pagina, 200, 168) != [255, 245, 220, 255]
+            rota = rota[3:]
         jogar(pagina, rota, toque)
         expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
         tocar(pagina, '#voltar-fase', toque)
@@ -1210,11 +1227,16 @@ def conferir_guardiao_do_farol(pagina, toque=False):
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#lentes-farol')).to_have_text('Lentes acesas: 0/3')
     expect(pagina.locator('#previsao')).to_contain_text('Feixe atual: oeste')
+    assert pixel_da_travessia(pagina, 0, 0) == [36, 45, 82, 255]
+    assert pixel_da_travessia(pagina, 196, 108) == [255, 241, 210, 255]
+    salvar_captura(pagina, f'farol-travessia-ponte-acesa-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'DURRR', toque)
     expect(pagina.locator('#previsao')).to_contain_text('Em 1 passo: sul')
     salvar_captura(pagina, f"farol-guardiao-aviso-{pagina.viewport_size['width']}px")
     jogar(pagina, 'R', toque)
     expect(pagina.locator('#feedback')).to_contain_text('A ponte de luz apagou')
+    assert pixel_da_travessia(pagina, 196, 108) != [255, 241, 210, 255]
+    salvar_captura(pagina, f'farol-travessia-ponte-apagada-{pagina.viewport_size["width"]}px')
     expect(pagina.locator('#erros')).to_have_text('1 / 3')
     jogar(pagina, 'R', toque)
     expect(pagina.locator('#passos')).to_have_text('6')
