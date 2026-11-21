@@ -9,6 +9,10 @@ import { caminhoDoCabo } from '../campanha/cabo-baixo.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
 import { carregar, salvar } from '../persistencia/index.ts';
 import { criarAudio } from '../audio/index.ts';
+import { gerarMareAMao, DIFICULDADES_MARE_A_MAO, MUNDOS_MARE_A_MAO, type OpcoesMareAMao } from '../mare-a-mao/index.ts';
+import {
+  incluirNoHistorico, lerHistoricoMare, salvarHistoricoMare, type EntradaMareAMao,
+} from './historico-mare-a-mao.ts';
 
 function buscar<T extends HTMLElement = HTMLElement>(seletor: string): T {
   const elemento = document.querySelector<T>(seletor);
@@ -68,9 +72,10 @@ function escalaDaLogo() {
 }
 new ResizeObserver(escalaDaLogo).observe(molduraLogo);
 
-type Tela = 'inicio' | 'praia' | 'fase' | 'creditos';
+type Tela = 'inicio' | 'praia' | 'fase' | 'creditos' | 'mare-a-mao';
 const paineis: Record<Tela, HTMLElement> = {
   inicio: buscar('#inicio'), praia: buscar('#praia'), fase: buscar('#fase'), creditos: buscar('#creditos'),
+  'mare-a-mao': buscar('#mare-a-mao'),
 };
 const listaTestes = buscar('#fases-teste');
 const niveis = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-fase]'));
@@ -90,6 +95,19 @@ let tela: Tela = 'inicio';
 let contextoCreditos: ContextoCreditos = 'inicio';
 let quadroMapa: number | undefined;
 let bancada = false;
+let desafioAvulso: EntradaMareAMao | undefined;
+let historicoMare = lerHistoricoMare(storage);
+let proximaSemente = 0;
+
+const controlesMare = {
+  mundo: buscar<HTMLSelectElement>('#mare-tema'),
+  dificuldade: buscar<HTMLSelectElement>('#mare-dificuldade'),
+  siris: buscar<HTMLSelectElement>('#mare-siris'),
+  garca: buscar<HTMLInputElement>('#mare-garca'),
+  fragmento: buscar<HTMLInputElement>('#mare-item'),
+};
+const modoCampanha = () => !bancada && !desafioAvulso;
+const temaDaFase = () => bancada ? false : desafioAvulso?.opcoes.mundo ?? mundoAtual(save.progresso);
 let indice = 0;
 let fase = FASES_BANCADA[0];
 let estado = iniciar(fase);
@@ -99,7 +117,9 @@ function gravar() {
 }
 
 function atualizarAmbiente() {
-  const mundo = tela === 'fase' && bancada ? 'praia' : mundoAtual(save.progresso);
+  const avulso = (tela === 'fase' || tela === 'mare-a-mao') ? desafioAvulso?.opcoes.mundo : undefined;
+  const comTemaPadrao = (tela === 'fase' && bancada) || tela === 'mare-a-mao';
+  const mundo = avulso ?? (comTemaPadrao ? 'praia' : mundoAtual(save.progresso));
   audio.ambiente(mundo, !document.hidden);
 }
 
@@ -188,11 +208,11 @@ function atualizarPraia(mensagem = ''): void {
 
 logo.addEventListener('load', () => {
   if (tela === 'praia' && quadroMapa === undefined) atualizarPraia();
-  if (tela === 'fase') desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso), fauna);
+  if (tela === 'fase') desenhar(tabuleiro.ctx, fase, estado, logo, temaDaFase(), fauna);
 });
 
 fauna.addEventListener('load', () => {
-  if (tela === 'fase') desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso), fauna);
+  if (tela === 'fase') desenhar(tabuleiro.ctx, fase, estado, logo, temaDaFase(), fauna);
 });
 
 arteCabo.addEventListener('load', () => {
@@ -387,21 +407,27 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     else if (fase.ressaca?.objetivo === 'atravessar') mensagens.push(`${fase.nome} vencido. Volte ao mapa.`);
     else if (fase.ressaca) mensagens.push(`${fase.nome} vencido. Volte à Baía.`);
     if (bancada && indice < FASES_BANCADA.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');
-    if (!bancada && fase.id === 'ilhota-perolada') mensagens.push('Concha Perolada encontrada. Atalho de volta aberto!');
-    else if (!bancada && !fase.ressaca && !fase.farol && !fase.ameaca?.rasante && !fase.recife && !arenaLocal && fase.id !== 'ponta-da-garca' && fase.id !== CAPITULO_FINAL) mensagens.push('Volte à praia para continuar.');
+    if (desafioAvulso) mensagens.push('Você pode gerar a próxima travessia ou mudar os filtros.');
+    if (modoCampanha() && fase.id === 'ilhota-perolada') mensagens.push('Concha Perolada encontrada. Atalho de volta aberto!');
+    else if (modoCampanha() && !fase.ressaca && !fase.farol && !fase.ameaca?.rasante && !fase.recife && !arenaLocal && fase.id !== 'ponta-da-garca' && fase.id !== CAPITULO_FINAL) mensagens.push('Volte à praia para continuar.');
   }
   buscar('#feedback').textContent = mensagem || mensagens.join(' ');
   const seguir = buscar('#seguir-fase');
-  seguir.hidden = bancada || estado.situacao !== 'vitoria'
+  seguir.hidden = !modoCampanha() || estado.situacao !== 'vitoria'
     || (fase.id !== 'ponta-da-garca' && fase.id !== CAPITULO_FINAL);
   seguir.textContent = fase.id === CAPITULO_FINAL ? 'Ver desfecho' : 'Concluir viagem';
-  desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso), fauna);
+  buscar('#nova-mare-a-mao').hidden = !desafioAvulso || estado.situacao === 'jogando';
+  desenhar(tabuleiro.ctx, fase, estado, logo, temaDaFase(), fauna);
   audio.eventos(eventos);
 }
 
 function selecionarFase(novoIndice: number, mensagem?: string, focar = true): void {
   indice = novoIndice;
   fase = (bancada ? FASES_BANCADA : TODAS_AS_FASES)[indice];
+  prepararFase(mensagem, focar);
+}
+
+function prepararFase(mensagem?: string, focar = true): void {
   estado = iniciar(fase);
   buscar('#nome-fase').textContent = fase.nome;
   buscar('#objetivo').textContent = fase.objetivo;
@@ -412,10 +438,64 @@ function selecionarFase(novoIndice: number, mensagem?: string, focar = true): vo
   buscar('#lembrete-fase').hidden = bancada;
   buscar('#grade').textContent = fase.mapa.join('\n');
   buscar<HTMLDetailsElement>('#ajuda').open = false;
-  buscar('#voltar-fase').textContent = bancada ? 'Tela inicial' : mundoAtual(save.progresso) === 'praia' ? 'Voltar à praia' : 'Voltar ao mapa';
+  buscar('#voltar-fase').textContent = desafioAvulso ? 'Editar filtros' : bancada ? 'Tela inicial' : mundoAtual(save.progresso) === 'praia' ? 'Voltar à praia' : 'Voltar ao mapa';
   niveis.forEach((botao, i) => botao.setAttribute('aria-pressed', String(indice === i)));
   trocarTela('fase', focar);
   atualizarFase([], mensagem ?? 'Fase selecionada. Maré baixa.');
+}
+
+function lerOpcoesMare(): OpcoesMareAMao | undefined {
+  const mundo = MUNDOS_MARE_A_MAO.find(item => item === controlesMare.mundo.value);
+  const dificuldade = DIFICULDADES_MARE_A_MAO.find(item => item === controlesMare.dificuldade.value);
+  const siris = Number(controlesMare.siris.value);
+  if (!mundo || !dificuldade || (siris !== 1 && siris !== 2 && siris !== 3)) return;
+  return { mundo, dificuldade, siris, garca: controlesMare.garca.checked, fragmento: controlesMare.fragmento.checked };
+}
+
+function mostrarOpcoesMare(opcoes: OpcoesMareAMao): void {
+  controlesMare.mundo.value = opcoes.mundo;
+  controlesMare.dificuldade.value = String(opcoes.dificuldade);
+  controlesMare.siris.value = String(opcoes.siris);
+  controlesMare.garca.checked = opcoes.garca;
+  controlesMare.fragmento.checked = opcoes.fragmento;
+}
+
+function jogarMareAMao(opcoes: OpcoesMareAMao, semente?: string): void {
+  const novaSemente = semente ?? `${Date.now().toString(36)}-${(++proximaSemente).toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+  const gerada = gerarMareAMao(opcoes, novaSemente);
+  if (!gerada) {
+    abrirMareAMao('Não foi possível montar uma travessia com esses filtros. Tente de novo ou ajuste a seleção.');
+    return;
+  }
+  const entrada = { opcoes, semente: novaSemente };
+  desafioAvulso = entrada;
+  fase = gerada;
+  bancada = false;
+  historicoMare = incluirNoHistorico(historicoMare, entrada);
+  const persistiu = salvarHistoricoMare(storage, historicoMare);
+  prepararFase(persistiu ? 'Travessia pronta. Maré baixa.' : 'Travessia pronta. O histórico não será salvo ao fechar.');
+}
+
+function abrirMareAMao(aviso = ''): void {
+  const lista = buscar('#mare-historico-itens');
+  lista.replaceChildren();
+  buscar('#mare-historico-vazio').hidden = historicoMare.length > 0;
+  for (const { opcoes, semente } of historicoMare) {
+    const item = document.createElement('li');
+    const repetir = document.createElement('button');
+    repetir.type = 'button';
+    const quantidade = opcoes.siris === 1 ? '1 siri' : `${opcoes.siris} siris`;
+    const pistas = [opcoes.garca ? 'garça' : '', opcoes.fragmento ? 'fragmento' : ''].filter(Boolean);
+    repetir.textContent = [nomeDo(opcoes.mundo), opcoes.dificuldade, quantidade, ...pistas, semente].join(' · ');
+    repetir.addEventListener('click', () => {
+      mostrarOpcoesMare(opcoes);
+      jogarMareAMao(opcoes, semente);
+    });
+    item.append(repetir);
+    lista.append(item);
+  }
+  buscar('#aviso-mare-a-mao').textContent = aviso;
+  trocarTela('mare-a-mao');
 }
 
 function entrarFase(): void {
@@ -477,7 +557,7 @@ function jogarAcao(acao: Acao): void {
   if (tela !== 'fase' || estado.situacao !== 'jogando') return;
   const transicao = executarPasso(fase, estado, acao);
   estado = transicao.estado;
-  if (!bancada && estado.situacao === 'vitoria' && ehIdFase(fase.id)) {
+  if (modoCampanha() && estado.situacao === 'vitoria' && ehIdFase(fase.id)) {
     save = { ...save, progresso: concluirFase(save.progresso, fase.id) };
     gravar();
   }
@@ -486,9 +566,13 @@ function jogarAcao(acao: Acao): void {
 
 const reiniciar = () => {
   // Devolva o foco ao título para Espaço voltar a trocar o siri, não reativar o botão.
-  if (tela === 'fase') selecionarFase(indice, 'Fase reiniciada. Maré baixa.');
+  if (tela === 'fase') prepararFase('Fase reiniciada. Maré baixa.');
 };
 const voltar = () => {
+  if (tela === 'fase' && desafioAvulso) {
+    abrirMareAMao();
+    return;
+  }
   if ((tela === 'fase' && !bancada) || (tela === 'creditos' && contextoCreditos === 'final')) abrirPraia();
   else if (tela !== 'inicio') trocarTela('inicio');
 };
@@ -502,14 +586,25 @@ function abrirCreditos(contexto: ContextoCreditos): void {
 }
 
 buscar('#comecar').addEventListener('click', () => {
+  desafioAvulso = undefined;
   save = { ...save, progresso: { ...save.progresso, viuTutorial: true } };
   gravar();
   abrirPraia();
 });
-buscar('#bancada').addEventListener('click', () => { bancada = true; selecionarFase(0); });
+buscar('#bancada').addEventListener('click', () => { desafioAvulso = undefined; bancada = true; selecionarFase(0); });
+buscar('#abrir-mare-a-mao').addEventListener('click', () => abrirMareAMao());
+buscar('#voltar-mare-a-mao').addEventListener('click', voltar);
+buscar('#configurar-mare-a-mao').addEventListener('submit', evento => {
+  evento.preventDefault();
+  const opcoes = lerOpcoesMare();
+  if (opcoes) jogarMareAMao(opcoes);
+});
+buscar('#nova-mare-a-mao').addEventListener('click', () => {
+  if (tela === 'fase' && desafioAvulso && estado.situacao !== 'jogando') jogarMareAMao(desafioAvulso.opcoes);
+});
 buscar('#creditos-inicio').addEventListener('click', () => abrirCreditos('inicio'));
 buscar('#seguir-fase').addEventListener('click', () => {
-  if (tela !== 'fase' || bancada || estado.situacao !== 'vitoria') return;
+  if (tela !== 'fase' || !modoCampanha() || estado.situacao !== 'vitoria') return;
   if (fase.id === CAPITULO_FINAL) abrirCreditos('final');
   else if (fase.id === 'ponta-da-garca') abrirCreditos('praia');
 });

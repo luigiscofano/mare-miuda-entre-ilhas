@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
+import { gerarMareAMao } from '../src/mare-a-mao/index.ts';
 
 // Este ensaio carrega o módulo realmente embutido no arquivo offline.
 // Simula DOM/Canvas para isolar comandos e desenho; não substitui o Chromium.
@@ -13,6 +14,10 @@ class ElementoFalso {
   value = '';
   disabled = false;
   eventos = {};
+  filhos = [];
+  checked = false;
+  append(filho) { this.filhos.push(filho); }
+  replaceChildren() { this.filhos = []; }
   constructor(dataset = {}) { this.dataset = dataset; }
   addEventListener(nome, fn) { (this.eventos[nome] ??= []).push(fn); }
   setAttribute(nome, valor) { this.atributos[nome] = valor; }
@@ -49,6 +54,7 @@ function prepararInterface() {
   );
   const storage = new Map([['miudezas', 'preservado']]);
   globalThis.document = Object.assign(new ElementoFalso(), {
+    createElement: () => new ElementoFalso(),
     querySelector: pegar,
     querySelectorAll: seletor => seletor === '[data-fase]' ? fases
       : Object.values(seletor === '[data-direcao]' ? botoes : mapa),
@@ -358,4 +364,58 @@ test('cada faixa offline é idêntica ao arquivo servido, sem referência remota
     assert.deepEqual(Buffer.from(base64, 'base64'), origem, faixa);
     assert.deepEqual(servido, origem, faixa);
   }
+});
+
+test('Ilha de Improviso gera, reinicia, avança e recupera a semente fora da campanha', async () => {
+  const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
+  const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
+  assert.ok(modulo);
+  const chaveCampanha = 'mare-miuda-entre-ilhas/praia-v1';
+  const chaveIlha = 'mare-miuda-entre-ilhas/mare-a-mao-v1';
+  const saveCampanha = JSON.stringify({ versao:1, progresso:{ mundo:'praia', posicao:{coluna:1,linha:1},
+    viuTutorial:true, concluidas:['primeira-onda'] }, audio:{musica:0,efeitos:0} });
+  const ui = prepararInterface();
+  const { pegar, storage } = ui;
+  storage.set(chaveCampanha, saveCampanha);
+  await import(modulo + '#ilha-improviso');
+  pegar('#abrir-mare-a-mao').click();
+  assert.equal(pegar('#mare-a-mao').hidden, false);
+  pegar('#mare-tema').value = 'recifes';
+  pegar('#mare-dificuldade').value = 'Sossegado';
+  pegar('#mare-siris').value = '1';
+  pegar('#configurar-mare-a-mao').disparar('submit', { preventDefault() {} });
+  assert.equal(pegar('#fase').hidden, false);
+  assert.equal(pegar('#nova-mare-a-mao').hidden, true);
+  const [entrada] = JSON.parse(storage.get(chaveIlha));
+  const prova = gerarMareAMao(entrada.opcoes, entrada.semente);
+  assert.ok(prova);
+  assert.equal(pegar('#grade').textContent, prova.mapa.join('\n'));
+  assert.equal(pegar('#voltar-fase').textContent, 'Editar filtros');
+  pegar('#reiniciar').click();
+  assert.equal(pegar('#grade').textContent, prova.mapa.join('\n'));
+  assert.equal(pegar('#passos').textContent, '0');
+  for (const acao of prova.solucao) {
+    if (acao === 'trocar') pegar('#trocar-siri').click();
+    else ui.botoes[acao].click();
+  }
+  assert.match(pegar('#feedback').textContent, /Fase concluída/);
+  assert.equal(pegar('#nova-mare-a-mao').hidden, false);
+  pegar('#nova-mare-a-mao').click();
+  assert.equal(pegar('#passos').textContent,'0');
+  assert.equal(pegar('#nova-mare-a-mao').hidden,true);
+  const entradas = JSON.parse(storage.get(chaveIlha));
+  assert.equal(entradas.length,2);
+  assert.notEqual(entradas[0].semente, entrada.semente);
+  assert.equal(storage.get(chaveCampanha), saveCampanha);
+
+  const recarregada = prepararInterface();
+  recarregada.storage.set(chaveCampanha, saveCampanha);
+  recarregada.storage.set(chaveIlha, JSON.stringify(entradas));
+  await import(modulo + '#ilha-improviso-recarregada');
+  recarregada.pegar('#abrir-mare-a-mao').click();
+  const opcoes = recarregada.pegar('#mare-historico-itens').filhos;
+  assert.equal(opcoes.length,2);
+  opcoes[1].filhos[0].click();
+  assert.equal(recarregada.pegar('#grade').textContent, prova.mapa.join('\n'));
+  assert.equal(recarregada.storage.get(chaveCampanha), saveCampanha);
 });

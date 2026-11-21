@@ -25,9 +25,59 @@
       <p>A água sobe em três passos e desce nos três seguintes. Atravesse a praia, escute a maré e descubra o caminho da ilhota.</p>
       <div class="botoes">
         <button type="button" class="principal" id="comecar">Começar viagem</button>
+        <button type="button" id="abrir-mare-a-mao">Ilha de Improviso</button>
         <button type="button" id="bancada">Bancada de testes</button>
         <button type="button" id="creditos-inicio">Créditos</button>
       </div>
+    </section>
+
+    <section id="mare-a-mao" class="painel" aria-labelledby="titulo-mare-a-mao" hidden>
+      <h2 id="titulo-mare-a-mao" tabindex="-1">Ilha de Improviso</h2>
+      <p>Monte a próxima travessia. As partidas deste modo não alteram a campanha.</p>
+      <form id="configurar-mare-a-mao">
+        <div class="filtros-mare">
+          <label for="mare-tema">Tema
+            <select id="mare-tema">
+              <option value="praia">Praia das Conchas</option>
+              <option value="recifes">Recifes Expostos</option>
+              <option value="mangue">Mangue dos Siris Duplos</option>
+              <option value="enseada">Enseada da Garça</option>
+              <option value="deriva">Ilhas à Deriva</option>
+              <option value="grutas">Grutas da Espuma</option>
+              <option value="ressaca">Baía da Ressaca</option>
+              <option value="farol">Arquipélago do Farol</option>
+            </select>
+          </label>
+          <label for="mare-dificuldade">Dificuldade
+            <select id="mare-dificuldade">
+              <option value="Sossegado">1 · Sossegado</option>
+              <option value="Animado">2 · Animado</option>
+              <option value="Puxado">3 · Puxado</option>
+              <option value="Mar Bravo">4 · Mar Bravo</option>
+              <option value="Maré Feroz">5 · Maré Feroz</option>
+            </select>
+          </label>
+          <label for="mare-siris">Siris
+            <select id="mare-siris">
+              <option value="1">1 siri</option>
+              <option value="2">2 siris</option>
+              <option value="3">3 siris</option>
+            </select>
+          </label>
+          <label class="marcacao-mare"><input type="checkbox" id="mare-garca"> Incluir garça</label>
+          <label class="marcacao-mare"><input type="checkbox" id="mare-item"> Incluir fragmento obrigatório</label>
+        </div>
+        <div class="botoes">
+          <button type="submit" id="gerar-mare-a-mao" class="principal">Gerar travessia</button>
+          <button type="button" id="voltar-mare-a-mao">Tela inicial</button>
+        </div>
+      </form>
+      <p id="aviso-mare-a-mao" role="status" aria-live="polite"></p>
+      <details id="historico-mare-a-mao">
+        <summary>Histórico de travessias</summary>
+        <p id="mare-historico-vazio">Nenhuma travessia gerada.</p>
+        <ol id="mare-historico-itens"></ol>
+      </details>
     </section>
 
     <section id="praia" class="painel" aria-labelledby="titulo-praia" hidden>
@@ -121,6 +171,7 @@
       <div class="botoes">
         <button type="button" id="voltar-fase">Voltar</button>
         <button type="button" id="trocar-siri" class="principal" hidden>Trocar siri</button>
+        <button type="button" id="nova-mare-a-mao" class="principal" hidden>Próxima travessia</button>
         <button type="button" id="seguir-fase" class="principal" hidden>Concluir viagem</button>
       </div>
       <details id="ajuda">
