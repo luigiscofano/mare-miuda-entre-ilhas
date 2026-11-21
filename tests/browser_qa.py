@@ -1257,9 +1257,12 @@ def conferir_desfecho(pagina, toque=False):
     expect(pagina.locator('#titulo-praia')).to_be_focused()
     expect(pagina.locator('#posicao-praia')).to_contain_text('A luz das duas marés · concluída')
     expect(pagina.locator('#rever-desfecho')).to_be_visible()
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
     pagina.reload()
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#progresso-praia')).to_contain_text('6/10')
+    expect(pagina.locator('#rever-desfecho')).to_be_visible()
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
     expect(pagina.locator('#posicao-praia')).to_contain_text('A luz das duas marés · concluída')
     jogar(pagina, 'U', toque, mapa=True)
     tocar(pagina, '#rever-desfecho', toque)
@@ -1267,6 +1270,7 @@ def conferir_desfecho(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
     tocar(pagina, '#voltar-creditos', toque)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Salão das lanternas · concluída')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
     expect(pagina.locator('#titulo-praia')).to_be_focused()
 
 
@@ -1335,7 +1339,6 @@ with sync_playwright() as p:
     conferir_lote2(desktop)
     conferir_grutas(desktop)
     conferir_farol(desktop)
-    conferir_desfecho(desktop)
     conferir_enseadinha(navegador.new_page(viewport={'width': 1180, 'height': 820}, offline=(PRIMEIRA_PAGINA == OFFLINE)))
     conferir_recifes_ampliados(desktop)
     conferir_chefes_recifes(desktop)
@@ -1352,6 +1355,8 @@ with sync_playwright() as p:
     conferir_vento_sul(desktop)
     conferir_ressaca_alta(desktop)
     conferir_chefes_deriva(desktop)
+    # A fixture do desfecho substitui o save; rode depois dos fluxos compartilhados.
+    conferir_desfecho(desktop)
     print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
         aparelho = navegador.new_page(viewport={'width': largura, 'height': 844}, has_touch=True,
@@ -1362,7 +1367,6 @@ with sync_playwright() as p:
         conferir_lote2(aparelho, toque=True)
         conferir_grutas(aparelho, toque=True)
         conferir_farol(aparelho, toque=True)
-        conferir_desfecho(aparelho, toque=True)
         conferir_enseadinha(aparelho, toque=True)
         conferir_recifes_ampliados(aparelho, toque=True)
         conferir_chefes_recifes(aparelho, toque=True)
@@ -1379,5 +1383,6 @@ with sync_playwright() as p:
         conferir_vento_sul(aparelho, toque=True)
         conferir_ressaca_alta(aparelho, toque=True)
         conferir_chefes_deriva(aparelho, toque=True)
+        conferir_desfecho(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()
