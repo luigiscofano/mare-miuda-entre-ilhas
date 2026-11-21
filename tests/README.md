@@ -115,3 +115,7 @@ A fixture do desfecho parte do Salão das lanternas com cinco regulares concluí
 ### Prévia da arte em Recifes e Mangue
 
 `arte-recifes-mangue.test.ts` verifica que cada costa tem cor, concha e enfeites próprios e usa a grade nativa com cores opacas. Os testes distinguem a areia molhada e os quatro cantos da maré alta. Degraus da vazante e Janela partilhada servem de verificação no navegador, com teclado e toque emulado, e de captura sem cursor com `MARE_CAPTURA_DIR`. Os testes dos chefes continuam verificando as comportas e placas. Sem teste em aparelho físico.
+
+### Prévia das travessias da Enseada e da Deriva
+
+`arte-enseada-deriva.test.ts` verifica grade e cores nativas, quatro cantos dos baixios na alta, X de risco acima da areia, posição da balsa nas duas marés e conchas diferentes por tema. Em **Um passo antes da sombra** e **Balsas alternadas**, a verificação Playwright combina os pixels com o aviso da garça e o transporte na virada. Com `MARE_CAPTURA_DIR`, gera capturas sem cursor. Toque emulado não substitui teste em aparelho físico.

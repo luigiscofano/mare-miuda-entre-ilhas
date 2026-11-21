@@ -64,7 +64,7 @@ test('Recifes e Mangue contêm conchas e enfeites próprios, sem trocar a arte d
   assert.notDeepEqual(recifes.desenhoConcha, mangue.desenhoConcha);
   assert.notDeepEqual(recifes.enfeites, mangue.enfeites);
   assert.notEqual(recifes.cores.mar, mangue.cores.mar);
-  for (const mundo of [false, 'arquipelago', 'enseada', 'deriva', 'grutas', 'ressaca', 'farol'] as const) {
+  for (const mundo of [false, 'arquipelago', 'grutas', 'ressaca', 'farol'] as const) {
     assert.equal(temaDaCosta(mundo), undefined);
   }
 });
