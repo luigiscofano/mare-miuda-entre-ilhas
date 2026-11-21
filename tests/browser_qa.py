@@ -142,6 +142,12 @@ def salvar_captura(pagina, nome):
         pagina.screenshot(path=pasta / (nome + '.png'), full_page=True)
 
 
+def pixel_da_travessia(pagina, x, y):
+    return pagina.locator('#tabuleiro').evaluate(
+        '(canvas, [x, y]) => Array.from(canvas.getContext("2d").getImageData(x, y, 1, 1).data)', [x, y]
+    )
+
+
 def conferir_praia(pagina, toque=False, opcional=False):
     erros = []
     pagina.on('pageerror', lambda erro: erros.append(str(erro)))
@@ -166,7 +172,13 @@ def conferir_praia(pagina, toque=False, opcional=False):
     expect(pagina.locator('#posicao-praia')).to_contain_text('Primeira onda')
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#lembrete-fase')).to_be_visible()
+    conferir_siri_canonico(pagina, '#tabuleiro')
+    assert pixel_da_travessia(pagina, 238, 179) == [204, 175, 121, 255]  # areia molhada
+    salvar_captura(pagina, f'travessia-praia-v32-baixa-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'RRR', toque)
+    for x, y in [(229, 165), (250, 165), (229, 186), (250, 186)]:
+        assert pixel_da_travessia(pagina, x, y) == [144, 215, 187, 255]  # cantos na alta
+    salvar_captura(pagina, f'travessia-praia-v32-alta-{pagina.viewport_size["width"]}px')
     tocar(pagina, '#voltar-fase', toque)
     expect(pagina.locator('#progresso-praia')).to_contain_text('1/4')
     if opcional:

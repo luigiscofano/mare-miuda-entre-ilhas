@@ -4,6 +4,7 @@ import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/
 import type { Mundo, Progresso } from '../campanha/index.ts';
 import { caminhoDoCabo, marcadorCabo } from '../campanha/cabo-baixo.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
+import { pintarTravessiaPraia, usaTravessiaPraia } from './travessia-praia.ts';
 
 export const LARGURA = 256;
 export const ALTURA = 192;
@@ -94,7 +95,7 @@ function bloco(ctx: CanvasRenderingContext2D, cor: string, x: number, y: number,
   ctx.fillRect(x, y, largura, altura);
 }
 
-function desenharCasa(ctx: CanvasRenderingContext2D, celula: string, alta: boolean, x: number, y: number, tons: Tons, placa = false) {
+function desenharPisoLegado(ctx: CanvasRenderingContext2D, celula: string, alta: boolean, x: number, y: number, tons: Tons) {
   bloco(ctx, tons.margem, x, y, TAMANHO_TILE, TAMANHO_TILE);
   const piso = celula === '~' || celula === 'I' ? tons.agua : celula === '=' ? (alta ? tons.agua : tons.areiaSombra)
     : celula === '#' ? tons.roca : tons.areia;
@@ -119,6 +120,9 @@ function desenharCasa(ctx: CanvasRenderingContext2D, celula: string, alta: boole
     bloco(ctx, tons.branco, x + 4, y + 4, 8, 4);
     bloco(ctx, tons.areiaSombra, x + 6, y + 3, 4, 2);
   }
+}
+
+function desenharMecanismosBase(ctx: CanvasRenderingContext2D, celula: string, x: number, y: number, tons: Tons, placa: boolean) {
   if (celula === 'P') {
     bloco(ctx, tons.linha, x + 3, y + 3, 10, 10);
     bloco(ctx, placa ? '#99b35b' : '#e9ac67', x + 4, y + 4, 8, 8);
@@ -316,10 +320,7 @@ function desenharFeixe(
   }
 }
 
-export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, logo: HTMLImageElement, tema: Mundo | false = false, fauna?: HTMLImageElement): void {
-  const tons: Tons = tema ? CORES_MUNDO[tema] : TONS_CINZA;
-  const cores = paleta(tons);
-  ctx.imageSmoothingEnabled = false;
+function desenharFundoDaTravessia(ctx: CanvasRenderingContext2D, tema: Mundo | false, tons: Tons) {
   bloco(ctx, tons.agua, 0, 0, LARGURA, ALTURA);
   // Decoração estática mantém árvores e corais fora da grade navegável.
   for (let y = 10; y < ALTURA; y += 16) {
@@ -340,13 +341,27 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       }
     }
   }
+}
+
+export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, logo: HTMLImageElement, tema: Mundo | false = false, fauna?: HTMLImageElement): void {
+  const tons: Tons = tema ? CORES_MUNDO[tema] : TONS_CINZA;
+  const cores = paleta(tons);
+  ctx.imageSmoothingEnabled = false;
+  const praia = usaTravessiaPraia(tema);
+  if (!praia) desenharFundoDaTravessia(ctx, tema, tons);
+
   const gradeLargura = fase.mapa[0].length * TAMANHO_TILE;
   const gradeAltura = fase.mapa.length * TAMANHO_TILE;
   const origemX = (LARGURA - gradeLargura) / 2;
   const origemY = (ALTURA - gradeAltura) / 2;
-  bloco(ctx, tons.margem, origemX - 4, origemY - 4, gradeLargura + 8, gradeAltura + 8);
-
   const alta = mareAlta(estado.passos);
+  if (praia) {
+    pintarTravessiaPraia({ contexto: ctx, origemX: origemX * DENSIDADE, origemY: origemY * DENSIDADE },
+      fase.mapa, alta, LARGURA * DENSIDADE, ALTURA * DENSIDADE);
+  } else {
+    bloco(ctx, tons.margem, origemX - 4, origemY - 4, gradeLargura + 8, gradeAltura + 8);
+  }
+
   const atual = jogadorAtivo(estado);
   const vizinhas = estado.situacao === 'jogando'
     ? DIRECOES.map(d => destinoPermitido(fase, estado, d)).filter(v => v !== undefined)
@@ -367,7 +382,9 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     const placaOcupada = celula === 'P' ? siris.some(siri => mesmaCasa(siri, pos))
       : celula === 'D' && portaoLiberado(fase, pos, siris);
     const comportaFechada = passagemDoRecifeFechada(fase, pos, estado.temFragmento);
-    desenharCasa(ctx, comportaFechada ? '~' : celula, alta, x, y, tons, placaOcupada);
+    const piso = comportaFechada ? '~' : celula;
+    if (!praia) desenharPisoLegado(ctx, piso, alta, x, y, tons);
+    desenharMecanismosBase(ctx, piso, x, y, tons, placaOcupada);
     if (celula === 'P' || celula === 'D') {
       const indice = fase.portoesVinculados?.findIndex(item => mesmaCasa(item.placa, pos) || mesmaCasa(item.portao, pos)) ?? -1;
       const numero = DIGITOS[String(indice + 1)];
@@ -392,7 +409,8 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     if (celula === 'N') desenharAncoradouro(ctx, x, y, tons,
       estado.ancoradouros?.some(ancora => mesmaCasa(ancora, pos)) ?? false);
     // Só o obstáculo imediatamente relevante ao próximo passo recebe cantos.
-    if (estado.situacao === 'jogando' && marcaBloqueioAdjacente(pos, atual, celula, alta, vizinhas)) {
+    if (estado.situacao === 'jogando' && !(praia && celula === '=')
+      && marcaBloqueioAdjacente(pos, atual, celula, alta, vizinhas)) {
       cantos(ctx, x, y, tons.branco, 2, 3);
     }
     if (vizinhas.some(v => mesmaCasa(v, pos))) cantos(ctx, x, y, tons.linha, 2, 3);
