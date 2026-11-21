@@ -133,3 +133,6 @@ As três fases iniciais estão em `lote3.ts`. `K` é a pérola, `E` o encaixe A,
 
 Os dois mapas de `farol.ts` reaproveitam a placa `P`, o portão `D`, o embarque em `~`, os fragmentos `B` e os alvos de chegada. Nenhuma regra nova no motor.
 
+## Enseada da Garça ampliada
+
+Seis travessias solo e uma em dupla nascem de um ramo ao norte da rota original. Veja as [fichas do lote](../../docs/processo-de-criacao/11-enseada-ampliada/README.md) com grades, ciclos da garça e soluções verificadas.

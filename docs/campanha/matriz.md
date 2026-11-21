@@ -51,3 +51,7 @@ As três travessias originais formam a rota curta; sete novas travessias regular
 ### Ampliação jogável: Mangue dos Siris Duplos
 
 As três fases iniciais permanecem; sete novas regulares ampliam o treino de troca, segurança do parceiro inativo, fechamento da porta, coleta separada e reencontro. Depois da porteira usa três trocas no mínimo para uma vitória sem levadas. No circuito final, não há vitória sem levadas com até três trocas ou com o portão bloqueado. Nenhuma fase nova é condição para a Enseada. [Fichas e soluções](../processo-de-criacao/10-mangue-ampliado/README.md).
+
+### Ampliação jogável: Enseada da Garça
+
+Depois do primeiro rasante, o ramo ensina a escolher a margem, combinar previsões da água e da garça, recolher fragmentos fora do próximo alvo e revezar a placa sem deixar o parceiro na mira. A garça é determinística: suas marcas são legíveis antes do movimento. A rota original e seus dois desvios continuam disponíveis; os chefes não fazem parte deste lote. [Fichas e soluções](../processo-de-criacao/11-enseada-ampliada/README.md).

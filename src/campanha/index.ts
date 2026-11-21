@@ -1,3 +1,5 @@
+import { FASES_ENSEADA_AMPLIADA } from '../fases/enseada-ampliada.ts';
+import type { IdFaseEnseadaAmpliada } from '../fases/enseada-ampliada.ts';
 import { FASES_MANGUE_AMPLIADO } from '../fases/mangue-ampliado.ts';
 import type { IdFaseMangueAmpliado } from '../fases/mangue-ampliado.ts';
 import { FASES_RECIFES_AMPLIADOS } from '../fases/recifes-ampliados.ts';
@@ -8,7 +10,7 @@ import type { Direcao, Posicao } from '../motor/index.ts';
 export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'praia-mirante'
   | 'praia-bolso-mare' | 'praia-trilha-das-pedras' | 'praia-fragmentos-areal';
 export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
-export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
+export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
   | 'enseada-dupla-vigia' | 'enseada-dupla-revezamento' | 'deriva-dupla-cais' | 'deriva-dupla-contramao'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
@@ -60,6 +62,12 @@ const NOS_MANGUE = [
 const ENTRADAS_MANGUE: readonly Entrada[] = FASES_MANGUE_AMPLIADO.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_MANGUE[i],
 }));
+const NOS_ENSEADA = [
+  P(2, 0), P(4, 0), P(6, -1), P(8, -1), P(10, -1), P(11, 1), P(11, 3),
+] as const;
+const ENTRADAS_ENSEADA: readonly Entrada[] = FASES_ENSEADA_AMPLIADA.map((fase, i) => ({
+  id: fase.id, nome: fase.nome, posicao: NOS_ENSEADA[i],
+}));
 const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
   praia: ENTRADAS_PRAIA,
   'praia-enseadinha': [
@@ -103,6 +111,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'enseada-farol-baixo', posicao: P(6, 1), nome: 'Corrida ao farol baixo' },
     { id: 'enseada-dupla-vigia', posicao: P(7, 0), nome: 'Vigia em dupla', opcional: true },
     { id: 'enseada-dupla-revezamento', posicao: P(9, 0), nome: 'Revezamento na restinga', opcional: true },
+    ...ENTRADAS_ENSEADA,
   ],
   deriva: [
     PORTO,
@@ -271,6 +280,20 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['enseada-farol-baixo'], 'Conclua Corrida ao farol baixo para abrir o desvio em dupla.'),
     trilha(P(7, 0), P(9, 0), 'direita', 'esquerda', [P(8.125, 0.375)],
       ['enseada-dupla-vigia'], 'Conclua Vigia em dupla para seguir pela restinga.'),
+    trilha(P(2, 1), NOS_ENSEADA[0], 'cima', 'baixo', [],
+      ['enseada-sombra-restinga'], 'Conclua Sombra na restinga para abrir o ramo norte da enseada.'),
+    trilha(NOS_ENSEADA[0], NOS_ENSEADA[1], 'direita', 'esquerda', [],
+      ['enseada-passo-sombra'], 'Complete Um passo antes da sombra para seguir.'),
+    trilha(NOS_ENSEADA[1], NOS_ENSEADA[2], 'direita', 'esquerda', [P(5, 0), P(5, -1)],
+      ['enseada-vigia-das-pedras'], 'Passe pela Vigia das pedras antes de escolher a margem.'),
+    trilha(NOS_ENSEADA[2], NOS_ENSEADA[3], 'direita', 'esquerda', [],
+      ['enseada-escolha-de-margem'], 'Conclua Escolha de margem para seguir.'),
+    trilha(NOS_ENSEADA[3], NOS_ENSEADA[4], 'direita', 'esquerda', [],
+      ['enseada-fragmento-do-bico', 'enseada-abrigo-ondas'], 'Recupere o fragmento e conclua Abrigo entre ondas para chegar à vazante.'),
+    trilha(NOS_ENSEADA[4], NOS_ENSEADA[5], 'direita', 'cima', [P(11, -1)],
+      ['enseada-fresta-da-vazante'], 'Atravesse a fresta para encontrar os dois pontos de coleta.'),
+    trilha(NOS_ENSEADA[5], NOS_ENSEADA[6], 'baixo', 'cima', [],
+      ['enseada-ecos-do-rasante'], 'Conclua Ecos do rasante para chegar à vigia da dupla.'),
   ],
   deriva: [
     ...sustentar('deriva-primeira-balsa', 'deriva-duas-margens', 'deriva-corrente-cruzada'),

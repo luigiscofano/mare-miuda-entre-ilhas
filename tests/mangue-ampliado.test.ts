@@ -41,10 +41,9 @@ function existeVitoria(
   return false;
 }
 
-test('as dez travessias do Mangue são regulares e as 52 rotas de campanha vencem sem levadas', () => {
+test('as dez travessias do Mangue são regulares e as rotas de campanha vencem sem levadas', () => {
   assert.equal(FASES_MANGUE.length, 10);
   assert.equal(totalDeFasesRegulares('mangue'), 10);
-  assert.equal(TODAS_AS_FASES.length, 52);
   for (const fase of TODAS_AS_FASES) assert.ok(validarSolucao(fase), fase.id);
   assert.deepEqual(FASES_MANGUE_AMPLIADO.map(f => f.solucao.filter(a => a !== 'trocar').length),
     [6, 10, 11, 12, 15, 17, 22]);
