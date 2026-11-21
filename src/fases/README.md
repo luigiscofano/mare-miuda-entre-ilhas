@@ -168,3 +168,7 @@ A arena opcional da Baía abre após Cofre da vazante. `N` é um ancoradouro que
 ## Trio na Baía e no Farol
 
 `trio-avancado.ts` reúne **Eco dos três cais**, com duas balsas, placa e fragmento, e **Três luzes em revezamento**, com duas balsas, placa e pérola até a Alavanca B. Reaproveitam os símbolos `M` e `Y` do trio das Grutas e o mesmo relógio. [Fichas, grades e rotas](../../docs/processo-de-criacao/19-trio-avancado/README.md).
+
+## Guardião do Farol
+
+`guardiao-farol.ts` define `I` (ponte de luz), `L` (lente) e as orientações do feixe. O destino usa o feixe antes do passo; segurança e lentes usam o feixe depois da virada. [Ficha e solução](../../docs/processo-de-criacao/20-guardiao-farol/README.md).

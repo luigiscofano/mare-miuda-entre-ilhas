@@ -28,3 +28,4 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 | [Ressaca Alta](17-ressaca-alta/README.md) | Segunda arena da Baía: sobrevivência em dupla e dois destinos distintos. |
 | [Três refúgios](18-trio-grutas/README.md) | Introdução do trio em um desvio das Grutas da Espuma. |
 | [Trio na Baía e no Farol](19-trio-avancado/README.md) | Dois desvios de dificuldade crescente, com balsas, placa e pérola em etapas. |
+| [Guardião do Farol](20-guardiao-farol/README.md) | Primeira arena opcional do Farol, com pontes temporárias e lentes. |

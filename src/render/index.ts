@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passosAteVirada, portaoDaGrutaAberto, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
@@ -93,7 +93,7 @@ function bloco(ctx: CanvasRenderingContext2D, cor: string, x: number, y: number,
 
 function desenharCasa(ctx: CanvasRenderingContext2D, celula: string, alta: boolean, x: number, y: number, tons: Tons, placa = false) {
   bloco(ctx, tons.margem, x, y, TAMANHO_TILE, TAMANHO_TILE);
-  const piso = celula === '~' ? tons.agua : celula === '=' ? (alta ? tons.agua : tons.areiaSombra)
+  const piso = celula === '~' || celula === 'I' ? tons.agua : celula === '=' ? (alta ? tons.agua : tons.areiaSombra)
     : celula === '#' ? tons.roca : tons.areia;
   bloco(ctx, piso, x + 1, y + 1, 14, 14);
   if (celula === '=') {
@@ -249,6 +249,35 @@ function desenharAncoradouro(ctx: CanvasRenderingContext2D, x: number, y: number
   }
 }
 
+function desenharFeixe(
+  ctx: CanvasRenderingContext2D, celula: string, pos: Posicao, x: number, y: number, tons: Tons,
+  feixe: ReturnType<typeof feixeNoTurno>, seguinte: ReturnType<typeof feixeNoTurno>, estado: Estado,
+): void {
+  if (celula === 'I') {
+    const iluminada = feixe?.plataformas.some(p => mesmaCasa(p, pos));
+    const permanece = seguinte?.plataformas.some(p => mesmaCasa(p, pos));
+    // Barras sólidas são piso; pontos nunca indicam uma entrada permitida.
+    if (iluminada) {
+      bloco(ctx, tons.linha, x + 1, y + 5, 14, 6);
+      bloco(ctx, tons.branco, x + 2, y + 6, 12, 4);
+      for (const coluna of [4, 8, 12]) bloco(ctx, tons.roca, x + coluna, y + 6, 1, 4);
+      if (!permanece) cantos(ctx, x, y, '#f3ab5b', 2, 3);
+    } else {
+      for (const coluna of [4, 7, 10]) bloco(ctx, permanece ? tons.branco : tons.margem, x + coluna, y + 8, 1, 1);
+    }
+  } else if (celula === 'L') {
+    bloco(ctx, tons.linha, x + 4, y + 4, 8, 8);
+    if (estado.lentesAcesas?.some(p => mesmaCasa(p, pos))) {
+      bloco(ctx, tons.branco, x + 6, y + 6, 4, 4);
+    } else if (feixe && mesmaCasa(feixe.lente, pos)) {
+      bloco(ctx, tons.branco, x + 7, y + 5, 2, 6);
+      bloco(ctx, tons.branco, x + 5, y + 7, 6, 2);
+    } else {
+      bloco(ctx, tons.branco, x + 7, y + 7, 2, 2);
+    }
+  }
+}
+
 export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, logo: HTMLImageElement, tema: Mundo | false = false): void {
   const tons: Tons = tema ? CORES_MUNDO[tema] : TONS_CINZA;
   const cores = paleta(tons);
@@ -288,6 +317,9 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   const faltam = passosAteVirada(estado.passos);
   const faixa = !alta && estado.situacao === 'jogando' ? faixaRessacaNoTurno(fase, estado.passos + faltam) : undefined;
   const balsas = balsasNoTurno(fase, estado.passos);
+  const feixe = feixeNoTurno(fase, estado.passos);
+  const pertoDaTroca = passosAteTrocaFeixe(fase, estado.passos);
+  const seguinte = pertoDaTroca === 1 ? feixeNoTurno(fase, estado.passos + 1) : feixe;
   const placa = posicoesDosSiris(estado).some(pos => fase.mapa[pos.linha]?.[pos.coluna] === 'P');
   fase.mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
     const x = origemX + coluna * TAMANHO_TILE;
@@ -307,6 +339,7 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     }
     if (vizinhas.some(v => mesmaCasa(v, pos))) cantos(ctx, x, y, tons.linha, 2, 3);
     if (mesmaCasa(atual, pos)) cantos(ctx, x, y, tons.linha, 1, 5);
+    if (feixe) desenharFeixe(ctx, celula, pos, x, y, tons, feixe, seguinte, estado);
     if (balsas.some(balsa => mesmaCasa(balsa, pos))) {
       bloco(ctx, tons.linha, x + 2, y + 3, 12, 10);
       bloco(ctx, '#bb965f', x + 3, y + 4, 10, 8);

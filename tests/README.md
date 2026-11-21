@@ -75,3 +75,7 @@ Os testes verificam troca gratuita, ocupação das casas, placa mantida por um i
 ## Trio na Baía e no Farol
 
 `trio-avancado.test.ts` reproduz as soluções de 23 e 40 passos, busca alternativas sem levadas, desativa um siri ou mecanismo por vez e verifica ida, volta e save. O teste de navegador acompanha a carona do coral enquanto Verde anda, o transporte de pérola e a abertura do portão, e confirma as conclusões sem alterar a contagem regular. A emulação móvel continua distinta de um aparelho físico.
+
+## Guardião do Farol
+
+Casos cobertos: ponte que apaga na entrada, bloqueio sem custo, proteção da última casa firme, persistência das lentes durante a tentativa e saída só após as três. A busca comprova 41 passos sem levadas, 33 com pontes fixas e recuperação de todo estado alcançável sem derrota. O roteiro de navegador entra pela conclusão do fim regular, testa a queda, reinicia, vence e recarrega a conclusão, com teclado e toque emulado.

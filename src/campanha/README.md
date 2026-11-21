@@ -49,3 +49,5 @@ Nas Grutas, ↓ no marco de A pérola e a placa abre Três refúgios depois da c
 ## Desvios de trio na Baía e no Farol
 
 Em Cais em paralelo, **↓** leva a Eco dos três cais e **↑** retorna. Em A luz das duas marés, **←** leva a Três luzes em revezamento e **→** retorna. Cada desvio abre com a conclusão do próprio marco, conta como extra e guarda a conclusão no save sem exigir a fase de trio de outro mundo.
+
+No Farol, ↓ abaixo de A luz das duas marés abre o Guardião depois da conclusão. ↑ volta ao mesmo marco. O atalho de volta e o desvio em trio preservam posições e condições próprias.

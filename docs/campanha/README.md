@@ -64,7 +64,7 @@ Corrente cruzada libera as Grutas da Espuma. O núcleo jogável atual tem três 
 
 Os desvios em dupla na Enseada e nas Ilhas reaproveitam as cores, a troca gratuita e o relógio compartilhado. A dupla volta de vez em quando, sem substituir os desafios de um siri só.
 
-As Grutas têm cinco fases regulares, das quais duas em dupla; sua última travessia abre a Baía da Ressaca. A Baía começou com duas travessias em dupla que combinam patrulha anunciada e deslocamento de balsas. O Farol abre depois de Ancoradouros em revezamento. Depois das duas travessias históricas, o mapa divide-se em dois ramais: a costa norte tem quatro desafios regulares de revisita e a rota dos guardiões tem quatro regulares, incluindo A luz das duas marés. São dez regulares no total (sete em dupla), sem chefes. [Fichas e soluções](../processo-de-criacao/15-farol-ampliado/README.md).
+As Grutas têm cinco fases regulares, das quais duas em dupla; sua última travessia abre a Baía da Ressaca. A Baía começou com duas travessias em dupla que combinam patrulha anunciada e deslocamento de balsas. O Farol abre depois de Ancoradouros em revezamento. Depois das duas travessias históricas, o mapa divide-se em dois ramais: a costa norte tem quatro desafios regulares de revisita e a rota dos guardiões tem quatro regulares, incluindo A luz das duas marés. São dez regulares no total (sete em dupla), sem contar a arena opcional do Guardião. [Fichas e soluções](../processo-de-criacao/15-farol-ampliado/README.md).
 
 Na Enseada e nas Ilhas, o segundo desvio regular em dupla é aberto após o primeiro. No segundo desafio da Enseada, a garça alterna margens; no da Deriva, duas balsas viajam em sentidos opostos no mesmo relógio. Esses desvios não são requisito de embarque.
 
@@ -107,3 +107,7 @@ Depois de **A pérola e a placa**, siga para baixo no mapa para o desvio **Três
 ## Trio na Baía e no Farol
 
 Depois da introdução em Três refúgios, **Eco dos três cais** combina duas balsas com placa e fragmento. **Três luzes em revezamento** combina duas balsas, placa e a ordem da pérola, do encaixe e da alavanca. Os desvios têm porta de entrada e volta, sem mudar as dez regulares de cada mundo nem os dois chefes da Baía. [Fichas e soluções](../processo-de-criacao/19-trio-avancado/README.md).
+
+## Guardião do Farol
+
+O primeiro chefe opcional do Farol abre abaixo de A luz das duas marés. O feixe muda de orientação, abre pontes diferentes e indica qual lente pode ser acesa. A passagem do trio à esquerda e o embarque para o arquipélago não dependem do Guardião. [Ficha](../processo-de-criacao/20-guardiao-farol/README.md).
