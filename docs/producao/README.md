@@ -1,5 +1,7 @@
 # Roteiro de produção
 
+> **Leitura atualizada:** esta página conserva planejamento e atualizações históricos. A base do PR #72 já contém oito mundos, 77 entradas não opcionais, 16 chefes opcionais e 13 bônus/alternativas não-chefes. Consulte o [estado datado e os critérios de contagem](../processo-de-criacao/estado-atual.md) antes de interpretar expressões antigas como “planejado”, “futuro” ou “pendente”. Arte preliminar e lançamento continuam sujeitos à revisão.
+
 | Marco | Entrega | Barreira antes de avançar |
 | --- | --- | --- |
 | Fundação | Repositório independente, contrato de turno, arquitetura e acordeões. | Exemplos claros de passo inválido, disputa de objetivos, maré e retorno. |
