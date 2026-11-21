@@ -12,6 +12,8 @@ Um siri cruza um arquipélago em um quebra-cabeça de aventura por turnos. A cad
 
 O ZIP foi gerado no [PR #77](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/77), a partir do commit `7eef68a`. Entre no GitHub para baixar até **5 de dezembro de 2026**. Depois disso, procure um ZIP mais recente nas execuções de **Verificar protótipo** ou gere o jogo localmente. O Safari em iPhone físico e o VoiceOver ainda precisam de validação. [Roteiro manual](tests/qa-manual.md).
 
+**Ilha de Improviso** gera travessias à parte da campanha. Escolha um dos oito temas, um a três siris e uma das cinco dificuldades, de Sossegado a **Maré Feroz**. A garça e o fragmento são opcionais. [Controles, filtros e histórico](docs/processo-de-criacao/39-ilha-de-improviso/README.md).
+
 ## Como jogar localmente
 
 Com Node.js 24 ou posterior, execute na raiz:

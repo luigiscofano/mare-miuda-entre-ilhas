@@ -1468,6 +1468,43 @@ def conferir_farol(pagina, toque=False):
     expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
 
 
+def conferir_ilha_improviso(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    salvos = pagina.evaluate("() => localStorage.getItem('mare-miuda-entre-ilhas/praia-v1')")
+    tocar(pagina, '#abrir-mare-a-mao', toque)
+    expect(pagina.locator('#titulo-mare-a-mao')).to_have_text('Ilha de Improviso')
+    expect(pagina.locator('#mare-tema option')).to_have_count(8)
+    expect(pagina.locator('#mare-dificuldade option')).to_have_count(5)
+    expect(pagina.locator('#mare-siris option')).to_have_count(3)
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+    pagina.locator('#mare-tema').select_option('mangue')
+    pagina.locator('#mare-dificuldade').select_option('Animado')
+    pagina.locator('#mare-siris').select_option('2')
+    tocar(pagina, '#mare-item', toque)
+    tocar(pagina, '#gerar-mare-a-mao', toque)
+    expect(pagina.locator('#trocar-siri')).to_be_visible()
+    expect(pagina.locator('#dupla-ativa')).to_contain_text('Coral')
+    tabuleiro = pagina.locator('#grade').text_content()
+    if toque:
+        tocar(pagina, '#trocar-siri', True)
+    else:
+        pagina.keyboard.press('Space')
+    expect(pagina.locator('#dupla-ativa')).to_contain_text('Verde')
+    expect(pagina.locator('#passos')).to_have_text('0')
+    tocar(pagina, '#reiniciar', toque)
+    expect(pagina.locator('#dupla-ativa')).to_contain_text('Coral')
+    expect(pagina.locator('#grade')).to_have_text(tabuleiro)
+    tocar(pagina, '#voltar-fase', toque)
+    expect(pagina.locator('#mare-tema')).to_have_value('mangue')
+    expect(pagina.locator('#mare-item')).to_be_checked()
+    pagina.reload()
+    tocar(pagina, '#abrir-mare-a-mao', toque)
+    tocar(pagina, '#historico-mare-a-mao summary', toque)
+    tocar(pagina, '#mare-historico-itens button', toque)
+    expect(pagina.locator('#grade')).to_have_text(tabuleiro)
+    assert pagina.evaluate("() => localStorage.getItem('mare-miuda-entre-ilhas/praia-v1')") == salvos
+
+
 with sync_playwright() as p:
     motor = os.getenv('MARE_BROWSER', 'chromium')
     if motor not in ('chromium', 'webkit'):
@@ -1527,7 +1564,9 @@ with sync_playwright() as p:
         conferir_ressaca_alta(aparelho, toque=True)
         conferir_chefes_deriva(aparelho, toque=True)
         conferir_desfecho(aparelho, toque=True)
+        conferir_ilha_improviso(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
+    conferir_ilha_improviso(desktop)
     # Encerre as sessões de campanha para isolar o desbloqueio e os loops.
     for contexto in navegador.contexts:
         contexto.close()
