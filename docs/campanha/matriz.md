@@ -69,3 +69,7 @@ O ramo ensina a voltar à primeira alavanca, contornar a maré entre câmaras, a
 As oito travessias do ramo norte combinam bolsos firmes, coleta, duas balsas e dupla com placa. Três moedas do cais introduz a coleta em 20 passos; Cofre da vazante volta a ela com duas balsas e dois siris em 22. O atalho e a saída da rota curta para o Farol continuam funcionando sem esse ramo. A ameaça específica da ressaca e os chefes continuam no plano. [Fichas e soluções](../processo-de-criacao/14-ressaca-ampliada/README.md).
 
 O [Farol ampliado](../processo-de-criacao/15-farol-ampliado/README.md) fecha dez regulares. A rota leste apresenta contorno da vigia, duas balsas e divisão de papéis no salão antes do fechamento; o ramo norte acrescenta três moedas com orçamento, volta da alavanca, quatro balsas e lentes. A última fase combina três balsas, dois portões e três fragmentos. A ligação entre ramais abre depois de concluir os dois lados.
+
+### Arena jogável: Vento Sul
+
+A baixa anuncia a próxima faixa do chefão. Na subida, busque refúgio ou termine fora da faixa; firme os três ancoradouros em chegadas seguras na baixa antes de usar a concha. A arena é opcional após Cofre da vazante e não altera o total das regulares. A segunda arena, Ressaca Alta, permanece planejada. [Ficha, renderização e rota](../processo-de-criacao/16-vento-sul/README.md).

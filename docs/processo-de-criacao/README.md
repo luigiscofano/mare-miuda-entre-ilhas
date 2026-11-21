@@ -24,3 +24,4 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 | Entrega | Conteúdo |
 | --- | --- |
 | [Baía da Ressaca ampliada](14-ressaca-ampliada/README.md) | Oito travessias com refúgios, balsas, dupla e orçamento de três moedas. |
+| [Vento Sul](16-vento-sul/README.md) | Primeira arena de chefe da Baía: faixa de ressaca e ancoradouros. |

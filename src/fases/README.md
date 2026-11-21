@@ -152,3 +152,7 @@ As oito travessias do ramo norte estão em `ressaca-ampliada.ts`. Há quatro sol
 ## Farol ampliado
 
 Oito mapas de `farol-ampliado.ts` combinam as regras existentes, cinco em dupla. As oito rotas de referência e os pré-requisitos estão nas [fichas do lote](../../docs/processo-de-criacao/15-farol-ampliado/README.md). O contorno de Faroleiros de vigia dispensa a placa, mas custa dois passos a mais; nos desafios Lentes em contramaré e A luz das duas marés ambos os portões são indispensáveis.
+
+## Vento Sul
+
+A arena opcional da Baía abre após Cofre da vazante. `N` é um ancoradouro que firma quando o siri termina um passo seguro na baixa; no mapa em texto, `n` marca a âncora firme. `ressaca.faixas` define em ordem a linha e as colunas atingidas a cada subida. Refúgios `H` são imunes à onda. Veja a [ficha e solução](../../docs/processo-de-criacao/16-vento-sul/README.md).

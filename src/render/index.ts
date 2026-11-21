@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, jogadorAtivo, mareAlta, mesmaCasa, portaoDaGrutaAberto } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passosAteVirada, portaoDaGrutaAberto } from '../motor/index.ts';
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
@@ -211,6 +211,27 @@ function desenharMecanismoDaGruta(
   if (concluida) bloco(ctx, tons.linha, x + 5, y + 12, 5, 1);
 }
 
+// Espuma no topo da célula, distinta dos cantos de movimento e da mira da garça.
+function desenharAvisoRessaca(ctx: CanvasRenderingContext2D, x: number, y: number, tons: Tons, imediata: boolean) {
+  bloco(ctx, tons.linha, x + 1, y + 1, 14, 5);
+  for (const i of [2, 7, 12]) {
+    bloco(ctx, tons.branco, x + i, y + 4, 3, 1);
+    if (imediata) bloco(ctx, tons.branco, x + i + 1, y + 3, 2, 1);
+  }
+}
+
+function desenharAncoradouro(ctx: CanvasRenderingContext2D, x: number, y: number, tons: Tons, firme: boolean) {
+  bloco(ctx, tons.linha, x + 4, y + 6, 8, 8);
+  bloco(ctx, firme ? '#799958' : '#936949', x + 5, y + 7, 6, 6);
+  if (firme) {
+    bloco(ctx, tons.branco, x + 6, y + 10, 2, 2);
+    bloco(ctx, tons.branco, x + 8, y + 8, 2, 3);
+  } else {
+    bloco(ctx, tons.branco, x + 7, y + 7, 2, 5);
+    bloco(ctx, tons.branco, x + 5, y + 11, 6, 1);
+  }
+}
+
 export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, logo: HTMLImageElement, tema: Mundo | false = false): void {
   const tons: Tons = tema ? CORES_MUNDO[tema] : TONS_CINZA;
   const cores = paleta(tons);
@@ -247,6 +268,8 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     ? DIRECOES.map(d => destinoPermitido(fase, estado, d)).filter(v => v !== undefined)
     : [];
   const alvo = alvoDaGarca(fase.ameaca, estado.passos + 1);
+  const faltam = passosAteVirada(estado.passos);
+  const faixa = !alta && estado.situacao === 'jogando' ? faixaRessacaNoTurno(fase, estado.passos + faltam) : undefined;
   const balsas = balsasNoTurno(fase, estado.passos);
   const placa = [estado.posicao, estado.dupla?.posicao].some(pos => pos && fase.mapa[pos.linha]?.[pos.coluna] === 'P');
   fase.mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
@@ -259,6 +282,8 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       else pintarPixels(ctx, FRAGMENTO, x + 5, y + 5, cores);
     }
     desenharMecanismoDaGruta(ctx, fase, estado, celula, x, y, tons);
+    if (celula === 'N') desenharAncoradouro(ctx, x, y, tons,
+      estado.ancoradouros?.some(ancora => mesmaCasa(ancora, pos)) ?? false);
     // Só o obstáculo imediatamente relevante ao próximo passo recebe cantos.
     if (estado.situacao === 'jogando' && marcaBloqueioAdjacente(pos, atual, celula, alta, vizinhas)) {
       cantos(ctx, x, y, tons.branco, 2, 3);
@@ -270,6 +295,7 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       bloco(ctx, '#bb965f', x + 3, y + 4, 10, 8);
       for (const h of [5, 8, 11]) bloco(ctx, '#eadab0', x + 4, y + h, 8, 1);
     }
+    if (faixa && faixaAfeta(fase, faixa, pos)) desenharAvisoRessaca(ctx, x, y, tons, faltam === 1);
     if (alvo && mesmaCasa(alvo, pos)) marcarAlvo(ctx, x, y, true, tons);
     else if (fase.ameaca && !fase.ameaca.rota?.length && mesmaCasa(fase.ameaca.alvo, pos)) marcarAlvo(ctx, x, y, false, tons);
   }));
@@ -390,6 +416,8 @@ export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progress
     if (concluida) {
       bloco(ctx, tons.branco, x - 3, y, 3, 2);
       bloco(ctx, tons.branco, x - 1, y - 2, 3, 2);
+    } else if (entrada?.chefe) {
+      pintarPixels(ctx, DIGITOS['*'], x - 2, y - 2, { b: tons.branco });
     } else if (entrada) {
       bloco(ctx, tons.branco, x - 1, y - 3, 2, 6);
       bloco(ctx, tons.branco, x - 3, y - 1, 6, 2);

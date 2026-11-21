@@ -1,10 +1,11 @@
 // O núcleo não lê tempo, DOM nem storage: reprodução e jogo usam a mesma função.
 export type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita';
 export type Acao = Direcao | 'trocar';
-export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~' | EtapaGruta | 'O';
+export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~' | EtapaGruta | 'O' | 'N';
 export type EtapaGruta = 'K' | 'E' | 'F';
 export type Posicao = Readonly<{ coluna: number; linha: number }>;
 export type Ameaca = Readonly<{ alvo: Posicao; primeiroAtaque: number; periodo: number; rota?: readonly Posicao[] }>;
+export type FaixaRessaca = Readonly<{ linha: number; primeiraColuna: number; ultimaColuna: number }>;
 export type Fase = Readonly<{
   id: string;
   nome: string;
@@ -16,6 +17,7 @@ export type Fase = Readonly<{
   balsas?: readonly Readonly<{ paradas: readonly [Posicao, Posicao] }>[];
   orcamentoMoedas?: number;
   etapasGruta?: readonly EtapaGruta[];
+  ressaca?: Readonly<{ faixas: readonly FaixaRessaca[] }>;
   dupla?: Readonly<{ segundoAlvo: 'T' | 'P' }>;
 }>;
 type EstadoDupla = Readonly<{ posicao: Posicao; ultimoFirme: Posicao; parceiroAtivo: boolean }>;
@@ -29,9 +31,10 @@ export type Estado = Readonly<{
   dupla?: EstadoDupla;
   etapaGruta?: number;
   portadorGruta?: 'principal' | 'parceiro';
+  ancoradouros?: readonly Posicao[];
   situacao: 'jogando' | 'vitoria' | 'derrota';
 }>;
-export type MotivoErro = 'mare' | 'garca';
+export type MotivoErro = 'mare' | 'garca' | 'ressaca';
 export type Evento =
   | Readonly<{ tipo: 'bloqueado' }>
   | Readonly<{ tipo: 'virada'; alta: boolean }>
@@ -43,6 +46,7 @@ export type Evento =
   | Readonly<{ tipo: 'fragmento' }>
   | Readonly<{ tipo: 'falta-fragmento' }>
   | Readonly<{ tipo: 'falta-parceiro' }>
+  | Readonly<{ tipo: 'ancorou' | 'ancora-na-alta' | 'faltam-ancoradouros' }>
   | Readonly<{ tipo: 'troca' }>
   | Readonly<{ tipo: 'orcamento-esgotado' }>
   | Readonly<{ tipo: 'vitoria' }>;
@@ -71,7 +75,7 @@ export function iniciar(fase: Fase): Estado {
     dupla = { posicao: parceiro, ultimoFirme: parceiro, parceiroAtivo: false };
   }
   return { posicao, ultimoFirme: posicao, passos: 0, levadas: 0, temFragmento: false,
-    fragmentos: [], ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}), situacao: 'jogando' };
+    fragmentos: [], ...(fase.ressaca ? { ancoradouros: [] } : {}), ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}), situacao: 'jogando' };
 }
 export function mareAlta(passos: number): boolean {
   return Math.floor(passos / PASSOS_POR_MARE) % 2 === 1;
@@ -97,6 +101,34 @@ export function alvoDaGarca(ameaca: Ameaca | undefined, passo: number): Posicao 
   const indice = (passo - ameaca.primeiroAtaque) / ameaca.periodo;
   const ciclo = [ameaca.alvo, ...ameaca.rota];
   return ciclo[indice % ciclo.length];
+}
+
+// Cada subida golpeia uma faixa inteira. A sequência avança pelo relógio da
+// maré, inclusive após uma levada; não existe um contador separado da arena.
+export function faixaRessacaNoTurno(fase: Fase, passos: number): FaixaRessaca | undefined {
+  if (!fase.ressaca || passos < PASSOS_POR_MARE || passos % PASSOS_POR_MARE !== 0 || !mareAlta(passos)) return;
+  const subidasAnteriores = Math.floor(passos / (2 * PASSOS_POR_MARE));
+  return fase.ressaca.faixas[subidasAnteriores % fase.ressaca.faixas.length];
+}
+
+export function faixaAfeta(fase: Fase, faixa: FaixaRessaca, posicao: Posicao): boolean {
+  const casa = lerCelula(fase, posicao);
+  return posicao.linha === faixa.linha && posicao.coluna >= faixa.primeiraColuna
+    && posicao.coluna <= faixa.ultimaColuna && casa !== undefined && casa !== 'H' && casa !== '#' && casa !== '~';
+}
+
+export const TOTAL_ANCORADOUROS = 3;
+
+function resolverAncoradouro(anteriores: Estado['ancoradouros'], destino: Posicao,
+  casa: Celula | undefined, passos: number, eventos: Evento[],
+): Estado['ancoradouros'] {
+  if (!anteriores || casa !== 'N' || anteriores.some(pos => mesmaCasa(pos, destino))) return anteriores;
+  if (mareAlta(passos)) {
+    eventos.push({ tipo: 'ancora-na-alta' });
+    return anteriores;
+  }
+  eventos.push({ tipo: 'ancorou' });
+  return [...anteriores, destino];
 }
 
 export function balsasNoTurno(fase: Fase, passos: number): readonly Posicao[] {
@@ -149,12 +181,20 @@ function ameacasNoTurno(fase: Fase, posicoes: readonly Posicao[], passos: number
   if (mareAlta(passos) && posicoes.some(pos => lerCelula(fase, pos) === '=')) motivos.push('mare');
   const alvo = alvoDaGarca(fase.ameaca, passos);
   if (alvo && posicoes.some(pos => mesmaCasa(alvo, pos))) motivos.push('garca');
+  const faixa = faixaRessacaNoTurno(fase, passos);
+  if (faixa && posicoes.some(pos => faixaAfeta(fase, faixa, pos))) motivos.push('ressaca');
   return motivos;
 }
 
-function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], fragmentos: number, eventos: Evento[]) {
+function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], fragmentos: number,
+  ancoradouros: Estado['ancoradouros'], eventos: Evento[],
+) {
   const chegou = celulas.includes('C') || celulas.includes('G');
   if (!chegou) return false;
+  if (ancoradouros && ancoradouros.length < TOTAL_ANCORADOUROS) {
+    eventos.push({ tipo: 'faltam-ancoradouros' });
+    return false;
+  }
   if (fragmentos < totalFragmentos(fase)) {
     eventos.push({ tipo: 'falta-fragmento' });
     return false;
@@ -249,7 +289,8 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
     if (celula === 'K') portadorGruta = movendoParceiro ? 'parceiro' : 'principal';
     if (celula === 'E') portadorGruta = undefined;
   }
-  const venceu = resolverObjetivo(fase, celulas, fragmentos.length, eventos);
+  const ancoradouros = resolverAncoradouro(anterior.ancoradouros, destino, celula, passos, eventos);
+  const venceu = resolverObjetivo(fase, celulas, fragmentos.length, ancoradouros, eventos);
   // Uma saída segura pode completar a missão exatamente no último passo.
   const perdeu = !venceu && terminouOrcamento(fase, passos, eventos);
   const posicao = movendoParceiro ? (destinoOutro ?? anterior.posicao) : destino;
@@ -263,6 +304,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   return {
     estado: { ...anterior, posicao, passos, temFragmento: fragmentos.length > 0, fragmentos,
       ultimoFirme: firmes ? posicao : anterior.ultimoFirme,
+      ...(ancoradouros === undefined ? {} : { ancoradouros }),
       ...(etapaGruta === undefined ? {} : { etapaGruta }),
       ...(dupla && etapaGruta !== undefined ? { portadorGruta } : {}),
       ...(novaDupla ? { dupla: novaDupla } : {}), situacao: venceu ? 'vitoria' : perdeu ? 'derrota' : 'jogando' },
