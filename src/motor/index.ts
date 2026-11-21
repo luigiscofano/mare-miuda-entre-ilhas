@@ -12,6 +12,8 @@ export type OrientacaoFarol = Readonly<{
   lente: Posicao;
   placa?: Posicao;
 }>;
+type ProvaRecife = Readonly<{ abrigos: readonly [Posicao, Posicao] }>
+  | Readonly<{ ida: Posicao; volta: Posicao }>;
 export type Fase = Readonly<{
   id: string;
   nome: string;
@@ -25,6 +27,7 @@ export type Fase = Readonly<{
   etapasGruta?: readonly EtapaGruta[];
   farol?: Readonly<{ passosPorOrientacao: number; orientacoes: readonly OrientacaoFarol[] }>;
   ressaca?: Readonly<{ faixas: readonly FaixaRessaca[]; objetivo?: 'sobreviver' | 'atravessar' }>;
+  recife?: ProvaRecife;
   dupla?: Readonly<{ segundoAlvo: 'T' | 'P'; terceiroAlvo?: 'Y' }>;
 }>;
 type EstadoDupla = Readonly<{ posicao: Posicao; ultimoFirme: Posicao; parceiroAtivo: boolean }>;
@@ -42,6 +45,7 @@ export type Estado = Readonly<{
   ancoradouros?: readonly Posicao[];
   ondasSeguras?: number;
   lentesAcesas?: readonly Posicao[];
+  abrigosVisitados?: readonly Posicao[];
   situacao: 'jogando' | 'vitoria' | 'derrota';
 }>;
 export type MotivoErro = 'mare' | 'garca' | 'ressaca' | 'farol';
@@ -53,6 +57,7 @@ export type Evento =
   | Readonly<{ tipo: 'gruta-precisa-portador' }>
   | Readonly<{ tipo: 'gruta-fora-da-ordem'; proxima: EtapaGruta }>
   | Readonly<{ tipo: 'levada'; motivos: readonly MotivoErro[] }>
+  | Readonly<{ tipo: 'abrigo-visitado' | 'faltam-abrigos' | 'recife-mudou-rota' }>
   | Readonly<{ tipo: 'fragmento' }>
   | Readonly<{ tipo: 'falta-fragmento' }>
   | Readonly<{ tipo: 'falta-parceiro' | 'faltam-siris' }>
@@ -88,7 +93,8 @@ export function iniciar(fase: Fase): Estado {
   const terceiroInicio = fase.dupla?.terceiroAlvo ? localizar(fase, 'M') : undefined;
   const terceiro = terceiroInicio ? { posicao: terceiroInicio, ultimoFirme: terceiroInicio, ativo: false } : undefined;
   return { posicao, ultimoFirme: posicao, passos: 0, levadas: 0, temFragmento: false,
-    fragmentos: [], ...(fase.farol ? { lentesAcesas: [] } : {}),
+    fragmentos: [], ...(fase.recife && 'abrigos' in fase.recife ? { abrigosVisitados: [] } : {}),
+    ...(fase.farol ? { lentesAcesas: [] } : {}),
     ...(fase.ressaca?.objetivo === 'sobreviver' ? { ondasSeguras: 0 } : fase.ressaca && !fase.ressaca.objetivo ? { ancoradouros: [] } : {}),
     ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}),
     ...(terceiro ? { terceiro } : {}), situacao: 'jogando' };
@@ -239,12 +245,35 @@ function ameacasNoTurno(fase: Fase, posicoes: readonly Posicao[], passos: number
   return motivos;
 }
 
+// As duas comportas são complementares. Só a rota aberta ainda pode depender da maré.
+export function passagemDoRecifeFechada(fase: Fase, posicao: Posicao, temFragmento: boolean): boolean {
+  const recife = fase.recife;
+  return recife !== undefined && 'ida' in recife
+    && mesmaCasa(posicao, temFragmento ? recife.ida : recife.volta);
+}
+
+function registrarAbrigo(fase: Fase, estado: Estado, posicao: Posicao, passos: number,
+  eventos: Evento[],
+): Estado['abrigosVisitados'] {
+  const visitados = estado.abrigosVisitados;
+  if (!visitados || !fase.recife || !('abrigos' in fase.recife) || !mareAlta(passos)
+    || !fase.recife.abrigos.some(abrigo => mesmaCasa(abrigo, posicao))
+    || visitados.some(abrigo => mesmaCasa(abrigo, posicao))) return visitados;
+  eventos.push({ tipo: 'abrigo-visitado' });
+  return [...visitados, posicao];
+}
+
 function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], fragmentos: number,
   ancoradouros: Estado['ancoradouros'], ondasSeguras: Estado['ondasSeguras'],
-  lentesAcesas: Estado['lentesAcesas'], eventos: Evento[],
+  lentesAcesas: Estado['lentesAcesas'], abrigosVisitados: Estado['abrigosVisitados'], eventos: Evento[],
 ) {
   const chegou = celulas.includes('C') || celulas.includes('G');
   if (!chegou) return false;
+  if (abrigosVisitados && fase.recife && 'abrigos' in fase.recife
+    && abrigosVisitados.length < fase.recife.abrigos.length) {
+    eventos.push({ tipo: 'faltam-abrigos' });
+    return false;
+  }
   if (lentesAcesas && lentesAcesas.length < (fase.farol?.orientacoes.length ?? 0)) {
     eventos.push({ tipo: 'faltam-lentes' });
     return false;
@@ -299,6 +328,7 @@ export function destinoPermitido(fase: Fase, estado: Estado, direcao: Direcao): 
   const celula = lerCelula(fase, destino);
   const placa = outros.some(outro => lerCelula(fase, outro) === 'P');
   if (!celula || celula === '#' || (celula === '=' && mareAlta(estado.passos)) ||
+    passagemDoRecifeFechada(fase, destino, estado.temFragmento) ||
     (celula === 'I' && !ponteIluminada(fase, destino, estado.passos)) ||
     (celula === '~' && !balsasNoTurno(fase, estado.passos).some(p => mesmaCasa(p, destino))) ||
     (celula === 'D' && !placa) || (celula === 'O' && !portaoDaGrutaAberto(fase, estado)) || outros.some(outro => mesmaCasa(outro, destino))) return;
@@ -364,7 +394,10 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
 
   const coletou = celula === 'B' && !anterior.fragmentos.some(p => mesmaCasa(p, destino));
   const fragmentos = coletou ? [...anterior.fragmentos, destino] : anterior.fragmentos;
-  if (coletou) eventos.push({ tipo: 'fragmento' });
+  if (coletou) {
+    eventos.push({ tipo: 'fragmento' });
+    if (fase.recife && 'ida' in fase.recife) eventos.push({ tipo: 'recife-mudou-rota' });
+  }
   const celulas = posicoes.map(p => lerCelula(fase, p));
   const etapaGruta = resolverGruta(fase, anterior, celula, eventos);
   // A pérola não muda de siri numa troca. A alavanca não precisa do portador.
@@ -379,7 +412,10 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   const ondasSeguras = anterior.ondasSeguras !== undefined && faixaRessacaNoTurno(fase, passos)
     ? Math.min(anterior.ondasSeguras + 1, fase.ressaca?.faixas.length ?? 0) : anterior.ondasSeguras;
   const lentesAcesas = acenderLente(fase, anterior.lentesAcesas, destino, celula, passos, posicoes, eventos);
-  const venceu = resolverObjetivo(fase, celulas, fragmentos.length, ancoradouros, ondasSeguras, lentesAcesas, eventos);
+  // Refúgios só contam depois de resolver a maré e as ameaças do passo.
+  const abrigosVisitados = registrarAbrigo(fase, anterior, destino, passos, eventos);
+  const venceu = resolverObjetivo(fase, celulas, fragmentos.length,
+    ancoradouros, ondasSeguras, lentesAcesas, abrigosVisitados, eventos);
   // Uma saída segura pode completar a missão exatamente no último passo.
   const perdeu = !venceu && terminouOrcamento(fase, passos, eventos);
   const [posicao, posicaoParceiro, posicaoTerceiro] = posicoes;
@@ -395,6 +431,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
       ...(ancoradouros === undefined ? {} : { ancoradouros }),
       ...(ondasSeguras === undefined ? {} : { ondasSeguras }),
       ...(lentesAcesas === undefined ? {} : { lentesAcesas }),
+      ...(abrigosVisitados === undefined ? {} : { abrigosVisitados }),
       ...(etapaGruta === undefined ? {} : { etapaGruta }),
       ...(dupla && etapaGruta !== undefined ? { portadorGruta } : {}),
       ...(novaDupla ? { dupla: novaDupla } : {}),

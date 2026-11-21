@@ -74,6 +74,16 @@ export function validarMapa(fase: Fase): void {
     (casa === 'C' || casa === 'T') && faixas?.some(faixa => faixaAfeta(fase, faixa, { coluna: x, linha: y }))))) {
     throw new Error(`Destino atingido pela ressaca: ${fase.id}.`);
   }
+  const recife = fase.recife;
+  if (recife) {
+    const correto = 'abrigos' in recife
+      ? recife.abrigos.length === 2 && !mesmaCasa(...recife.abrigos)
+        && recife.abrigos.every(pos => lerCelula(fase, pos) === 'H') && contar('C') === 1
+      : !mesmaCasa(recife.ida, recife.volta)
+        && lerCelula(fase, recife.ida) === '=' && lerCelula(fase, recife.volta) === '='
+        && contar('B') === 1 && contar('G') === 1;
+    if (!correto || fase.dupla) throw new Error(`Configuração de prova do recife inválida: ${fase.id}.`);
+  }
   const balsas = fase.balsas ?? [];
   const agua = balsas.flatMap(balsa => balsa.paradas);
   if (agua.some((pos, i) => lerCelula(fase, pos) !== '~'

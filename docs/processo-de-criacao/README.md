@@ -32,3 +32,4 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 | [Última Virada](21-ultima-virada/README.md) | Segunda arena do Farol, com três siris e placas de sintonia. |
 | [Vigia das ondas](22-vigia-das-ondas/README.md) | Primeira arena opcional da Praia, com faixa anunciada e refúgios de pedra. |
 | [Ponta da Ressaca](23-ponta-da-ressaca/README.md) | Segunda arena opcional da Praia, com duas faixas alternadas, refúgios e duas janelas de passagem. |
+| [Chefes dos Recifes](24-chefes-recifes/README.md) | Refúgios registrados na alta e retorno por uma comporta que muda com a coleta. |

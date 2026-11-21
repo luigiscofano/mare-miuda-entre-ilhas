@@ -305,6 +305,48 @@ def conferir_recifes_ampliados(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def conferir_chefes_recifes(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+        versao: 1, progresso: {mundo: 'recifes', posicao: {coluna: 6, linha: 1},
+            viuTutorial: true, concluidas: ['recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno']},
+        audio: {musica: 0, efeitos: 0},
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    jogar(pagina, 'R', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Guardião das Poças · chefe opcional')
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#mensagem-praia')).to_contain_text('Vença o Guardião das Poças')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#progresso-recife')).to_have_text('Refúgios visitados na alta: 0/2.')
+    jogar(pagina, 'RRDR', toque)
+    expect(pagina.locator('#progresso-recife')).to_have_text('Refúgios visitados na alta: 1/2.')
+    salvar_captura(pagina, f"recifes-guardiao-pocas-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'UDURRRLRRRRDURR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Arena vencida: Guardião das Poças')
+    tocar(pagina, '#voltar-fase', toque)
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Vigia do Recife · chefe opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#progresso-recife')).to_contain_text('Ida aberta ao norte')
+    jogar(pagina, 'DUDURRRRRRLRRRR', toque)
+    expect(pagina.locator('#progresso-recife')).to_contain_text('Volta aberta ao sul')
+    expect(pagina.locator('#feedback')).to_contain_text('A comporta norte fechou')
+    salvar_captura(pagina, f"recifes-vigia-comportas-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'DDLLLLDUDULLLUUL', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Arena vencida: Vigia do Recife')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Vigia do Recife · chefe opcional · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('3/10')
+    jogar(pagina, 'UL', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('A volta do recife')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+
+
 def conferir_mangue_ampliado(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
@@ -1031,6 +1073,7 @@ with sync_playwright() as p:
     conferir_farol(desktop)
     conferir_enseadinha(navegador.new_page(viewport={'width': 1180, 'height': 820}, offline=(PRIMEIRA_PAGINA == OFFLINE)))
     conferir_recifes_ampliados(desktop)
+    conferir_chefes_recifes(desktop)
     conferir_mangue_ampliado(desktop)
     conferir_enseada_ampliada(desktop)
     conferir_deriva_ampliada(desktop)
@@ -1052,6 +1095,7 @@ with sync_playwright() as p:
         conferir_farol(aparelho, toque=True)
         conferir_enseadinha(aparelho, toque=True)
         conferir_recifes_ampliados(aparelho, toque=True)
+        conferir_chefes_recifes(aparelho, toque=True)
         conferir_mangue_ampliado(aparelho, toque=True)
         conferir_enseada_ampliada(aparelho, toque=True)
         conferir_deriva_ampliada(aparelho, toque=True)

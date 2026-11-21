@@ -180,3 +180,7 @@ Em `ultima-virada.ts`, cada orientação do feixe tem sua própria `placa`. A le
 ## Ponta da Ressaca
 
 As faixas alternam em cada subida. Cruze o primeiro baixio, proteja-se na margem firme e ajuste o passo antes da segunda passagem. A rota sem levadas tem 22 passos. Veja a [ficha completa](../../docs/processo-de-criacao/23-ponta-da-ressaca/README.md).
+
+## Chefes dos Recifes
+
+`chefes-recifes.ts` registra as duas arenas opcionais. A configuração `recife` usa dois pontos em pedras altas no Guardião ou duas casas de baixio ligadas ao fragmento no Vigia. [Fichas, soluções e capturas](../../docs/processo-de-criacao/24-chefes-recifes/README.md).

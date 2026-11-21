@@ -46,7 +46,7 @@ O Farol abre pelos Ancoradouros da Ressaca; as duas primeiras travessias em dupl
 
 ### Ampliação jogável: Recifes Expostos
 
-As três travessias originais formam a rota curta; sete novas travessias regulares elevam a contagem para dez. A curva começa com Degraus da vazante e Janelas do coral para treinar refúgio e sincronização. Oco da pedra e Volta pelo costão introduzem coleta com retorno e alternativas. Poças suspensas, Cintura de espuma e Três anéis da vazante desenvolvem planejamento em ciclos sucessivos. Fio de coral e Mosaico das poças são extras. Os dois chefes da matriz seguem planejados. [Fichas e soluções](../processo-de-criacao/09-recifes-ampliados/README.md).
+As três travessias originais formam a rota curta; sete novas travessias regulares elevam a contagem para dez. A curva começa com Degraus da vazante e Janelas do coral para treinar refúgio e sincronização. Oco da pedra e Volta pelo costão introduzem coleta com retorno e alternativas. Poças suspensas, Cintura de espuma e Três anéis da vazante desenvolvem planejamento em ciclos sucessivos. Fio de coral e Mosaico das poças são extras. Os chefes opcionais são Guardião das Poças (registre dois refúgios na alta) e Vigia do Recife (o fragmento alterna as comportas da ida e da volta). [Fichas e soluções](../processo-de-criacao/09-recifes-ampliados/README.md).
 
 ### Ampliação jogável: Mangue dos Siris Duplos
 
