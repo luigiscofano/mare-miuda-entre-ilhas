@@ -12,7 +12,7 @@ Na Enseada e na Deriva, ↑ no marco da terceira travessia abre o desvio opciona
 
 Nas Grutas, as três travessias anteriores dão acesso a dois nós regulares, e o segundo abre a Baía da Ressaca no arquipélago. A rota inicial da Baía tem dois nós em sequência, porto e atalho após a conclusão. IDs e nós anteriores continuam válidos no save.
 
-No arquipélago, Ancoradouros em revezamento abre a saída de cima na Baía da Ressaca. O Farol tem dois nós regulares, porto e atalho após a segunda travessia, sem exigir qualquer desvio.
+No arquipélago, Ancoradouros em revezamento abre a saída de cima na Baía da Ressaca. O Farol mantém os dois primeiros nós regulares, porto e atalho após a segunda travessia. No segundo nó, → abre a rota dos guardiões e ↑ o ramo norte; a fase final não depende do ramo norte. A passagem entre Lentes em contramaré e Salão das lanternas funciona nos dois sentidos depois de concluir as duas.
 
 ## Recifes Expostos ampliados
 

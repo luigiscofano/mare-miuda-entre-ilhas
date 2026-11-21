@@ -10,6 +10,8 @@ import { FASES_MANGUE_AMPLIADO } from '../fases/mangue-ampliado.ts';
 import type { IdFaseMangueAmpliado } from '../fases/mangue-ampliado.ts';
 import { FASES_RECIFES_AMPLIADOS } from '../fases/recifes-ampliados.ts';
 import type { IdFaseRecifesAmpliados } from '../fases/recifes-ampliados.ts';
+import { FASES_FAROL_AMPLIADO } from '../fases/farol-ampliado.ts';
+import type { IdFaseFarolAmpliado } from '../fases/farol-ampliado.ts';
 import { mesmaCasa } from '../motor/index.ts';
 import type { Direcao, Posicao } from '../motor/index.ts';
 
@@ -23,7 +25,7 @@ export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
   | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
-  | 'farol-fragmento-margens' | 'farol-duas-luzes';
+  | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
 export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
   posicao: Posicao;
@@ -91,6 +93,13 @@ const NOS_RESSACA = [
 ] as const;
 const ENTRADAS_RESSACA: readonly Entrada[] = FASES_RESSACA_AMPLIADA.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_RESSACA[i],
+}));
+// Os dois caminhos acrescentam desafios sem mudar os marcos persistidos na rota inicial.
+const NOS_FAROL = [
+  P(6, 1), P(8, 1), P(4, -1), P(6, -1), P(10, 1), P(8, -1), P(11, -1), P(11, 3),
+] as const;
+const ENTRADAS_FAROL: readonly Entrada[] = FASES_FAROL_AMPLIADO.map((fase, i) => ({
+  id: fase.id, nome: fase.nome, posicao: NOS_FAROL[i],
 }));
 const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
   praia: ENTRADAS_PRAIA,
@@ -165,6 +174,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     PORTO,
     { id: 'farol-fragmento-margens', posicao: P(2, 1), nome: 'O fragmento das duas margens' },
     { id: 'farol-duas-luzes', posicao: P(4, 1), nome: 'As duas luzes do farol' },
+    ...ENTRADAS_FAROL,
   ],
 };
 
@@ -391,6 +401,25 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['farol-fragmento-margens'], 'Recupere o fragmento para chegar às duas luzes.'),
     trilha(CAIS, P(4, 1), 'baixo', 'baixo', [P(2, 3), P(3.75, 2.5)],
       ['farol-duas-luzes'], 'O atalho abre quando as duas luzes estiverem acesas.'),
+    trilha(P(4, 1), P(6, 1), 'direita', 'esquerda', [],
+      ['farol-duas-luzes'], 'Acenda As duas luzes do farol para passar aos faroleiros.'),
+    trilha(P(6, 1), P(8, 1), 'direita', 'esquerda', [],
+      ['farol-faroleiros-de-vigia'], 'Complete Faroleiros de vigia para chegar aos guardiões.'),
+    trilha(P(8, 1), P(10, 1), 'direita', 'esquerda', [],
+      ['farol-turno-dos-guardioes'], 'Reúna a dupla em Turno dos guardiões para acessar o salão.'),
+    trilha(P(4, 1), P(4, -1), 'cima', 'baixo', [],
+      ['farol-duas-luzes'], 'Acenda As duas luzes do farol para abrir a costa.'),
+    trilha(P(4, -1), P(6, -1), 'direita', 'esquerda', [],
+      ['farol-costa-das-tres-luzes'], 'Recolha as moedas na Costa das três luzes para seguir.'),
+    trilha(P(6, -1), P(8, -1), 'direita', 'esquerda', [],
+      ['farol-faisca-de-entrada'], 'Complete Faísca de entrada para chegar aos quatro cais.'),
+    trilha(P(8, -1), P(11, -1), 'direita', 'esquerda', [],
+      ['farol-quatro-cais'], 'Conclua Quatro cais do farol para acessar as lentes.'),
+    trilha(P(11, -1), P(10, 1), 'baixo', 'cima', [P(11, 0), P(10, 0)],
+      ['farol-lentes-em-contramare', 'farol-salao-das-lanternas'],
+      'Conclua Lentes em contramaré e Salão das lanternas para abrir o atalho entre as rotas.'),
+    trilha(P(10, 1), P(11, 3), 'baixo', 'cima', [P(10, 2), P(11, 2)],
+      ['farol-salao-das-lanternas'], 'Complete Salão das lanternas para chegar à luz final.'),
   ],
 };
 

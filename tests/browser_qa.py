@@ -660,10 +660,34 @@ def conferir_farol(pagina, toque=False):
         expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
         expect(pagina.locator('#erros')).to_have_text('0 / 3')
         tocar(pagina, '#voltar-fase', toque)
+    etapas = [
+        ('R', 'Faroleiros de vigia', 'XRXRRRDRXRRRRRDXRRUDD'),
+        ('R', 'Turno dos guardiões', 'RRRXRRRRRRXRXRRLXRRRRRXR'),
+        ('R', 'Salão das lanternas', 'RRRRRXRRRRRRXRDRRRDRXRDRRRU'),
+        ('LLLU', 'Costa das três luzes', 'DLDLRLRLLUUUUURRRDRRURRDDDR'),
+        ('R', 'Faísca de entrada', 'RRRURRRDRDLULLLULULRRRDRRDRDDR'),
+        ('R', 'Quatro cais do farol', 'RRRRRRDRDRLRRDDDRLLRLLRLLULLLL'),
+        ('R', 'Lentes em contramaré', 'RRRXRRRRRXRRRRXRDDXDRRLDDRXRR'),
+        ('DD', 'A luz das duas marés', 'RXRRRXRRRXRRRXRRRRXDDXRRLRLRLDDRLDRRRXRRD'),
+    ]
+    for entrada, nome, caminho in etapas:
+        jogar(pagina, entrada, toque, mapa=True)
+        tocar(pagina, '#entrar-fase', toque)
+        expect(pagina.locator('#nome-fase')).to_have_text(nome)
+        if nome == 'Costa das três luzes':
+            expect(pagina.locator('#orcamento')).to_have_text('Passos restantes: 29')
+        jogar(pagina, caminho, toque)
+        expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+        expect(pagina.locator('#erros')).to_have_text('0 / 3')
+        if nome == 'A luz das duas marés':
+            expect(pagina.locator('#passos')).to_have_text('34')
+            salvar_captura(pagina, f"farol-duas-mares-{pagina.viewport_size['width']}px")
+        tocar(pagina, '#voltar-fase', toque)
     pagina.reload()
     tocar(pagina, '#comecar', toque)
-    expect(pagina.locator('#progresso-praia')).to_contain_text('2/2')
-    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#progresso-praia')).to_contain_text('10/10')
+    expect(pagina.locator('#posicao-praia')).to_contain_text('A luz das duas marés')
+    jogar(pagina, 'ULLLD', toque, mapa=True)
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
 

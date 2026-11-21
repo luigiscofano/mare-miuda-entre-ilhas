@@ -15,7 +15,7 @@
 
 Recifes e Mangue continuam disponíveis em qualquer ordem. Para não exigir salto de dificuldade se o jogador escolher Mangue primeiro, a estreia de cada região ensina sua regra isolada; a combinação tardia na Enseada é o primeiro ponto de convergência. Não force as 10 fases ou os opcionais como condição de saída. Use palcos mais largos só quando a leitura de câmera, retorno e blocos estiver clara no celular.
 
-A dupla reaparece em pontos escolhidos pela regra local, sem aparecer em toda fase. A Enseada ensina a proteger o siri inativo do rasante e depois alternar as duas margens sob patrulha. A Deriva ensina o transporte de quem ficou na balsa e depois combina duas balsas em sentidos opostos, portão, coleta e retorno. Os quatro desvios já são jogáveis; não bloqueiam a progressão principal. As Grutas já aplicam a regra em duas fases regulares, do transporte com placa à separação entre câmaras. A Ressaca acrescenta duas fases regulares com patrulha, balsas e revezamento mais exigente. O Farol tem dois desafios avançados planejados; chefes continuam fora desta entrega.
+A dupla reaparece em pontos escolhidos pela regra local, sem aparecer em toda fase. A Enseada ensina a proteger o siri inativo do rasante e depois alternar as duas margens sob patrulha. A Deriva ensina o transporte de quem ficou na balsa e depois combina duas balsas em sentidos opostos, portão, coleta e retorno. Os quatro desvios já são jogáveis; não bloqueiam a progressão principal. As Grutas já aplicam a regra em duas fases regulares, do transporte com placa à separação entre câmaras. A Ressaca acrescenta duas fases regulares com patrulha, balsas e revezamento mais exigente. O Farol tem sete travessias em dupla e três solo; chefes continuam fora desta entrega.
 
 A meta passa a ser pelo menos duas fases de coordenação genuína em cada mundo do 3 ao 8, sem transformar toda a campanha em dupla. Um terceiro siri (amarelo) pode estrear a partir do sexto mundo, em fase específica, se o desenho justificar; trio não substitui as duas fases de dupla por mundo.
 
@@ -42,7 +42,7 @@ Por fase registre início, refúgios, terreno, objetivo, pistas antes do primeir
 | Duas câmaras, uma ordem | A antes de B | B cedo dá uma pista e não apaga progresso; volte depois de A. |
 | A pérola da maré baixa | Entrega, retorno e maré | O baixio separa as câmaras; chão firme permite ajustar os passos sem espera. |
 
-O Farol abre pelo final regular da Ressaca e já oferece duas travessias em dupla. O fragmento das duas margens exige proteger o siri inativo no baixio antes de cruzar de balsa. As duas luzes do farol exige balsas opostas, o momento certo de ocupar a placa sob patrulha e uma troca dentro da última janela de maré. [Fichas e provas de solução](../processo-de-criacao/11-farol-dupla/README.md).
+O Farol abre pelos Ancoradouros da Ressaca; as duas primeiras travessias em dupla foram mantidas. O fragmento das duas margens exige proteger o siri inativo no baixio antes de cruzar de balsa. As duas luzes do farol exige balsas opostas, o momento certo de ocupar a placa sob patrulha e uma troca dentro da última janela de maré. [Fichas e provas de solução](../processo-de-criacao/11-farol-dupla/README.md).
 
 ### Ampliação jogável: Recifes Expostos
 
@@ -67,3 +67,5 @@ O ramo ensina a voltar à primeira alavanca, contornar a maré entre câmaras, a
 ### Ampliação jogável: Baía da Ressaca
 
 As oito travessias do ramo norte combinam bolsos firmes, coleta, duas balsas e dupla com placa. Três moedas do cais introduz a coleta em 20 passos; Cofre da vazante volta a ela com duas balsas e dois siris em 22. O atalho e a saída da rota curta para o Farol continuam funcionando sem esse ramo. A ameaça específica da ressaca e os chefes continuam no plano. [Fichas e soluções](../processo-de-criacao/14-ressaca-ampliada/README.md).
+
+O [Farol ampliado](../processo-de-criacao/15-farol-ampliado/README.md) fecha dez regulares. A rota leste apresenta contorno da vigia, duas balsas e divisão de papéis no salão antes do fechamento; o ramo norte acrescenta três moedas com orçamento, volta da alavanca, quatro balsas e lentes. A última fase combina três balsas, dois portões e três fragmentos. A ligação entre ramais abre depois de concluir os dois lados.

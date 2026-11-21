@@ -148,3 +148,7 @@ As cinco travessias do ramo norte reutilizam a entrega da pérola, a ordem do en
 ## Baía da Ressaca ampliada
 
 As oito travessias do ramo norte estão em `ressaca-ampliada.ts`. Há quatro solos e quatro duplas; Três moedas do cais e Cofre da vazante usam o mesmo orçamento que foi prototipado no laboratório, com limites próprios de 20 e 22 passos. Consulte as [fichas e rotas](../../docs/processo-de-criacao/14-ressaca-ampliada/README.md).
+
+## Farol ampliado
+
+Oito mapas de `farol-ampliado.ts` combinam as regras existentes, cinco em dupla. As oito rotas de referência e os pré-requisitos estão nas [fichas do lote](../../docs/processo-de-criacao/15-farol-ampliado/README.md). O contorno de Faroleiros de vigia dispensa a placa, mas custa dois passos a mais; nos desafios Lentes em contramaré e A luz das duas marés ambos os portões são indispensáveis.

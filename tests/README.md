@@ -32,7 +32,7 @@ O teste dos dois desvios comprova as rotas autorizadas, o portão sem gasto de t
 
 A ampliação da dupla checa as duas novas testemunhas sem levadas, a impossibilidade de vitória sem trocar, a necessidade de cada balsa no desvio avançado e a persistência dos dois vértices opcionais. O roteiro Playwright joga ambos, recarrega no desvio concluído e retorna ao porto por teclado e toque emulado.
 
-O Farol verifica a travessia com balsa e placa, a ausência de solução sem troca ou sem qualquer balsa, o portão sem gasto de passo, a patrulha sobre o inativo, a janela de dois passos para a troca no baixio, conclusão e recarga. O teste de navegador joga as duas fases por teclado e por toque emulado.
+O Farol verifica a travessia com balsa e placa, a ausência de solução sem troca ou sem qualquer balsa, o portão sem gasto de passo, a patrulha sobre o inativo, a janela de dois passos para a troca no baixio, conclusão e recarga. O teste de navegador joga as dez fases do Farol por teclado e por toque emulado; as duas iniciais permanecem no mesmo ponto de entrada.
 
 A ampliação de Recifes verifica 45 testemunhas de vitória, contagem de dez regulares e dois desvios, atalhos, atribuição única de direção no seletor e persistência de marcos em saves novos e antigos. O roteiro Playwright visita um regular e um opcional usando teclado e toque emulado, reinicia a página e confere que o opcional não altera a contagem. As verificações do navegador devem ser confirmadas no resultado do workflow.
 
@@ -55,3 +55,7 @@ As soluções da campanha encerram sem levadas. A busca usa o motor e demonstra 
 ## Baía da Ressaca ampliada
 
 O motor reproduz as 79 rotas da campanha sem levadas. `ressaca-ampliada.test.ts` verifica dependência das balsas, troca e placa, e comprova os limites sem levadas de 20 e 22 passos nos desafios de três moedas. Verifica também as trilhas de ida e volta, a retomada de saves e a abertura do Farol pela rota anterior. O Playwright percorre o Cofre da vazante com teclado e toque emulado e confirma a vitória no último passo e o progresso após recarregar.
+
+## Farol ampliado
+
+A busca ordenada por passos repete o motor sem levadas e preserva o relógio da maré e da patrulha. Confere o contorno da vigia (19 passos ante 17 pela placa), o orçamento da costa (mínimo de 27), as travessias com quatro e três balsas indispensáveis e ambos os portões nos dois últimos desafios em dupla. A luz das duas marés requer no mínimo 34 passos; a solução publicada tem sete trocas e três fragmentos. O roteiro de navegador entra nos dois ramais, conclui a fase final, recarrega a posição com 10/10 e volta ao arquipélago. Toque é emulado; aparelho físico não foi testado.
