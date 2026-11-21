@@ -107,3 +107,33 @@ button:disabled { cursor: default; opacity: .64; }
 #mare-historico-itens { padding-inline-start: 1.25rem; }
 #mare-historico-itens li + li { margin-top: .35rem; }
 #mare-historico-itens button { max-width: 100%; overflow-wrap: anywhere; text-align: start; }
+/* Prévia estrutural: as oito composições não dependem dos PNGs de fase. */
+#seletor-fases { display: grid; gap: 1rem; margin: .75rem 0; }
+#seletor-fases section { display: grid; gap: .4rem; }
+#seletor-fases h3 { margin: 0; }
+.seletor-fileira { display: flex; flex-wrap: wrap; justify-content: center; gap: .45rem; }
+.seletor-marco {
+  flex: 1 1 0;
+  min-width: 7.8rem;
+  min-height: 3rem;
+  max-width: min(11rem, 100%);
+  padding: .5rem;
+  border: 2px solid var(--seletor-cor, #3c776a);
+  border-radius: 2px;
+  overflow-wrap: anywhere;
+  display: grid;
+  align-content: center;
+  gap: .2rem;
+}
+.seletor-marco[aria-disabled="true"] { opacity: .8; border-style: dashed; cursor: not-allowed; }
+.seletor-marco[data-estado="concluida"] { border-style: double; border-width: 4px; }
+.seletor-marco:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }
+.seletor-marco small { font-size: .76rem; }
+#seletor-fases[data-tema="praia"] { --seletor-cor: #8f6533; }
+#seletor-fases[data-tema="recifes"] { --seletor-cor: #a35b48; }
+#seletor-fases[data-tema="mangue"] { --seletor-cor: #587444; }
+#seletor-fases[data-tema="enseada"] { --seletor-cor: #6a679b; }
+#seletor-fases[data-tema="deriva"] { --seletor-cor: #2d7771; }
+#seletor-fases[data-tema="grutas"] { --seletor-cor: #64637e; }
+#seletor-fases[data-tema="ressaca"] { --seletor-cor: #386b84; }
+#seletor-fases[data-tema="farol"] { --seletor-cor: #655683; }

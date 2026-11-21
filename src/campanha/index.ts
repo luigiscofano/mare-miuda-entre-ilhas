@@ -527,13 +527,10 @@ export function nosDo(mundo: Mundo): readonly Posicao[] {
     lista.findIndex(item => mesmaCasa(item, pos)) === i);
 }
 
-export function normalizarPosicao(
-  mundo: Mundo, posicao: Posicao | undefined, concluidas: readonly IdFase[],
-): Posicao {
+export function posicoesVisitaveis(mundo: Mundo, concluidas: readonly IdFase[]): readonly Posicao[] {
   const inicio = mundo === 'arquipelago' ? P(1, 3) : CAIS;
-  if (!posicao) return inicio;
   const disponiveis: Posicao[] = [inicio];
-  // Migração de saves de células: não conceda um nó do outro lado de uma passagem trancada.
+  // O mapa, a migração de saves e a seleção direta respeitam as mesmas travas.
   for (let i = 0; i < disponiveis.length; i++) {
     for (const t of trilhasDo(mundo)) {
       if (!t.precisa.every(id => concluidas.includes(id))) continue;
@@ -542,6 +539,14 @@ export function normalizarPosicao(
       if (outro && !disponiveis.some(n => mesmaCasa(n, outro))) disponiveis.push(outro);
     }
   }
+  return disponiveis;
+}
+
+export function normalizarPosicao(
+  mundo: Mundo, posicao: Posicao | undefined, concluidas: readonly IdFase[],
+): Posicao {
+  if (!posicao) return mundo === 'arquipelago' ? P(1, 3) : CAIS;
+  const disponiveis = posicoesVisitaveis(mundo, concluidas);
   const distancia = (n: Posicao) => Math.abs(n.coluna - posicao.coluna) + Math.abs(n.linha - posicao.linha);
   // Empates mantêm a primeira posição visitável na ordem das trilhas declaradas.
   return disponiveis.reduce((maisProxima, n) => distancia(n) < distancia(maisProxima) ? n : maisProxima);
@@ -602,3 +607,6 @@ export function concluirFase(progresso: Progresso, id: IdFase): Progresso {
   if (progresso.concluidas.includes(id)) return progresso;
   return { ...progresso, concluidas: [...progresso.concluidas, id] };
 }
+
+// A seleção direta usa os mesmos marcos do mapa, sem manter um segundo catálogo.
+export const entradasDo = (mundo: Mundo): readonly Entrada[] => ENTRADAS[mundo];

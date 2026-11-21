@@ -16,8 +16,8 @@ class ElementoFalso {
   eventos = {};
   filhos = [];
   checked = false;
-  append(filho) { this.filhos.push(filho); }
-  replaceChildren() { this.filhos = []; }
+  append(...filhos) { this.filhos.push(...filhos); }
+  replaceChildren(...filhos) { this.filhos = filhos; }
   constructor(dataset = {}) { this.dataset = dataset; }
   addEventListener(nome, fn) { (this.eventos[nome] ??= []).push(fn); }
   setAttribute(nome, valor) { this.atributos[nome] = valor; }
@@ -54,8 +54,8 @@ function prepararInterface() {
   );
   const storage = new Map([['miudezas', 'preservado']]);
   globalThis.document = Object.assign(new ElementoFalso(), {
-    createElement: () => new ElementoFalso(),
     querySelector: pegar,
+    createElement: () => new ElementoFalso(),
     querySelectorAll: seletor => seletor === '[data-fase]' ? fases
       : Object.values(seletor === '[data-direcao]' ? botoes : mapa),
   });
@@ -65,11 +65,25 @@ function prepararInterface() {
     setItem: (chave, valor) => storage.set(chave, valor),
   };
   globalThis.Element = ElementoFalso;
-  globalThis.ResizeObserver = class { observe() {} };
+  const observadores = new Map();
+  globalThis.ResizeObserver = class {
+    constructor(notificar) { this.notificar = notificar; }
+    observe(moldura) { observadores.set(moldura, this.notificar); }
+  };
+  const executarResize = seletor => observadores.get(pegar(seletor))();
   function tecla(key, repeat = false) {
     window.disparar('keydown', { key, repeat, preventDefault() {} });
   }
-  return { pegar, quadros, recortes, fases, botoes, mapa, tecla, storage };
+  function buscarMarco(id, no = pegar('#seletor-fases')) {
+    if (no.dataset.marco === id) return no;
+    return no.filhos.map(filho => buscarMarco(id, filho)).find(Boolean);
+  }
+  const abrirMarco = id => {
+    const marco = buscarMarco(id);
+    assert.ok(marco, id);
+    marco.click();
+  };
+  return { pegar, quadros, recortes, fases, botoes, mapa, tecla, storage, buscarMarco, abrirMarco, executarResize };
 }
 
 test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', async () => {
@@ -97,7 +111,7 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   }
 
   assert.ok(!html.includes("href=\"./styles.css\""));
-  const { pegar, quadros, recortes, fases, botoes, mapa, tecla, storage } = prepararInterface();
+  const { pegar, quadros, recortes, fases, botoes, mapa, tecla, storage, abrirMarco, buscarMarco } = prepararInterface();
   await import(modulo);
   const ler = id => pegar(id).textContent;
   assert.equal(pegar('#inicio').hidden, false);
@@ -148,24 +162,22 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
 
   pegar('#voltar-fase').click();
   pegar('#comecar').click();
-  const bilheteAntes = ler('#progresso-praia');
-  assert.ok(!quadros.some(([cor]) => cor === '#dfb050'), 'A decoração antiga fica só no histórico.');
-  assert.doesNotMatch(bilheteAntes, /bem-te-vi/i);
+  assert.equal(pegar('#controles-arquipelago').hidden, true);
+  assert.equal(pegar('#seletor-fases').hidden, false);
+  assert.equal(buscarMarco('sombra-da-garca').atributos['aria-disabled'], 'true');
+  abrirMarco('sombra-da-garca');
+  assert.equal(pegar('#fase').hidden, true);
   const movimento = { U: 'cima', D: 'baixo', L: 'esquerda', R: 'direita' };
-  const andar = rota => [...rota].forEach(d => mapa[movimento[d]].click());
   const jogar = rota => [...rota].forEach(d => botoes[movimento[d]].click());
-  andar('D'); // O cenário marítimo não adquiriu uma casa caminhável.
-  assert.match(ler('#mensagem-praia'), /Não há trilha/);
-  assert.equal(ler('#progresso-praia'), bilheteAntes);
-  const entrar = () => pegar('#entrar-fase').click();
   const voltar = () => pegar('#voltar-fase').click();
-  andar('R'); entrar(); jogar('RRR'); voltar();
+  abrirMarco('primeira-onda'); jogar('RRR'); voltar();
   assert.match(ler('#progresso-praia'), /1\/4/);
-  andar('D'); entrar(); jogar('RLDDRRRRU'); voltar();
+  assert.equal(buscarMarco('primeira-onda').dataset.estado, 'concluida');
+  abrirMarco('ilhota-perolada'); jogar('RLDDRRRRU'); voltar();
   assert.match(ler('#progresso-praia'), /Concha Perolada: encontrada/);
-  andar('UR'); entrar(); jogar('RRDURR'); voltar();
-  andar('R'); entrar(); jogar('DDRLRLUUR'); voltar();
-  andar('R'); entrar(); jogar('RRRDDLRRRU');
+  abrirMarco('sombra-da-garca'); jogar('RRDURR'); voltar();
+  abrirMarco('busca-e-volta'); jogar('DDRLRLUUR'); voltar();
+  abrirMarco('ponta-da-garca'); jogar('RRRDDLRRRU');
   assert.equal(pegar('#seguir-fase').hidden, false);
   pegar('#seguir-fase').click();
   assert.equal(pegar('#creditos').hidden, false);
@@ -183,7 +195,7 @@ test('HTML offline avisa a onda e salva a conclusão de Vento Sul sem rede', asy
   const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
   const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
   assert.ok(modulo);
-  const { pegar, botoes, mapa, storage, quadros } = prepararInterface();
+  const { pegar, botoes, mapa, storage, quadros, abrirMarco } = prepararInterface();
   const chave = 'mare-miuda-entre-ilhas/praia-v1';
   storage.set(chave, JSON.stringify({
     versao: 1,
@@ -203,10 +215,8 @@ test('HTML offline avisa a onda e salva a conclusão de Vento Sul sem rede', asy
     U: 'cima', D: 'baixo', L: 'esquerda', R: 'direita',
   }[letra]].click());
   pegar('#comecar').click();
-  mapa.esquerda.click();
-  assert.match(ler('#posicao-praia'), /Vento Sul · chefe opcional/);
   quadros.length = 0;
-  pegar('#entrar-fase').click();
+  abrirMarco('ressaca-chefe-vento-sul');
   assert.match(ler('#previsao'), /Onda na subida: linha 1, colunas 2 a 4/);
   assert.equal(ler('#ancoradouros'), 'Ancoradouros firmes: 0/3');
   assert.ok(quadros.length && quadros.every(([, ...posicoes]) => posicoes.every(Number.isInteger)));
@@ -233,7 +243,7 @@ test('HTML offline firma as âncoras da Deriva, transporta a dupla e preserva a 
   const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
   const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
   assert.ok(modulo);
-  const { pegar, botoes, mapa, storage, tecla } = prepararInterface();
+  const { pegar, botoes, mapa, storage, tecla, abrirMarco, buscarMarco } = prepararInterface();
   const chave = 'mare-miuda-entre-ilhas/praia-v1';
   storage.set(chave, JSON.stringify({ versao: 1, progresso: { mundo: 'deriva', posicao: { coluna: 6, linha: 1 },
     viuTutorial: true, concluidas: ['deriva-primeira-balsa', 'deriva-duas-margens', 'deriva-corrente-cruzada'] },
@@ -247,11 +257,8 @@ test('HTML offline firma as âncoras da Deriva, transporta a dupla e preserva a 
   });
 
   pegar('#comecar').click();
-  mapa.direita.click();
-  assert.match(ler('#posicao-praia'), /Mestre das Correntes · chefe opcional/);
-  mapa.baixo.click();
-  assert.match(ler('#mensagem-praia'), /Vença Mestre das Correntes/);
-  pegar('#entrar-fase').click();
+  assert.equal(buscarMarco('deriva-chefe-passagem-das-balsas').atributos['aria-disabled'], 'true');
+  abrirMarco('deriva-chefe-mestre-das-correntes');
   jogar('DD');
   assert.match(ler('#feedback'), /faltar um passo para a virada/);
   jogar('RDUDRUUULR');
@@ -260,8 +267,7 @@ test('HTML offline firma as âncoras da Deriva, transporta a dupla e preserva a 
   jogar('DDDLLLLULUUR');
   assert.match(ler('#feedback'), /Arena vencida: Mestre das Correntes/);
   pegar('#voltar-fase').click();
-  mapa.baixo.click();
-  pegar('#entrar-fase').click();
+  abrirMarco('deriva-chefe-passagem-das-balsas');
   jogar('DUDURRRRXR');
   assert.match(ler('#posicao'), /Coral: coluna 6, linha 1.*Verde \(ativo\): coluna 3, linha 4/);
   jogar('RXRRXR');
@@ -277,8 +283,7 @@ test('HTML offline firma as âncoras da Deriva, transporta a dupla e preserva a 
   const save = JSON.parse(storage.get(chave));
   assert.ok(save.progresso.concluidas.includes('deriva-chefe-mestre-das-correntes'));
   assert.ok(save.progresso.concluidas.includes('deriva-chefe-passagem-das-balsas'));
-  mapa.cima.click();
-  assert.match(ler('#posicao-praia'), /Mestre das Correntes · chefe opcional · concluída/);
+  assert.equal(buscarMarco('deriva-chefe-mestre-das-correntes').dataset.estado, 'concluida');
 });
 
 test('HTML offline abre e revisita o desfecho no mesmo marco com apenas seis fases', async () => {
@@ -300,8 +305,7 @@ test('HTML offline abre e revisita o desfecho no mesmo marco com apenas seis fas
   pegar('#voltar-creditos').click();
   pegar('#comecar').click();
   assert.equal(pegar('#rever-desfecho').hidden, true);
-  ui.mapa.baixo.click();
-  pegar('#entrar-fase').click();
+  ui.abrirMarco('farol-luz-das-duas-mares');
   assert.equal(pegar('#nome-fase').textContent, 'A luz das duas marés');
   assert.equal(pegar('#seguir-fase').hidden, true);
   const direcoes = { D: 'baixo', L: 'esquerda', R: 'direita' };
@@ -321,7 +325,7 @@ test('HTML offline abre e revisita o desfecho no mesmo marco com apenas seis fas
   pegar('#seguir-fase').click();
   assert.match(pegar('#desfecho').textContent, /A luz voltou/);
   pegar('#voltar-creditos').click();
-  assert.match(pegar('#posicao-praia').textContent, /A luz das duas marés · concluída/);
+  assert.equal(ui.buscarMarco('farol-luz-das-duas-mares').dataset.estado, 'concluida');
   assert.equal(ui.storage.get(chave), salvo);
 
   ui = prepararInterface();
@@ -330,11 +334,10 @@ test('HTML offline abre e revisita o desfecho no mesmo marco com apenas seis fas
   pegar('#comecar').click();
   assert.match(pegar('#progresso-praia').textContent, /6\/10/);
   assert.equal(pegar('#rever-desfecho').hidden, false);
-  ui.mapa.cima.click();
   pegar('#rever-desfecho').click();
   assert.match(pegar('#desfecho').textContent, /A luz voltou/);
   pegar('#voltar-creditos').click();
-  assert.match(pegar('#posicao-praia').textContent, /Salão das lanternas · concluída/);
+  assert.equal(ui.buscarMarco('farol-salao-das-lanternas').dataset.estado, 'concluida');
 });
 
 test('Build autônomo conserva os bytes dos fundos nativos de todos os seletores com arte', async () => {
@@ -418,4 +421,45 @@ test('Ilha de Improviso gera, reinicia, avança e recupera a semente fora da cam
   opcoes[1].filhos[0].click();
   assert.equal(recarregada.pegar('#grade').textContent, prova.mapa.join('\n'));
   assert.equal(recarregada.storage.get(chaveCampanha), saveCampanha);
+});
+
+
+test('escala inteira adia notificações de resize e evita reescrever largura', async () => {
+  const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
+  const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
+  assert.ok(modulo);
+  const { pegar, executarResize } = prepararInterface();
+  const quadros = [];
+  window.requestAnimationFrame = callback => quadros.push(callback);
+  await import(modulo + '#resize-sem-loop');
+
+  for (const [moldura, arte, nativa] of [
+    ['#moldura', '#tabuleiro', 256],
+    ['#moldura-praia', '#mapa-praia', 256],
+    ['#moldura-logo', '#marca-praia', 180],
+  ]) {
+    let largura = pegar(arte).style.width;
+    let escritas = 0;
+    Object.defineProperty(pegar(arte).style, 'width', {
+      get: () => largura,
+      set(valor) { largura = valor; escritas++; },
+    });
+    pegar(moldura).clientWidth = nativa * 3 + 2;
+    executarResize(moldura);
+    executarResize(moldura);
+    assert.equal(escritas, 0, 'Não escreva dentro do ResizeObserver.');
+    assert.equal(quadros.length, 1, 'Agrupe notificações no mesmo quadro.');
+    quadros.shift()();
+    assert.equal(largura, `${nativa * 3}px`);
+    assert.equal(escritas, 1);
+
+    pegar(moldura).clientWidth = nativa * 3 + 5;
+    executarResize(moldura);
+    assert.equal(quadros.length, 0);
+    assert.equal(escritas, 1, 'Uma largura que resulta na mesma escala não reescreve.');
+    pegar(moldura).clientWidth = 0;
+    executarResize(moldura);
+    assert.equal(quadros.length, 0);
+    assert.equal(escritas, 1, 'Uma moldura oculta não altera a arte.');
+  }
 });
