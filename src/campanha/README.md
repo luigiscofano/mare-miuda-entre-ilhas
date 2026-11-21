@@ -29,3 +29,7 @@ Suba depois de Sombra na restinga para sete travessias regulares novas. A bifurc
 ## Ilhas à Deriva ampliadas
 
 Suba depois de A primeira balsa para sete regulares. Duas rampas e Duas margens abrem o trecho das balsas alternadas. Os desvios em dupla e o atalho do trecho histórico mantêm ID e posição, e só Corrente cruzada condiciona o acesso às Grutas.
+
+## Grutas da Espuma ampliadas
+
+Suba depois de Uma pérola para o portão para cinco novas regulares. A pérola e a placa, na rota de origem, é pré-requisito das três novas em dupla; nenhuma fase nova condiciona o retorno ao porto ou a abertura da Baía da Ressaca. IDs, marcos e saves anteriores permanecem.

@@ -140,3 +140,7 @@ Seis travessias solo e uma em dupla nascem de um ramo ao norte da rota original.
 ## Ilhas à Deriva ampliadas
 
 As sete travessias do ramo norte usam balsas e mantêm os três mapas originais e os dois desvios em dupla. As [fichas do lote](../../docs/processo-de-criacao/12-deriva-ampliada/README.md) trazem as grades, os cais por maré e as rotas testadas.
+
+## Grutas da Espuma ampliadas
+
+As cinco travessias do ramo norte reutilizam a entrega da pérola, a ordem do encaixe e da alavanca e o portão. Três exigem os dois siris. As [fichas do lote](../../docs/processo-de-criacao/13-grutas-ampliadas/README.md) trazem grades, etapas e rotas verificadas.

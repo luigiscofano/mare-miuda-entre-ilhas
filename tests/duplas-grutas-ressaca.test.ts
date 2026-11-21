@@ -78,7 +78,7 @@ test('A Ressaca abre após os dois desafios em dupla e pode ser retomada pelo sa
   const completa = concluirFase(primeira, 'grutas-dupla-camaras');
   let ressaca = viajar(direita(completa), 'ressaca');
   assert.equal(ressaca.mundo, 'ressaca');
-  assert.equal(totalDeFasesRegulares('grutas'), 5);
+  assert.equal(totalDeFasesRegulares('grutas'), 10);
   assert.equal(totalDeFasesRegulares('ressaca'), 2);
   ressaca = direita(ressaca);
   assert.strictEqual(direita(ressaca), ressaca);

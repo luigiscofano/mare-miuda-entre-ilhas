@@ -47,3 +47,7 @@ O motor reproduz as 59 soluções sem levadas. Nas sete novas, uma rota que venc
 ## Ilhas à Deriva ampliadas
 
 As 66 soluções vencem sem levadas. A busca usa o motor e confirma que remover qualquer balsa impede vencer sem levadas cada travessia nova. O teste da dupla verifica que os dois chegam ao cais na mesma virada e que proibir carona do inativo eleva o mínimo de 9 para 13 passos. O roteiro Playwright cobre a previsão, o tabuleiro de 15 colunas, a dupla, o transporte observado da posição e a recarga em teclado e toque emulado; os resultados constam da CI.
+
+## Grutas da Espuma ampliadas
+
+As 71 soluções encerram sem levadas. A busca usa o motor e demonstra que omitir qualquer etapa impede vencer nas cinco novas travessias e que nenhuma das três duplas vence sem troca ou placa. O teste confirma que o siri que recolhe é o mesmo que encaixa, e que a alavanca exige o parceiro nas duas fases com as três etapas. O Playwright percorre coleta, encaixe, alavanca, fragmento e saída na fase final, com teclado e toque emulado; os resultados constam da CI.
