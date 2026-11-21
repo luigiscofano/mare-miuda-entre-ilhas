@@ -127,3 +127,7 @@ A fixture do desfecho parte do Salão das lanternas com cinco regulares concluí
 ### Prévia do seletor de mundos Meia-Lua
 
 `seletor-arquipelago.test.ts` verifica pintura nativa sem interpolação, recorte e posição do siri idênticos com ou sem o fundo e os mesmos nove marcos e oito trechos. O marco da Enseada só deixa de mostrar o cadeado após os dois percursos necessários. Playwright percorre o mapa nas duas ordens (Recifes primeiro ou Mangue primeiro) e confere o pixel do marco antes e depois da abertura. O teste offline compara os bytes do fundo copiado e embutido ao PNG original. O quadro de fallback usa o mapa anterior.
+
+## Seletores da Praia das Conchas
+
+`seletores-praia.test.ts` compara o Siri com a projeção anterior, o fundo do Cabo Baixo, os nove caminhos e dez vértices da Enseadinha e a leitura do bloqueio/desvio. O teste autônomo verifica os bytes dos três fundos de seleção empacotados. O percurso Playwright verifica a entrada nos dois mapas, o mapa travado e aberto após Fio de areia, os chefes e o save em desktop e toque emulado. Quadros nativos do renderizador no [caderno 34](../docs/processo-de-criacao/34-seletores-praia/README.md) são independentes de captura de navegador.

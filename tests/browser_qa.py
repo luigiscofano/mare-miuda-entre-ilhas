@@ -1087,12 +1087,20 @@ def conferir_enseadinha(pagina, toque=False):
     jogar(pagina, 'R', toque, mapa=True)
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#viagem-praia')).to_contain_text('2/2')
+    expect(pagina.locator('#enseadinha')).to_have_js_property('naturalWidth', 512)
+    conferir_siri_canonico(pagina, '#mapa-praia')
     expect(pagina.locator('#entrar-fase')).to_have_text('Voltar ao Cabo Baixo')
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#entrar-fase')).to_have_text('Ir à Enseadinha')
     tocar(pagina, '#entrar-fase', toque)
     jogar(pagina, 'RR', toque, mapa=True)  # Segundo avanço bloqueado.
     expect(pagina.locator('#mensagem-praia')).to_contain_text('Conclua Fio de areia')
+    def cor_da_passagem():
+        return pagina.locator('#mapa-praia').evaluate(
+            '(c) => Array.from(c.getContext("2d").getImageData(224, 164, 1, 1).data)'
+        )
+    assert cor_da_passagem() == [38, 59, 69, 255], 'Cadeado de Fio de areia deve estar visível.'
+    salvar_captura(pagina, f"enseadinha-bloqueio-{pagina.viewport_size['width']}px")
     for indice, (solucao, desvio) in enumerate([
         ('RRRDUDURR', ('D', 'RDRRRLLLU', 'U')),
         ('RRDUDULLUDUDLLDUDURRU', ('U', 'RURRRLRDR', 'D')),
@@ -1107,7 +1115,9 @@ def conferir_enseadinha(pagina, toque=False):
             tocar(pagina, '#comecar', toque)
             expect(pagina.locator('#viagem-praia')).to_contain_text('2/2')
             expect(pagina.locator('#progresso-praia')).to_contain_text('1/3')
-            salvar_captura(pagina, f"enseadinha-prototipo-{pagina.viewport_size['width']}px")
+            assert cor_da_passagem() == [239, 201, 135, 255], 'Areia aberta após Fio de areia; o cadeado deve sumir.'
+            expect(pagina.locator('#saidas-praia')).to_contain_text('Bolso da maré')
+            salvar_captura(pagina, f"enseadinha-desvio-{pagina.viewport_size['width']}px")
             conferir_vigia_das_ondas(pagina, toque)
         if not toque:
             ida, comandos, volta = desvio

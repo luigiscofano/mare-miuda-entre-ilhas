@@ -36,6 +36,7 @@ function storageLocal() {
 }
 
 const tabuleiro = montarCanvas('#tabuleiro', '#moldura');
+const arteEnseadinha = buscar<HTMLImageElement>('#enseadinha');
 const arteCabo = buscar<HTMLImageElement>('#cabo-baixo');
 const arteArquipelago = buscar<HTMLImageElement>('#arte-arquipelago');
 const fauna = buscar<HTMLImageElement>('#folha-fauna');
@@ -144,7 +145,7 @@ function atualizarPraia(mensagem = ''): void {
     : mundo === 'arquipelago' ? 'Bifurcação das ilhas.' : 'Cais da Praia das Conchas.';
   buscar('#mensagem-praia').textContent = mensagem;
   const entrar = buscar<HTMLButtonElement>('#entrar-fase');
-  buscar('#viagem-praia').textContent = mundo === 'praia' ? '1/2 · Cabo Baixo' : mundo === 'praia-enseadinha' ? '2/2 · Enseadinha (arte provisória)' : '';
+  buscar('#viagem-praia').textContent = mundo === 'praia' ? '1/2 · Cabo Baixo' : mundo === 'praia-enseadinha' ? '2/2 · Enseadinha' : '';
   entrar.disabled = !entrada || quadroMapa !== undefined;
   paineis.praia.setAttribute('aria-busy', String(quadroMapa !== undefined));
   const rotas: string[] = [];
@@ -164,7 +165,7 @@ function atualizarPraia(mensagem = ''): void {
   else if (entrada?.destino) entrar.textContent = entrada.id.startsWith('rumo-') ? 'Visitar região' : entrada.nome;
   else entrar.textContent = 'Entrar na fase';
   if (podeDesenharCabo(mundo, arteCabo)) desenharCabo(mapaPraia.ctx, p, arteCabo, logo);
-  else desenharPraia(mapaPraia.ctx, p, logo, undefined, arteArquipelago);
+  else desenharPraia(mapaPraia.ctx, p, logo, undefined, arteArquipelago, arteEnseadinha);
 }
 
 logo.addEventListener('load', () => {
@@ -178,6 +179,10 @@ fauna.addEventListener('load', () => {
 
 arteCabo.addEventListener('load', () => {
   if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'praia') atualizarPraia();
+});
+
+arteEnseadinha.addEventListener('load', () => {
+  if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'praia-enseadinha') atualizarPraia();
 });
 
 arteArquipelago.addEventListener('load', () => {
@@ -438,7 +443,7 @@ function mover(direcao: Direcao): void {
       if (fracao >= 1) { concluir(); return; }
       const ponto = percurso.ponto(fracao);
       if (caminhoVisual) desenharCabo(mapaPraia.ctx, save.progresso, arteCabo, logo, ponto);
-      else desenharPraia(mapaPraia.ctx, save.progresso, logo, ponto, arteArquipelago);
+      else desenharPraia(mapaPraia.ctx, save.progresso, logo, ponto, arteArquipelago, arteEnseadinha);
       quadroMapa = window.requestAnimationFrame(animar);
     };
     quadroMapa = window.requestAnimationFrame(animar);
