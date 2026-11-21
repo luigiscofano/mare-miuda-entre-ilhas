@@ -18,7 +18,7 @@ Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem subs
 | [10 · Duplas nas Grutas e Ressaca](10-duplas-grutas-ressaca/README.md) | Quatro fases regulares, posse da pérola, balsas e patrulha. |
 | [Estudos da identidade visual](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/3) | Placa de Areia e Corrente de Espuma, PT/EN, preservadas em PR separado. A foi aprovada para a abertura; B permanece como estudo. |
 
-| [Acervo histórico de identidade](acervo-visual/README.md) | Índice externo por commit, com inventário de 340 arquivos ainda não importados. |
+| [Acervo histórico de identidade](acervo-visual/README.md) | 340 arquivos preservados na documentação, com índice local e proveniência fixada por commit. |
 | [11 · Farol em dupla](11-farol-dupla/README.md) | Duas travessias regulares: fragmentos, balsas opostas e janela final de maré. |
 
 ## Expansão da campanha

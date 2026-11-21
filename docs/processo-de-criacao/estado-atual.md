@@ -35,11 +35,11 @@ Fontes: [catálogo](../../src/fases/index.ts), [campanha](../../src/campanha/ind
 | Travessias da Praia | Direção V32 aprovada e aplicada; prancha conceitual identificada separadamente das capturas. | [Caderno 29](29-travessia-praia/README.md) |
 | Travessias dos outros sete mundos | Prévias jogáveis para revisão, não aprovação final inferida. | [30](30-travessias-recifes-mangue/README.md), [31](31-travessias-enseada-deriva/README.md), [32](32-travessias-grutas-ressaca-farol/README.md) |
 | Meia-Lua e demais seletores | Propostas aplicadas à base de teste, com rotas e cadeados existentes. A presença no PR não certifica aprovação final. | [33](33-seletor-arquipelago/README.md), [34](34-seletores-praia/README.md), [35](35-seletores-recifes-mangue/README.md), [36](36-seletores-enseada-deriva/README.md), [37](37-seletores-mundos-finais/README.md) |
-| Estudos de marca e litoral | Acervo histórico externo indexado; não se sobrepõe à arte atual. | [Inventário e proveniência](acervo-visual/README.md) |
+| Estudos de marca e litoral | Acervo histórico preservado na documentação; não se sobrepõe à arte atual. | [Inventário e proveniência](acervo-visual/README.md) |
 | Áudio | Provisório nesta base. Trabalhos paralelos posteriores não estão incluídos nesta leitura. | [README principal](../../README.md) |
 
 ## Leitura do histórico e pendências
 
 Os cadernos são cumulativos. Quando uma etapa antiga diz “três testes”, “futuro” ou “primeiro lote”, descreve aquele momento; não invalida as entregas posteriores. Os textos originais foram preservados. Esta página é o resumo datado, não substitui a ficha de regras ou a fonte da fase.
 
-Continuam pendentes a revisão final das propostas visuais, o áudio definitivo, a revisão de lançamento e os testes em dispositivos físicos. A primeira tranche de documentação ainda não importou o acervo visual: seus 340 arquivos têm links imutáveis e hashes, mas permanecem nas fontes históricas. Não há mudança no Miudezas, em regras, saves, build ou publicação.
+Continuam pendentes a revisão final das propostas visuais, o áudio definitivo, a revisão de lançamento e os testes em dispositivos físicos. Os 340 arquivos do acervo estão preservados na documentação com hashes e links imutáveis de proveniência; a cópia histórica fica fora do build. Não há mudança no Miudezas, em regras, saves, build ou publicação.
