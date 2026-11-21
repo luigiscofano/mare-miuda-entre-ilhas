@@ -4,7 +4,7 @@ import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/
 import type { Mundo, Progresso } from '../campanha/index.ts';
 import { caminhoDoCabo, marcadorCabo } from '../campanha/cabo-baixo.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
-import { pintarTravessiaPraia, usaTravessiaPraia } from './travessia-praia.ts';
+import { pintarCosta, temaDaCosta } from './travessia-praia.ts';
 
 export const LARGURA = 256;
 export const ALTURA = 192;
@@ -347,17 +347,21 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   const tons: Tons = tema ? CORES_MUNDO[tema] : TONS_CINZA;
   const cores = paleta(tons);
   ctx.imageSmoothingEnabled = false;
-  const praia = usaTravessiaPraia(tema);
-  if (!praia) desenharFundoDaTravessia(ctx, tema, tons);
+  const costa = temaDaCosta(tema);
+  if (!costa) desenharFundoDaTravessia(ctx, tema, tons);
 
   const gradeLargura = fase.mapa[0].length * TAMANHO_TILE;
   const gradeAltura = fase.mapa.length * TAMANHO_TILE;
   const origemX = (LARGURA - gradeLargura) / 2;
   const origemY = (ALTURA - gradeAltura) / 2;
   const alta = mareAlta(estado.passos);
-  if (praia) {
-    pintarTravessiaPraia({ contexto: ctx, origemX: origemX * DENSIDADE, origemY: origemY * DENSIDADE },
-      fase.mapa, alta, LARGURA * DENSIDADE, ALTURA * DENSIDADE);
+  if (costa) {
+    // Em Recifes a comporta fechada cobre o piso antes de receber o símbolo.
+    const mapa = costa.tipo === 'recifes' && fase.recife && 'ida' in fase.recife ? fase.mapa.map((fileira, linha) =>
+      [...fileira].map((casa, coluna) =>
+        passagemDoRecifeFechada(fase, { coluna, linha }, estado.temFragmento) ? '~' : casa).join('')) : fase.mapa;
+    pintarCosta({ contexto: ctx, origemX: origemX * DENSIDADE, origemY: origemY * DENSIDADE },
+      mapa, alta, LARGURA * DENSIDADE, ALTURA * DENSIDADE, costa);
   } else {
     bloco(ctx, tons.margem, origemX - 4, origemY - 4, gradeLargura + 8, gradeAltura + 8);
   }
@@ -383,7 +387,7 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       : celula === 'D' && portaoLiberado(fase, pos, siris);
     const comportaFechada = passagemDoRecifeFechada(fase, pos, estado.temFragmento);
     const piso = comportaFechada ? '~' : celula;
-    if (!praia) desenharPisoLegado(ctx, piso, alta, x, y, tons);
+    if (!costa) desenharPisoLegado(ctx, piso, alta, x, y, tons);
     desenharMecanismosBase(ctx, piso, x, y, tons, placaOcupada);
     if (celula === 'P' || celula === 'D') {
       const indice = fase.portoesVinculados?.findIndex(item => mesmaCasa(item.placa, pos) || mesmaCasa(item.portao, pos)) ?? -1;
@@ -409,7 +413,7 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     if (celula === 'N') desenharAncoradouro(ctx, x, y, tons,
       estado.ancoradouros?.some(ancora => mesmaCasa(ancora, pos)) ?? false);
     // Só o obstáculo imediatamente relevante ao próximo passo recebe cantos.
-    if (estado.situacao === 'jogando' && !(praia && celula === '=')
+    if (estado.situacao === 'jogando' && !(costa && celula === '=' && !(costa.tipo === 'recifes' && comportaFechada))
       && marcaBloqueioAdjacente(pos, atual, celula, alta, vizinhas)) {
       cantos(ctx, x, y, tons.branco, 2, 3);
     }

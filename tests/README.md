@@ -111,3 +111,7 @@ A fixture do desfecho parte do Salão das lanternas com cinco regulares concluí
 ### Arte da Travessia da Praia
 
 `arte-travessia-praia.test.ts` executa o renderizador com coordenadas inteiras e cores opacas. Verifica o escopo (Cabo Baixo e Enseadinha, não bancada ou Recifes), a areia molhada na baixa, os quatro cantos de um pixel na alta, a espuma e a concha. O teste de navegador percorre a primeira travessia com teclado e toque emulado, confere o recorte exato do siri e compara os pixels da maré. Com `MARE_CAPTURA_DIR` preenchido, salva os dois estados sem cursor. Aparelho físico não entra nessa verificação.
+
+### Prévia da arte em Recifes e Mangue
+
+`arte-recifes-mangue.test.ts` verifica que cada costa tem cor, concha e enfeites próprios e usa a grade nativa com cores opacas. Os testes distinguem a areia molhada e os quatro cantos da maré alta. Degraus da vazante e Janela partilhada servem de verificação no navegador, com teclado e toque emulado, e de captura sem cursor com `MARE_CAPTURA_DIR`. Os testes dos chefes continuam verificando as comportas e placas. Sem teste em aparelho físico.
