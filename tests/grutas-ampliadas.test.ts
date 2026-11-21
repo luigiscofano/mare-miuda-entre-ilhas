@@ -94,7 +94,7 @@ test('os novos marcos persistem, e a rota antiga basta para chegar à Baía', ()
     assert.equal(entradaEm(ramo.posicao, 'grutas')?.id, id);
     ramo = concluirFase(ramo, id);
   }
-  assert.equal(nosDo('grutas').length, 11);
+  assert.equal(nosDo('grutas').length, 12);
   const trilhas = trilhasDo('grutas');
   for (const t of trilhas) {
     assert.deepEqual(moverNoMapa({ ...ramo, posicao: t.de }, t.ida).progresso.posicao, t.para);

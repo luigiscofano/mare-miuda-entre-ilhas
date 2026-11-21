@@ -448,6 +448,42 @@ def conferir_grutas_ampliadas(pagina, toque=False):
 
 
 
+def conferir_trio_grutas(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    # Usa um save de jogador que já aprendeu a placa em dupla.
+    pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+        versao: 1, progresso: {mundo: 'grutas', posicao: {coluna: 8, linha: 1},
+            viuTutorial: true, concluidas: ['grutas-encaixe', 'grutas-ordem',
+              'grutas-retorno', 'grutas-dupla-portao']},
+        audio: {musica: 0, efeitos: 0},
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Três refúgios · opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#dupla-ativa')).to_contain_text('Coral, pinças erguidas')
+    for siri in ['Verde', 'Amarelo', 'Coral']:
+        jogar(pagina, 'X', toque)
+        expect(pagina.locator('#posicao')).to_contain_text(f'{siri} (ativo)')
+        expect(pagina.locator('#feedback')).to_contain_text(f'Siri ativo: {siri}. A maré não avançou.')
+        expect(pagina.locator('#passos')).to_have_text('0')
+    jogar(pagina, 'RRRXRRRRRRXRRRR', toque)
+    expect(pagina.locator('#posicao')).to_contain_text('Amarelo (ativo): coluna 5, linha 5')
+    expect(pagina.locator('#posicao')).to_contain_text('Verde: coluna 7, linha 3')
+    salvar_captura(pagina, f"grutas-tres-refugios-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'XRRXXRRXRR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+    expect(pagina.locator('#passos')).to_have_text('19')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Três refúgios · opcional · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('4/10')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+
+
 def conferir_ressaca_ampliada(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     # Retoma o último marco para verificar a travessia cronometrada na interface.
@@ -779,6 +815,7 @@ with sync_playwright() as p:
     conferir_enseada_ampliada(desktop)
     conferir_deriva_ampliada(desktop)
     conferir_grutas_ampliadas(desktop)
+    conferir_trio_grutas(desktop)
     conferir_ressaca_ampliada(desktop)
     conferir_vento_sul(desktop)
     conferir_ressaca_alta(desktop)
@@ -798,6 +835,7 @@ with sync_playwright() as p:
         conferir_enseada_ampliada(aparelho, toque=True)
         conferir_deriva_ampliada(aparelho, toque=True)
         conferir_grutas_ampliadas(aparelho, toque=True)
+        conferir_trio_grutas(aparelho, toque=True)
         conferir_ressaca_ampliada(aparelho, toque=True)
         conferir_vento_sul(aparelho, toque=True)
         conferir_ressaca_alta(aparelho, toque=True)

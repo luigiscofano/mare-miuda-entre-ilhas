@@ -99,3 +99,7 @@ O primeiro chefe da Baía usa a própria subida da maré para varrer uma faixa a
 ## Arena Ressaca Alta
 
 Depois de Vento Sul, siga à esquerda para sobreviver a três faixas anunciadas e conduzir a dupla a dois destinos. As arenas são opcionais, mantêm dez regulares na Baía e não mudam a passagem ao Farol. [Ficha e solução](../processo-de-criacao/17-ressaca-alta/README.md).
+
+## Estreia do trio nas Grutas
+
+Depois de **A pérola e a placa**, siga para baixo no mapa para o desvio **Três refúgios**. O trio divide o comando e a maré, e vence com três alvos ocupados. O desafio não entra nas dez regulares nem impede a viagem à Baía. [Ficha](../processo-de-criacao/18-trio-grutas/README.md).

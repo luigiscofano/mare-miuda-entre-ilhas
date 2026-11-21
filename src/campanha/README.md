@@ -43,3 +43,5 @@ Suba depois de Abrigo dos dois cais para acessar oito travessias novas. Cais em 
 Ao concluir Cofre da vazante, siga à esquerda para o marco de chefe; direita volta ao Cofre. A arena é salva pelo mesmo sistema de conclusões, mas não entra no progresso das dez regulares e não bloqueia o Farol.
 
 Ressaca Alta aparece em um novo marco à esquerda da arena Vento Sul, liberado pela conclusão do primeiro chefe. Ambos ficam fora do contador de regulares. Nenhum requisito novo para viajar até o Farol.
+
+Nas Grutas, ↓ no marco de A pérola e a placa abre Três refúgios depois da conclusão. ↑ volta ao marco. O ID novo é reconhecido pelo save sem migração e não é condição do caminho à Baía.

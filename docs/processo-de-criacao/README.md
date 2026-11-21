@@ -26,3 +26,4 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 | [Baía da Ressaca ampliada](14-ressaca-ampliada/README.md) | Oito travessias com refúgios, balsas, dupla e orçamento de três moedas. |
 | [Vento Sul](16-vento-sul/README.md) | Primeira arena de chefe da Baía: faixa de ressaca e ancoradouros. |
 | [Ressaca Alta](17-ressaca-alta/README.md) | Segunda arena da Baía: sobrevivência em dupla e dois destinos distintos. |
+| [Três refúgios](18-trio-grutas/README.md) | Introdução do trio em um desvio das Grutas da Espuma. |

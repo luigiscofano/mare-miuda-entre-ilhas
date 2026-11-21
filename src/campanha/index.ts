@@ -1,3 +1,4 @@
+import { TRES_REFUGIOS } from '../fases/trio-grutas.ts';
 import { RESSACA_ALTA } from '../fases/ressaca-alta.ts';
 import { VENTO_SUL } from '../fases/vento-sul.ts';
 import { FASES_RESSACA_AMPLIADA } from '../fases/ressaca-ampliada.ts';
@@ -27,7 +28,7 @@ export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
   | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
-  | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
+  | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof TRES_REFUGIOS.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
 export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
   posicao: Posicao;
@@ -85,6 +86,7 @@ const NOS_DERIVA = [
 const ENTRADAS_DERIVA: readonly Entrada[] = FASES_DERIVA_AMPLIADA.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_DERIVA[i],
 }));
+const DESVIO_TRIO = P(8, 3);
 const NOS_GRUTAS = [
   P(2, 0), P(4, -1), P(6, -1), P(8, -1), P(10, -1),
 ] as const;
@@ -168,6 +170,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'grutas-dupla-portao', posicao: P(8, 1), nome: 'A pérola e a placa' },
     { id: 'grutas-dupla-camaras', posicao: P(10, 1), nome: 'Revezamento nas câmaras' },
     ...ENTRADAS_GRUTAS,
+    { id: TRES_REFUGIOS.id, nome: TRES_REFUGIOS.nome, posicao: DESVIO_TRIO, opcional: true },
   ],
   ressaca: [
     PORTO,
@@ -378,6 +381,8 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['grutas-coral-portador'], 'Leve a pérola com o siri coral para visitar a outra margem.'),
     trilha(NOS_GRUTAS[3], NOS_GRUTAS[4], 'direita', 'esquerda', [],
       ['grutas-alavanca-distante'], 'Acione A alavanca distante para abrir a boca do labirinto.'),
+    trilha(P(8, 1), DESVIO_TRIO, 'baixo', 'cima', [],
+      ['grutas-dupla-portao'], 'Conclua A pérola e a placa para encontrar o terceiro siri.'),
   ],
   ressaca: [
     trilha(CAIS, P(2, 1), 'direita', 'esquerda', []),

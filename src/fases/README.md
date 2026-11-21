@@ -160,3 +160,7 @@ A arena opcional da Baía abre após Cofre da vazante. `N` é um ancoradouro que
 ## Ressaca Alta
 
 `ressaca-alta.ts` reaproveita o aviso de faixas da subida. O objetivo de sobrevivência usa o tamanho do ciclo para contar ondas seguras consecutivas e só termina com a dupla nos alvos `C` e `T`. O contador zera com uma levada; a maré não volta. [Ficha e solução](../../docs/processo-de-criacao/17-ressaca-alta/README.md).
+
+## Três refúgios
+
+`trio-grutas.ts` usa `M` para a posição inicial do Amarelo e `Y` para o terceiro alvo. O campo `dupla.terceiroAlvo` estende o grupo sem alterar os mapas solo ou em dupla. A concha, o marco `T` e o novo marco precisam ser ocupados no mesmo turno seguro. [Ficha e solução](../../docs/processo-de-criacao/18-trio-grutas/README.md).

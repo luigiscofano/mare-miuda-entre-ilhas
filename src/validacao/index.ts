@@ -5,7 +5,7 @@ export function validarMapa(fase: Fase): void {
   const largura = fase.mapa[0]?.length ?? 0;
   const celulas = fase.mapa.join('');
   const contar = (simbolo: string) => [...celulas].filter(valor => valor === simbolo).length;
-  if (!largura || fase.mapa.some(linha => linha.length !== largura) || /[^S.=#CBGHAPDT~KEFON]/.test(celulas)) {
+  if (!largura || fase.mapa.some(linha => linha.length !== largura) || /[^S.=#CBGHAPDT~KEFONMY]/.test(celulas)) {
     throw new Error(`Mapa retangular inválido: ${fase.id}.`);
   }
   if (contar('S') !== 1 || contar('C') + contar('G') !== 1 ||
@@ -14,6 +14,10 @@ export function validarMapa(fase: Fase): void {
   }
   if (fase.dupla && (contar('A') !== 1 || contar(fase.dupla.segundoAlvo) !== 1)) {
     throw new Error(`Configuração dupla inválida: ${fase.id}.`);
+  }
+  const temTrio = fase.dupla?.terceiroAlvo !== undefined;
+  if (temTrio ? (contar('M') !== 1 || contar('Y') !== 1) : /[MY]/.test(celulas)) {
+    throw new Error(`Configuração do trio inválida: ${fase.id}.`);
   }
   if ((!fase.dupla && /[APDT]/.test(celulas)) || (contar('D') && contar('P') !== 1)) {
     throw new Error(`Mecanismo sem dupla ou placa: ${fase.id}.`);

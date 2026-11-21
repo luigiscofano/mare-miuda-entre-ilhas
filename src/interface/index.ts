@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, executarPasso, faixaRessacaNoTurno, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, PASSOS_POR_MARE, passosAteVirada, mesmaCasa, TOTAL_ANCORADOUROS, totalFragmentos } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, executarPasso, faixaRessacaNoTurno, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, PASSOS_POR_MARE, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, TOTAL_ANCORADOUROS, totalFragmentos } from '../motor/index.ts';
 import type { Acao, Direcao, Evento } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { ALTURA, DENSIDADE, desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
@@ -171,6 +171,8 @@ function abrirPraia(mensagem = ''): void {
   atualizarPraia(mensagem);
 }
 
+const SIRIS = ['Coral', 'Verde', 'Amarelo'] as const;
+const SILHUETAS = ['pinças erguidas', 'pinças baixas', 'pinças de lado'] as const;
 function descricao(evento: Evento): string {
   switch (evento.tipo) {
     case 'bloqueado': return 'Passo bloqueado. A maré não avançou.';
@@ -191,8 +193,9 @@ function descricao(evento: Evento): string {
     case 'ancora-na-alta': return 'Volte a este ancoradouro na maré baixa.';
     case 'faltam-ondas': return 'Sobreviva ao ciclo inteiro antes de reunir a dupla nos destinos.';
     case 'faltam-ancoradouros': return 'Firme os três ancoradouros para usar a saída.';
+    case 'faltam-siris': return 'Coloque um siri em cada um dos três destinos.';
     case 'falta-parceiro': return 'O outro siri ainda não está no destino.'; 
-    case 'troca': return 'Siri ativo trocado sem avançar a maré.';
+    case 'troca': return `Siri ativo: ${SIRIS[siriAtivo(estado)]}. A maré não avançou.`;
     case 'vitoria': return 'Fase concluída!';
   }
 }
@@ -219,7 +222,8 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     const proxima = fase.etapasGruta[etapa];
     const coleta = total ? ` · ${fragmento.textContent}` : '';
     const levando = etapa === 1 && fase.etapasGruta[0] === 'K';
-    const inventario = estado.portadorGruta === 'parceiro' ? 'Pérola com o siri verde · '
+    const inventario = estado.portadorGruta === 'terceiro' ? 'Pérola com o siri amarelo · '
+      : estado.portadorGruta === 'parceiro' ? 'Pérola com o siri verde · '
       : estado.portadorGruta === 'principal' ? 'Pérola com o siri coral · '
       : levando ? 'Pérola no inventário · ' : '';
     fragmento.textContent = proxima
@@ -239,7 +243,8 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   ondas.textContent = ondas.hidden ? '' : `Ondas seguras seguidas: ${estado.ondasSeguras}/${fase.ressaca?.faixas.length}`;
   const duplaAtiva = buscar('#dupla-ativa');
   duplaAtiva.hidden = !estado.dupla;
-  duplaAtiva.textContent = `Siri ativo: ${estado.dupla?.parceiroAtivo ? 'Verde, pinças baixas' : 'Coral, pinças erguidas'} (Espaço para trocar)`;
+  const ativo = siriAtivo(estado);
+  duplaAtiva.textContent = `Siri ativo: ${SIRIS[ativo]}, ${SILHUETAS[ativo]} (Espaço ou botão Trocar siri)`;
   buscar('#trocar-siri').hidden = !estado.dupla || finalizada;
   const coordenadas = (p: { coluna: number; linha: number }) => `coluna ${p.coluna + 1}, linha ${p.linha + 1}`;
   const alvo = alvoDaGarca(fase.ameaca, estado.passos + 1);
@@ -253,7 +258,9 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   const sinalRessaca = faixa ? ` Onda na subida: linha ${faixa.linha + 1}, colunas ${faixa.primeiraColuna + 1} a ${faixa.ultimaColuna + 1}. Pedra alta protege.` : '';
   buscar('#previsao').textContent = finalizada ? 'Tentativa encerrada.'
     : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}${sinalRessaca}`;
-  buscar('#posicao').textContent = `Siri na coluna ${estado.posicao.coluna + 1}, linha ${estado.posicao.linha + 1}.`;
+  buscar('#posicao').textContent = estado.dupla
+    ? posicoesDosSiris(estado).map((pos, i) => `${SIRIS[i]}${i === ativo ? ' (ativo)' : ''}: ${coordenadas(pos)}.`).join(' ')
+    : `Siri na ${coordenadas(estado.posicao)}.`;
 
   const mensagens = eventos.map(descricao);
   if (eventos.some(evento => evento.tipo === 'levada')) {
