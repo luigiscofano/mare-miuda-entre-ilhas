@@ -43,3 +43,5 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 [30 · Travessias de Recifes e Mangue](30-travessias-recifes-mangue/README.md): prévia visual jogável, com costa em grade e uma concha por mundo.
 
 [31 · Travessias da Enseada e da Deriva](31-travessias-enseada-deriva/README.md): duas propostas visuais com quadros das duas marés.
+
+[32 · Travessias das Grutas, da Baía e do Farol](32-travessias-grutas-ressaca-farol/README.md): últimas três propostas de tabuleiro, com os mecanismos em contraste nas duas marés.
