@@ -2,6 +2,10 @@
 
 [README principal](../../README.md) · [Processo de criação](README.md) · [Acervo visual](acervo-visual/README.md)
 
+## Conferência posterior: prévia privada
+
+A leitura abaixo permanece como registro do PR #72. Mais tarde, o [PR #75](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/75) integrou ao rascunho as oito faixas aprovadas de **Siri na Areia — Notas Claras**. O [CI do PR #77](https://github.com/luigiscofano/mare-miuda-entre-ilhas/actions/runs/44938701024) passou e gerou um ZIP privado. A contagem da campanha não mudou. Teste manual de Safari/VoiceOver no iPhone físico e publicação seguem pendentes.
+
 ## Referência desta leitura
 
 Base exata: [PR #72](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/72), commit `ffe041cd996b7414b49b77417a6cc1ba1016dd48`, árvore `30d0a52ddda197c7bf966d269bd5cf115a49acc4`. Conferência em 21/11/2026. O PR estava aberto, sem merge. Este documento descreve a proposta local desse commit, **não uma versão lançada**. Nenhuma publicação, integração ou alteração de jogo decorre desta consolidação.
