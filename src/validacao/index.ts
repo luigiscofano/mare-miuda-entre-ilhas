@@ -1,4 +1,4 @@
-import { faixaAfeta, TOTAL_ANCORADOUROS, executarPasso, iniciar, lerCelula, mesmaCasa } from '../motor/index.ts';
+import { casasDoRasante, faixaAfeta, TOTAL_ANCORADOUROS, executarPasso, iniciar, lerCelula, mesmaCasa } from '../motor/index.ts';
 import type { Acao, Fase } from '../motor/index.ts';
 
 const chave = ({ coluna, linha }: { coluna: number; linha: number }) => `${coluna}:${linha}`;
@@ -103,6 +103,12 @@ export function validarMapa(fase: Fase): void {
   if (alvos.some(pos => !lerCelula(fase, pos) || lerCelula(fase, pos) === '#') || !Number.isInteger(periodo) || periodo < 1
     || !Number.isInteger(primeiroAtaque) || primeiroAtaque < 1) {
     throw new Error(`Ameaça inválida: ${fase.id}.`);
+  }
+  const rasante = fase.ameaca.rasante;
+  if (rasante && ((rasante.eixo !== 'linha' && rasante.eixo !== 'coluna')
+    || !Number.isInteger(rasante.alcance) || rasante.alcance < 1 || rasante.alcance > 4
+    || alvos.some((_, i) => casasDoRasante(fase, primeiroAtaque + i * periodo).length < 2))) {
+    throw new Error(`Rasante inválido: ${fase.id}.`);
   }
 }
 

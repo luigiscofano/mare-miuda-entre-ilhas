@@ -42,6 +42,8 @@ O motor percorre as 52 soluções da campanha sem levadas. A busca das sete nova
 
 ## Enseada da Garça ampliada
 
+Os chefes têm cobertura de rota mínima, recuperação sem reinício nos estados anteriores à derrota, refúgio alto, ataque ao siri inativo e persistência do ramal. O roteiro Playwright percorre as duas arenas com teclado e toque emulado.
+
 O motor reproduz as 59 soluções sem levadas. Nas sete novas, uma rota que vence sem a garça é atingida quando a patrulha real está ativa. O teste também verifica marcos, volta, saves e a saída original para a Deriva. O roteiro Playwright cobre aviso, rasante, reinício, desvio seguro e recarga com teclado e toque emulado; confirme os resultados na CI.
 
 ## Ilhas à Deriva ampliadas
@@ -95,7 +97,3 @@ O teste reproduz a alternância das faixas, a proteção na pedra alta e as duas
 ## Chefes dos Recifes
 
 `chefes-recifes.test.ts` audita as soluções de 19 e 31 passos, a recuperação após levadas, a ida/volta das comportas e o ramo opcional. O cenário de navegador cobre as duas vitórias, a mudança da passagem e a persistência sem alterar o contador regular. Consulte a CI para a evidência de teclado e toque emulado.
-
-## Chefes do Mangue
-
-`chefes-mangue.test.ts` valida as duas rotas, ligações específicas, rasante no siri inativo e recuperação de todos os estados firmes alcançáveis. O Playwright verifica o par certo de placa e raiz, aviso e levada, reinício, vitória, retorno e save por teclado e toque emulado.

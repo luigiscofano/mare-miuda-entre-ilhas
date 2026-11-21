@@ -4,7 +4,13 @@ export type Acao = Direcao | 'trocar';
 export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~' | EtapaGruta | 'O' | 'N' | 'M' | 'Y' | 'I' | 'L';
 export type EtapaGruta = 'K' | 'E' | 'F';
 export type Posicao = Readonly<{ coluna: number; linha: number }>;
-export type Ameaca = Readonly<{ alvo: Posicao; primeiroAtaque: number; periodo: number; rota?: readonly Posicao[] }>;
+export type Ameaca = Readonly<{
+  alvo: Posicao;
+  primeiroAtaque: number;
+  periodo: number;
+  rota?: readonly Posicao[];
+  rasante?: Readonly<{ eixo: 'linha' | 'coluna'; alcance: number }>;
+}>;
 export type FaixaRessaca = Readonly<{ linha: number; primeiraColuna: number; ultimaColuna: number }>;
 export type OrientacaoFarol = Readonly<{
   nome: string;
@@ -126,6 +132,24 @@ export function alvoDaGarca(ameaca: Ameaca | undefined, passo: number): Posicao 
   return ciclo[indice % ciclo.length];
 }
 
+// Solo firme também é atingido. O voo passa por cima dos obstáculos,
+// mas a pedra alta oculta o siri e nunca recebe a marca do rasante.
+export function casasDoRasante(fase: Fase, passo: number): Posicao[] {
+  const alvo = alvoDaGarca(fase.ameaca, passo);
+  if (!alvo) return [];
+  const rasante = fase.ameaca?.rasante;
+  if (!rasante) return [alvo];
+  const casas: Posicao[] = [];
+  for (let deslocamento = -rasante.alcance; deslocamento <= rasante.alcance; deslocamento++) {
+    const pos = rasante.eixo === 'linha'
+      ? { coluna: alvo.coluna + deslocamento, linha: alvo.linha }
+      : { coluna: alvo.coluna, linha: alvo.linha + deslocamento };
+    const celula = lerCelula(fase, pos);
+    if (celula && celula !== '#' && celula !== 'H' && celula !== '~') casas.push(pos);
+  }
+  return casas;
+}
+
 // Cada subida golpeia uma faixa inteira. A sequência avança pelo relógio da
 // maré, inclusive após uma levada; não existe um contador separado da arena.
 export function faixaRessacaNoTurno(fase: Fase, passos: number): FaixaRessaca | undefined {
@@ -238,8 +262,8 @@ function calcularDestino(posicao: Posicao, direcao: Direcao): Posicao {
 function ameacasNoTurno(fase: Fase, posicoes: readonly Posicao[], passos: number): MotivoErro[] {
   const motivos: MotivoErro[] = [];
   if (mareAlta(passos) && posicoes.some(pos => lerCelula(fase, pos) === '=')) motivos.push('mare');
-  const alvo = alvoDaGarca(fase.ameaca, passos);
-  if (alvo && posicoes.some(pos => mesmaCasa(alvo, pos))) motivos.push('garca');
+  const rasante = casasDoRasante(fase, passos);
+  if (posicoes.some(pos => rasante.some(casa => mesmaCasa(casa, pos)))) motivos.push('garca');
   if (fase.farol && posicoes.some(pos => lerCelula(fase, pos) === 'I' && !ponteIluminada(fase, pos, passos))) motivos.push('farol');
   const faixa = faixaRessacaNoTurno(fase, passos);
   if (faixa && posicoes.some(pos => faixaAfeta(fase, faixa, pos))) motivos.push('ressaca');
