@@ -368,6 +368,47 @@ def conferir_enseada_ampliada(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def conferir_deriva_ampliada(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    # Retoma no quarto marco do ramo para testar o tabuleiro mais largo e a dupla.
+    pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+        versao: 1, progresso: {mundo: 'deriva', posicao: {coluna: 8, linha: -1},
+            viuTutorial: true, concluidas: ['deriva-primeira-balsa', 'deriva-duas-margens',
+              'deriva-um-passo-ao-cais', 'deriva-cais-da-alta', 'deriva-duas-rampas',
+              'deriva-ida-e-retorno', 'deriva-dois-ancoradouros']},
+        audio: {musica: 0, efeitos: 0},
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Balsas alternadas')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('Balsa 2')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+    salvar_captura(pagina, f"deriva-balsas-alternadas-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'RRRRDUDURRRRRR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+    tocar(pagina, '#voltar-fase', toque)
+    jogar(pagina, 'RRD', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Tripulação partilhada')
+    tocar(pagina, '#entrar-fase', toque)
+    jogar(pagina, 'RRX', toque)
+    expect(pagina.locator('#passos')).to_have_text('2')
+    expect(pagina.locator('#dupla-ativa')).to_contain_text('Verde')
+    expect(pagina.locator('#posicao')).to_contain_text('coluna 3, linha 1')
+    jogar(pagina, 'R', toque)
+    expect(pagina.locator('#passos')).to_have_text('3')
+    expect(pagina.locator('#posicao')).to_contain_text('coluna 5, linha 1')
+    expect(pagina.locator('#feedback')).to_contain_text('A balsa levou o siri')
+    jogar(pagina, 'RRXRRRXR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Tripulação partilhada · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('9/10')
+
+
 def conferir_enseadinha(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
@@ -475,8 +516,7 @@ def conferir_lote2(pagina, toque=False):
         jogar(pagina, 'LD', toque, mapa=True)
         pagina.reload()
         tocar(pagina, '#comecar', toque)
-        expect(pagina.locator('#progresso-praia')).to_contain_text(
-            '3/10' if mundo.startswith('Enseada') else '3/3')
+        expect(pagina.locator('#progresso-praia')).to_contain_text('3/10')
         jogar(pagina, 'D', toque, mapa=True)
         tocar(pagina, '#entrar-fase', toque)
         expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
@@ -570,6 +610,7 @@ with sync_playwright() as p:
     conferir_recifes_ampliados(desktop)
     conferir_mangue_ampliado(desktop)
     conferir_enseada_ampliada(desktop)
+    conferir_deriva_ampliada(desktop)
     print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
         aparelho = navegador.new_page(viewport={'width': largura, 'height': 844}, has_touch=True,
@@ -584,5 +625,6 @@ with sync_playwright() as p:
         conferir_recifes_ampliados(aparelho, toque=True)
         conferir_mangue_ampliado(aparelho, toque=True)
         conferir_enseada_ampliada(aparelho, toque=True)
+        conferir_deriva_ampliada(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()

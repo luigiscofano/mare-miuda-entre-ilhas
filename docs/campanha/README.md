@@ -79,3 +79,7 @@ O Mangue tem dez travessias regulares, sem chefes neste lote. A rota original co
 ## Ampliação da Enseada da Garça
 
 A Enseada passa a dez regulares mais dois desvios históricos em dupla. O ramo novo parte de Sombra na restinga e termina em Vigia partilhada, em dupla. Não altera a abertura das Ilhas à Deriva. [Fichas e soluções](../processo-de-criacao/11-enseada-ampliada/README.md).
+
+## Ampliação das Ilhas à Deriva
+
+O mundo tem dez travessias regulares e dois desvios em dupla. A rota curta original, o embarque para as Grutas e os saves permanecem. O novo ramo apresenta sete desafios de balsa, incluindo uma travessia regular em dupla. [Fichas e soluções](../processo-de-criacao/12-deriva-ampliada/README.md).

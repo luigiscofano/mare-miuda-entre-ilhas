@@ -136,3 +136,7 @@ Os dois mapas de `farol.ts` reaproveitam a placa `P`, o portão `D`, o embarque 
 ## Enseada da Garça ampliada
 
 Seis travessias solo e uma em dupla nascem de um ramo ao norte da rota original. Veja as [fichas do lote](../../docs/processo-de-criacao/11-enseada-ampliada/README.md) com grades, ciclos da garça e soluções verificadas.
+
+## Ilhas à Deriva ampliadas
+
+As sete travessias do ramo norte usam balsas e mantêm os três mapas originais e os dois desvios em dupla. As [fichas do lote](../../docs/processo-de-criacao/12-deriva-ampliada/README.md) trazem as grades, os cais por maré e as rotas testadas.

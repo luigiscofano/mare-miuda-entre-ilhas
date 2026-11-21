@@ -1,3 +1,5 @@
+import { FASES_DERIVA_AMPLIADA } from '../fases/deriva-ampliada.ts';
+import type { IdFaseDerivaAmpliada } from '../fases/deriva-ampliada.ts';
 import { FASES_ENSEADA_AMPLIADA } from '../fases/enseada-ampliada.ts';
 import type { IdFaseEnseadaAmpliada } from '../fases/enseada-ampliada.ts';
 import { FASES_MANGUE_AMPLIADO } from '../fases/mangue-ampliado.ts';
@@ -10,7 +12,7 @@ import type { Direcao, Posicao } from '../motor/index.ts';
 export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'praia-mirante'
   | 'praia-bolso-mare' | 'praia-trilha-das-pedras' | 'praia-fragmentos-areal';
 export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
-export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
+export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | IdFaseDerivaAmpliada | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
   | 'enseada-dupla-vigia' | 'enseada-dupla-revezamento' | 'deriva-dupla-cais' | 'deriva-dupla-contramao'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
@@ -68,6 +70,12 @@ const NOS_ENSEADA = [
 const ENTRADAS_ENSEADA: readonly Entrada[] = FASES_ENSEADA_AMPLIADA.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_ENSEADA[i],
 }));
+const NOS_DERIVA = [
+  P(2, 0), P(4, 0), P(6, -1), P(8, -1), P(10, -1), P(11, 1), P(11, 3),
+] as const;
+const ENTRADAS_DERIVA: readonly Entrada[] = FASES_DERIVA_AMPLIADA.map((fase, i) => ({
+  id: fase.id, nome: fase.nome, posicao: NOS_DERIVA[i],
+}));
 const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
   praia: ENTRADAS_PRAIA,
   'praia-enseadinha': [
@@ -120,6 +128,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'deriva-corrente-cruzada', posicao: P(6, 1), nome: 'Corrente cruzada' },
     { id: 'deriva-dupla-cais', posicao: P(7, 0), nome: 'Encontro nos dois cais', opcional: true },
     { id: 'deriva-dupla-contramao', posicao: P(9, 0), nome: 'Balsas na contramão', opcional: true },
+    ...ENTRADAS_DERIVA,
   ],
   grutas: [
     PORTO,
@@ -301,6 +310,20 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['deriva-corrente-cruzada'], 'Conclua Corrente cruzada para abrir o desvio em dupla.'),
     trilha(P(7, 0), P(9, 0), 'direita', 'esquerda', [P(8.125, 0.375)],
       ['deriva-dupla-cais'], 'Conclua Encontro nos dois cais para alcançar a outra corrente.'),
+    trilha(P(2, 1), NOS_DERIVA[0], 'cima', 'baixo', [],
+      ['deriva-primeira-balsa'], 'Conclua A primeira balsa para abrir o ramo norte.'),
+    trilha(NOS_DERIVA[0], NOS_DERIVA[1], 'direita', 'esquerda', [],
+      ['deriva-um-passo-ao-cais'], 'Conclua Um passo ao cais para explorar o cais da alta.'),
+    trilha(NOS_DERIVA[1], NOS_DERIVA[2], 'direita', 'esquerda', [P(5, 0), P(5, -1)],
+      ['deriva-cais-da-alta'], 'Atravesse pelo cais da alta antes de explorar as rampas.'),
+    trilha(NOS_DERIVA[2], NOS_DERIVA[3], 'direita', 'esquerda', [],
+      ['deriva-duas-rampas', 'deriva-duas-margens'], 'Conclua Duas rampas e Duas margens para visitar o ilhote.'),
+    trilha(NOS_DERIVA[3], NOS_DERIVA[4], 'direita', 'esquerda', [],
+      ['deriva-balsas-alternadas'], 'Troque de balsa no ilhote para abrir a corrente seguinte.'),
+    trilha(NOS_DERIVA[4], NOS_DERIVA[5], 'direita', 'cima', [P(11, -1)],
+      ['deriva-ida-e-retorno'], 'Conclua Ida e retorno pela corrente para chegar aos ancoradouros.'),
+    trilha(NOS_DERIVA[5], NOS_DERIVA[6], 'baixo', 'cima', [],
+      ['deriva-dois-ancoradouros'], 'Traga os dois fragmentos para encontrar a tripulação.'),
   ],
   grutas: [
     ...sustentar('grutas-encaixe', 'grutas-ordem', 'grutas-retorno', true),
