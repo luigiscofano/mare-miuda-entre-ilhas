@@ -1,5 +1,7 @@
 # Processo de criação
 
+**Comece pelo [estado atual da base de teste](estado-atual.md).** Para consultar propostas anteriores sem confundi-las com o jogo, veja o [acervo visual e sua proveniência](acervo-visual/README.md).
+
 Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem substituir o que retrata uma versão anterior. Uma captura nunca é confundida com arte conceitual. Os arquivos históricos não são lidos pelo jogo, não entram no build e não compartilham save com a praia.
 
 | Etapa | Conteúdo |
@@ -16,7 +18,7 @@ Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem subs
 | [10 · Duplas nas Grutas e Ressaca](10-duplas-grutas-ressaca/README.md) | Quatro fases regulares, posse da pérola, balsas e patrulha. |
 | [Estudos da identidade visual](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/3) | Placa de Areia e Corrente de Espuma, PT/EN, preservadas em PR separado. A foi aprovada para a abertura; B permanece como estudo. |
 
-As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/`. Esse caminho só será integrado junto dos estudos correspondentes.
+| [Acervo histórico de identidade](acervo-visual/README.md) | Índice externo por commit, com inventário de 340 arquivos ainda não importados. |
 | [11 · Farol em dupla](11-farol-dupla/README.md) | Duas travessias regulares: fragmentos, balsas opostas e janela final de maré. |
 
 ## Expansão da campanha
@@ -55,3 +57,17 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 - [36 · Seletores da Enseada e da Deriva](36-seletores-enseada-deriva/README.md): fundos editáveis, acesso bloqueado e liberado, chefes e desvio.
 
 - [37 · Seletores das Grutas, da Baía e do Farol](37-seletores-mundos-finais/README.md): três fundos editáveis e os estados de acesso às arenas opcionais.
+
+## Cadernos complementares já presentes
+
+A numeração reflete frentes paralelas, não uma sequência única de versões. Estes cadernos também fazem parte do histórico:
+
+- [Recifes ampliados](09-recifes-ampliados/README.md).
+- [Mangue ampliado](10-mangue-ampliado/README.md).
+- [Enseada ampliada](11-enseada-ampliada/README.md).
+- [Deriva ampliada](12-deriva-ampliada/README.md).
+- [Grutas ampliadas](13-grutas-ampliadas/README.md).
+- [Farol ampliado](15-farol-ampliado/README.md).
+- [Guardião do Farol](20-guardiao-farol/README.md).
+
+“12 · Deriva ampliada” é um nome de pasta da campanha, não uma autorização para importar o PR #12. A consolidação do acervo exclui o gameplay desse PR.

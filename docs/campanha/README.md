@@ -1,5 +1,7 @@
 # Campanha e mapa-múndi
 
+> **Leitura atualizada:** esta página conserva planejamento e atualizações históricos. A base do PR #72 já contém oito mundos, 77 entradas não opcionais, 16 chefes opcionais e 13 bônus/alternativas não-chefes. Consulte o [estado datado e os critérios de contagem](../processo-de-criacao/estado-atual.md) antes de interpretar expressões antigas como “planejado”, “futuro” ou “pendente”. Arte preliminar e lançamento continuam sujeitos à revisão.
+
 **Planejado.** O protótipo tem seleção de três testes, não um mapa autoral. Na fatia vertical, a Praia das Conchas terá percurso caminhável, bifurcação e retorno. Depois, Recifes e Mangue podem ser feitos em qualquer ordem; completar ambos libera a Enseada. Segredos dão recompensas opcionais e nunca travam a história. Atalhos evitam refazer trechos.
 
 | Mundo | Introdução → aplicação → combinação → domínio |
