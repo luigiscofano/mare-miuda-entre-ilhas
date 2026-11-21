@@ -129,3 +129,7 @@ Ao vencer Vigia das ondas, suba no marco dele para encarar a segunda arena opcio
 ## Chefes dos Recifes Expostos
 
 A volta do recife abre o ramo direito: Guardião das Poças primeiro e Vigia do Recife abaixo. A saída da região e os dez marcos regulares não mudam. [Fichas e rotas](../processo-de-criacao/24-chefes-recifes/README.md).
+
+## Chefes das Ilhas à Deriva
+
+Depois de Corrente cruzada, vá à direita para **Mestre das Correntes**. Vença-o e siga para baixo para **Passagem das Balsas**. As dez travessias regulares e os dois desvios em dupla não mudam. Os dois chefes são opcionais e não são requisitos para o embarque rumo às Grutas da Espuma. [Fichas, capturas e soluções](../processo-de-criacao/27-chefes-deriva/README.md).

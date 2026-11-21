@@ -93,8 +93,8 @@ test('o ramo novo tem ida, volta e save, e conserva o acesso anterior às Grutas
     assert.equal(entradaEm(ramo.posicao, 'deriva')?.id, id);
     ramo = concluirFase(ramo, id);
   }
-  assert.equal(nosDo('deriva').length, 13);
-  const todos = concluirFase(ramo, 'deriva-dupla-cais');
+  assert.equal(nosDo('deriva').length, 15);
+  const todos = concluirFase(concluirFase(ramo, 'deriva-dupla-cais'), 'deriva-chefe-mestre-das-correntes');
   const trilhas = trilhasDo('deriva');
   for (const t of trilhas) {
     assert.deepEqual(moverNoMapa({ ...todos, posicao: t.de }, t.ida).progresso.posicao, t.para);
