@@ -14,4 +14,4 @@
 
 A campanha tem **oito mundos com no mínimo dez fases autorais (quinze como meta de expansão) e dois chefes por mundo**. Estrutura de produção, entrega começando pela Praia, navegação por marcos e requisitos de leitura/tema nas fases: [escopo e decisão de navegação](escopo-e-leitura.md).
 
-A Baía da Ressaca alcança dez fases regulares, com seis em dupla. O Arquipélago do Farol também tem dez fases regulares. A Baía tem dois chefes opcionais: Vento Sul, com ancoragem, e Ressaca Alta, com sobrevivência em dupla. As demais arenas, o trio e a revisão de lançamento continuam pendentes. [Fichas da Baía](../processo-de-criacao/14-ressaca-ampliada/README.md).
+A Baía da Ressaca alcança dez fases regulares, com seis em dupla. O Arquipélago do Farol também tem dez fases regulares. A Baía tem dois chefes opcionais: Vento Sul, com ancoragem, e Ressaca Alta, com sobrevivência em dupla. O trio estreia no desvio Três refúgios. As demais arenas, a expansão do trio aos mundos posteriores e a revisão de lançamento continuam pendentes. [Fichas da Baía](../processo-de-criacao/14-ressaca-ampliada/README.md).

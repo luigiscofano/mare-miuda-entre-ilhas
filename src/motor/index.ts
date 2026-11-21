@@ -1,7 +1,7 @@
 // O núcleo não lê tempo, DOM nem storage: reprodução e jogo usam a mesma função.
 export type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita';
 export type Acao = Direcao | 'trocar';
-export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~' | EtapaGruta | 'O' | 'N';
+export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~' | EtapaGruta | 'O' | 'N' | 'M' | 'Y';
 export type EtapaGruta = 'K' | 'E' | 'F';
 export type Posicao = Readonly<{ coluna: number; linha: number }>;
 export type Ameaca = Readonly<{ alvo: Posicao; primeiroAtaque: number; periodo: number; rota?: readonly Posicao[] }>;
@@ -18,7 +18,7 @@ export type Fase = Readonly<{
   orcamentoMoedas?: number;
   etapasGruta?: readonly EtapaGruta[];
   ressaca?: Readonly<{ faixas: readonly FaixaRessaca[]; objetivo?: 'sobreviver' }>;
-  dupla?: Readonly<{ segundoAlvo: 'T' | 'P' }>;
+  dupla?: Readonly<{ segundoAlvo: 'T' | 'P'; terceiroAlvo?: 'Y' }>;
 }>;
 type EstadoDupla = Readonly<{ posicao: Posicao; ultimoFirme: Posicao; parceiroAtivo: boolean }>;
 export type Estado = Readonly<{
@@ -29,8 +29,9 @@ export type Estado = Readonly<{
   temFragmento: boolean;
   fragmentos: readonly Posicao[];
   dupla?: EstadoDupla;
+  terceiro?: Readonly<{ posicao: Posicao; ultimoFirme: Posicao; ativo: boolean }>;
   etapaGruta?: number;
-  portadorGruta?: 'principal' | 'parceiro';
+  portadorGruta?: 'principal' | 'parceiro' | 'terceiro';
   ancoradouros?: readonly Posicao[];
   ondasSeguras?: number;
   situacao: 'jogando' | 'vitoria' | 'derrota';
@@ -46,7 +47,7 @@ export type Evento =
   | Readonly<{ tipo: 'levada'; motivos: readonly MotivoErro[] }>
   | Readonly<{ tipo: 'fragmento' }>
   | Readonly<{ tipo: 'falta-fragmento' }>
-  | Readonly<{ tipo: 'falta-parceiro' }>
+  | Readonly<{ tipo: 'falta-parceiro' | 'faltam-siris' }>
   | Readonly<{ tipo: 'ancorou' | 'ancora-na-alta' | 'faltam-ancoradouros' }>
   | Readonly<{ tipo: 'faltam-ondas' }>
   | Readonly<{ tipo: 'troca' }>
@@ -64,7 +65,7 @@ const DELTAS: Record<Direcao, Posicao> = {
   direita: { coluna: 1, linha: 0 },
 };
 
-function localizar(fase: Fase, simbolo: 'S' | 'A'): Posicao {
+function localizar(fase: Fase, simbolo: 'S' | 'A' | 'M'): Posicao {
   const linha = fase.mapa.findIndex(fileira => fileira.includes(simbolo));
   if (linha < 0) throw new Error(`Fase sem casa inicial ${simbolo}.`);
   return { linha, coluna: fase.mapa[linha].indexOf(simbolo) };
@@ -76,10 +77,13 @@ export function iniciar(fase: Fase): Estado {
     const parceiro = localizar(fase, 'A');
     dupla = { posicao: parceiro, ultimoFirme: parceiro, parceiroAtivo: false };
   }
+  const terceiroInicio = fase.dupla?.terceiroAlvo ? localizar(fase, 'M') : undefined;
+  const terceiro = terceiroInicio ? { posicao: terceiroInicio, ultimoFirme: terceiroInicio, ativo: false } : undefined;
   return { posicao, ultimoFirme: posicao, passos: 0, levadas: 0, temFragmento: false,
     fragmentos: [],
     ...(fase.ressaca?.objetivo === 'sobreviver' ? { ondasSeguras: 0 } : fase.ressaca ? { ancoradouros: [] } : {}),
-    ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}), situacao: 'jogando' };
+    ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}),
+    ...(terceiro ? { terceiro } : {}), situacao: 'jogando' };
 }
 export function mareAlta(passos: number): boolean {
   return Math.floor(passos / PASSOS_POR_MARE) % 2 === 1;
@@ -161,7 +165,7 @@ function resolverGruta(fase: Fase, estado: Estado, celula: Celula | undefined, e
   if (atual === undefined || (celula !== 'K' && celula !== 'E' && celula !== 'F')) return atual;
   const proxima = etapas?.[atual];
   if (proxima === celula) {
-    const ativo = estado.dupla?.parceiroAtivo ? 'parceiro' : 'principal';
+    const ativo = nomeInternoDoSiri(siriAtivo(estado));
     if (celula === 'E' && estado.portadorGruta && estado.portadorGruta !== ativo) {
       eventos.push({ tipo: 'gruta-precisa-portador' });
       return atual;
@@ -203,6 +207,11 @@ function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], 
     eventos.push({ tipo: 'falta-fragmento' });
     return false;
   }
+  if (fase.dupla?.terceiroAlvo &&
+    (!celulas.includes(fase.dupla.segundoAlvo) || !celulas.includes(fase.dupla.terceiroAlvo))) {
+    eventos.push({ tipo: 'faltam-siris' });
+    return false;
+  }
   if (fase.dupla && !celulas.includes(fase.dupla.segundoAlvo)) {
     eventos.push({ tipo: 'falta-parceiro' });
     return false;
@@ -215,19 +224,33 @@ function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], 
   return true;
 }
 
+// Ordem estável no mapa em texto, no seletor e na troca: coral, verde, amarelo.
+export function posicoesDosSiris(estado: Estado): Posicao[] {
+  return [estado.posicao, ...(estado.dupla ? [estado.dupla.posicao] : []),
+    ...(estado.terceiro ? [estado.terceiro.posicao] : [])];
+}
+
+export function siriAtivo(estado: Estado): 0 | 1 | 2 {
+  return estado.terceiro?.ativo ? 2 : estado.dupla?.parceiroAtivo ? 1 : 0;
+}
+
+function nomeInternoDoSiri(ativo: ReturnType<typeof siriAtivo>): NonNullable<Estado['portadorGruta']> {
+  return (['principal', 'parceiro', 'terceiro'] as const)[ativo];
+}
+
 export function jogadorAtivo(estado: Estado): Posicao {
-  return estado.dupla?.parceiroAtivo ? estado.dupla.posicao : estado.posicao;
+  return posicoesDosSiris(estado)[siriAtivo(estado)];
 }
 
 export function destinoPermitido(fase: Fase, estado: Estado, direcao: Direcao): Posicao | undefined {
   const origem = jogadorAtivo(estado);
-  const outro = estado.dupla && (estado.dupla.parceiroAtivo ? estado.posicao : estado.dupla.posicao);
+  const outros = posicoesDosSiris(estado).filter((_, i) => i !== siriAtivo(estado));
   const destino = calcularDestino(origem, direcao);
   const celula = lerCelula(fase, destino);
-  const placa = outro && lerCelula(fase, outro) === 'P';
+  const placa = outros.some(outro => lerCelula(fase, outro) === 'P');
   if (!celula || celula === '#' || (celula === '=' && mareAlta(estado.passos)) ||
     (celula === '~' && !balsasNoTurno(fase, estado.passos).some(p => mesmaCasa(p, destino))) ||
-    (celula === 'D' && !placa) || (celula === 'O' && !portaoDaGrutaAberto(fase, estado)) || (outro && mesmaCasa(outro, destino))) return;
+    (celula === 'D' && !placa) || (celula === 'O' && !portaoDaGrutaAberto(fase, estado)) || outros.some(outro => mesmaCasa(outro, destino))) return;
   return destino;
 }
 
@@ -241,22 +264,22 @@ function terminouOrcamento(fase: Fase, passos: number, eventos: Evento[]): boole
 // decide se os dois siris ficam seguros antes de qualquer coleta ou vitória.
 export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transicao {
   if (anterior.situacao !== 'jogando') return { estado: anterior, eventos: [] };
-  const dupla = anterior.dupla;
+  const { dupla, terceiro } = anterior;
+  const ativo = siriAtivo(anterior);
   if (acao === 'trocar') {
     if (!dupla) return { estado: anterior, eventos: [] };
-    return { estado: { ...anterior, dupla: { ...dupla, parceiroAtivo: !dupla.parceiroAtivo } },
-      eventos: [{ tipo: 'troca' }] };
+    const proximo = (ativo + 1) % (terceiro ? 3 : 2);
+    return { estado: { ...anterior, dupla: { ...dupla, parceiroAtivo: proximo === 1 },
+      ...(terceiro ? { terceiro: { ...terceiro, ativo: proximo === 2 } } : {}) }, eventos: [{ tipo: 'troca' }] };
   }
-  const movendoParceiro = dupla?.parceiroAtivo ?? false;
-  const outro = dupla ? (movendoParceiro ? anterior.posicao : dupla.posicao) : undefined;
   const entrada = destinoPermitido(fase, anterior, acao);
   if (!entrada) {
     return { estado: anterior, eventos: [{ tipo: 'bloqueado' }] };
   }
   const passos = anterior.passos + 1;
   const eventos: Evento[] = [];
-  let destino = entrada;
-  let destinoOutro = outro;
+  let posicoes = posicoesDosSiris(anterior);
+  posicoes[ativo] = entrada;
   if (passos % PASSOS_POR_MARE === 0) {
     eventos.push({ tipo: 'virada', alta: mareAlta(passos) });
     const balsasAntes = balsasNoTurno(fase, anterior.passos);
@@ -265,13 +288,13 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
       const indice = balsasAntes.findIndex(parada => mesmaCasa(parada, pos));
       return balsasDepois[indice] ?? pos;
     };
-    // A corrente leva os ocupantes das balsas mesmo quando é o outro siri que anda.
-    destino = transportar(entrada);
-    destinoOutro = outro && transportar(outro);
-    if (destino !== entrada || destinoOutro !== outro) eventos.push({ tipo: 'balsa' });
+    // A corrente transporta todo siri que estiver embarcado, inclusive os inativos.
+    const transportadas = posicoes.map(transportar);
+    if (transportadas.some((pos, i) => pos !== posicoes[i])) eventos.push({ tipo: 'balsa' });
+    posicoes = transportadas;
   }
+  const destino = posicoes[ativo];
   const celula = lerCelula(fase, destino);
-  const posicoes = destinoOutro ? [destino, destinoOutro] : [destino];
   const motivos = ameacasNoTurno(fase, posicoes, passos);
 
   if (motivos.length > 0) {
@@ -282,6 +305,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
       estado: { ...anterior, passos, levadas, posicao: anterior.ultimoFirme,
         ...(anterior.ondasSeguras === undefined ? {} : { ondasSeguras: 0 }),
         ...(dupla ? { dupla: { ...dupla, posicao: dupla.ultimoFirme } } : {}),
+        ...(terceiro ? { terceiro: { ...terceiro, posicao: terceiro.ultimoFirme } } : {}),
         situacao: perdeu ? 'derrota' : 'jogando' },
       eventos,
     };
@@ -295,7 +319,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   // A pérola não muda de siri numa troca. A alavanca não precisa do portador.
   let portadorGruta = anterior.portadorGruta;
   if (dupla && etapaGruta !== anterior.etapaGruta) {
-    if (celula === 'K') portadorGruta = movendoParceiro ? 'parceiro' : 'principal';
+    if (celula === 'K') portadorGruta = nomeInternoDoSiri(ativo);
     if (celula === 'E') portadorGruta = undefined;
   }
   const ancoradouros = resolverAncoradouro(anterior.ancoradouros, destino, celula, passos, eventos);
@@ -306,9 +330,8 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   const venceu = resolverObjetivo(fase, celulas, fragmentos.length, ancoradouros, ondasSeguras, eventos);
   // Uma saída segura pode completar a missão exatamente no último passo.
   const perdeu = !venceu && terminouOrcamento(fase, passos, eventos);
-  const posicao = movendoParceiro ? (destinoOutro ?? anterior.posicao) : destino;
-  const posicaoParceiro = dupla ? (movendoParceiro ? destino : destinoOutro) : undefined;
-  // Os marcos da dupla sempre vêm de um mesmo turno seguro e não se sobrepõem.
+  const [posicao, posicaoParceiro, posicaoTerceiro] = posicoes;
+  // Os marcos do grupo vêm de um mesmo turno seguro e não se sobrepõem.
   // Portões móveis não são marcos firmes: podem fechar depois do retorno.
   const firmes = celulas.every(casa => casa !== '=' && casa !== 'D' && casa !== '~');
   const novaDupla = dupla && posicaoParceiro
@@ -321,7 +344,10 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
       ...(ondasSeguras === undefined ? {} : { ondasSeguras }),
       ...(etapaGruta === undefined ? {} : { etapaGruta }),
       ...(dupla && etapaGruta !== undefined ? { portadorGruta } : {}),
-      ...(novaDupla ? { dupla: novaDupla } : {}), situacao: venceu ? 'vitoria' : perdeu ? 'derrota' : 'jogando' },
+      ...(novaDupla ? { dupla: novaDupla } : {}),
+      ...(terceiro && posicaoTerceiro ? { terceiro: { ...terceiro, posicao: posicaoTerceiro,
+        ultimoFirme: firmes ? posicaoTerceiro : terceiro.ultimoFirme } } : {}),
+      situacao: venceu ? 'vitoria' : perdeu ? 'derrota' : 'jogando' },
     eventos,
   };
 }

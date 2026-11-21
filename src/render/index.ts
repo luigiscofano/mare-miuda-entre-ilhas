@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passosAteVirada, portaoDaGrutaAberto } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passosAteVirada, portaoDaGrutaAberto, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
@@ -62,6 +62,18 @@ function desenharSiri(ctx: CanvasRenderingContext2D, logo: HTMLImageElement, cen
   ctx.restore();
 }
 
+// A silhueta estreita com pinças nas laterais distingue o amarelo mesmo sem cor.
+const TERCEIRO = [
+  '....l..l....',
+  '....b..b....',
+  'l...l..l...l',
+  'll..l..l..ll',
+  '.llccccclll.',
+  '..lcccccll..',
+  '...lcccll...',
+  '..l.llll.l..',
+  '.l........l.',
+] as const;
 const FRAGMENTO = ['..l..', '.lcl.', 'lcbcl', '.lcl.', '..l..'];
 const paleta = (tons: Tons) => ({ l: tons.linha, c: tons.cinza, b: tons.branco }) as Readonly<Record<string, string>>;
 
@@ -119,6 +131,11 @@ function desenharCasa(ctx: CanvasRenderingContext2D, celula: string, alta: boole
     bloco(ctx, tons.linha, x + 7, y + 4, 2, 9);
     bloco(ctx, tons.linha, x + 5, y + 8, 6, 2);
     bloco(ctx, tons.branco, x + 7, y + 3, 2, 2);
+  }
+  if (celula === 'Y') {
+    bloco(ctx, tons.linha, x + 5, y + 3, 6, 10);
+    bloco(ctx, '#edb735', x + 6, y + 4, 4, 3);
+    bloco(ctx, tons.branco, x + 6, y + 9, 4, 3);
   }
   if (celula === 'G') {
     bloco(ctx, tons.linha, x + 4, y + 3, 8, 11);
@@ -271,7 +288,7 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   const faltam = passosAteVirada(estado.passos);
   const faixa = !alta && estado.situacao === 'jogando' ? faixaRessacaNoTurno(fase, estado.passos + faltam) : undefined;
   const balsas = balsasNoTurno(fase, estado.passos);
-  const placa = [estado.posicao, estado.dupla?.posicao].some(pos => pos && fase.mapa[pos.linha]?.[pos.coluna] === 'P');
+  const placa = posicoesDosSiris(estado).some(pos => fase.mapa[pos.linha]?.[pos.coluna] === 'P');
   fase.mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
     const x = origemX + coluna * TAMANHO_TILE;
     const y = origemY + linha * TAMANHO_TILE;
@@ -300,6 +317,13 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     else if (fase.ameaca && !fase.ameaca.rota?.length && mesmaCasa(fase.ameaca.alvo, pos)) marcarAlvo(ctx, x, y, false, tons);
   }));
 
+  if (estado.terceiro) {
+    const { coluna, linha } = estado.terceiro.posicao;
+    const x = origemX + coluna * TAMANHO_TILE;
+    const y = origemY + linha * TAMANHO_TILE;
+    pintarPixels(ctx, TERCEIRO, x + 2, y + 3, { l: tons.linha, c: '#edb735', b: tons.branco });
+    if (siriAtivo(estado) === 2) bloco(ctx, tons.branco, x + 6, y + 14, 4, 1);
+  }
   if (estado.dupla) {
     const parceiro = estado.dupla.posicao;
     const x = origemX + parceiro.coluna * TAMANHO_TILE;
@@ -308,7 +332,7 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     if (estado.dupla.parceiroAtivo) bloco(ctx, tons.branco, x + 6, y + 14, 4, 1);
   }
   const { coluna, linha } = estado.posicao;
-  if (estado.dupla && !estado.dupla.parceiroAtivo) {
+  if (estado.dupla && siriAtivo(estado) === 0) {
     bloco(ctx, tons.branco, origemX + coluna * TAMANHO_TILE + 6, origemY + linha * TAMANHO_TILE + 14, 4, 1);
   }
   desenharSiri(ctx, logo, origemX + coluna * TAMANHO_TILE + 8, origemY + linha * TAMANHO_TILE + 13);
