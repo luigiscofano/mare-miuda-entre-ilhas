@@ -501,6 +501,12 @@ def conferir_chefes_mangue(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def pixel_do_seletor_interno(pagina, x, y):
+    return pagina.locator('#mapa-praia').evaluate(
+        '(c, [x, y]) => Array.from(c.getContext("2d").getImageData(x, y, 1, 1).data)', [x, y]
+    )
+
+
 def conferir_enseada_ampliada(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
@@ -511,7 +517,11 @@ def conferir_enseada_ampliada(pagina, toque=False):
     pagina.reload()
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#progresso-praia')).to_contain_text('1/10')
+    expect(pagina.locator('#mapa-enseada')).to_have_js_property('naturalWidth', 512)
     jogar(pagina, 'UR', toque, mapa=True)
+    conferir_siri_canonico(pagina, '#mapa-praia')
+    assert pixel_do_seletor_interno(pagina, 224, 122) == [38, 59, 69, 255]
+    salvar_captura(pagina, f'enseada-seletor-bloqueado-{pagina.viewport_size["width"]}px')
     expect(pagina.locator('#mensagem-praia')).to_contain_text('Complete Um passo antes da sombra')
     tocar(pagina, '#entrar-fase', toque)
     assert pixel_da_travessia(pagina, 0, 0) == [40, 72, 88, 255]
@@ -533,6 +543,7 @@ def conferir_enseada_ampliada(pagina, toque=False):
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Um passo antes da sombra · concluída')
     expect(pagina.locator('#progresso-praia')).to_contain_text('2/10')
+    assert pixel_do_seletor_interno(pagina, 224, 122) == [239, 201, 135, 255]
     salvar_captura(pagina, f"enseada-ampliada-{pagina.viewport_size['width']}px")
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
@@ -604,6 +615,10 @@ def conferir_deriva_ampliada(pagina, toque=False):
     pagina.reload()
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Balsas alternadas')
+    expect(pagina.locator('#mapa-deriva')).to_have_js_property('naturalWidth', 512)
+    conferir_siri_canonico(pagina, '#mapa-praia')
+    assert pixel_do_seletor_interno(pagina, 416, 90) == [38, 59, 69, 255]
+    salvar_captura(pagina, f'deriva-seletor-bloqueado-{pagina.viewport_size["width"]}px')
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#previsao')).to_contain_text('Balsa 2')
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
@@ -617,6 +632,8 @@ def conferir_deriva_ampliada(pagina, toque=False):
     jogar(pagina, 'RDUDURRRRRR', toque)
     expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
     tocar(pagina, '#voltar-fase', toque)
+    assert pixel_do_seletor_interno(pagina, 416, 90) == [239, 201, 135, 255]
+    salvar_captura(pagina, f'deriva-seletor-aberto-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'RRD', toque, mapa=True)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Tripulação partilhada')
     tocar(pagina, '#entrar-fase', toque)

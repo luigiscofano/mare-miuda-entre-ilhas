@@ -58,3 +58,7 @@ Para verificar em movimento, rode `npm run build` e abra a **Passagem da primeir
 ## Seletores de Recifes e Mangue
 
 Os [fundos nativos e quadros de comparação](../processo-de-criacao/35-seletores-recifes-mangue/README.md) registram as duas propostas. As rotas e categorias de marco permanecem na camada do jogo, acima do terreno. A arte dos demais seletores e travessias não muda.
+
+## Seletores da Enseada e da Deriva
+
+[Propostas, quadros e fonte](../processo-de-criacao/36-seletores-enseada-deriva/README.md). As paletas distinguem os dois ambientes; as placas e as rotas saem da mesma lógica dos outros seletores. A posição das placas no ramal norte deixa os cadeados visíveis.
