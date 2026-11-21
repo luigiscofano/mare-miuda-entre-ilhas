@@ -4,7 +4,13 @@
 
 **Resultado atual:** Chromium e WebKit automatizados passaram no [CI da trilha](https://github.com/luigiscofano/mare-miuda-entre-ilhas/actions/runs/44937149983). Este roteiro manual ainda não foi executado em iPhone físico.
 
-**Alvos:** Safari em iPhone físico (retrato e paisagem); Chrome desktop (teclado e mouse); VoiceOver no Safari do iPhone. No desktop, rode a versão web de `npm run build` + `npm run serve` ou a URL de prévia da mesma versão. No iPhone, use a URL de prévia: `127.0.0.1` do computador não é acessível pelo celular. As letras nos roteiros significam **U** ↑, **D** ↓, **L** ←, **R** →, **X** Espaço / **Trocar siri**. **R** nos roteiros significa seta direita, não a tecla de reiniciar.
+**Alvos:** Safari em iPhone físico (retrato e paisagem); Chrome desktop (teclado e mouse); VoiceOver no Safari do iPhone. No desktop, rode a versão web de `npm run build` + `npm run serve` ou a URL de prévia da mesma versão. No iPhone, use o endereço local da prévia descrito abaixo: `127.0.0.1` do computador não é acessível pelo celular. As letras nos roteiros significam **U** ↑, **D** ↓, **L** ←, **R** →, **X** Espaço / **Trocar siri**. **R** nos roteiros significa seta direita, não a tecla de reiniciar.
+
+## Abrir a prévia privada no Safari
+
+1. No PR, abra a execução bem-sucedida de **Verificar protótipo** e baixe o artefato `mare-miuda-previa-qa-<commit>` em **Artifacts**. O acesso depende das permissões do repositório e o ZIP expira em 14 dias. Confira se o commit corresponde à versão a testar.
+2. Para teste offline no desktop, extraia o ZIP e abra `mare-miuda-prototipo.html`. Para testar o Safari no iPhone, use uma rede Wi-Fi privada e confiável. No computador, entre na pasta extraída que contém `index.html` e execute `python3 -m http.server 4173 --bind IP_LOCAL_DO_COMPUTADOR`, trocando o marcador pelo IP do computador nessa rede. Não aponte o servidor para o checkout nem para uma pasta com outros arquivos.
+3. Com o iPhone na mesma rede, navegue no Safari para `http://IP_LOCAL_DO_COMPUTADOR:4173/`, com o mesmo IP. Ao terminar, pare o servidor com Ctrl+C. Se a rede bloquear o acesso, registre como não testado; não abra portas no roteador nem desative o firewall. Não é uma hospedagem pública nem exige GitHub Pages.
 
 ## P0 · Primeira viagem, controles e save
 
