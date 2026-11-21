@@ -962,10 +962,17 @@ def conferir_ressaca_alta(pagina, toque=False):
     expect(pagina.locator('#previsao')).to_contain_text('linha 1, colunas 1 a 13')
     assert pixel_da_travessia(pagina, 0, 0) == [41, 61, 80, 255]
     jogar(pagina, 'RR', toque)
-    assert pixel_da_travessia(pagina, 102, 118) == [255, 241, 210, 255]
+    expect(pagina.locator('#passos')).to_have_text('2')
+    # Leia a crista em células vazias dos dois lados do Coral, não sob seu sprite.
+    espuma = [255, 241, 210, 255]
+    cristas = (38, 70, 198, 326)
+    excecoes = (134, 166, 454)  # Refúgio, rocha e concha fora do alcance.
+    assert all(pixel_da_travessia(pagina, x, 118) == espuma for x in cristas)
+    assert all(pixel_da_travessia(pagina, x, 118) != espuma for x in excecoes)
     salvar_captura(pagina, f'ressaca-travessia-faixa-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'R', toque)
-    assert pixel_da_travessia(pagina, 102, 118) != [255, 241, 210, 255]
+    expect(pagina.locator('#passos')).to_have_text('3')
+    assert all(pixel_da_travessia(pagina, x, 118) == [197, 160, 120, 255] for x in cristas)
     salvar_captura(pagina, f'ressaca-travessia-alta-{pagina.viewport_size["width"]}px')
     expect(pagina.locator('#ondas-seguras')).to_have_text('Ondas seguras seguidas: 1/3')
     expect(pagina.locator('#previsao')).to_contain_text('linha 5, colunas 1 a 13')
