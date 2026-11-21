@@ -80,6 +80,16 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   assert.ok(cabo);
   assert.deepEqual(Buffer.from(cabo, 'base64'), await readFile(new URL('../assets/cabo-baixo-192.png', import.meta.url)));
 
+  for (const [id, arquivo] of Object.entries({
+    'folha-fauna': 'spritesheet.png',
+    'garca-patrulha': 'garca-patrulha.png',
+    'garca-rasante': 'garca-rasante.png',
+  })) {
+    const embutida = html.match(new RegExp(`id="${id}" src="data:image/png;base64,([^"]+)"`))?.[1];
+    assert.ok(embutida, id);
+    assert.deepEqual(Buffer.from(embutida, 'base64'), await readFile(new URL(`../assets/fauna/${arquivo}`, import.meta.url)));
+  }
+
   assert.ok(!html.includes("href=\"./styles.css\""));
   const { pegar, quadros, recortes, fases, botoes, mapa, tecla, storage } = prepararInterface();
   await import(modulo);
@@ -105,8 +115,12 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   assert.equal(ler('#mare'), 'Alta');
   assert.match(ler('#feedback'), /Fase concluída/);
   fases[1].click();
+  assert.equal(pegar('#garca-patrulha').hidden, false);
+  assert.equal(pegar('#garca-rasante').hidden, true);
   ['direita', 'direita'].forEach(dir => botoes[dir].click());
   assert.match(ler('#previsao'), /Garça no próximo passo/);
+  assert.equal(pegar('#garca-patrulha').hidden, true);
+  assert.equal(pegar('#garca-rasante').hidden, false);
   botoes.direita.click();
   assert.equal(ler('#erros'), '1 / 3');
   tecla('r');

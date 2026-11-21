@@ -80,6 +80,8 @@ def conferir_jogo(pagina, toque=False):
     expect(pagina.locator('#nome-fase')).to_have_text('Passagem da primeira onda')
     expect(pagina.locator('footer')).to_contain_text('Luigi Scofano de Araujo')
     expect(pagina.locator('#passos')).to_have_text('0')
+    expect(pagina.locator('#garca-patrulha')).to_be_hidden()
+    expect(pagina.locator('#garca-rasante')).to_be_hidden()
     expect(pagina.locator('#sinal-concha')).to_be_visible()
     jogar(pagina, 'L', toque)
     expect(pagina.locator('#passos')).to_have_text('0')
@@ -89,8 +91,16 @@ def conferir_jogo(pagina, toque=False):
     jogar(pagina, 'R', toque)
     expect(pagina.locator('#passos')).to_have_text('3')
     pagina.locator('[data-fase="2"]').tap() if toque else pagina.locator('[data-fase="2"]').click()
+    expect(pagina.locator('#garca-patrulha')).to_be_visible()
+    expect(pagina.locator('#garca-rasante')).to_be_hidden()
+    expect(pagina.locator('#garca-patrulha')).to_have_js_property('naturalWidth', 31)
+    salvar_captura(pagina, f"fauna-patrulha-{pagina.viewport_size['width']}px")
     jogar(pagina, 'RR', toque)
     expect(pagina.locator('#previsao')).to_contain_text('Garça no próximo passo')
+    expect(pagina.locator('#garca-patrulha')).to_be_hidden()
+    expect(pagina.locator('#garca-rasante')).to_be_visible()
+    expect(pagina.locator('#garca-rasante')).to_have_js_property('naturalHeight', 23)
+    salvar_captura(pagina, f"fauna-rasante-{pagina.viewport_size['width']}px")
     jogar(pagina, 'R', toque)
     expect(pagina.locator('#erros')).to_have_text('1 / 3')
     pagina.locator('#reiniciar').tap() if toque else pagina.keyboard.press('r')
@@ -462,9 +472,33 @@ def conferir_trio_grutas(pagina, toque=False):
     jogar(pagina, 'D', toque, mapa=True)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Três refúgios · opcional')
     tocar(pagina, '#entrar-fase', toque)
-    expect(pagina.locator('#dupla-ativa')).to_contain_text('Coral, pinças erguidas')
-    for siri in ['Verde', 'Amarelo', 'Coral']:
+    expect(pagina.locator('#dupla-ativa')).to_contain_text('Coral, círculo')
+    expect(pagina.locator('#folha-fauna')).to_have_js_property('naturalWidth', 155)
+    assert pagina.locator('#tabuleiro').evaluate("""canvas => {
+        const imagem = document.querySelector('#folha-fauna');
+        const folha = document.createElement('canvas');
+        folha.width = 155;
+        folha.height = 23;
+        const fonte = folha.getContext('2d');
+        fonte.drawImage(imagem, 0, 0);
+        const tabuleiro = canvas.getContext('2d');
+        const branco = [255, 245, 220];
+        return [0, 2, 4].every((linha, i) => {
+            // Os três começam na primeira coluna do tabuleiro de 8 × 5.
+            const y = 112 + linha * 32;
+            const esperado = fonte.getImageData(i * 31, 0, 31, 23).data;
+            const desenhado = tabuleiro.getImageData(129, y + 3, 31, 23).data;
+            const marca = tabuleiro.getImageData(143, y + 1, 3, 3).data;
+            const contornos = ['010101010', '111101111', '010101111'];
+            return esperado.every((canal, n) => esperado[(n & ~3) + 3] === 0 || canal === desenhado[n])
+              && [...contornos[i]].every((bit, p) =>
+                branco.every((canal, j) => (marca[p * 4 + j] === canal) === (bit === '1')));
+        });
+    }"""), 'Os pixels opacos do trio e as três insígnias precisam coincidir.'
+    salvar_captura(pagina, f"fauna-trio-{pagina.viewport_size['width']}px")
+    for siri, insignia in [('Verde', 'quadrado'), ('Amarelo', 'triângulo'), ('Coral', 'círculo')]:
         jogar(pagina, 'X', toque)
+        expect(pagina.locator('#dupla-ativa')).to_contain_text(f'{siri}, {insignia}')
         expect(pagina.locator('#posicao')).to_contain_text(f'{siri} (ativo)')
         expect(pagina.locator('#feedback')).to_contain_text(f'Siri ativo: {siri}. A maré não avançou.')
         expect(pagina.locator('#passos')).to_have_text('0')

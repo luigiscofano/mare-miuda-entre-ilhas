@@ -86,7 +86,7 @@ Legenda adicional: A início do segundo siri, T raiz-alvo, P placa, D portão. E
 | Um segura, outro passa | `S=HDC / .#### / A.P##` | `RRXRRXRR` |
 | Reencontro na ponta do mangue | `S=H.DC / .#.##T / A=H.P.` | `RRRLRLXRRRRXRRRXRU` |
 
-Aprendizado: troca gratuita e destinos distintos → segurar a placa → proteger ambos na virada, abrir passagem e reunir a dupla. Observe se o formato das pinças e o marcador de atividade identificam o siri ativo sem depender da cor. Erros levam ambos à última combinação segura; reiniciar também redefine o siri ativo e o portão. Nenhuma solução depende do tempo de resposta físico.
+Aprendizado: troca gratuita e destinos distintos → segurar a placa → proteger ambos na virada, abrir passagem e reunir a dupla. Observe se as insígnias acima dos sprites e o marcador de atividade identificam o siri ativo sem depender da cor. Erros levam ambos à última combinação segura; reiniciar também redefine o siri ativo e o portão. Nenhuma solução depende do tempo de resposta físico.
 
 As fichas deste trecho original permanecem válidas. As sete travessias regulares novas estão no [registro da ampliação do Mangue](../../docs/processo-de-criacao/10-mangue-ampliado/README.md), com objetivos, diagramas e soluções sem levadas.
 
@@ -168,7 +168,3 @@ A arena opcional da Baía abre após Cofre da vazante. `N` é um ancoradouro que
 ## Trio na Baía e no Farol
 
 `trio-avancado.ts` reúne **Eco dos três cais**, com duas balsas, placa e fragmento, e **Três luzes em revezamento**, com duas balsas, placa e pérola até a Alavanca B. Reaproveitam os símbolos `M` e `Y` do trio das Grutas e o mesmo relógio. [Fichas, grades e rotas](../../docs/processo-de-criacao/19-trio-avancado/README.md).
-
-## Guardião do Farol
-
-`guardiao-farol.ts` define `I` (ponte de luz), `L` (lente) e as orientações do feixe. O destino usa o feixe antes do passo; segurança e lentes usam o feixe depois da virada. [Ficha e solução](../../docs/processo-de-criacao/20-guardiao-farol/README.md).

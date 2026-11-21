@@ -36,20 +36,11 @@ const CORES_MUNDO: Readonly<Record<Mundo, Tons>> = {
   mangue: { agua: '#374c3f', margem: '#627550', areia: '#d9b879', areiaSombra: '#919768',
     roca: '#60654a', linha: '#333d34', branco: '#fff0c3', cinza: '#e1875b' },
 };
-const PARCEIRO = [
-  '...ll..ll...',
-  '...bl..lb...',
-  '..llcllcll..',
-  'lllcccccc.ll',
-  'l.cccccccc.l',
-  '..lcccccc.l.',
-  '.l.lcllcl.l.',
-  '..l.llll.l..',
-  '....l..l....',
+const INSIGNIAS = [
+  ['.x.', 'x.x', '.x.'],
+  ['xxx', 'x.x', 'xxx'],
+  ['.x.', 'x.x', 'xxx'],
 ] as const;
-
-
-
 // A placa da abertura é a única fonte do protagonista. O recorte usa pixels
 // nativos, enquanto o terreno permanece na grade lógica de 16 pixels por casa.
 function desenharSiri(ctx: CanvasRenderingContext2D, logo: HTMLImageElement, centroX: number, baseY: number) {
@@ -62,18 +53,30 @@ function desenharSiri(ctx: CanvasRenderingContext2D, logo: HTMLImageElement, cen
   ctx.restore();
 }
 
-// A silhueta estreita com pinças nas laterais distingue o amarelo mesmo sem cor.
-const TERCEIRO = [
-  '....l..l....',
-  '....b..b....',
-  'l...l..l...l',
-  'll..l..l..ll',
-  '.llccccclll.',
-  '..lcccccll..',
-  '...lcccll...',
-  '..l.llll.l..',
-  '.l........l.',
-] as const;
+function desenharSiriDaEquipe(
+  ctx: CanvasRenderingContext2D, folha: HTMLImageElement | undefined, indice: number, centroX: number, baseY: number,
+) {
+  const { largura, altura } = RECORTE_SIRI;
+  if (!folha?.complete || folha.naturalWidth !== largura * 5 || folha.naturalHeight !== altura) return;
+  // A folha usa a mesma resolução nativa do recorte original, sem escala.
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.drawImage(folha, indice * largura, 0, largura, altura,
+    Math.round(centroX * DENSIDADE - largura / 2), Math.round(baseY * DENSIDADE) - altura, largura, altura);
+  ctx.restore();
+}
+
+function desenharInsignia(ctx: CanvasRenderingContext2D, indice: number, centroX: number, topoY: number, tons: Tons) {
+  // A identificação fica acima da silhueta, fora dos pixels da arte aprovada.
+  const x = Math.round(centroX * DENSIDADE) - 3;
+  const y = Math.round(topoY * DENSIDADE);
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  bloco(ctx, tons.linha, x, y, 7, 5);
+  pintarPixels(ctx, INSIGNIAS[indice], x + 2, y + 1, { x: tons.branco });
+  ctx.restore();
+}
+
 const FRAGMENTO = ['..l..', '.lcl.', 'lcbcl', '.lcl.', '..l..'];
 const paleta = (tons: Tons) => ({ l: tons.linha, c: tons.cinza, b: tons.branco }) as Readonly<Record<string, string>>;
 
@@ -278,7 +281,7 @@ function desenharFeixe(
   }
 }
 
-export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, logo: HTMLImageElement, tema: Mundo | false = false): void {
+export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, logo: HTMLImageElement, tema: Mundo | false = false, fauna?: HTMLImageElement): void {
   const tons: Tons = tema ? CORES_MUNDO[tema] : TONS_CINZA;
   const cores = paleta(tons);
   ctx.imageSmoothingEnabled = false;
@@ -330,6 +333,7 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       if (fase.orcamentoMoedas) moeda(ctx, x, y, tons);
       else pintarPixels(ctx, FRAGMENTO, x + 5, y + 5, cores);
     }
+    if (feixe) desenharFeixe(ctx, celula, pos, x, y, tons, feixe, seguinte, estado);
     desenharMecanismoDaGruta(ctx, fase, estado, celula, x, y, tons);
     if (celula === 'N') desenharAncoradouro(ctx, x, y, tons,
       estado.ancoradouros?.some(ancora => mesmaCasa(ancora, pos)) ?? false);
@@ -339,7 +343,6 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     }
     if (vizinhas.some(v => mesmaCasa(v, pos))) cantos(ctx, x, y, tons.linha, 2, 3);
     if (mesmaCasa(atual, pos)) cantos(ctx, x, y, tons.linha, 1, 5);
-    if (feixe) desenharFeixe(ctx, celula, pos, x, y, tons, feixe, seguinte, estado);
     if (balsas.some(balsa => mesmaCasa(balsa, pos))) {
       bloco(ctx, tons.linha, x + 2, y + 3, 12, 10);
       bloco(ctx, '#bb965f', x + 3, y + 4, 10, 8);
@@ -350,25 +353,17 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     else if (fase.ameaca && !fase.ameaca.rota?.length && mesmaCasa(fase.ameaca.alvo, pos)) marcarAlvo(ctx, x, y, false, tons);
   }));
 
-  if (estado.terceiro) {
-    const { coluna, linha } = estado.terceiro.posicao;
+  const ativo = siriAtivo(estado);
+  posicoesDosSiris(estado).forEach(({ coluna, linha }, indice) => {
     const x = origemX + coluna * TAMANHO_TILE;
     const y = origemY + linha * TAMANHO_TILE;
-    pintarPixels(ctx, TERCEIRO, x + 2, y + 3, { l: tons.linha, c: '#edb735', b: tons.branco });
-    if (siriAtivo(estado) === 2) bloco(ctx, tons.branco, x + 6, y + 14, 4, 1);
-  }
-  if (estado.dupla) {
-    const parceiro = estado.dupla.posicao;
-    const x = origemX + parceiro.coluna * TAMANHO_TILE;
-    const y = origemY + parceiro.linha * TAMANHO_TILE;
-    pintarPixels(ctx, PARCEIRO, x + 2, y + 3, { l: tons.linha, c: '#a7b969', b: tons.branco });
-    if (estado.dupla.parceiroAtivo) bloco(ctx, tons.branco, x + 6, y + 14, 4, 1);
-  }
-  const { coluna, linha } = estado.posicao;
-  if (estado.dupla && siriAtivo(estado) === 0) {
-    bloco(ctx, tons.branco, origemX + coluna * TAMANHO_TILE + 6, origemY + linha * TAMANHO_TILE + 14, 4, 1);
-  }
-  desenharSiri(ctx, logo, origemX + coluna * TAMANHO_TILE + 8, origemY + linha * TAMANHO_TILE + 13);
+    if (estado.dupla) {
+      desenharInsignia(ctx, indice, x + 8, y, tons);
+      if (indice === ativo) bloco(ctx, tons.branco, x + 6, y + 14, 4, 1);
+    }
+    if (indice === 0) desenharSiri(ctx, logo, x + 8, y + 13);
+    else desenharSiriDaEquipe(ctx, fauna, indice, x + 8, y + 13);
+  });
 }
 
 const MAPA_X = 56;

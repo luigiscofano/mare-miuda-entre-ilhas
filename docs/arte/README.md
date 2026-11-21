@@ -23,8 +23,12 @@ A variante A, Placa de Areia, foi escolhida para a abertura. É usada sem modifi
 
 ## Primeiro lote: arte de teste, não direção final
 
-Recifes usam mar mais frio, corais chapados e o topo claro da pedra segura; Mangue usa paleta oliva, raízes, placa e portão com formas distintas. O protagonista usa o recorte da marca; o parceiro continua verde, com silhueta de pinças distinta. O ativo recebe um traço sob os pés. Os desenhos usam a mesma grade, sem pinceladas ou pixels fora da grade. Mapa e cenário são suficientes para testes de regra, mas **a densidade e a composição estão abertas**. A Placa de Areia continua exatamente igual; os estudos de ampliação visual são trabalho separado.
+Recifes usam mar mais frio, corais chapados e o topo claro da pedra segura; Mangue usa paleta oliva, raízes, placa e portão com formas distintas. O protagonista usa o recorte da marca; Verde e Amarelo usam a mesma silhueta, com paletas e insígnias próprias. O ativo recebe um traço sob os pés. Os desenhos usam a mesma grade, sem pinceladas ou pixels fora da grade. Mapa e cenário são suficientes para testes de regra, mas **a densidade e a composição estão abertas**. A Placa de Areia continua exatamente igual; os estudos de ampliação visual são trabalho separado.
 
 ### Cabo Baixo, mapa de seleção
 
 O fundo aprovado mantém 192 × 144 pixels na moldura de desenho. Números, desvio opcional e portão são desenhados pelo seletor em âncoras da imagem base. O siri da placa segue as âncoras do seletor, sem cobrir os números. O fundo não incorpora o personagem. A Enseadinha ainda usa terreno provisório e está identificada como tal.
+
+## Fauna
+
+[Sprites do trio, duas poses da garça, capturas e fontes](fauna/README.md).

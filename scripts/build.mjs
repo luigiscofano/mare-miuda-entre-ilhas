@@ -43,18 +43,20 @@ await mkdir(pasta, { recursive: true });
 await compilarFontes('src');
 const html = await readFile('index.html', 'utf8');
 const css = await readFile('styles.css', 'utf8');
-const logo = 'assets/logo-placa-de-areia-pt.png';
-await mkdir(join(pasta, 'assets'), { recursive: true });
-await copyFile(logo, join(pasta, logo));
-const cabo = 'assets/cabo-baixo-192.png';
-await copyFile(cabo, join(pasta, cabo));
-const caboEmbutido = 'data:image/png;base64,' + (await readFile(cabo)).toString('base64');
-const placaEmbutida = 'data:image/png;base64,' + (await readFile(logo)).toString('base64');
+// O executável offline incorpora as mesmas imagens copiadas para o build servido.
+const imagens = ['assets/logo-placa-de-areia-pt.png', 'assets/cabo-baixo-192.png',
+  'assets/fauna/spritesheet.png', 'assets/fauna/garca-patrulha.png', 'assets/fauna/garca-rasante.png'];
+let htmlOffline = html;
+for (const imagem of imagens) {
+  const destino = join(pasta, imagem);
+  await mkdir(dirname(destino), { recursive: true });
+  await copyFile(imagem, destino);
+  const embutida = 'data:image/png;base64,' + (await readFile(imagem)).toString('base64');
+  htmlOffline = htmlOffline.replace('./' + imagem, embutida);
+}
 await writeFile(join(pasta, 'index.html'), html);
 await writeFile(join(pasta, 'styles.css'), css);
-await writeFile(join(pasta, 'mare-miuda-prototipo.html'), html
+await writeFile(join(pasta, 'mare-miuda-prototipo.html'), htmlOffline
   .replace('<link rel="stylesheet" href="./styles.css">', `<style>\n${css}</style>`)
-  .replace('./src/interface/index.js', gerarUrl('src/interface/index.js'))
-  .replace('./' + logo, placaEmbutida)
-  .replace('./' + cabo, caboEmbutido));
+  .replace('./src/interface/index.js', gerarUrl('src/interface/index.js')));
 console.log('Build em dist/; HTML offline em dist/mare-miuda-prototipo.html');
