@@ -73,3 +73,5 @@ O [Farol ampliado](../processo-de-criacao/15-farol-ampliado/README.md) fecha dez
 ### Arena jogável: Vento Sul
 
 A baixa anuncia a próxima faixa do chefão. Na subida, busque refúgio ou termine fora da faixa; firme os três ancoradouros em chegadas seguras na baixa antes de usar a concha. A arena é opcional após Cofre da vazante e não altera o total das regulares. A segunda arena, Ressaca Alta, permanece planejada. [Ficha, renderização e rota](../processo-de-criacao/16-vento-sul/README.md).
+
+Ressaca Alta é o segundo chefe opcional e fica à esquerda de Vento Sul. Alterna as faixas norte, sul e central. A dupla precisa de três ondas seguidas sem levadas e da chegada em dois pontos seguros; não há coleta de âncoras. [Ficha](../processo-de-criacao/17-ressaca-alta/README.md).

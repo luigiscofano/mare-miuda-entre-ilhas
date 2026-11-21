@@ -31,7 +31,10 @@ export function validarMapa(fase: Fase): void {
     throw new Error(`Mecanismos da gruta inválidos: ${fase.id}.`);
   }
   const faixas = fase.ressaca?.faixas;
-  if (faixas ? (contar('N') !== TOTAL_ANCORADOUROS || contar('C') !== 1 || !faixas.length
+  const sobrevivencia = fase.ressaca?.objetivo === 'sobreviver';
+  if (faixas ? (contar('N') !== (sobrevivencia ? 0 : TOTAL_ANCORADOUROS)
+    || contar('C') !== 1 || !faixas.length || (sobrevivencia &&
+      (fase.dupla?.segundoAlvo !== 'T' || faixas.length < 2 || new Set(faixas.map(f => f.linha)).size !== faixas.length))
     || faixas.some(faixa => {
       const { linha, primeiraColuna, ultimaColuna } = faixa;
       return ![linha, primeiraColuna, ultimaColuna].every(Number.isInteger)
@@ -40,6 +43,10 @@ export function validarMapa(fase: Fase): void {
         || [...fase.mapa[linha]].filter((_, coluna) => faixaAfeta(fase, faixa, { coluna, linha })).length < 2;
     })) : contar('N') > 0) {
     throw new Error(`Configuração de ressaca inválida: ${fase.id}.`);
+  }
+  if (sobrevivencia && fase.mapa.some((linha, y) => [...linha].some((casa, x) =>
+    (casa === 'C' || casa === 'T') && faixas?.some(faixa => faixaAfeta(fase, faixa, { coluna: x, linha: y }))))) {
+    throw new Error(`Destino atingido pela ressaca: ${fase.id}.`);
   }
   const balsas = fase.balsas ?? [];
   const agua = balsas.flatMap(balsa => balsa.paradas);

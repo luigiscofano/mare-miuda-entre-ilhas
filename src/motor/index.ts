@@ -17,7 +17,7 @@ export type Fase = Readonly<{
   balsas?: readonly Readonly<{ paradas: readonly [Posicao, Posicao] }>[];
   orcamentoMoedas?: number;
   etapasGruta?: readonly EtapaGruta[];
-  ressaca?: Readonly<{ faixas: readonly FaixaRessaca[] }>;
+  ressaca?: Readonly<{ faixas: readonly FaixaRessaca[]; objetivo?: 'sobreviver' }>;
   dupla?: Readonly<{ segundoAlvo: 'T' | 'P' }>;
 }>;
 type EstadoDupla = Readonly<{ posicao: Posicao; ultimoFirme: Posicao; parceiroAtivo: boolean }>;
@@ -32,6 +32,7 @@ export type Estado = Readonly<{
   etapaGruta?: number;
   portadorGruta?: 'principal' | 'parceiro';
   ancoradouros?: readonly Posicao[];
+  ondasSeguras?: number;
   situacao: 'jogando' | 'vitoria' | 'derrota';
 }>;
 export type MotivoErro = 'mare' | 'garca' | 'ressaca';
@@ -47,6 +48,7 @@ export type Evento =
   | Readonly<{ tipo: 'falta-fragmento' }>
   | Readonly<{ tipo: 'falta-parceiro' }>
   | Readonly<{ tipo: 'ancorou' | 'ancora-na-alta' | 'faltam-ancoradouros' }>
+  | Readonly<{ tipo: 'faltam-ondas' }>
   | Readonly<{ tipo: 'troca' }>
   | Readonly<{ tipo: 'orcamento-esgotado' }>
   | Readonly<{ tipo: 'vitoria' }>;
@@ -75,7 +77,9 @@ export function iniciar(fase: Fase): Estado {
     dupla = { posicao: parceiro, ultimoFirme: parceiro, parceiroAtivo: false };
   }
   return { posicao, ultimoFirme: posicao, passos: 0, levadas: 0, temFragmento: false,
-    fragmentos: [], ...(fase.ressaca ? { ancoradouros: [] } : {}), ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}), situacao: 'jogando' };
+    fragmentos: [],
+    ...(fase.ressaca?.objetivo === 'sobreviver' ? { ondasSeguras: 0 } : fase.ressaca ? { ancoradouros: [] } : {}),
+    ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}), situacao: 'jogando' };
 }
 export function mareAlta(passos: number): boolean {
   return Math.floor(passos / PASSOS_POR_MARE) % 2 === 1;
@@ -187,7 +191,7 @@ function ameacasNoTurno(fase: Fase, posicoes: readonly Posicao[], passos: number
 }
 
 function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], fragmentos: number,
-  ancoradouros: Estado['ancoradouros'], eventos: Evento[],
+  ancoradouros: Estado['ancoradouros'], ondasSeguras: Estado['ondasSeguras'], eventos: Evento[],
 ) {
   const chegou = celulas.includes('C') || celulas.includes('G');
   if (!chegou) return false;
@@ -201,6 +205,10 @@ function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], 
   }
   if (fase.dupla && !celulas.includes(fase.dupla.segundoAlvo)) {
     eventos.push({ tipo: 'falta-parceiro' });
+    return false;
+  }
+  if (ondasSeguras !== undefined && ondasSeguras < (fase.ressaca?.faixas.length ?? 0)) {
+    eventos.push({ tipo: 'faltam-ondas' });
     return false;
   }
   eventos.push({ tipo: 'vitoria' });
@@ -272,6 +280,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
     const perdeu = terminouOrcamento(fase, passos, eventos) || levadas >= LIMITE_LEVADAS;
     return {
       estado: { ...anterior, passos, levadas, posicao: anterior.ultimoFirme,
+        ...(anterior.ondasSeguras === undefined ? {} : { ondasSeguras: 0 }),
         ...(dupla ? { dupla: { ...dupla, posicao: dupla.ultimoFirme } } : {}),
         situacao: perdeu ? 'derrota' : 'jogando' },
       eventos,
@@ -290,7 +299,11 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
     if (celula === 'E') portadorGruta = undefined;
   }
   const ancoradouros = resolverAncoradouro(anterior.ancoradouros, destino, celula, passos, eventos);
-  const venceu = resolverObjetivo(fase, celulas, fragmentos.length, ancoradouros, eventos);
+  // O ciclo de sobrevivência conta só ondas sem levada. Uma perda devolve a
+  // dupla aos marcos e reinicia a sequência sem rebobinar a maré.
+  const ondasSeguras = anterior.ondasSeguras !== undefined && faixaRessacaNoTurno(fase, passos)
+    ? Math.min(anterior.ondasSeguras + 1, fase.ressaca?.faixas.length ?? 0) : anterior.ondasSeguras;
+  const venceu = resolverObjetivo(fase, celulas, fragmentos.length, ancoradouros, ondasSeguras, eventos);
   // Uma saída segura pode completar a missão exatamente no último passo.
   const perdeu = !venceu && terminouOrcamento(fase, passos, eventos);
   const posicao = movendoParceiro ? (destinoOutro ?? anterior.posicao) : destino;
@@ -305,6 +318,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
     estado: { ...anterior, posicao, passos, temFragmento: fragmentos.length > 0, fragmentos,
       ultimoFirme: firmes ? posicao : anterior.ultimoFirme,
       ...(ancoradouros === undefined ? {} : { ancoradouros }),
+      ...(ondasSeguras === undefined ? {} : { ondasSeguras }),
       ...(etapaGruta === undefined ? {} : { etapaGruta }),
       ...(dupla && etapaGruta !== undefined ? { portadorGruta } : {}),
       ...(novaDupla ? { dupla: novaDupla } : {}), situacao: venceu ? 'vitoria' : perdeu ? 'derrota' : 'jogando' },

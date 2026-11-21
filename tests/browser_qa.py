@@ -519,6 +519,39 @@ def conferir_vento_sul(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def conferir_ressaca_alta(pagina, toque=False):
+    # O desafio fica à esquerda do primeiro chefe, sem alterar o mapa antigo.
+    jogar(pagina, 'L', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Ressaca Alta · chefe opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#ancoradouros')).to_be_hidden()
+    expect(pagina.locator('#ondas-seguras')).to_have_text('Ondas seguras seguidas: 0/3')
+    expect(pagina.locator('#previsao')).to_contain_text('linha 1, colunas 1 a 13')
+    jogar(pagina, 'RRR', toque)
+    expect(pagina.locator('#ondas-seguras')).to_have_text('Ondas seguras seguidas: 1/3')
+    expect(pagina.locator('#previsao')).to_contain_text('linha 5, colunas 1 a 13')
+    jogar(pagina, 'LRLRLR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('A faixa da ressaca te alcançou!')
+    expect(pagina.locator('#ondas-seguras')).to_have_text('Ondas seguras seguidas: 0/3')
+    expect(pagina.locator('#erros')).to_have_text('1 / 3')
+    tocar(pagina, '#reiniciar', toque)
+    jogar(pagina, 'RDXRRRRXDRDRRXRRRR', toque)
+    expect(pagina.locator('#ondas-seguras')).to_have_text('Ondas seguras seguidas: 3/3')
+    expect(pagina.locator('#passos')).to_have_text('15')
+    salvar_captura(pagina, f"ressaca-alta-refugios-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'RXDRRRRXRRRRUUUUXRRRRR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Ressaca Alta vencida.')
+    expect(pagina.locator('#passos')).to_have_text('34')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Ressaca Alta · chefe opcional · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('10/10')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+
+
+
 def conferir_enseadinha(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
@@ -748,6 +781,7 @@ with sync_playwright() as p:
     conferir_grutas_ampliadas(desktop)
     conferir_ressaca_ampliada(desktop)
     conferir_vento_sul(desktop)
+    conferir_ressaca_alta(desktop)
     print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
         aparelho = navegador.new_page(viewport={'width': largura, 'height': 844}, has_touch=True,
@@ -766,5 +800,6 @@ with sync_playwright() as p:
         conferir_grutas_ampliadas(aparelho, toque=True)
         conferir_ressaca_ampliada(aparelho, toque=True)
         conferir_vento_sul(aparelho, toque=True)
+        conferir_ressaca_alta(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()

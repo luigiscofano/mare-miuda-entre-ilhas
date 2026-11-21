@@ -63,3 +63,7 @@ A busca ordenada por passos repete o motor sem levadas e preserva o relógio da 
 ## Arena Vento Sul
 
 `vento-sul.test.ts` cobre a previsão de faixas, a imunidade da pedra alta, levada única por ameaças simultâneas, proteção da saída até firmar as três âncoras, chegada na alta, reinício, ida e volta e persistência sem bloqueio do Farol. O roteiro Playwright lê o aviso, provoca a primeira onda, reinicia e conclui a arena por teclado e toque emulado. A verificação em aparelho físico permanece pendente.
+
+## Arena Ressaca Alta
+
+O motor valida três ondas seguras seguidas, perda causada pelo siri inativo, retorno sem rebobinar a maré, proteção da pedra alta e dois alvos seguros. A rota ótima tem 34 passos; sem proteção das pedras são 36. O roteiro de navegador exercita os avisos, o reinício, a solução completa e a retomada da conclusão no mapa, com teclado e toque emulado. Save e entrada no Farol não exigem os chefes.

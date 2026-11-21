@@ -189,6 +189,7 @@ function descricao(evento: Evento): string {
       ? 'Para sair, encontre todos os fragmentos.' : 'Para sair, encontre o fragmento na ilhota.';
     case 'ancorou': return 'Ancoradouro firme!';
     case 'ancora-na-alta': return 'Volte a este ancoradouro na maré baixa.';
+    case 'faltam-ondas': return 'Sobreviva ao ciclo inteiro antes de reunir a dupla nos destinos.';
     case 'faltam-ancoradouros': return 'Firme os três ancoradouros para usar a saída.';
     case 'falta-parceiro': return 'O outro siri ainda não está no destino.'; 
     case 'troca': return 'Siri ativo trocado sem avançar a maré.';
@@ -233,6 +234,9 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     buscar('#grade').textContent = fase.mapa.map((fileira, linha) => [...fileira].map((casa, coluna) =>
       casa === 'N' && firmes.some(p => mesmaCasa(p, { linha, coluna })) ? 'n' : casa).join('')).join('\n');
   }
+  const ondas = buscar('#ondas-seguras');
+  ondas.hidden = estado.ondasSeguras === undefined;
+  ondas.textContent = ondas.hidden ? '' : `Ondas seguras seguidas: ${estado.ondasSeguras}/${fase.ressaca?.faixas.length}`;
   const duplaAtiva = buscar('#dupla-ativa');
   duplaAtiva.hidden = !estado.dupla;
   duplaAtiva.textContent = `Siri ativo: ${estado.dupla?.parceiroAtivo ? 'Verde, pinças baixas' : 'Coral, pinças erguidas'} (Espaço para trocar)`;
@@ -256,7 +260,8 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     mensagens.push(estado.levadas >= LIMITE_LEVADAS ? 'Três erros: tente de novo.' : 'De volta à última casa firme.');
   }
   if (estado.situacao === 'vitoria') {
-    if (fase.ressaca) mensagens.push(`${fase.nome} vencido. Volte à Baía.`);
+    if (fase.ressaca?.objetivo === 'sobreviver') mensagens.push('Ressaca Alta vencida. Volte à Baía.');
+    else if (fase.ressaca) mensagens.push(`${fase.nome} vencido. Volte à Baía.`);
     if (bancada && indice < FASES_BANCADA.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');
     if (!bancada && fase.id === 'ilhota-perolada') mensagens.push('Concha Perolada encontrada. Atalho de volta aberto!');
     else if (!bancada && !fase.ressaca && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');

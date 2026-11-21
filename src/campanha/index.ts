@@ -1,3 +1,4 @@
+import { RESSACA_ALTA } from '../fases/ressaca-alta.ts';
 import { VENTO_SUL } from '../fases/vento-sul.ts';
 import { FASES_RESSACA_AMPLIADA } from '../fases/ressaca-ampliada.ts';
 import type { IdFaseRessacaAmpliada } from '../fases/ressaca-ampliada.ts';
@@ -26,7 +27,7 @@ export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
   | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
-  | typeof VENTO_SUL.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
+  | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
 export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
   posicao: Posicao;
@@ -94,6 +95,7 @@ const NOS_RESSACA = [
   P(2, 0), P(4, -1), P(6, -1), P(8, -1), P(10, -1), P(11, 1), P(11, 3), P(8, 3),
 ] as const;
 const ARENA_VENTO_SUL = P(6, 3);
+const ARENA_RESSACA_ALTA = P(4, 3);
 const ENTRADAS_RESSACA: readonly Entrada[] = FASES_RESSACA_AMPLIADA.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_RESSACA[i],
 }));
@@ -173,6 +175,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'ressaca-dupla-ancoradouros', posicao: P(4, 1), nome: 'Ancoradouros em revezamento' },
     ...ENTRADAS_RESSACA,
     { id: VENTO_SUL.id, nome: VENTO_SUL.nome, posicao: ARENA_VENTO_SUL, opcional: true, chefe: true },
+    { id: RESSACA_ALTA.id, nome: RESSACA_ALTA.nome, posicao: ARENA_RESSACA_ALTA, opcional: true, chefe: true },
   ],
   farol: [
     PORTO,
@@ -400,6 +403,8 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['ressaca-atracadouro-torto'], 'Conclua Atracadouro torto para encontrar o cofre.'),
     trilha(NOS_RESSACA[7], ARENA_VENTO_SUL, 'esquerda', 'direita', [],
       ['ressaca-cofre-da-vazante'], 'Conclua Cofre da vazante para enfrentar Vento Sul.'),
+    trilha(ARENA_VENTO_SUL, ARENA_RESSACA_ALTA, 'esquerda', 'direita', [],
+      [VENTO_SUL.id], 'Vença Vento Sul para enfrentar Ressaca Alta.'),
   ],
   farol: [
     trilha(CAIS, P(2, 1), 'direita', 'esquerda', []),
