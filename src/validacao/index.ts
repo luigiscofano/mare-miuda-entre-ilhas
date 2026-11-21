@@ -1,11 +1,13 @@
 import { faixaAfeta, TOTAL_ANCORADOUROS, executarPasso, iniciar, lerCelula, mesmaCasa } from '../motor/index.ts';
 import type { Acao, Fase } from '../motor/index.ts';
 
+const chave = ({ coluna, linha }: { coluna: number; linha: number }) => `${coluna}:${linha}`;
+
 export function validarMapa(fase: Fase): void {
   const largura = fase.mapa[0]?.length ?? 0;
   const celulas = fase.mapa.join('');
   const contar = (simbolo: string) => [...celulas].filter(valor => valor === simbolo).length;
-  if (!largura || fase.mapa.some(linha => linha.length !== largura) || /[^S.=#CBGHAPDT~KEFONMY]/.test(celulas)) {
+  if (!largura || fase.mapa.some(linha => linha.length !== largura) || /[^S.=#CBGHAPDT~KEFONMYIL]/.test(celulas)) {
     throw new Error(`Mapa retangular inválido: ${fase.id}.`);
   }
   if (contar('S') !== 1 || contar('C') + contar('G') !== 1 ||
@@ -33,6 +35,22 @@ export function validarMapa(fase: Fase): void {
     || acoesGruta.some(acao => contar(acao) !== Number(etapas.includes(acao))))
     : /[KEFO]/.test(celulas)) {
     throw new Error(`Mecanismos da gruta inválidos: ${fase.id}.`);
+  }
+  const farol = fase.farol;
+  if (farol) {
+    const { passosPorOrientacao, orientacoes } = farol;
+    const lentes = new Set(orientacoes.map(({ lente }) => chave(lente)));
+    const pontes = new Set(orientacoes.flatMap(({ plataformas }) => plataformas.map(chave)));
+    if (!Number.isInteger(passosPorOrientacao) || passosPorOrientacao < 2 || orientacoes.length < 2
+      || new Set(orientacoes.map(o => o.nome)).size !== orientacoes.length || contar('C') !== 1
+      || lentes.size !== orientacoes.length || lentes.size !== contar('L') || pontes.size !== contar('I')
+      || orientacoes.some(o => !o.nome || !o.plataformas.length
+        || new Set(o.plataformas.map(chave)).size !== o.plataformas.length || lerCelula(fase, o.lente) !== 'L'
+        || o.plataformas.some(pos => lerCelula(fase, pos) !== 'I'))) {
+      throw new Error(`Configuração do feixe inválida: ${fase.id}.`);
+    }
+  } else if (/[IL]/.test(celulas)) {
+    throw new Error(`Ponte ou lente sem feixe: ${fase.id}.`);
   }
   const faixas = fase.ressaca?.faixas;
   const sobrevivencia = fase.ressaca?.objetivo === 'sobreviver';

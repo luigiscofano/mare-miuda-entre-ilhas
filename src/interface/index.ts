@@ -1,5 +1,5 @@
-import { alvoDaGarca, balsasNoTurno, executarPasso, faixaRessacaNoTurno, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, PASSOS_POR_MARE, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, TOTAL_ANCORADOUROS, totalFragmentos } from '../motor/index.ts';
-import type { Acao, Direcao, Evento } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, executarPasso, faixaRessacaNoTurno, feixeNoTurno, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, PASSOS_POR_MARE, passosAteTrocaFeixe, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, TOTAL_ANCORADOUROS, totalFragmentos } from '../motor/index.ts';
+import type { Acao, Direcao, Evento, OrientacaoFarol } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { ALTURA, DENSIDADE, desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
 import { conectarTeclado } from '../entrada/index.ts';
@@ -182,7 +182,8 @@ function descricao(evento: Evento): string {
     case 'gruta-fora-da-ordem': return `Ainda não. Próxima etapa: ${nomeDaEtapaGruta(evento.proxima)}.`;
     case 'balsa': return 'A balsa levou o siri ao outro cais.';
     case 'virada': return evento.alta ? 'A maré subiu.' : 'A maré baixou.';
-    case 'levada': if (evento.motivos.includes('ressaca')) return 'A faixa da ressaca te alcançou!';
+    case 'levada': if (evento.motivos.includes('farol')) return 'A ponte de luz apagou sob um siri!';
+      if (evento.motivos.includes('ressaca')) return 'A faixa da ressaca te alcançou!';
       return evento.motivos.length > 1 ? 'A onda e a garça te alcançaram!'
       : evento.motivos.includes('mare') ? 'A maré te levou!' : 'A garça te alcançou!';
     case 'orcamento-esgotado': return 'Os passos acabaram. Reinicie e tente outra rota.';
@@ -191,6 +192,9 @@ function descricao(evento: Evento): string {
       ? 'Para sair, encontre todos os fragmentos.' : 'Para sair, encontre o fragmento na ilhota.';
     case 'ancorou': return 'Ancoradouro firme!';
     case 'ancora-na-alta': return 'Volte a este ancoradouro na maré baixa.';
+    case 'lente-acesa': return 'Lente acesa!';
+    case 'lente-fora-do-feixe': return 'A lente só acende se você chegar enquanto o feixe estiver voltado para ela.';
+    case 'faltam-lentes': return 'Acenda todas as lentes antes de sair.';
     case 'faltam-ondas': return 'Sobreviva ao ciclo inteiro antes de reunir a dupla nos destinos.';
     case 'faltam-ancoradouros': return 'Firme os três ancoradouros para usar a saída.';
     case 'faltam-siris': return 'Coloque um siri em cada um dos três destinos.';
@@ -241,6 +245,9 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   const ondas = buscar('#ondas-seguras');
   ondas.hidden = estado.ondasSeguras === undefined;
   ondas.textContent = ondas.hidden ? '' : `Ondas seguras seguidas: ${estado.ondasSeguras}/${fase.ressaca?.faixas.length}`;
+  const lentes = buscar('#lentes-farol');
+  lentes.hidden = !estado.lentesAcesas;
+  lentes.textContent = estado.lentesAcesas ? `Lentes acesas: ${estado.lentesAcesas.length}/${fase.farol?.orientacoes.length}` : '';
   const duplaAtiva = buscar('#dupla-ativa');
   duplaAtiva.hidden = !estado.dupla;
   const ativo = siriAtivo(estado);
@@ -256,8 +263,16 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   const ateSubir = faltam + (alta ? PASSOS_POR_MARE : 0);
   const faixa = faixaRessacaNoTurno(fase, estado.passos + ateSubir);
   const sinalRessaca = faixa ? ` Onda na subida: linha ${faixa.linha + 1}, colunas ${faixa.primeiraColuna + 1} a ${faixa.ultimaColuna + 1}. Pedra alta protege.` : '';
+  const atualFarol = feixeNoTurno(fase, estado.passos);
+  const passosDoFeixe = passosAteTrocaFeixe(fase, estado.passos);
+  const proximoFarol = feixeNoTurno(fase, estado.passos + passosDoFeixe);
+  const descreverFeixe = (feixe: OrientacaoFarol) =>
+    `${feixe.nome}; lente em ${coordenadas(feixe.lente)}; pontes em ${feixe.plataformas.map(coordenadas).join('; ')}.`;
+  const sinalFarol = atualFarol && proximoFarol
+    ? ` Feixe atual: ${descreverFeixe(atualFarol)} Em ${passosDoFeixe} ${passosDoFeixe === 1 ? 'passo' : 'passos'}: ` +
+      descreverFeixe(proximoFarol) : '';
   buscar('#previsao').textContent = finalizada ? 'Tentativa encerrada.'
-    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}${sinalRessaca}`;
+    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}${sinalRessaca}${sinalFarol}`;
   buscar('#posicao').textContent = estado.dupla
     ? posicoesDosSiris(estado).map((pos, i) => `${SIRIS[i]}${i === ativo ? ' (ativo)' : ''}: ${coordenadas(pos)}.`).join(' ')
     : `Siri na ${coordenadas(estado.posicao)}.`;
@@ -267,11 +282,12 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     mensagens.push(estado.levadas >= LIMITE_LEVADAS ? 'Três erros: tente de novo.' : 'De volta à última casa firme.');
   }
   if (estado.situacao === 'vitoria') {
+    if (fase.farol) mensagens.push('Guardião do Farol vencido. Volte ao mapa.');
     if (fase.ressaca?.objetivo === 'sobreviver') mensagens.push('Ressaca Alta vencida. Volte à Baía.');
     else if (fase.ressaca) mensagens.push(`${fase.nome} vencido. Volte à Baía.`);
     if (bancada && indice < FASES_BANCADA.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');
     if (!bancada && fase.id === 'ilhota-perolada') mensagens.push('Concha Perolada encontrada. Atalho de volta aberto!');
-    else if (!bancada && !fase.ressaca && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');
+    else if (!bancada && !fase.ressaca && !fase.farol && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');
   }
   buscar('#feedback').textContent = mensagem || mensagens.join(' ');
   buscar('#seguir-fase').hidden = bancada || fase.id !== 'ponta-da-garca' || estado.situacao !== 'vitoria';

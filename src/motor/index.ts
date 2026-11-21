@@ -1,11 +1,16 @@
 // O núcleo não lê tempo, DOM nem storage: reprodução e jogo usam a mesma função.
 export type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita';
 export type Acao = Direcao | 'trocar';
-export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~' | EtapaGruta | 'O' | 'N' | 'M' | 'Y';
+export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~' | EtapaGruta | 'O' | 'N' | 'M' | 'Y' | 'I' | 'L';
 export type EtapaGruta = 'K' | 'E' | 'F';
 export type Posicao = Readonly<{ coluna: number; linha: number }>;
 export type Ameaca = Readonly<{ alvo: Posicao; primeiroAtaque: number; periodo: number; rota?: readonly Posicao[] }>;
 export type FaixaRessaca = Readonly<{ linha: number; primeiraColuna: number; ultimaColuna: number }>;
+export type OrientacaoFarol = Readonly<{
+  nome: string;
+  plataformas: readonly Posicao[];
+  lente: Posicao;
+}>;
 export type Fase = Readonly<{
   id: string;
   nome: string;
@@ -17,6 +22,7 @@ export type Fase = Readonly<{
   balsas?: readonly Readonly<{ paradas: readonly [Posicao, Posicao] }>[];
   orcamentoMoedas?: number;
   etapasGruta?: readonly EtapaGruta[];
+  farol?: Readonly<{ passosPorOrientacao: number; orientacoes: readonly OrientacaoFarol[] }>;
   ressaca?: Readonly<{ faixas: readonly FaixaRessaca[]; objetivo?: 'sobreviver' }>;
   dupla?: Readonly<{ segundoAlvo: 'T' | 'P'; terceiroAlvo?: 'Y' }>;
 }>;
@@ -34,9 +40,10 @@ export type Estado = Readonly<{
   portadorGruta?: 'principal' | 'parceiro' | 'terceiro';
   ancoradouros?: readonly Posicao[];
   ondasSeguras?: number;
+  lentesAcesas?: readonly Posicao[];
   situacao: 'jogando' | 'vitoria' | 'derrota';
 }>;
-export type MotivoErro = 'mare' | 'garca' | 'ressaca';
+export type MotivoErro = 'mare' | 'garca' | 'ressaca' | 'farol';
 export type Evento =
   | Readonly<{ tipo: 'bloqueado' }>
   | Readonly<{ tipo: 'virada'; alta: boolean }>
@@ -49,7 +56,7 @@ export type Evento =
   | Readonly<{ tipo: 'falta-fragmento' }>
   | Readonly<{ tipo: 'falta-parceiro' | 'faltam-siris' }>
   | Readonly<{ tipo: 'ancorou' | 'ancora-na-alta' | 'faltam-ancoradouros' }>
-  | Readonly<{ tipo: 'faltam-ondas' }>
+  | Readonly<{ tipo: 'faltam-ondas' | 'lente-acesa' | 'lente-fora-do-feixe' | 'faltam-lentes' }>
   | Readonly<{ tipo: 'troca' }>
   | Readonly<{ tipo: 'orcamento-esgotado' }>
   | Readonly<{ tipo: 'vitoria' }>;
@@ -80,7 +87,7 @@ export function iniciar(fase: Fase): Estado {
   const terceiroInicio = fase.dupla?.terceiroAlvo ? localizar(fase, 'M') : undefined;
   const terceiro = terceiroInicio ? { posicao: terceiroInicio, ultimoFirme: terceiroInicio, ativo: false } : undefined;
   return { posicao, ultimoFirme: posicao, passos: 0, levadas: 0, temFragmento: false,
-    fragmentos: [],
+    fragmentos: [], ...(fase.farol ? { lentesAcesas: [] } : {}),
     ...(fase.ressaca?.objetivo === 'sobreviver' ? { ondasSeguras: 0 } : fase.ressaca ? { ancoradouros: [] } : {}),
     ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}),
     ...(terceiro ? { terceiro } : {}), situacao: 'jogando' };
@@ -139,6 +146,35 @@ function resolverAncoradouro(anteriores: Estado['ancoradouros'], destino: Posica
   return [...anteriores, destino];
 }
 
+// A mesma orientação governa o aviso, a ponte transitável e a lente acesa.
+export function feixeNoTurno(fase: Fase, passos: number): OrientacaoFarol | undefined {
+  const farol = fase.farol;
+  if (!farol) return;
+  return farol.orientacoes[Math.floor(passos / farol.passosPorOrientacao) % farol.orientacoes.length];
+}
+
+export function passosAteTrocaFeixe(fase: Fase, passos: number): number {
+  const periodo = fase.farol?.passosPorOrientacao;
+  return periodo ? periodo - passos % periodo : 0;
+}
+
+function ponteIluminada(fase: Fase, posicao: Posicao, passos: number): boolean {
+  return feixeNoTurno(fase, passos)?.plataformas.some(p => mesmaCasa(p, posicao)) ?? false;
+}
+
+function acenderLente(fase: Fase, anteriores: Estado['lentesAcesas'], destino: Posicao,
+  casa: Celula | undefined, passos: number, eventos: Evento[],
+): Estado['lentesAcesas'] {
+  if (!anteriores || casa !== 'L' || anteriores.some(pos => mesmaCasa(pos, destino))) return anteriores;
+  const iluminada = feixeNoTurno(fase, passos)?.lente;
+  if (!iluminada || !mesmaCasa(iluminada, destino)) {
+    eventos.push({ tipo: 'lente-fora-do-feixe' });
+    return anteriores;
+  }
+  eventos.push({ tipo: 'lente-acesa' });
+  return [...anteriores, destino];
+}
+
 export function balsasNoTurno(fase: Fase, passos: number): readonly Posicao[] {
   const parada = mareAlta(passos) ? 1 : 0;
   return (fase.balsas ?? []).map(balsa => balsa.paradas[parada]);
@@ -189,16 +225,22 @@ function ameacasNoTurno(fase: Fase, posicoes: readonly Posicao[], passos: number
   if (mareAlta(passos) && posicoes.some(pos => lerCelula(fase, pos) === '=')) motivos.push('mare');
   const alvo = alvoDaGarca(fase.ameaca, passos);
   if (alvo && posicoes.some(pos => mesmaCasa(alvo, pos))) motivos.push('garca');
+  if (fase.farol && posicoes.some(pos => lerCelula(fase, pos) === 'I' && !ponteIluminada(fase, pos, passos))) motivos.push('farol');
   const faixa = faixaRessacaNoTurno(fase, passos);
   if (faixa && posicoes.some(pos => faixaAfeta(fase, faixa, pos))) motivos.push('ressaca');
   return motivos;
 }
 
 function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], fragmentos: number,
-  ancoradouros: Estado['ancoradouros'], ondasSeguras: Estado['ondasSeguras'], eventos: Evento[],
+  ancoradouros: Estado['ancoradouros'], ondasSeguras: Estado['ondasSeguras'],
+  lentesAcesas: Estado['lentesAcesas'], eventos: Evento[],
 ) {
   const chegou = celulas.includes('C') || celulas.includes('G');
   if (!chegou) return false;
+  if (lentesAcesas && lentesAcesas.length < (fase.farol?.orientacoes.length ?? 0)) {
+    eventos.push({ tipo: 'faltam-lentes' });
+    return false;
+  }
   if (ancoradouros && ancoradouros.length < TOTAL_ANCORADOUROS) {
     eventos.push({ tipo: 'faltam-ancoradouros' });
     return false;
@@ -249,6 +291,7 @@ export function destinoPermitido(fase: Fase, estado: Estado, direcao: Direcao): 
   const celula = lerCelula(fase, destino);
   const placa = outros.some(outro => lerCelula(fase, outro) === 'P');
   if (!celula || celula === '#' || (celula === '=' && mareAlta(estado.passos)) ||
+    (celula === 'I' && !ponteIluminada(fase, destino, estado.passos)) ||
     (celula === '~' && !balsasNoTurno(fase, estado.passos).some(p => mesmaCasa(p, destino))) ||
     (celula === 'D' && !placa) || (celula === 'O' && !portaoDaGrutaAberto(fase, estado)) || outros.some(outro => mesmaCasa(outro, destino))) return;
   return destino;
@@ -327,13 +370,14 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
   // dupla aos marcos e reinicia a sequência sem rebobinar a maré.
   const ondasSeguras = anterior.ondasSeguras !== undefined && faixaRessacaNoTurno(fase, passos)
     ? Math.min(anterior.ondasSeguras + 1, fase.ressaca?.faixas.length ?? 0) : anterior.ondasSeguras;
-  const venceu = resolverObjetivo(fase, celulas, fragmentos.length, ancoradouros, ondasSeguras, eventos);
+  const lentesAcesas = acenderLente(fase, anterior.lentesAcesas, destino, celula, passos, eventos);
+  const venceu = resolverObjetivo(fase, celulas, fragmentos.length, ancoradouros, ondasSeguras, lentesAcesas, eventos);
   // Uma saída segura pode completar a missão exatamente no último passo.
   const perdeu = !venceu && terminouOrcamento(fase, passos, eventos);
   const [posicao, posicaoParceiro, posicaoTerceiro] = posicoes;
   // Os marcos do grupo vêm de um mesmo turno seguro e não se sobrepõem.
   // Portões móveis não são marcos firmes: podem fechar depois do retorno.
-  const firmes = celulas.every(casa => casa !== '=' && casa !== 'D' && casa !== '~');
+  const firmes = celulas.every(casa => casa !== '=' && casa !== 'D' && casa !== '~' && casa !== 'I');
   const novaDupla = dupla && posicaoParceiro
     ? { ...dupla, posicao: posicaoParceiro, ultimoFirme: firmes ? posicaoParceiro : dupla.ultimoFirme }
     : undefined;
@@ -342,6 +386,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
       ultimoFirme: firmes ? posicao : anterior.ultimoFirme,
       ...(ancoradouros === undefined ? {} : { ancoradouros }),
       ...(ondasSeguras === undefined ? {} : { ondasSeguras }),
+      ...(lentesAcesas === undefined ? {} : { lentesAcesas }),
       ...(etapaGruta === undefined ? {} : { etapaGruta }),
       ...(dupla && etapaGruta !== undefined ? { portadorGruta } : {}),
       ...(novaDupla ? { dupla: novaDupla } : {}),
