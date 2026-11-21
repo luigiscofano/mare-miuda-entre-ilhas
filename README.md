@@ -16,6 +16,8 @@ O ZIP foi gerado no [PR #77](https://github.com/luigiscofano/mare-miuda-entre-il
 
 ## Como jogar localmente
 
+A seleção direta tem uma [nota de implementação e compatibilidade](docs/campanha/seletor-direto.md); as pranchas finais são uma etapa à parte.
+
 Com Node.js 24 ou posterior, execute na raiz:
 
 ```sh
@@ -32,9 +34,9 @@ A trilha **Siri na Areia — Notas Claras** acompanha os oito mundos. O áudio c
 
 ## Visuais do jogo
 
-Quadros do renderizador em **512 × 384**, sem cursor, nos estados jogáveis indicados. Não são capturas de aparelho nem pranchas conceituais.
+Quadros do renderizador em **512 × 384**, sem cursor, nos estados jogáveis indicados. Não são capturas de aparelho nem pranchas conceituais. O quadro do Cabo Baixo registra o seletor caminhável anterior, preservado no Processo de criação.
 
-| Seleção de mundos · proposta em revisão | Cabo Baixo · fundo aprovado |
+| Seleção de mundos · proposta em revisão | Cabo Baixo · mapa caminhável anterior |
 | --- | --- |
 | ![Arquipélago Meia-Lua com os portos da campanha](docs/processo-de-criacao/33-seletor-arquipelago/inicio.png) | ![Seletor de fases da Praia com o desvio disponível](docs/processo-de-criacao/34-seletores-praia/cabo-desvio.png) |
 | **Trilha das pedras · maré baixa** | **Trilha das pedras · maré alta** |
@@ -85,7 +87,7 @@ O jogo parte da ideia de maré do minigame Maré Miúda. Neste repositório, o e
 | Ação | Teclado | Toque |
 | --- | --- | --- |
 | Mover uma casa na travessia / seguir para o próximo marco no mapa | Setas ou WASD | Direcionais |
-| Entrar no marco | Enter | Entrar na fase ou ação do mapa |
+| Abrir fase ou região | Tab + Enter/Espaço na lista; Enter no marco do Arquipélago | Toque na fase ou visite o marco atual do Arquipélago |
 | Alternar siri quando a fase tem dupla ou trio | Espaço | Trocar siri |
 | Reiniciar a tentativa | R | Reiniciar |
 | Voltar | Esc | Voltar |
@@ -108,7 +110,7 @@ O núcleo combina contagem de passos, leitura espacial e previsão. O jogador n�
 <details>
 <summary>Campanha e mapa-múndi</summary>
 
-A Praia das Conchas tem dois seletores, **Cabo Baixo** e **Enseadinha**. Depois da Praia, Recifes e Mangue podem ser visitados em qualquer ordem. As duas rotas principais abrem a Enseada, e o percurso segue por Deriva, Grutas, Baía e Farol. O desfecho é revisitável: **A luz das duas marés** encerra a campanha sem exigir chefes nem bônus.
+Escolha a fase pelo nome, sem andar dentro da região. Os botões mostram **Disponível**, **Bloqueada** (com motivo) ou **Concluída**. Bônus, chefes opcionais e viagens ficam em grupos próprios. O **Arquipélago** conserva o mapa caminhável e seus portos. A Praia das Conchas tem dois seletores, **Cabo Baixo** e **Enseadinha**, com a mesma passagem entre eles. Depois da Praia, Recifes e Mangue podem ser visitados em qualquer ordem. As duas rotas principais abrem a Enseada, e o percurso segue por Deriva, Grutas, Baía e Farol. O desfecho é revisitável: **A luz das duas marés** encerra a campanha sem exigir chefes nem bônus.
 
 | Mundo | Entradas não opcionais | Mecânica e progressão |
 | --- | ---: | --- |

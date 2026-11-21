@@ -63,9 +63,7 @@ def conferir_embutidas(pagina):
 
 
 def conferir_travessia_da_praia(pagina, toque):
-    avancar_mapa(pagina, toque)
-    expect(pagina.locator('#posicao-praia')).to_contain_text('Primeira onda')
-    acionar(pagina, '#entrar-fase', toque)
+    acionar(pagina, '[data-marco="primeira-onda"]', toque)
     expect(pagina.locator('#nome-fase')).to_have_text('Passagem da primeira onda')
     acionar(pagina, '[data-direcao="direita"]', toque)
     expect(pagina.locator('#passos')).to_have_text('1')
@@ -110,9 +108,7 @@ def testar_rede(browser, url, *, toque=False):
         with pagina.expect_response(lambda r: r.url.endswith('/praia.mp3') and r.status == 404):
             acionar(pagina, '#comecar', toque)
         expect(pagina.locator('#titulo-praia')).to_have_text('Praia das Conchas')
-        avancar_mapa(pagina, toque)
-        expect(pagina.locator('#posicao-praia')).to_contain_text('Primeira onda')
-        acionar(pagina, '#entrar-fase', toque)
+        acionar(pagina, '[data-marco="primeira-onda"]', toque)
         expect(pagina.locator('#nome-fase')).to_have_text('Passagem da primeira onda')
         pagina.wait_for_function('iniciosDeLoop.length === 1')
         assert pedidos == ['praia.mp3', 'praia.mp3'], pedidos
@@ -133,8 +129,7 @@ def testar_rede(browser, url, *, toque=False):
         expect(pagina.locator('#comecar')).to_have_text('Continuar viagem')
         acionar(pagina, '#comecar', toque)
         pagina.wait_for_function('iniciosDeLoop.length === 1')
-        expect(pagina.locator('#entrar-fase')).to_have_text('Seguir para o arquipélago')
-        acionar(pagina, '#entrar-fase', toque)
+        acionar(pagina, '[data-marco="embarque-cabo"]', toque)
         expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
         for _ in range(2):
             avancar_mapa(pagina, toque)
@@ -153,8 +148,7 @@ def testar_rede(browser, url, *, toque=False):
         assert abs(segundo['duracao'] - PERIODO) < 0.1
         [parada] = pagina.evaluate('paradasDeLoop')
         assert abs(parada - segundo['instante'] - 0.44) < 0.002
-        avancar_mapa(pagina, toque)
-        acionar(pagina, '#entrar-fase', toque)
+        acionar(pagina, '[data-marco="mangue-dois-encontros"]', toque)
         expect(pagina.locator('#nome-fase')).to_have_text('Raízes vizinhas')
         acionar(pagina, '#voltar-fase', toque)
         assert pagina.evaluate('iniciosDeLoop.length') == 2

@@ -96,6 +96,7 @@
       <img id="mapa-farol" src="./assets/seletor-farol-512.png" width="512" height="384" alt="" hidden>
       <img id="cabo-baixo" src="./assets/cabo-baixo-192.png" width="192" height="144" alt="" hidden>
       <img id="arte-arquipelago" src="./assets/arquipelago-meia-lua.png" width="512" height="384" alt="" hidden>
+      <nav id="seletor-fases" aria-label="Seleção de fases" hidden></nav>
       <div id="moldura-praia" class="moldura">
         <canvas id="mapa-praia" width="256" height="192" role="img" aria-label="Mapa caminhável da Praia das Conchas" aria-describedby="posicao-praia orientacao-praia">
           A posição, as entradas e os bloqueios também são informados em texto.
@@ -103,7 +104,7 @@
       </div>
       <p id="posicao-praia"></p>
       <p id="mensagem-praia" class="feedback" role="status" aria-live="polite"></p>
-      <div class="acoes">
+      <div class="acoes" id="controles-arquipelago">
         <div class="direcional" role="group" aria-label="Andar no mapa">
           <button type="button" data-mapa-direcao="cima" aria-label="Andar no mapa para cima">↑</button>
           <button type="button" data-mapa-direcao="esquerda" aria-label="Andar no mapa para a esquerda">←</button>
@@ -115,7 +116,7 @@
       <button type="button" id="rever-desfecho" hidden>Rever desfecho</button>
       <p id="saidas-praia" class="dica" aria-label="Saídas deste ponto"></p>
       <p id="enseada-aberta" class="dica" hidden>A passagem da Enseada se abriu. Visite a Enseada da Garça para encontrar a rota das balsas.</p>
-      <p class="dica">Setas, WASD ou toque escolhem uma saída. O siri segue até o próximo marco. Enter abre o ponto atual. Viajar não muda a maré.</p>
+      <p class="dica" id="dica-arquipelago">Setas, WASD ou toque escolhem uma saída. O siri segue até o próximo marco. Enter abre o ponto atual. Viajar não muda a maré.</p>
       <p id="aviso-save" class="dica" hidden>O navegador não permitiu salvar. Você pode jogar, mas o progresso pode se perder ao fechar.</p>
       <button type="button" id="menu-praia">Tela inicial</button>
     </section>
