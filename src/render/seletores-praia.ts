@@ -69,7 +69,7 @@ export function podePintarSeletorInterno(arte?: HTMLImageElement): arte is HTMLI
 }
 
 // Os mesmos vértices alimentam o traço e a animação; nenhum azulejo novo muda a navegação.
-const MAPAS_COM_FUNDO = ['praia-enseadinha', 'recifes', 'mangue', 'enseada', 'deriva'] as const;
+const MAPAS_COM_FUNDO = ['praia-enseadinha', 'recifes', 'mangue', 'enseada', 'deriva', 'grutas', 'ressaca', 'farol'] as const;
 type MapaInterno = typeof MAPAS_COM_FUNDO[number];
 
 export function mapaComFundoInterno(mundo: Mundo): mundo is MapaInterno {
@@ -122,15 +122,17 @@ export function pintarSeletorInterno(
     placa(ctx, INK, x - 2, y - 2, 5, 5);
     placa(ctx, CLARO, x - 1, y - 1, 3, 3);
     // No ramal norte, a placa lateral não some atrás do Siri no vértice vizinho.
-    const lateral = p.linha < 1;
+    const lateral = p.linha < 1 || (mundo === 'farol' && p.linha >= 3);
+    // A coluna mais à direita não tem margem para uma placa voltada ao litoral.
+    const deslocamento = lateral ? (x >= 240 ? -13 : 13) : 0;
     // Nos ramais norte destes mapas, os cadeados ficam na horizontal.
     // Ele não pode ficar por baixo da placa lateral do vértice ao lado.
-    const acimaDaTrilha = p.linha <= 0 && (mundo === 'enseada' || mundo === 'deriva');
+    const acimaDaTrilha = p.linha <= 0 && (mundo !== 'praia-enseadinha' && mundo !== 'recifes' && mundo !== 'mangue');
     if (lateral) {
-      placa(ctx, INK, x + 3, y, 8, 2);
-      if (acimaDaTrilha) placa(ctx, INK, x + 9, y - 5, 2, 5);
+      placa(ctx, INK, x + (deslocamento > 0 ? 3 : -10), y, 8, 2);
+      if (acimaDaTrilha) placa(ctx, INK, x + (deslocamento > 0 ? 9 : -10), y - 5, 2, 5);
     }
-    pintarMarcoDaPraia(ctx, x + (lateral ? 13 : 0), y + (acimaDaTrilha ? -15 : lateral ? -8 : 0),
+    pintarMarcoDaPraia(ctx, x + deslocamento, y + (acimaDaTrilha ? -15 : lateral ? -8 : 0),
       simbolo, progresso.concluidas.some(id => id === entrada.id), false);
   }
 }

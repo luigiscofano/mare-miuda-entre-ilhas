@@ -62,3 +62,7 @@ Os [fundos nativos e quadros de comparação](../processo-de-criacao/35-seletore
 ## Seletores da Enseada e da Deriva
 
 [Propostas, quadros e fonte](../processo-de-criacao/36-seletores-enseada-deriva/README.md). As paletas distinguem os dois ambientes; as placas e as rotas saem da mesma lógica dos outros seletores. A posição das placas no ramal norte deixa os cadeados visíveis.
+
+## Seletores das Grutas, da Baía e do Farol
+
+[Fundos, fontes e quadros](../processo-de-criacao/37-seletores-mundos-finais/README.md). A arte de cada região preserva os sinais jogáveis e a paleta de cada ambiente. O farol cenográfico não é um objetivo: a camada do jogo indica as rotas, inclusive a reta do último chefe.

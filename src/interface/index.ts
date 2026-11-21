@@ -43,6 +43,9 @@ const fundosDosSeletores = {
   mangue: buscar<HTMLImageElement>('#mapa-mangue'),
   enseada: buscar<HTMLImageElement>('#mapa-enseada'),
   deriva: buscar<HTMLImageElement>('#mapa-deriva'),
+  grutas: buscar<HTMLImageElement>('#mapa-grutas'),
+  ressaca: buscar<HTMLImageElement>('#mapa-ressaca'),
+  farol: buscar<HTMLImageElement>('#mapa-farol'),
 };
 function fundoDoSeletor(mundo: ReturnType<typeof mundoAtual>) {
   if (mapaComFundoInterno(mundo)) return fundosDosSeletores[mundo];

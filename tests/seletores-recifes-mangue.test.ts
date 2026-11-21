@@ -36,8 +36,8 @@ test('os dois fundos nativos não mudam os pixels ou a âncora do siri, nem o ma
     assert.deepEqual(pintar(partida, fundo), [{ fonte: fundo, coordenadas: [0, 0, 256, 192] }, ...semFundo]);
     assert.equal(totalDeFasesRegulares(mundo), 10);
   }
-  const grutas = preparar('grutas');
-  assert.deepEqual(pintar(grutas, fundo), pintar(grutas));
+  const arquipelago = preparar('arquipelago');
+  assert.deepEqual(pintar(arquipelago, fundo), pintar(arquipelago));
 });
 
 test('os seletores conservam os ramos, os dois chefes e as mesmas travas', () => {

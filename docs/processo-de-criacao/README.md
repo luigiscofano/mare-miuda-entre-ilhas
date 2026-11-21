@@ -53,3 +53,5 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 - [35 · Seletores de Recifes e Mangue](35-seletores-recifes-mangue/README.md): dois fundos e estados de entrada e acesso ao primeiro chefe, sem alteração da campanha.
 
 - [36 · Seletores da Enseada e da Deriva](36-seletores-enseada-deriva/README.md): fundos editáveis, acesso bloqueado e liberado, chefes e desvio.
+
+- [37 · Seletores das Grutas, da Baía e do Farol](37-seletores-mundos-finais/README.md): três fundos editáveis e os estados de acesso às arenas opcionais.
