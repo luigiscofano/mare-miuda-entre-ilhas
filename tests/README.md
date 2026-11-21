@@ -105,3 +105,5 @@ O teste reproduz a alternância das faixas, a proteção na pedra alta e as duas
 ## Chefes das Grutas da Espuma
 
 `chefes-grutas.test.ts` verifica o relógio de cada peça, a exigência de mover os dois siris no Cofre, a recusa com a placa livre e a recuperação após até duas levadas. O mapa preserva o acesso à Baía, dez regulares e recarga. O roteiro Playwright cobre as duas arenas com teclado e toque emulado, incluindo recusa, reinício, conclusão, save e capturas sem cursor.
+
+A fixture do desfecho parte do Salão das lanternas com cinco regulares concluídas. Ela testa a vitória em 34 passos, o desfecho com 6/10, a revisita após recarga, o retorno ao mesmo marco e a ausência de desfecho na preliminar. O HTML offline cobre o save v1 e igualdade da preferência de áudio; o roteiro Playwright acrescenta foco, teclado e toque emulado.

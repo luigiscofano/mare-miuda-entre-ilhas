@@ -137,3 +137,7 @@ Depois de Corrente cruzada, vá à direita para **Mestre das Correntes**. Vença
 ## Chefes das Grutas da Espuma
 
 Depois de Revezamento nas câmaras, siga à direita para a Sentinela da Gruta e, ao vencê-la, desça para o Cofre das Espumas. A maré controla quando os mecanismos respondem, e a segunda arena exige a dupla em margens diferentes. As arenas não bloqueiam a Baía ou o desvio de trio. [Fichas, capturas e soluções](../processo-de-criacao/28-chefes-grutas/README.md).
+
+## Desfecho e créditos
+
+**A luz das duas marés** encerra a história. Não é necessário ter 10/10 regulares nem vencer chefes ou desvios do trio. A ação **Ver desfecho** aparece na vitória; depois, **Rever desfecho** fica disponível no mapa do Farol. Voltar preserva o marco atual, e partidas antigas já concluídas liberam a ação sem migração. **As duas luzes do farol** é uma etapa anterior e não libera o desfecho.

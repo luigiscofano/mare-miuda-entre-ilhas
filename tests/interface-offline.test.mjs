@@ -274,3 +274,59 @@ test('HTML offline firma as âncoras da Deriva, transporta a dupla e preserva a 
   mapa.cima.click();
   assert.match(ler('#posicao-praia'), /Mestre das Correntes · chefe opcional · concluída/);
 });
+
+test('HTML offline abre e revisita o desfecho no mesmo marco com apenas seis fases', async () => {
+  const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
+  const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
+  assert.ok(modulo);
+  let ui = prepararInterface();
+  const chave = 'mare-miuda-entre-ilhas/praia-v1';
+  const concluidas = ['farol-fragmento-margens', 'farol-duas-luzes', 'farol-faroleiros-de-vigia',
+    'farol-turno-dos-guardioes', 'farol-salao-das-lanternas'];
+  const audio = { musica: 0, efeitos: 0 };
+  ui.storage.set(chave, JSON.stringify({ versao: 1, progresso: { mundo: 'farol',
+    posicao: { coluna: 10, linha: 1 }, viuTutorial: true, concluidas }, audio }));
+  await import(modulo + '#desfecho');
+  const pegar = id => ui.pegar(id);
+  pegar('#creditos-inicio').click();
+  assert.equal(pegar('#titulo-creditos').textContent, 'Créditos');
+  assert.doesNotMatch(pegar('#desfecho').textContent, /A luz voltou/);
+  pegar('#voltar-creditos').click();
+  pegar('#comecar').click();
+  assert.equal(pegar('#rever-desfecho').hidden, true);
+  ui.mapa.baixo.click();
+  pegar('#entrar-fase').click();
+  assert.equal(pegar('#nome-fase').textContent, 'A luz das duas marés');
+  assert.equal(pegar('#seguir-fase').hidden, true);
+  const direcoes = { D: 'baixo', L: 'esquerda', R: 'direita' };
+  for (const letra of 'RXRRRXRRRXRRRXRRRRXDDXRRLRLRLDDRLDRRRXRRD') {
+    if (letra === 'X') ui.tecla(' ');
+    else ui.botoes[direcoes[letra]].click();
+  }
+  assert.equal(pegar('#passos').textContent, '34');
+  assert.equal(pegar('#erros').textContent, '0 / 3');
+  assert.equal(pegar('#creditos').hidden, true);
+  assert.equal(pegar('#seguir-fase').hidden, false);
+  assert.equal(pegar('#seguir-fase').textContent, 'Ver desfecho');
+  const salvo = ui.storage.get(chave);
+  assert.deepEqual(JSON.parse(salvo), { versao: 1, progresso: { mundo: 'farol',
+    posicao: { coluna: 11, linha: 3 }, viuTutorial: true,
+    concluidas: [...concluidas, 'farol-luz-das-duas-mares'] }, audio });
+  pegar('#seguir-fase').click();
+  assert.match(pegar('#desfecho').textContent, /A luz voltou/);
+  pegar('#voltar-creditos').click();
+  assert.match(pegar('#posicao-praia').textContent, /A luz das duas marés · concluída/);
+  assert.equal(ui.storage.get(chave), salvo);
+
+  ui = prepararInterface();
+  ui.storage.set(chave, salvo);
+  await import(modulo + '#desfecho-recarregado');
+  pegar('#comecar').click();
+  assert.match(pegar('#progresso-praia').textContent, /6\/10/);
+  assert.equal(pegar('#rever-desfecho').hidden, false);
+  ui.mapa.cima.click();
+  pegar('#rever-desfecho').click();
+  assert.match(pegar('#desfecho').textContent, /A luz voltou/);
+  pegar('#voltar-creditos').click();
+  assert.match(pegar('#posicao-praia').textContent, /Salão das lanternas · concluída/);
+});

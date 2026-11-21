@@ -9,3 +9,5 @@ Na navegação por marcos, a chave e o esquema legados permanecem. Uma posição
 As três fases das Grutas e seus nós passam pela mesma validação de IDs e posições do save v1. Salva-se a conclusão e o local no mapa, não a pérola nem a sequência de uma tentativa.
 
 O Farol usa o mesmo esquema v1: salva o nó atual e os dois IDs de fases regulares sem guardar a partida. O porto retorna ao nó existente no arquipélago e não altera saves de outros mundos.
+
+O desfecho usa a conclusão já armazenada de `farol-luz-das-duas-mares`. Saves v1 antigos com esse ID liberam **Rever desfecho** sem migração ou campo novo; abrir ou fechar os créditos não escreve no save.

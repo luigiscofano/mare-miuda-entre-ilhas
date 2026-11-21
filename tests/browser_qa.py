@@ -1224,6 +1224,52 @@ def conferir_ultima_virada(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def conferir_desfecho(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+        versao: 1, progresso: {mundo: 'farol', posicao: {coluna: 10, linha: 1}, viuTutorial: true,
+          concluidas: ['farol-fragmento-margens', 'farol-duas-luzes', 'farol-faroleiros-de-vigia',
+                       'farol-turno-dos-guardioes', 'farol-salao-das-lanternas']},
+        audio: {musica: 0, efeitos: 0},
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#creditos-inicio', toque)
+    expect(pagina.locator('#titulo-creditos')).to_have_text('Créditos')
+    expect(pagina.locator('#desfecho')).not_to_contain_text('A luz voltou')
+    tocar(pagina, '#voltar-creditos', toque)
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#rever-desfecho')).to_be_hidden()
+    jogar(pagina, 'D', toque, mapa=True)
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#nome-fase')).to_have_text('A luz das duas marés')
+    expect(pagina.locator('#seguir-fase')).to_be_hidden()
+    jogar(pagina, 'RXRRRXRRRXRRRXRRRRXDDXRRLRLRLDDRLDRRRXRRD', toque)
+    expect(pagina.locator('#passos')).to_have_text('34')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    expect(pagina.locator('#seguir-fase')).to_have_text('Ver desfecho')
+    expect(pagina.locator('#creditos')).to_be_hidden()
+    tocar(pagina, '#seguir-fase', toque)
+    expect(pagina.locator('#titulo-creditos')).to_have_text('Desfecho e créditos')
+    expect(pagina.locator('#titulo-creditos')).to_be_focused()
+    expect(pagina.locator('#desfecho')).to_contain_text('A luz voltou')
+    expect(pagina.locator('#creditos')).to_contain_text('Luigi Scofano de Araujo')
+    tocar(pagina, '#voltar-creditos', toque)
+    expect(pagina.locator('#titulo-praia')).to_be_focused()
+    expect(pagina.locator('#posicao-praia')).to_contain_text('A luz das duas marés · concluída')
+    expect(pagina.locator('#rever-desfecho')).to_be_visible()
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#progresso-praia')).to_contain_text('6/10')
+    expect(pagina.locator('#posicao-praia')).to_contain_text('A luz das duas marés · concluída')
+    jogar(pagina, 'U', toque, mapa=True)
+    tocar(pagina, '#rever-desfecho', toque)
+    expect(pagina.locator('#desfecho')).to_contain_text('A luz voltou')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+    tocar(pagina, '#voltar-creditos', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Salão das lanternas · concluída')
+    expect(pagina.locator('#titulo-praia')).to_be_focused()
+
+
 def conferir_farol(pagina, toque=False):
     jogar(pagina, 'U', toque, mapa=True)
     tocar(pagina, '#entrar-fase', toque)
@@ -1239,7 +1285,9 @@ def conferir_farol(pagina, toque=False):
         jogar(pagina, caminho, toque)
         expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
         expect(pagina.locator('#erros')).to_have_text('0 / 3')
+        expect(pagina.locator('#seguir-fase')).to_be_hidden()
         tocar(pagina, '#voltar-fase', toque)
+        expect(pagina.locator('#rever-desfecho')).to_be_hidden()
     etapas = [
         ('R', 'Faroleiros de vigia', 'XRXRRRDRXRRRRRDXRRUDD'),
         ('R', 'Turno dos guardiões', 'RRRXRRRRRRXRXRRLXRRRRRXR'),
@@ -1287,6 +1335,7 @@ with sync_playwright() as p:
     conferir_lote2(desktop)
     conferir_grutas(desktop)
     conferir_farol(desktop)
+    conferir_desfecho(desktop)
     conferir_enseadinha(navegador.new_page(viewport={'width': 1180, 'height': 820}, offline=(PRIMEIRA_PAGINA == OFFLINE)))
     conferir_recifes_ampliados(desktop)
     conferir_chefes_recifes(desktop)
@@ -1313,6 +1362,7 @@ with sync_playwright() as p:
         conferir_lote2(aparelho, toque=True)
         conferir_grutas(aparelho, toque=True)
         conferir_farol(aparelho, toque=True)
+        conferir_desfecho(aparelho, toque=True)
         conferir_enseadinha(aparelho, toque=True)
         conferir_recifes_ampliados(aparelho, toque=True)
         conferir_chefes_recifes(aparelho, toque=True)

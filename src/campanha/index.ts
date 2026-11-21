@@ -591,6 +591,13 @@ export function moverNoMapa(progresso: Progresso, direcao: Direcao) {
   };
 }
 
+export const CAPITULO_FINAL = 'farol-luz-das-duas-mares';
+
+// Os saves antigos já guardam a vitória; o desfecho não precisa de uma nova marca.
+export function campanhaConcluida(progresso: Progresso): boolean {
+  return progresso.concluidas.includes(CAPITULO_FINAL);
+}
+
 export function concluirFase(progresso: Progresso, id: IdFase): Progresso {
   if (progresso.concluidas.includes(id)) return progresso;
   return { ...progresso, concluidas: [...progresso.concluidas, id] };
