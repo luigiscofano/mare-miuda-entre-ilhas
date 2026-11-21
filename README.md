@@ -44,7 +44,7 @@ Abra `dist/mare-miuda-prototipo.html` no navegador para jogar sem conexão. A ou
 
 [O seletor de mundos Meia-Lua](docs/processo-de-criacao/33-seletor-arquipelago/README.md) registra a adaptação da arte do estudo aos marcos do jogo, com rotas e bloqueios legíveis. [Os seletores da Praia](docs/processo-de-criacao/34-seletores-praia/README.md) registram as duas telas com desvio e cadeado em escala nativa. [Recifes e Mangue](docs/processo-de-criacao/35-seletores-recifes-mangue/README.md) levam a mesma sinalização a dois mapas próprios. [Enseada e Deriva](docs/processo-de-criacao/36-seletores-enseada-deriva/README.md) mostram os ramais, cadeados e desvios na escala de jogo. [Grutas, Baía e Farol](docs/processo-de-criacao/37-seletores-mundos-finais/README.md) fecham o lote e mostram o acesso às últimas arenas.
 
-[Índice permanente do processo](docs/processo-de-criacao/README.md) · [Acervo visual: 340 arquivos históricos catalogados](docs/processo-de-criacao/acervo-visual/README.md). Os arquivos ainda não importados têm links para commits exatos, sem prometer pastas locais inexistentes. O material histórico não entra no build.
+[Índice permanente do processo](docs/processo-de-criacao/README.md) · [Acervo visual: 340 arquivos históricos preservados](docs/processo-de-criacao/acervo-visual/README.md). Consulte as cópias locais e os commits exatos de origem. O material histórico não entra no build.
 
 </details>
 

@@ -1,0 +1,254 @@
+[
+  {
+    "id": "primeira-onda",
+    "fase": "Passagem da primeira onda",
+    "mundo": 1,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "sombra-da-garca",
+    "fase": "A sombra da garça",
+    "mundo": 1,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "busca-e-volta",
+    "fase": "Busca e volta",
+    "mundo": 1,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "ilhota-perolada",
+    "fase": "O segredo da ilhota",
+    "mundo": 1,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "ponta-da-garca",
+    "fase": "A ponta da garça",
+    "mundo": 1,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "praia-fio-de-areia",
+    "fase": "Fio de areia",
+    "mundo": 1,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "praia-pocas-espelho",
+    "fase": "Poças em espelho",
+    "mundo": 1,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "praia-mirante",
+    "fase": "Da praia ao mirante",
+    "mundo": 1,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "praia-bolso-mare",
+    "fase": "Bolso da maré",
+    "mundo": 1,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "praia-trilha-das-pedras",
+    "fase": "Trilha das pedras",
+    "mundo": 1,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "praia-fragmentos-areal",
+    "fase": "Fragmentos do areal",
+    "mundo": 1,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "recife-pedra-firme",
+    "fase": "Acima da espuma",
+    "mundo": 2,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "recife-duas-pocas",
+    "fase": "Duas poças do recife",
+    "mundo": 2,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "recife-retorno",
+    "fase": "A volta do recife",
+    "mundo": 2,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "mangue-dois-encontros",
+    "fase": "Raízes vizinhas",
+    "mundo": 3,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "mangue-placa",
+    "fase": "Um segura, outro passa",
+    "mundo": 3,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "mangue-reuniao",
+    "fase": "Reencontro na ponta do mangue",
+    "mundo": 3,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "enseada-sombra-restinga",
+    "fase": "Sombra na restinga",
+    "mundo": 4,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "enseada-abrigo-ondas",
+    "fase": "Abrigo entre ondas",
+    "mundo": 4,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "enseada-farol-baixo",
+    "fase": "Corrida ao farol baixo",
+    "mundo": 4,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "enseada-dupla-vigia",
+    "fase": "Vigia em dupla",
+    "mundo": 4,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "enseada-dupla-revezamento",
+    "fase": "Revezamento na restinga",
+    "mundo": 4,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "deriva-primeira-balsa",
+    "fase": "A primeira balsa",
+    "mundo": 5,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "deriva-duas-margens",
+    "fase": "Duas margens",
+    "mundo": 5,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "deriva-corrente-cruzada",
+    "fase": "Corrente cruzada",
+    "mundo": 5,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "deriva-dupla-cais",
+    "fase": "Encontro nos dois cais",
+    "mundo": 5,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "deriva-dupla-contramao",
+    "fase": "Balsas na contramão",
+    "mundo": 5,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "grutas-encaixe",
+    "fase": "Uma pérola para o portão",
+    "mundo": 6,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "grutas-ordem",
+    "fase": "Duas câmaras, uma ordem",
+    "mundo": 6,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "grutas-retorno",
+    "fase": "A pérola da maré baixa",
+    "mundo": 6,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "grutas-dupla-portao",
+    "fase": "A pérola e a placa",
+    "mundo": 6,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "grutas-dupla-camaras",
+    "fase": "Revezamento nas câmaras",
+    "mundo": 6,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "ressaca-dupla-abrigo",
+    "fase": "Abrigo dos dois cais",
+    "mundo": 7,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "ressaca-dupla-ancoradouros",
+    "fase": "Ancoradouros em revezamento",
+    "mundo": 7,
+    "uso": "concha",
+    "forma": null
+  },
+  {
+    "id": "farol-fragmento-margens",
+    "fase": "O fragmento das duas margens",
+    "mundo": 8,
+    "uso": "reserva",
+    "forma": null
+  },
+  {
+    "id": "farol-duas-luzes",
+    "fase": "As duas luzes do farol",
+    "mundo": 8,
+    "uso": "reserva",
+    "forma": null
+  }
+]
