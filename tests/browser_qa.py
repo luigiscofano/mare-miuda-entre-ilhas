@@ -683,6 +683,36 @@ def conferir_ressaca_alta(pagina, toque=False):
 
 
 
+def conferir_vigia_das_ondas(pagina, toque=False):
+    jogar(pagina, 'U', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Vigia das ondas · chefe opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#ancoradouros')).to_be_hidden()
+    expect(pagina.locator('#ondas-seguras')).to_be_hidden()
+    expect(pagina.locator('#previsao')).to_contain_text('linha 2, colunas 3 a 9')
+    jogar(pagina, 'RR', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('Em 1 passo a maré sobe')
+    salvar_captura(pagina, f"praia-vigia-das-ondas-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'D', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('A faixa da ressaca te alcançou!')
+    expect(pagina.locator('#erros')).to_have_text('1 / 3')
+    tocar(pagina, '#reiniciar', toque)
+    jogar(pagina, 'RLRRDRRDU', toque)
+    expect(pagina.locator('#passos')).to_have_text('9')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    jogar(pagina, 'RLRRRRR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Vigia das ondas vencido.')
+    expect(pagina.locator('#passos')).to_have_text('16')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Vigia das ondas · chefe opcional · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('1/3')
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Fio de areia')
+
+
 def conferir_enseadinha(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
@@ -720,6 +750,7 @@ def conferir_enseadinha(pagina, toque=False):
             expect(pagina.locator('#viagem-praia')).to_contain_text('2/2')
             expect(pagina.locator('#progresso-praia')).to_contain_text('1/3')
             salvar_captura(pagina, f"enseadinha-prototipo-{pagina.viewport_size['width']}px")
+            conferir_vigia_das_ondas(pagina, toque)
         if not toque:
             ida, comandos, volta = desvio
             jogar(pagina, ida, mapa=True)

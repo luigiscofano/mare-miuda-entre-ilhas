@@ -298,6 +298,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     if (fase.farol?.orientacoes.some(o => o.placa)) mensagens.push(`Arena vencida: ${fase.nome}. Volte ao mapa.`);
     else if (fase.farol) mensagens.push('Guardião do Farol vencido. Volte ao mapa.');
     if (fase.ressaca?.objetivo === 'sobreviver') mensagens.push('Ressaca Alta vencida. Volte à Baía.');
+    else if (fase.ressaca?.objetivo === 'atravessar') mensagens.push(`${fase.nome} vencido. Volte ao mapa.`);
     else if (fase.ressaca) mensagens.push(`${fase.nome} vencido. Volte à Baía.`);
     if (bancada && indice < FASES_BANCADA.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');
     if (!bancada && fase.id === 'ilhota-perolada') mensagens.push('Concha Perolada encontrada. Atalho de volta aberto!');

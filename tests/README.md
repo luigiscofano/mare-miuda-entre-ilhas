@@ -83,3 +83,7 @@ A suíte confere os hashes dos cinco quadros entregues e da folha, além dos byt
 ## Última Virada
 
 `ultima-virada.test.ts` confirma 48 passos sem levadas, contra 42 sem exigir placa, e cobre o risco antes da recompensa e a retomada do save. A busca reversa verifica 949.104 combinações de posições firmes em menos de um segundo localmente. O roteiro Playwright cobre a recusa da lente com a placa livre, a indicação da placa ocupada e o fechamento com os três siris por teclado e toque emulado.
+
+## Vigia das ondas
+
+Testa a onda atingindo areia firme, o refúgio protegendo, a rota de 16 passos sem levadas e a recuperação de todo estado alcançável sem derrota. O Playwright usa o desvio da Enseadinha, testa aviso e levada, reinicia, conclui, recarrega e retoma a rota anterior com teclado e toque emulado.

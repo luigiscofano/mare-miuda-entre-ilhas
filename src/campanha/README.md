@@ -55,3 +55,5 @@ No Farol, ↓ abaixo de A luz das duas marés abre o Guardião depois da conclus
 ## Última Virada
 
 Depois de vencer Guardião do Farol, siga à esquerda para a segunda arena. Direita retorna. A conclusão é opcional, fica no save e não muda o contador das regulares.
+
+Na Enseadinha, ↑ no marco de Fio de areia abre Vigia das ondas após a conclusão do primeiro. ↓ volta ao mesmo marco. O embarque e os três desvios anteriores continuam independentes.

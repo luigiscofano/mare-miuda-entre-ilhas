@@ -58,7 +58,7 @@ export function validarMapa(fase: Fase): void {
   }
   const faixas = fase.ressaca?.faixas;
   const sobrevivencia = fase.ressaca?.objetivo === 'sobreviver';
-  if (faixas ? (contar('N') !== (sobrevivencia ? 0 : TOTAL_ANCORADOUROS)
+  if (faixas ? (contar('N') !== (fase.ressaca?.objetivo ? 0 : TOTAL_ANCORADOUROS)
     || contar('C') !== 1 || !faixas.length || (sobrevivencia &&
       (fase.dupla?.segundoAlvo !== 'T' || faixas.length < 2 || new Set(faixas.map(f => f.linha)).size !== faixas.length))
     || faixas.some(faixa => {

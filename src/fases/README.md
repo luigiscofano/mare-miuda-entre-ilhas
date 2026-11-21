@@ -172,3 +172,7 @@ A arena opcional da Baía abre após Cofre da vazante. `N` é um ancoradouro que
 ## Última Virada
 
 Em `ultima-virada.ts`, cada orientação do feixe tem sua própria `placa`. A lente só acende se a equipe terminar um passo seguro com outro siri nessa placa. A arena reaproveita `P`, `I` e `L` e não muda o funcionamento das fases com uma única placa de portão. [Ficha e solução](../../docs/processo-de-criacao/21-ultima-virada/README.md).
+
+## Vigia das ondas
+
+`vigia-das-ondas.ts` usa o aviso de espuma do motor de ondas em uma única faixa. Com objetivo `atravessar`, basta alcançar a concha; não há ancoradouros nem contador de sobrevivência. [Ficha](../../docs/processo-de-criacao/22-vigia-das-ondas/README.md).

@@ -17,3 +17,5 @@ A campanha tem **oito mundos com no mínimo dez fases autorais (quinze como meta
 A Baía da Ressaca alcança dez fases regulares, com seis em dupla. O Arquipélago do Farol também tem dez fases regulares. A Baía tem dois chefes opcionais: Vento Sul, com ancoragem, e Ressaca Alta, com sobrevivência em dupla. O trio estreia no desvio Três refúgios e volta em desafios mais difíceis na Baía e no Farol. O Guardião do Farol estreia com pontes de luz e três lentes. [Fichas da Baía](../processo-de-criacao/14-ressaca-ampliada/README.md).
 
 O Farol tem duas arenas opcionais. O Guardião ensina pontes temporárias e três lentes; a Última Virada acrescenta três posições e controles dependentes. As arenas dos demais mundos e a revisão de lançamento continuam pendentes.
+
+A primeira arena de chefe da Praia é [Vigia das ondas](../processo-de-criacao/22-vigia-das-ondas/README.md). Ponta da garça continua como encontro legado; Ponta da Ressaca fica para o próximo lote.

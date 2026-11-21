@@ -24,7 +24,7 @@ export type Fase = Readonly<{
   orcamentoMoedas?: number;
   etapasGruta?: readonly EtapaGruta[];
   farol?: Readonly<{ passosPorOrientacao: number; orientacoes: readonly OrientacaoFarol[] }>;
-  ressaca?: Readonly<{ faixas: readonly FaixaRessaca[]; objetivo?: 'sobreviver' }>;
+  ressaca?: Readonly<{ faixas: readonly FaixaRessaca[]; objetivo?: 'sobreviver' | 'atravessar' }>;
   dupla?: Readonly<{ segundoAlvo: 'T' | 'P'; terceiroAlvo?: 'Y' }>;
 }>;
 type EstadoDupla = Readonly<{ posicao: Posicao; ultimoFirme: Posicao; parceiroAtivo: boolean }>;
@@ -89,7 +89,7 @@ export function iniciar(fase: Fase): Estado {
   const terceiro = terceiroInicio ? { posicao: terceiroInicio, ultimoFirme: terceiroInicio, ativo: false } : undefined;
   return { posicao, ultimoFirme: posicao, passos: 0, levadas: 0, temFragmento: false,
     fragmentos: [], ...(fase.farol ? { lentesAcesas: [] } : {}),
-    ...(fase.ressaca?.objetivo === 'sobreviver' ? { ondasSeguras: 0 } : fase.ressaca ? { ancoradouros: [] } : {}),
+    ...(fase.ressaca?.objetivo === 'sobreviver' ? { ondasSeguras: 0 } : fase.ressaca && !fase.ressaca.objetivo ? { ancoradouros: [] } : {}),
     ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}),
     ...(terceiro ? { terceiro } : {}), situacao: 'jogando' };
 }
