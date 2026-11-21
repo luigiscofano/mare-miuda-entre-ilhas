@@ -87,3 +87,7 @@ A suíte confere os hashes dos cinco quadros entregues e da folha, além dos byt
 ## Vigia das ondas
 
 Testa a onda atingindo areia firme, o refúgio protegendo, a rota de 16 passos sem levadas e a recuperação de todo estado alcançável sem derrota. O Playwright usa o desvio da Enseadinha, testa aviso e levada, reinicia, conclui, recarrega e retoma a rota anterior com teclado e toque emulado.
+
+## Ponta da Ressaca
+
+O teste reproduz a alternância das faixas, a proteção na pedra alta e as duas passagens obrigatórias em baixios de janelas diferentes. A busca encontra 22 passos e confere a recuperação de todos os estados sem derrota. O Playwright cobre a transição do Vigia para a segunda arena, os avisos de norte e sul, a vitória e a recarga com teclado e toque emulado.

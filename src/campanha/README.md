@@ -57,3 +57,5 @@ No Farol, ↓ abaixo de A luz das duas marés abre o Guardião depois da conclus
 Depois de vencer Guardião do Farol, siga à esquerda para a segunda arena. Direita retorna. A conclusão é opcional, fica no save e não muda o contador das regulares.
 
 Na Enseadinha, ↑ no marco de Fio de areia abre Vigia das ondas após a conclusão do primeiro. ↓ volta ao mesmo marco. O embarque e os três desvios anteriores continuam independentes.
+
+Acima de Vigia das ondas, ↑ abre Ponta da Ressaca após vencê-lo. ↓ volta ao Vigia e mais ↓ retorna ao Fio de areia. O segundo chefe é opcional, preserva as posições existentes e não muda o embarque.
