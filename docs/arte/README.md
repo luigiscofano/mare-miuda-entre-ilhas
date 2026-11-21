@@ -27,7 +27,7 @@ Recifes usam mar mais frio, corais chapados e o topo claro da pedra segura; Mang
 
 ### Cabo Baixo, mapa de seleção
 
-O fundo aprovado mantém 192 × 144 pixels na moldura de desenho. Números, desvio opcional e portão são desenhados pelo seletor em âncoras da imagem base. O siri da placa segue as âncoras do seletor, sem cobrir os números. O fundo não incorpora o personagem. A Enseadinha ainda usa terreno provisório e está identificada como tal.
+O fundo aprovado mantém 192 × 144 pixels na moldura de desenho. Números, desvio opcional e portão são desenhados pelo seletor em âncoras da imagem base. O siri da placa segue as âncoras do seletor, sem cobrir os números. O fundo não incorpora o personagem. A Enseadinha agora tem uma proposta de fundo próprio em 512 × 384, com ilhotas ortogonais, espuma e camadas de luz. Números, desvios, chefes, saídas e cadeados são desenhados sobre o fundo, seguindo o progresso. Veja [quadros, fontes e legenda](../processo-de-criacao/34-seletores-praia/README.md).
 
 ## Travessia da Praia: direção V32
 

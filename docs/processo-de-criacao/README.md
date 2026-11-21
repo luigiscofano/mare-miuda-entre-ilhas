@@ -47,3 +47,5 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 [32 · Travessias das Grutas, da Baía e do Farol](32-travessias-grutas-ressaca-farol/README.md): últimas três propostas de tabuleiro, com os mecanismos em contraste nas duas marés.
 
 [33 · Seletor de mundos Meia-Lua](33-seletor-arquipelago/README.md): estudo sem casas aplicado ao Arquipélago, com caminhos e bloqueios dinâmicos.
+
+[34 · Seletores da Praia das Conchas](34-seletores-praia/README.md): placas do Cabo Baixo e proposta de fundo e trilhas da Enseadinha, com quadros nativos.

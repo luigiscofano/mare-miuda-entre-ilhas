@@ -331,12 +331,16 @@ test('HTML offline abre e revisita o desfecho no mesmo marco com apenas seis fas
   assert.match(pegar('#posicao-praia').textContent, /Salão das lanternas · concluída/);
 });
 
-test('Build autônomo conserva os bytes nativos do fundo do Arquipélago', async () => {
+test('Build autônomo conserva os bytes dos fundos nativos de todos os seletores com arte', async () => {
   const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
-  const original = await readFile(new URL('../assets/arquipelago-meia-lua.png', import.meta.url));
-  const copiado = await readFile(new URL('../dist/assets/arquipelago-meia-lua.png', import.meta.url));
-  const embutido = html.match(/id="arte-arquipelago" src="data:image\/png;base64,([^"]+)"/)?.[1];
-  assert.ok(embutido);
-  assert.deepEqual(Buffer.from(embutido, 'base64'), original);
-  assert.deepEqual(copiado, original);
+  for (const [id, arquivo] of [
+    ['arte-arquipelago', 'arquipelago-meia-lua.png'], ['enseadinha', 'enseadinha-512.png'], ['cabo-baixo', 'cabo-baixo-192.png'],
+  ]) {
+    const original = await readFile(new URL(`../assets/${arquivo}`, import.meta.url));
+    const copiado = await readFile(new URL(`../dist/assets/${arquivo}`, import.meta.url));
+    const embutido = html.match(new RegExp(`id="${id}" src="data:image/png;base64,([^"]+)"`))?.[1];
+    assert.ok(embutido, id);
+    assert.deepEqual(Buffer.from(embutido, 'base64'), original, id);
+    assert.deepEqual(copiado, original, id);
+  }
 });

@@ -7,6 +7,8 @@ import { prepararTravessia } from '../campanha/travessia.ts';
 import { pintarCosta, temaDaCosta } from './travessia-praia.ts';
 import { pintarSeletorArquipelago, podePintarArquipelago } from './seletor-arquipelago.ts';
 
+import { pintarCadeadoPraia, pintarMarcoDaPraia, pintarSeletorEnseadinha, podePintarEnseadinha } from './seletores-praia.ts';
+
 export const LARGURA = 256;
 export const ALTURA = 192;
 export const DENSIDADE = 2;
@@ -496,19 +498,15 @@ export function desenharCabo(
     const [x, y] = marco.ponto;
     const entrada = entradaEm(ponto);
     const concluida = progresso.concluidas.some(f => f === entrada?.id);
-    const cor = concluida ? '#5f805a' : entrada?.opcional ? '#8d6549' : '#486c6b';
-    bloco(ctx, '#293b4a', CABO_X + x - 5, CABO_Y + y - 10, 11, 10);
-    bloco(ctx, cor, CABO_X + x - 4, CABO_Y + y - 9, 9, 8);
-    bloco(ctx, '#293b4a', CABO_X + x - 1, CABO_Y + y, 3, 2);
-    const desenho = DIGITOS[marco.simbolo];
-    pintarPixels(ctx, desenho, CABO_X + x - Math.floor(desenho[0].length / 2), CABO_Y + y - 7, { b: '#f5dcaa' });
+    const simbolo = marco.simbolo === '*' ? 'desvio' : marco.simbolo === '>' ? 'direita' : marco.simbolo;
+    pintarMarcoDaPraia(ctx, CABO_X + x, CABO_Y + y, simbolo, concluida, true);
   }
   for (const trecho of trilhasDo('praia')) {
     if (rotaLivre(progresso, trecho)) continue;
     const pontos = caminhoDoCabo(trecho.de, trecho.para);
     if (!pontos) continue;
     const meio = prepararTravessia(pontos).ponto(.5);
-    bloco(ctx, '#293b4a', CABO_X + Math.round(meio.coluna) - 2, CABO_Y + Math.round(meio.linha), 5, 3);
+    pintarCadeadoPraia(ctx, CABO_X + Math.round(meio.coluna), CABO_Y + Math.round(meio.linha));
   }
   const atual = marcadorCabo(progresso.posicao)?.ponto;
   const x = transito?.coluna ?? atual?.[0];
@@ -521,13 +519,19 @@ export function desenharCabo(
 }
 
 export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progresso, logo: HTMLImageElement,
-  transito = progresso.posicao, arquipelago?: HTMLImageElement): void {
+  transito = progresso.posicao, arquipelago?: HTMLImageElement, enseadinha?: HTMLImageElement): void {
   const mundo = mundoAtual(progresso);
   if (mundo === 'arquipelago' && podePintarArquipelago(arquipelago)) {
     pintarSeletorArquipelago(ctx, progresso, ponto => {
       const [x, y] = centroNo(ponto);
       return [x * DENSIDADE, y * DENSIDADE];
     }, arquipelago);
+    const [x, y] = centroNo(transito);
+    desenharSiri(ctx, logo, x, y - 1);
+    return;
+  }
+  if (mundo === 'praia-enseadinha' && podePintarEnseadinha(enseadinha)) {
+    pintarSeletorEnseadinha(ctx, progresso, centroNo, enseadinha);
     const [x, y] = centroNo(transito);
     desenharSiri(ctx, logo, x, y - 1);
     return;
