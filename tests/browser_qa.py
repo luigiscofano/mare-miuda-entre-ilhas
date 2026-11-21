@@ -730,8 +730,12 @@ def conferir_chefes_grutas(pagina, toque=False):
     }))""")
     pagina.reload()
     tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#mapa-grutas')).to_have_js_property('naturalWidth', 512)
     jogar(pagina, 'R', toque, mapa=True)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Sentinela da Gruta · chefe opcional')
+    conferir_siri_canonico(pagina, '#mapa-praia')
+    assert pixel_do_seletor_interno(pagina, 480, 186) == [38, 59, 69, 255]
+    salvar_captura(pagina, f'grutas-seletor-bloqueado-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'D', toque, mapa=True)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Sentinela da Gruta')
     tocar(pagina, '#entrar-fase', toque)
@@ -746,6 +750,8 @@ def conferir_chefes_grutas(pagina, toque=False):
     expect(pagina.locator('#passos')).to_have_text('24')
     expect(pagina.locator('#feedback')).to_contain_text('Arena vencida: Sentinela da Gruta.')
     tocar(pagina, '#voltar-fase', toque)
+    assert pixel_do_seletor_interno(pagina, 480, 186) == [239, 201, 135, 255]
+    salvar_captura(pagina, f'grutas-seletor-aberto-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'D', toque, mapa=True)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Cofre das Espumas · chefe opcional')
     tocar(pagina, '#entrar-fase', toque)
@@ -968,8 +974,12 @@ def conferir_ressaca_ampliada(pagina, toque=False):
 
 def conferir_vento_sul(pagina, toque=False):
     # A verificação anterior deixa o viajante no Cofre concluído.
+    expect(pagina.locator('#mapa-ressaca')).to_have_js_property('naturalWidth', 512)
     jogar(pagina, 'L', toque, mapa=True)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Vento Sul · chefe opcional')
+    conferir_siri_canonico(pagina, '#mapa-praia')
+    assert pixel_do_seletor_interno(pagina, 288, 218) == [38, 59, 69, 255]
+    salvar_captura(pagina, f'ressaca-seletor-bloqueado-{pagina.viewport_size["width"]}px')
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#ancoradouros')).to_have_text('Ancoradouros firmes: 0/3')
     expect(pagina.locator('#previsao')).to_contain_text('linha 1, colunas 2 a 4')
@@ -995,6 +1005,8 @@ def conferir_vento_sul(pagina, toque=False):
     pagina.reload()
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Vento Sul · chefe opcional · concluída')
+    assert pixel_do_seletor_interno(pagina, 288, 218) == [239, 201, 135, 255]
+    salvar_captura(pagina, f'ressaca-seletor-aberto-{pagina.viewport_size["width"]}px')
     expect(pagina.locator('#progresso-praia')).to_contain_text('10/10')
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
@@ -1279,8 +1291,12 @@ def conferir_grutas(pagina, toque=False):
 
 
 def conferir_guardiao_do_farol(pagina, toque=False):
+    expect(pagina.locator('#mapa-farol')).to_have_js_property('naturalWidth', 512)
     jogar(pagina, 'D', toque, mapa=True)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Guardião do Farol · chefe opcional')
+    conferir_siri_canonico(pagina, '#mapa-praia')
+    assert pixel_do_seletor_interno(pagina, 432, 250) == [38, 59, 69, 255]
+    salvar_captura(pagina, f'farol-seletor-bloqueado-{pagina.viewport_size["width"]}px')
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#lentes-farol')).to_have_text('Lentes acesas: 0/3')
     expect(pagina.locator('#previsao')).to_contain_text('Feixe atual: oeste')
@@ -1309,6 +1325,8 @@ def conferir_guardiao_do_farol(pagina, toque=False):
     pagina.reload()
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Guardião do Farol · chefe opcional · concluída')
+    assert pixel_do_seletor_interno(pagina, 432, 250) == [239, 201, 135, 255]
+    salvar_captura(pagina, f'farol-seletor-aberto-{pagina.viewport_size["width"]}px')
     expect(pagina.locator('#progresso-praia')).to_contain_text('10/10')
     conferir_ultima_virada(pagina, toque)
     jogar(pagina, 'U', toque, mapa=True)

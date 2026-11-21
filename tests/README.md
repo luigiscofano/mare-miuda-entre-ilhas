@@ -139,3 +139,7 @@ Os testes Node conferem grade inteira, recorte do siri, fallback sem imagem e os
 ## Seletores da Enseada da Garça e das Ilhas à Deriva
 
 `seletores-enseada-deriva.test.ts` verifica 15 vértices, 15 caminhos, os quadros com e sem fundo válido, o recorte do Siri e a troca visual de cadeado por areia aberta sem alterar o destino. O Playwright observa o mesmo antes e depois de vencer a fase exigida, em teclado e toque emulado. O build autônomo verifica os bytes de cada fundo PNG. Os quadros nativos do [caderno 36](../docs/processo-de-criacao/36-seletores-enseada-deriva/README.md) não substituem testes no navegador ou em aparelho físico.
+
+## Seletores das Grutas, da Baía e do Farol
+
+`seletores-mundos-finais.test.ts` verifica os vértices e ligações, o recorte do Siri, o fundo de contingência e a mudança de estado visual dos três acessos entre arenas. O Playwright valida essas passagens antes e depois da primeira arena de cada mundo, em desktop e toque emulado, e mantém a cobertura de desfecho e créditos. Os seis quadros do [caderno 37](../docs/processo-de-criacao/37-seletores-mundos-finais/README.md) são renderizações nativas, não substitutos de captura do navegador.
