@@ -7,7 +7,7 @@ import { prepararTravessia } from '../campanha/travessia.ts';
 import { pintarCosta, temaDaCosta } from './travessia-praia.ts';
 import { pintarSeletorArquipelago, podePintarArquipelago } from './seletor-arquipelago.ts';
 
-import { pintarCadeadoPraia, pintarMarcoDaPraia, pintarSeletorInterno, podePintarSeletorInterno } from './seletores-praia.ts';
+import { mapaComFundoInterno, pintarCadeadoPraia, pintarMarcoDaPraia, pintarSeletorInterno, podePintarSeletorInterno } from './seletores-praia.ts';
 
 export const LARGURA = 256;
 export const ALTURA = 192;
@@ -530,8 +530,7 @@ export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progress
     desenharSiri(ctx, logo, x, y - 1);
     return;
   }
-  if ((mundo === 'praia-enseadinha' || mundo === 'recifes' || mundo === 'mangue')
-    && podePintarSeletorInterno(fundoInterno)) {
+  if (mapaComFundoInterno(mundo) && podePintarSeletorInterno(fundoInterno)) {
     pintarSeletorInterno(ctx, progresso, centroNo, fundoInterno, mundo);
     const [x, y] = centroNo(transito);
     desenharSiri(ctx, logo, x, y - 1);

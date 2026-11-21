@@ -19,3 +19,5 @@ A versão em inglês e a opção Corrente de Espuma (B) permanecem no [acervo do
 A proposta `enseadinha-512.png` é o fundo nativo (512 × 384) da seleção de fases da Enseadinha, sem marcas de navegação embutidas. [Fonte e exportação reproduzível](../docs/processo-de-criacao/34-seletores-praia/README.md). O arquivo aprovado do Cabo Baixo permanece inalterado.
 
 - `seletor-recifes-512.png` e `seletor-mangue-512.png`: fundos de seletores em 512 × 384 sem marcas, com [fonte e exportador](../docs/processo-de-criacao/35-seletores-recifes-mangue/README.md).
+
+- `seletor-enseada-512.png` e `seletor-deriva-512.png`: fundos ortogonais sem elementos interativos, com [exportador reproduzível](../docs/processo-de-criacao/36-seletores-enseada-deriva/README.md).

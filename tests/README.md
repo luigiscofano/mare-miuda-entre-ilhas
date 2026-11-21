@@ -135,3 +135,7 @@ A fixture do desfecho parte do Salão das lanternas com cinco regulares concluí
 ### Seletores de Recifes e Mangue
 
 Os testes Node conferem grade inteira, recorte do siri, fallback sem imagem e os ramos existentes. O HTML autônomo carrega os dois PNGs originais byte a byte. O Playwright localiza os fundos no Canvas e percorre ramos, travas e saves após recarga, com teclado e toque emulado. Não conta como teste em dispositivo físico.
+
+## Seletores da Enseada da Garça e das Ilhas à Deriva
+
+`seletores-enseada-deriva.test.ts` verifica 15 vértices, 15 caminhos, os quadros com e sem fundo válido, o recorte do Siri e a troca visual de cadeado por areia aberta sem alterar o destino. O Playwright observa o mesmo antes e depois de vencer a fase exigida, em teclado e toque emulado. O build autônomo verifica os bytes de cada fundo PNG. Os quadros nativos do [caderno 36](../docs/processo-de-criacao/36-seletores-enseada-deriva/README.md) não substituem testes no navegador ou em aparelho físico.

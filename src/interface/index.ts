@@ -1,4 +1,5 @@
 import { balsasNoTurno, casasDoRasante, executarPasso, faixaRessacaNoTurno, feixeNoTurno, iniciar, janelaGrutaAtiva, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, nomeDaJanelaGruta, passagemDoRecifeFechada, PASSOS_POR_MARE, passosAteTrocaFeixe, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, totalAncoradouros, totalFragmentos } from '../motor/index.ts';
+import { mapaComFundoInterno } from '../render/seletores-praia.ts';
 import type { Acao, Direcao, Evento, OrientacaoFarol } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { ALTURA, DENSIDADE, desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
@@ -40,9 +41,11 @@ const fundosDosSeletores = {
   'praia-enseadinha': buscar<HTMLImageElement>('#enseadinha'),
   recifes: buscar<HTMLImageElement>('#mapa-recifes'),
   mangue: buscar<HTMLImageElement>('#mapa-mangue'),
+  enseada: buscar<HTMLImageElement>('#mapa-enseada'),
+  deriva: buscar<HTMLImageElement>('#mapa-deriva'),
 };
 function fundoDoSeletor(mundo: ReturnType<typeof mundoAtual>) {
-  if (mundo === 'praia-enseadinha' || mundo === 'recifes' || mundo === 'mangue') return fundosDosSeletores[mundo];
+  if (mapaComFundoInterno(mundo)) return fundosDosSeletores[mundo];
 }
 const arteCabo = buscar<HTMLImageElement>('#cabo-baixo');
 const arteArquipelago = buscar<HTMLImageElement>('#arte-arquipelago');
