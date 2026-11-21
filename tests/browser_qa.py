@@ -285,6 +285,17 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def conferir_cores_da_costa(pagina, mar, baixio):
+    assert pixel_da_travessia(pagina, 0, 0) == mar
+    assert pixel_da_travessia(pagina, 222, 163) == baixio
+
+
+def conferir_cantos_da_costa(pagina, marca):
+    for x, y in [(213, 149), (234, 149), (213, 170), (234, 170)]:
+        assert pixel_da_travessia(pagina, x, y) == marca
+    assert pixel_da_travessia(pagina, 214, 150) != marca
+
+
 def conferir_recifes_ampliados(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
@@ -300,7 +311,12 @@ def conferir_recifes_ampliados(pagina, toque=False):
     jogar(pagina, 'R', toque, mapa=True)
     expect(pagina.locator('#mensagem-praia')).to_contain_text('Degraus da vazante')
     tocar(pagina, '#entrar-fase', toque)
-    jogar(pagina, 'RRDUDDRR', toque)
+    conferir_cores_da_costa(pagina, [21, 60, 88, 255], [158, 182, 170, 255])
+    salvar_captura(pagina, f'recifes-travessia-baixa-{pagina.viewport_size["width"]}px')
+    jogar(pagina, 'RRD', toque)
+    conferir_cantos_da_costa(pagina, [172, 224, 214, 255])
+    salvar_captura(pagina, f'recifes-travessia-alta-{pagina.viewport_size["width"]}px')
+    jogar(pagina, 'UDDRR', toque)
     expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
     tocar(pagina, '#voltar-fase', toque)
     jogar(pagina, 'DRD', toque, mapa=True)
@@ -382,7 +398,11 @@ def conferir_mangue_ampliado(pagina, toque=False):
     tocar(pagina, '#voltar-fase', toque)
     jogar(pagina, 'R', toque, mapa=True)
     tocar(pagina, '#entrar-fase', toque)
+    conferir_cores_da_costa(pagina, [48, 62, 53, 255], [142, 133, 96, 255])
+    salvar_captura(pagina, f'mangue-travessia-baixa-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'RXRR', toque)
+    conferir_cantos_da_costa(pagina, [196, 210, 159, 255])
+    salvar_captura(pagina, f'mangue-travessia-alta-{pagina.viewport_size["width"]}px')
     expect(pagina.locator('#erros')).to_have_text('1 / 3')
     tocar(pagina, '#reiniciar', toque)
     expect(pagina.locator('#nome-fase')).to_be_focused()
