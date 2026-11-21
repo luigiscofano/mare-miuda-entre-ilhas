@@ -41,3 +41,5 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 [29 · Travessia da Praia](29-travessia-praia/README.md): referência V32 aprovada e implementação em grade na Praia das Conchas.
 
 [30 · Travessias de Recifes e Mangue](30-travessias-recifes-mangue/README.md): prévia visual jogável, com costa em grade e uma concha por mundo.
+
+[31 · Travessias da Enseada e da Deriva](31-travessias-enseada-deriva/README.md): duas propostas visuais com quadros das duas marés.

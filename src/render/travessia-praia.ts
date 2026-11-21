@@ -1,6 +1,7 @@
 import type { Mundo } from '../campanha/index.ts';
 import type { Posicao } from '../motor/index.ts';
 import { ENFEITES_DA_PRAIA } from './enfeites-da-praia.ts';
+import { TEMA_DERIVA, TEMA_ENSEADA } from './costas-enseada-deriva.ts';
 import { RAIZ_DE_MARGEM, TEMA_MANGUE, TEMA_RECIFES } from './costas-recifes-mangue.ts';
 
 // Cada casa é desenhada na superfície nativa, sem interpolar os 32 × 32 pixels.
@@ -35,7 +36,7 @@ export type TemaDeCosta = Readonly<{
   cores: Cores;
   enfeites: readonly Enfeite[];
   desenhoConcha?: readonly string[];
-  tipo: 'praia' | 'recifes' | 'mangue';
+  tipo: 'praia' | 'recifes' | 'mangue' | 'enseada' | 'deriva';
   raios: readonly [number, number, number, number];
 }>;
 
@@ -50,6 +51,8 @@ export function temaDaCosta(mundo: Mundo | false): TemaDeCosta | undefined {
   if (usaTravessiaPraia(mundo)) return TEMA_PRAIA;
   if (mundo === 'recifes') return TEMA_RECIFES;
   if (mundo === 'mangue') return TEMA_MANGUE;
+  if (mundo === 'enseada') return TEMA_ENSEADA;
+  if (mundo === 'deriva') return TEMA_DERIVA;
 }
 
 function ret(ctx: CanvasRenderingContext2D, cor: string, x: number, y: number, l: number, a = 1): void {
@@ -155,7 +158,7 @@ function rocha(ctx: CanvasRenderingContext2D, x: number, y: number, semente: num
     sprite(ctx, PEDRA_MEDIA, paletaPedra, x + 4, y + 15);
     sprite(ctx, PEDRA_PEQUENA, paletaPedra, x + 11, y + 9);
   }
-  if (costa === 'recifes') {
+  if (costa === 'recifes' || costa === 'enseada') {
     // Apenas a face de um dos blocos recebe o veio; o desenho continua angular.
     const recuo = tipo % 3;
     ret(ctx, cores.rochaFaceClara, x + 10 + recuo, y + 17, 8);
@@ -311,6 +314,18 @@ function areia(ctx: CanvasRenderingContext2D, x: number, y: number, v: number, d
     // Pequenos cacos de concha no chão; o rosa ou o nácar grande fica reservado ao objetivo.
     ret(ctx, cores.areiaClara, x + 8, y + 19, 3, 2);
     ret(ctx, cores.areiaBorda, x + 12, y + 21, 3);
+  }
+  if (decorar && tipo === 'enseada' && v % 7 === 3) {
+    // Penas não entram na paisagem. Os traços chapados são sedimento do vento.
+    ret(ctx, cores.areiaBorda, x + 9, y + 24, 8);
+    ret(ctx, cores.areiaClara, x + 12, y + 23, 6);
+    ret(ctx, cores.areiaClara, x + 20, y + 22, 3);
+  }
+  if (decorar && tipo === 'deriva' && v % 7 === 3) {
+    // Um graveto pequeno repousa no piso, bem menor que o casco navegável.
+    ret(ctx, cores.areiaPonto, x + 8, y + 24, 9);
+    ret(ctx, cores.barranco, x + 9, y + 23, 6);
+    ret(ctx, cores.barrancoEscuro, x + 14, y + 22, 2);
   }
   if (decorar && tipo === 'mangue') {
     const a = 6 + v % 12;

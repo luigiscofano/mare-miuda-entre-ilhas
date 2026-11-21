@@ -484,12 +484,18 @@ def conferir_enseada_ampliada(pagina, toque=False):
     jogar(pagina, 'UR', toque, mapa=True)
     expect(pagina.locator('#mensagem-praia')).to_contain_text('Complete Um passo antes da sombra')
     tocar(pagina, '#entrar-fase', toque)
+    assert pixel_da_travessia(pagina, 0, 0) == [40, 72, 88, 255]
+    assert pixel_da_travessia(pagina, 254, 179) == [171, 180, 169, 255]
+    salvar_captura(pagina, f'enseada-travessia-baixa-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'R', toque)
     expect(pagina.locator('#previsao')).to_contain_text('Garça no próximo passo')
     jogar(pagina, 'R', toque)
     expect(pagina.locator('#erros')).to_have_text('1 / 3')
     tocar(pagina, '#reiniciar', toque)
-    jogar(pagina, 'DRRRUR', toque)
+    jogar(pagina, 'DRR', toque)
+    assert pixel_da_travessia(pagina, 245, 167) == [195, 224, 221, 255]
+    salvar_captura(pagina, f'enseada-travessia-alta-{pagina.viewport_size["width"]}px')
+    jogar(pagina, 'RUR', toque)
     expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
     expect(pagina.locator('#erros')).to_have_text('0 / 3')
     tocar(pagina, '#voltar-fase', toque)
@@ -571,8 +577,14 @@ def conferir_deriva_ampliada(pagina, toque=False):
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#previsao')).to_contain_text('Balsa 2')
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+    assert pixel_da_travessia(pagina, 0, 0) == [46, 101, 94, 255]
+    assert pixel_da_travessia(pagina, 120, 152) == [187, 150, 95, 255]
     salvar_captura(pagina, f"deriva-balsas-alternadas-{pagina.viewport_size['width']}px")
-    jogar(pagina, 'RRRRDUDURRRRRR', toque)
+    jogar(pagina, 'RRR', toque)
+    assert pixel_da_travessia(pagina, 120, 152) != [187, 150, 95, 255]
+    expect(pagina.locator('#feedback')).to_contain_text('A balsa levou o siri')
+    salvar_captura(pagina, f'deriva-balsas-na-alta-{pagina.viewport_size["width"]}px')
+    jogar(pagina, 'RDUDURRRRRR', toque)
     expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
     tocar(pagina, '#voltar-fase', toque)
     jogar(pagina, 'RRD', toque, mapa=True)

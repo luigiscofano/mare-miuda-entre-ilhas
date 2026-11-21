@@ -1,6 +1,6 @@
 # Arte e renderização
 
-Grade lógica de 256 × 192 e casas de 16 × 16. O Canvas desenha retângulos inteiros e sprites baseados em caracteres, uma célula de cor por pixel. O exterior de sprites é vazio; sobre o palco opaco, não há alpha parcial. A superfície de desenho é de 512 × 384 (densidade 2×), sem mudar a grade lógica, as posições ou a largura CSS. A Praia, os Recifes e o Mangue desenham o cenário diretamente na superfície, com 32 pixels nativos por casa; bancada e demais cenários mantêm o terreno lógico existente. O recorte de 31 × 23 do siri permanece nativo, sem suavização.
+Grade lógica de 256 × 192 e casas de 16 × 16. O Canvas desenha retângulos inteiros e sprites baseados em caracteres, uma célula de cor por pixel. O exterior de sprites é vazio; sobre o palco opaco, não há alpha parcial. A superfície de desenho é de 512 × 384 (densidade 2×), sem mudar a grade lógica, as posições ou a largura CSS. A Praia e as prévias de Recifes, Mangue, Enseada e Deriva desenham o cenário diretamente na superfície, com 32 pixels nativos por casa; bancada e demais cenários mantêm o terreno lógico existente. O recorte de 31 × 23 do siri permanece nativo, sem suavização.
 
 - Cinzas e padrões diferenciam firme, baixio baixo, baixio coberto e obstáculo.
 - Contorno em X mostra ameaça no próximo passo, acompanhado de texto.
@@ -38,6 +38,10 @@ Para verificar em movimento, rode `npm run build` e abra a **Passagem da primeir
 ## Travessias de Recifes e Mangue: prévia jogável
 
 [Direção, quadros e regras de leitura](../processo-de-criacao/30-travessias-recifes-mangue/README.md). As paletas e matrizes dos dois ambientes estão em [costas-recifes-mangue.ts](../../src/render/costas-recifes-mangue.ts), sem reamostragem. Um tema muda o mar, os enfeites, os estratos, o acabamento do baixio e o desenho da concha. A mesma grade ortogonal e a mesma ordem de camadas protegem os sinais de jogo; os seletores e a arte da Praia permanecem intactos.
+
+## Travessias da Enseada e da Deriva: prévia jogável
+
+[Quadros, paletas e critérios de leitura](../processo-de-criacao/31-travessias-enseada-deriva/README.md). As [matrizes nativas](../../src/render/costas-enseada-deriva.ts) mantêm a mesma malha, com azul de amanhecer e juncos na Enseada, canais de jade e boia distante na Deriva. A concha em violeta e a concha em crescente distinguem os objetivos. O X da garça aparece por cima; o ramo, a espuma e a boia nunca entram no tabuleiro nem se confundem com a balsa que carrega o siri.
 
 ## Fauna
 
