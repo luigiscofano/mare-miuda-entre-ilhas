@@ -64,7 +64,7 @@ Corrente cruzada libera as Grutas da Espuma. O núcleo jogável atual tem três 
 
 Os desvios em dupla na Enseada e nas Ilhas reaproveitam as cores, a troca gratuita e o relógio compartilhado. A dupla volta de vez em quando, sem substituir os desafios de um siri só.
 
-As Grutas têm cinco fases regulares, das quais duas em dupla; sua última travessia abre a Baía da Ressaca. A Baía começa com duas travessias em dupla que combinam patrulha anunciada e deslocamento de balsas, sem chefes nesta etapa. O Farol acrescenta duas travessias regulares em dupla e abre depois de Ancoradouros em revezamento. Nenhuma das duas fases é chefe.
+As Grutas têm cinco fases regulares, das quais duas em dupla; sua última travessia abre a Baía da Ressaca. A Baía começa com duas travessias em dupla que combinam patrulha anunciada e deslocamento de balsas, sem chefes nesta etapa. O Farol abre depois de Ancoradouros em revezamento. Depois das duas travessias históricas, o mapa divide-se em dois ramais: a costa norte tem quatro desafios regulares de revisita e a rota dos guardiões tem quatro regulares, incluindo A luz das duas marés. São dez regulares no total (sete em dupla), sem chefes. [Fichas e soluções](../processo-de-criacao/15-farol-ampliado/README.md).
 
 Na Enseada e nas Ilhas, o segundo desvio regular em dupla é aberto após o primeiro. No segundo desafio da Enseada, a garça alterna margens; no da Deriva, duas balsas viajam em sentidos opostos no mesmo relógio. Esses desvios não são requisito de embarque.
 

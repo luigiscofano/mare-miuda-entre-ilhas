@@ -89,7 +89,7 @@ test('Farol é progressão regular, recupera save e não exige desvio opcional',
     moverNoMapa(concluirFase(ressaca, 'ressaca-dupla-ancoradouros'), 'cima').progresso, 'farol',
   );
   assert.equal(mundoAtual(progresso), 'farol');
-  assert.equal(totalDeFasesRegulares('farol'), 2);
+  assert.equal(totalDeFasesRegulares('farol'), 10);
   assert.equal(moverNoMapa(progresso, 'baixo').progresso, progresso);
   for (const id of ['farol-fragmento-margens', 'farol-duas-luzes'] as const) {
     progresso = moverNoMapa(progresso, 'direita').progresso;

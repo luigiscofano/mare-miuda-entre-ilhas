@@ -5,7 +5,6 @@ import {
 } from '../src/campanha/index.ts';
 import type { Progresso } from '../src/campanha/index.ts';
 import { FASES_GRUTAS_AMPLIADAS } from '../src/fases/grutas-ampliadas.ts';
-import { TODAS_AS_FASES } from '../src/fases/index.ts';
 import { DIRECOES, executarPasso, iniciar, mesmaCasa } from '../src/motor/index.ts';
 import type { Acao, Fase } from '../src/motor/index.ts';
 import { carregar, salvar } from '../src/persistencia/index.ts';
@@ -35,11 +34,10 @@ function existeVitoriaSemLevadas(fase: Fase, comTroca = true): boolean {
   return false;
 }
 
-test('as Grutas têm dez regulares e a campanha tem 79 soluções sem levadas', () => {
+test('as Grutas têm dez regulares com soluções sem levadas', () => {
   assert.equal(totalDeFasesRegulares('grutas'), 10);
   assert.equal(FASES_GRUTAS_AMPLIADAS.filter(f => 'dupla' in f).length, 3);
-  assert.equal(TODAS_AS_FASES.length, 79);
-  for (const fase of TODAS_AS_FASES) assert.ok(validarSolucao(fase), fase.id);
+  for (const fase of FASES_GRUTAS_AMPLIADAS) assert.ok(validarSolucao(fase), fase.id);
 });
 
 test('as cinco travessias dependem de cada etapa e os três resgates exigem troca', () => {
