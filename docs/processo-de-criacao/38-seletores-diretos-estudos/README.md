@@ -12,6 +12,8 @@ A proposta usa areia, pedra e água, sem árvores. Números mostram fases, losan
 
 [Prancha comparativa em 2×](seletores-diretos.png) · [Fonte editável](desenhar.py)
 
+[V2 · oito seletores, referência oficial provisória](v2/README.md) · segunda rodada preservada sem substituir estes estudos.
+
 ## Reproduzir
 
 Com Python 3 e Pillow, execute `python3 desenhar.py` numa cópia desta pasta. A fonte produz cada quadro nativo em 320 × 240, a ampliação em 3× e a prancha em 2× por vizinho mais próximo. Cada pixel do original é opaco e quadrado; não há filtros de suavização no resultado exportado. As prévias são autorais do projeto e não incorporam recursos do Miudezas.
