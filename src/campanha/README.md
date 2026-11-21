@@ -45,3 +45,7 @@ Ao concluir Cofre da vazante, siga à esquerda para o marco de chefe; direita vo
 Ressaca Alta aparece em um novo marco à esquerda da arena Vento Sul, liberado pela conclusão do primeiro chefe. Ambos ficam fora do contador de regulares. Nenhum requisito novo para viajar até o Farol.
 
 Nas Grutas, ↓ no marco de A pérola e a placa abre Três refúgios depois da conclusão. ↑ volta ao marco. O ID novo é reconhecido pelo save sem migração e não é condição do caminho à Baía.
+
+## Desvios de trio na Baía e no Farol
+
+Em Cais em paralelo, **↓** leva a Eco dos três cais e **↑** retorna. Em A luz das duas marés, **←** leva a Três luzes em revezamento e **→** retorna. Cada desvio abre com a conclusão do próprio marco, conta como extra e guarda a conclusão no save sem exigir a fase de trio de outro mundo.

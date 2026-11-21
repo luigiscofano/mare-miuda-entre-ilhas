@@ -118,9 +118,9 @@ function atualizarPraia(mensagem = ''): void {
     : mundo === 'enseada' ? 'A rota do cais leva às Ilhas à Deriva. Suba depois de Sombra na restinga para explorar o ramo; os dois desvios em dupla continuam no último marco da rota original.'
     : mundo === 'deriva' ? 'Siga pela rota do cais para as Grutas. Suba depois de A primeira balsa para abrir o ramo norte; os desvios em dupla continuam no último marco da rota original.'
     : mundo === 'grutas' ? 'A rota do cais leva à Baía da Ressaca. Suba depois de Uma pérola para o portão para explorar as câmaras ao norte.'
-      : mundo === 'ressaca' ? 'A rota do cais leva ao Farol. Suba depois de Abrigo dos dois cais para explorar o ramo norte. Ao completar Cofre da vazante, siga à esquerda para enfrentar Vento Sul.'
+      : mundo === 'ressaca' ? 'A rota do cais leva ao Farol. Suba depois de Abrigo dos dois cais para explorar o ramo norte. Desça depois de Cais em paralelo para o trio. Depois do Cofre da vazante, siga à esquerda para Vento Sul.'
       : mundo === 'farol'
-        ? 'Siga as travessias na ordem. O atalho para o cais só se abre depois da última.'
+        ? 'Explore a costa norte ou siga pela rota dos guardiões. Depois de A luz das duas marés, vá à esquerda para o desafio em trio.'
         : 'Complete as três travessias. O atalho sul só se abre depois da última.';
   buscar('#progresso-praia').textContent = mundo === 'praia'
     ? `Rota principal: ${concluidas}/4 · Concha Perolada: ${perola ? 'encontrada' : 'não encontrada'}.`

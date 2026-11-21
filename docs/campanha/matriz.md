@@ -77,3 +77,7 @@ A baixa anuncia a próxima faixa do chefão. Na subida, busque refúgio ou termi
 Ressaca Alta é o segundo chefe opcional e fica à esquerda de Vento Sul. Alterna as faixas norte, sul e central. A dupla precisa de três ondas seguidas sem levadas e da chegada em dois pontos seguros; não há coleta de âncoras. [Ficha](../processo-de-criacao/17-ressaca-alta/README.md).
 
 A primeira travessia em trio é **Três refúgios**, um desvio das Grutas que ensina alternância, relógio compartilhado e três destinos. Novos quebra-cabeças de trio nos mundos posteriores continuam no plano.
+
+### Trio jogável nos mundos 6, 7 e 8
+
+**Três refúgios** ensina a troca sem custo e a maré compartilhada. **Eco dos três cais** faz um siri já embarcado depender do passo do outro, além da placa. **Três luzes em revezamento** separa os papéis de sustentação da placa, transporte da pérola e alavanca, com duas balsas. As soluções sem levadas requerem, respectivamente, pelo menos 19, 23 e 40 movimentos válidos. [Continuação das fichas](../processo-de-criacao/19-trio-avancado/README.md).
