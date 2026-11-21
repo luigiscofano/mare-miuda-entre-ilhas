@@ -82,4 +82,4 @@ A primeira travessia em trio é **Três refúgios**, um desvio das Grutas que en
 
 **Três refúgios** ensina a troca sem custo e a maré compartilhada. **Eco dos três cais** faz um siri já embarcado depender do passo do outro, além da placa. **Três luzes em revezamento** separa os papéis de sustentação da placa, transporte da pérola e alavanca, com duas balsas. As soluções sem levadas requerem, respectivamente, pelo menos 19, 23 e 40 movimentos válidos. [Continuação das fichas](../processo-de-criacao/19-trio-avancado/README.md).
 
-O **Guardião do Farol** introduz pontes temporárias e três lentes, sem repetir a ancoragem ou as faixas de ataque da Baía. A segunda arena planejada do Farol, **Última Virada**, continua pendente.
+O **Guardião do Farol** introduz pontes temporárias e três lentes, sem repetir a ancoragem ou as faixas de ataque da Baía. A **Última Virada** exige alternar o trio, casar a orientação com outra placa ocupada e reunir os três siris nos destinos. [Ficha e solução](../processo-de-criacao/21-ultima-virada/README.md).
