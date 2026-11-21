@@ -1,3 +1,5 @@
+import { FASES_MANGUE_AMPLIADO } from '../fases/mangue-ampliado.ts';
+import type { IdFaseMangueAmpliado } from '../fases/mangue-ampliado.ts';
 import { FASES_RECIFES_AMPLIADOS } from '../fases/recifes-ampliados.ts';
 import type { IdFaseRecifesAmpliados } from '../fases/recifes-ampliados.ts';
 import { mesmaCasa } from '../motor/index.ts';
@@ -6,7 +8,7 @@ import type { Direcao, Posicao } from '../motor/index.ts';
 export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'praia-mirante'
   | 'praia-bolso-mare' | 'praia-trilha-das-pedras' | 'praia-fragmentos-areal';
 export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
-export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
+export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
   | 'enseada-dupla-vigia' | 'enseada-dupla-revezamento' | 'deriva-dupla-cais' | 'deriva-dupla-contramao'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
@@ -52,6 +54,12 @@ const ENTRADAS_RECIFES: readonly Entrada[] = FASES_RECIFES_AMPLIADOS.map((fase, 
   id: fase.id, nome: fase.nome, posicao: NOS_RECIFES[i],
   opcional: fase.id === 'recife-fio-coral' || fase.id === 'recife-mosaico',
 }));
+const NOS_MANGUE = [
+  P(2, 0), P(4, 0), P(7, 0), P(9, 0), P(10, 1), P(10, 3), P(8, 3),
+] as const;
+const ENTRADAS_MANGUE: readonly Entrada[] = FASES_MANGUE_AMPLIADO.map((fase, i) => ({
+  id: fase.id, nome: fase.nome, posicao: NOS_MANGUE[i],
+}));
 const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
   praia: ENTRADAS_PRAIA,
   'praia-enseadinha': [
@@ -86,6 +94,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'mangue-dois-encontros', posicao: P(2, 1), nome: 'Raízes vizinhas' },
     { id: 'mangue-placa', posicao: P(4, 1), nome: 'Um segura, outro passa' },
     { id: 'mangue-reuniao', posicao: P(6, 1), nome: 'Reencontro na ponta do mangue' },
+    ...ENTRADAS_MANGUE,
   ],
   enseada: [
     PORTO,
@@ -239,7 +248,23 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
     trilha(NOS_RECIFES[6], NOS_RECIFES[8], 'esquerda', 'direita', [],
       ['recife-tres-aneis'], 'Os três anéis abrem o desvio do mosaico.'),
   ],
-  mangue: sustentar('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao', true),
+  mangue: [
+    ...sustentar('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao', true),
+    trilha(P(2, 1), NOS_MANGUE[0], 'cima', 'baixo', [],
+      ['mangue-dois-encontros'], 'Conclua Raízes vizinhas para acessar as duas veredas.'),
+    trilha(NOS_MANGUE[0], NOS_MANGUE[1], 'direita', 'esquerda', [],
+      ['mangue-duas-veredas'], 'Conclua Duas veredas para encontrar os baixios.'),
+    trilha(NOS_MANGUE[1], NOS_MANGUE[2], 'direita', 'esquerda', [P(4, -0.375), P(7, -0.375)],
+      ['mangue-janela-partilhada'], 'Atravesse a janela da maré para chegar ao trinco.'),
+    trilha(NOS_MANGUE[2], NOS_MANGUE[3], 'direita', 'esquerda', [],
+      ['mangue-trinco-salgado', 'mangue-placa'], 'Conclua Trinco salgado e Um segura, outro passa para liberar o trecho.'),
+    trilha(NOS_MANGUE[3], NOS_MANGUE[4], 'baixo', 'cima', [P(9, 1)],
+      ['mangue-fragmentos-cruzados'], 'Busque os fragmentos nas duas margens para chegar ao cotovelo.'),
+    trilha(NOS_MANGUE[4], NOS_MANGUE[5], 'baixo', 'cima', [],
+      ['mangue-cotovelo'], 'Conclua Cotovelo das raízes para chegar à porteira.'),
+    trilha(NOS_MANGUE[5], NOS_MANGUE[6], 'esquerda', 'direita', [],
+      ['mangue-porteira-encontro'], 'Reúna a dupla depois da porteira para abrir o circuito.'),
+  ],
   enseada: [
     ...sustentar('enseada-sombra-restinga', 'enseada-abrigo-ondas', 'enseada-farol-baixo', true),
     trilha(P(6, 1), P(7, 0), 'cima', 'baixo', [P(6.375, 0.5)],

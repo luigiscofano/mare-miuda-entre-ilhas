@@ -17,3 +17,7 @@ No arquipélago, Ancoradouros em revezamento abre a saída de cima na Baía da R
 ## Recifes Expostos ampliados
 
 A rota histórica, seus três nós e seu atalho pelo sul não mudam. No primeiro marco, suba depois de Acima da espuma para acessar o ramo norte. O ramo tem sete travessias regulares, com uma confluência após o costão: Poças suspensas exige o costão e Duas poças do recife. Os desvios **Fio de coral** e **Mosaico das poças** têm marca própria e não entram no contador de dez regulares. O acesso à Enseada permanece compatível com os saves anteriores.
+
+## Mangue dos Siris Duplos ampliado
+
+No primeiro marco do Mangue, suba depois de Raízes vizinhas para explorar as sete novas travessias. O cruzamento logo após Trinco salgado pede também Um segura, outro passa. A rota original, seus três marcos e o atalho ao porto continuam exatamente nas mesmas posições. O ramo não entra na condição de abertura da Enseada.

@@ -1,3 +1,4 @@
+import { FASES_MANGUE_AMPLIADO } from './mangue-ampliado.ts';
 import { FASES_RECIFES_AMPLIADOS } from './recifes-ampliados.ts';
 import { FASES_ENSEADINHA } from './praia-enseadinha.ts';
 import { FASES_DERIVA, FASES_ENSEADA } from './lote2.ts';
@@ -107,6 +108,7 @@ export const FASES_MANGUE: readonly Fase[] = [
     mapa: ['S=H.DC', '.#.##T', 'A=H.P.'],
     dupla: { segundoAlvo: 'T' }, solucao: rota('RRRLRLXRRRRXRRRXRU'),
   },
+  ...FASES_MANGUE_AMPLIADO,
 ];
 
 export const TODAS_AS_FASES = [...FASES_PRAIA, ...FASES_ENSEADINHA, ...FASES_RECIFES, ...FASES_MANGUE, ...FASES_ENSEADA, ...FASES_DERIVA, DUPLA_ENSEADA, DUPLA_ENSEADA_REVEZAMENTO, DUPLA_DERIVA, DUPLA_DERIVA_CONTRAMAO, ...FASES_GRUTAS, ...GRUTAS_DUPLA, ...RESSACA_DUPLA, ...FASES_FAROL];

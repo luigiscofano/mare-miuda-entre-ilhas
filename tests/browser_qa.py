@@ -233,8 +233,7 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
                 pagina.reload()
                 tocar(pagina, '#comecar', toque)
                 expect(pagina.locator('#titulo-praia')).to_have_text(nome)
-                expect(pagina.locator('#progresso-praia')).to_contain_text(
-                    '1/10' if nome == 'Recifes Expostos' else '1/3')
+                expect(pagina.locator('#progresso-praia')).to_contain_text('1/10')
             tocar(pagina, '#entrar-fase', toque)
             if fase == 1 and not toque:
                 quantidade = 3 if nome == 'Recifes Expostos' else 5
@@ -250,8 +249,7 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
             jogar(pagina, solucao, toque)
             expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
             tocar(pagina, '#voltar-fase', toque)
-        expect(pagina.locator('#progresso-praia')).to_contain_text(
-            '3/10' if nome == 'Recifes Expostos' else '3/3')
+        expect(pagina.locator('#progresso-praia')).to_contain_text('3/10')
         jogar(pagina, 'D', toque, mapa=True)
         tocar(pagina, '#entrar-fase', toque)
         expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
@@ -294,6 +292,44 @@ def conferir_recifes_ampliados(pagina, toque=False):
     expect(pagina.locator('#posicao-praia')).to_contain_text('Fio de coral · opcional · concluída')
     expect(pagina.locator('#progresso-praia')).to_contain_text('3/10')
     salvar_captura(pagina, f"recifes-ampliados-{pagina.viewport_size['width']}px")
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+
+
+def conferir_mangue_ampliado(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+        versao: 1, progresso: {mundo: 'mangue', posicao: {coluna: 2, linha: 1},
+            viuTutorial: true, concluidas: ['mangue-dois-encontros']},
+        audio: {musica: 0, efeitos: 0},
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#progresso-praia')).to_contain_text('1/10')
+    jogar(pagina, 'UR', toque, mapa=True)
+    expect(pagina.locator('#mensagem-praia')).to_contain_text('Conclua Duas veredas')
+    tocar(pagina, '#entrar-fase', toque)
+    jogar(pagina, 'RRR', toque)
+    expect(pagina.locator('#passos')).to_have_text('3')
+    jogar(pagina, 'X', toque)
+    expect(pagina.locator('#passos')).to_have_text('3')
+    expect(pagina.locator('#dupla-ativa')).to_contain_text('Verde')
+    jogar(pagina, 'LLL', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+    tocar(pagina, '#voltar-fase', toque)
+    jogar(pagina, 'R', toque, mapa=True)
+    tocar(pagina, '#entrar-fase', toque)
+    jogar(pagina, 'RXRR', toque)
+    expect(pagina.locator('#erros')).to_have_text('1 / 3')
+    tocar(pagina, '#reiniciar', toque)
+    jogar(pagina, 'RRDURRXRRRR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Janela partilhada · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('3/10')
+    salvar_captura(pagina, f"mangue-ampliado-{pagina.viewport_size['width']}px")
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
@@ -496,6 +532,7 @@ with sync_playwright() as p:
     conferir_farol(desktop)
     conferir_enseadinha(navegador.new_page(viewport={'width': 1180, 'height': 820}, offline=(PRIMEIRA_PAGINA == OFFLINE)))
     conferir_recifes_ampliados(desktop)
+    conferir_mangue_ampliado(desktop)
     print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
         aparelho = navegador.new_page(viewport={'width': largura, 'height': 844}, has_touch=True,
@@ -508,5 +545,6 @@ with sync_playwright() as p:
         conferir_farol(aparelho, toque=True)
         conferir_enseadinha(aparelho, toque=True)
         conferir_recifes_ampliados(aparelho, toque=True)
+        conferir_mangue_ampliado(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()

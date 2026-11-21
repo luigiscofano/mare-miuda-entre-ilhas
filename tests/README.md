@@ -33,3 +33,7 @@ A ampliação da dupla checa as duas novas testemunhas sem levadas, a impossibil
 O Farol verifica a travessia com balsa e placa, a ausência de solução sem troca ou sem qualquer balsa, o portão sem gasto de passo, a patrulha sobre o inativo, a janela de dois passos para a troca no baixio, conclusão e recarga. O teste de navegador joga as duas fases por teclado e por toque emulado.
 
 A ampliação de Recifes verifica 45 testemunhas de vitória, contagem de dez regulares e dois desvios, atalhos, atribuição única de direção no seletor e persistência de marcos em saves novos e antigos. O roteiro Playwright visita um regular e um opcional usando teclado e toque emulado, reinicia a página e confere que o opcional não altera a contagem. As verificações do navegador devem ser confirmadas no resultado do workflow.
+
+## Mangue dos Siris Duplos ampliado
+
+O motor percorre as 52 soluções da campanha sem levadas. A busca das sete novas fases confirma que não há vitória sem levadas com um dos siris imóvel; também verifica ausência de solução sem portão nas duas finais e o mínimo de trocas. O teste do mapa cobre ida, volta, teclas exclusivas, saves e saída legada para a Enseada. O roteiro Playwright usa teclado e toque emulado para trocar sem gastar passos, provocar uma levada no baixio, reiniciar, vencer e recarregar com o novo marco. Os resultados de navegadores constam da execução de CI.

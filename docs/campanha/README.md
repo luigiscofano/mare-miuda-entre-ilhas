@@ -71,3 +71,7 @@ Na Enseada e nas Ilhas, o segundo desvio regular em dupla é aberto após o prim
 ## Ampliação dos Recifes Expostos
 
 O percurso original conserva a chave que libera a Enseada. Os marcos novos saem de um braço ao norte da primeira travessia: sete regulares e dois desvios facultativos, totalizando doze travessias em Recifes. O ramo não é pré-requisito do arquipélago. Os chefes ficam para outro lote. [Fichas e soluções](../processo-de-criacao/09-recifes-ampliados/README.md).
+
+## Ampliação do Mangue dos Siris Duplos
+
+O Mangue tem dez travessias regulares, sem chefes neste lote. A rota original continua a liberar a Enseada. Um ramo novo parte de Raízes vizinhas e trabalha troca, maré compartilhada, placa, porta, fragmentos e reencontro. [Fichas e soluções](../processo-de-criacao/10-mangue-ampliado/README.md).
