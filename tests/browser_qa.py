@@ -310,6 +310,18 @@ def conferir_cantos_da_costa(pagina, marca):
     assert pixel_da_travessia(pagina, 214, 150) != marca
 
 
+def conferir_fundo_do_seletor(pagina, imagem, cor):
+    pagina.wait_for_function(
+        "(id) => { const img = document.getElementById(id); return img.complete && img.naturalWidth === 512; }",
+        arg=imagem,
+    )
+    pagina.wait_for_function(
+        "(cor) => Array.from(document.querySelector('#mapa-praia').getContext('2d')"
+        ".getImageData(0, 0, 1, 1).data).every((canal, i) => canal === cor[i])",
+        arg=cor,
+    )
+
+
 def conferir_recifes_ampliados(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
@@ -320,6 +332,8 @@ def conferir_recifes_ampliados(pagina, toque=False):
     pagina.reload()
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#progresso-praia')).to_contain_text('2/10')
+    conferir_fundo_do_seletor(pagina, 'mapa-recifes', [21, 60, 82, 255])
+    salvar_captura(pagina, f'recifes-seletor-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'U', toque, mapa=True)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Degraus da vazante')
     jogar(pagina, 'R', toque, mapa=True)
@@ -399,6 +413,8 @@ def conferir_mangue_ampliado(pagina, toque=False):
     pagina.reload()
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#progresso-praia')).to_contain_text('1/10')
+    conferir_fundo_do_seletor(pagina, 'mapa-mangue', [34, 72, 74, 255])
+    salvar_captura(pagina, f'mangue-seletor-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'UR', toque, mapa=True)
     expect(pagina.locator('#mensagem-praia')).to_contain_text('Conclua Duas veredas')
     tocar(pagina, '#entrar-fase', toque)

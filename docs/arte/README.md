@@ -54,3 +54,7 @@ Para verificar em movimento, rode `npm run build` e abra a **Passagem da primeir
 ## Fauna
 
 [Sprites do trio, duas poses da garça, capturas e fontes](fauna/README.md).
+
+## Seletores de Recifes e Mangue
+
+Os [fundos nativos e quadros de comparação](../processo-de-criacao/35-seletores-recifes-mangue/README.md) registram as duas propostas. As rotas e categorias de marco permanecem na camada do jogo, acima do terreno. A arte dos demais seletores e travessias não muda.

@@ -36,7 +36,14 @@ function storageLocal() {
 }
 
 const tabuleiro = montarCanvas('#tabuleiro', '#moldura');
-const arteEnseadinha = buscar<HTMLImageElement>('#enseadinha');
+const fundosDosSeletores = {
+  'praia-enseadinha': buscar<HTMLImageElement>('#enseadinha'),
+  recifes: buscar<HTMLImageElement>('#mapa-recifes'),
+  mangue: buscar<HTMLImageElement>('#mapa-mangue'),
+};
+function fundoDoSeletor(mundo: ReturnType<typeof mundoAtual>) {
+  if (mundo === 'praia-enseadinha' || mundo === 'recifes' || mundo === 'mangue') return fundosDosSeletores[mundo];
+}
 const arteCabo = buscar<HTMLImageElement>('#cabo-baixo');
 const arteArquipelago = buscar<HTMLImageElement>('#arte-arquipelago');
 const fauna = buscar<HTMLImageElement>('#folha-fauna');
@@ -165,7 +172,7 @@ function atualizarPraia(mensagem = ''): void {
   else if (entrada?.destino) entrar.textContent = entrada.id.startsWith('rumo-') ? 'Visitar região' : entrada.nome;
   else entrar.textContent = 'Entrar na fase';
   if (podeDesenharCabo(mundo, arteCabo)) desenharCabo(mapaPraia.ctx, p, arteCabo, logo);
-  else desenharPraia(mapaPraia.ctx, p, logo, undefined, arteArquipelago, arteEnseadinha);
+  else desenharPraia(mapaPraia.ctx, p, logo, undefined, arteArquipelago, fundoDoSeletor(mundo));
 }
 
 logo.addEventListener('load', () => {
@@ -181,9 +188,11 @@ arteCabo.addEventListener('load', () => {
   if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'praia') atualizarPraia();
 });
 
-arteEnseadinha.addEventListener('load', () => {
-  if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'praia-enseadinha') atualizarPraia();
-});
+for (const [mundo, arte] of Object.entries(fundosDosSeletores)) {
+  arte.addEventListener('load', () => {
+    if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === mundo) atualizarPraia();
+  });
+}
 
 arteArquipelago.addEventListener('load', () => {
   if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'arquipelago') atualizarPraia();
@@ -443,7 +452,7 @@ function mover(direcao: Direcao): void {
       if (fracao >= 1) { concluir(); return; }
       const ponto = percurso.ponto(fracao);
       if (caminhoVisual) desenharCabo(mapaPraia.ctx, save.progresso, arteCabo, logo, ponto);
-      else desenharPraia(mapaPraia.ctx, save.progresso, logo, ponto, arteArquipelago, arteEnseadinha);
+      else desenharPraia(mapaPraia.ctx, save.progresso, logo, ponto, arteArquipelago, fundoDoSeletor(mundoAtual(save.progresso)));
       quadroMapa = window.requestAnimationFrame(animar);
     };
     quadroMapa = window.requestAnimationFrame(animar);

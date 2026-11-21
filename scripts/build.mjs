@@ -44,7 +44,7 @@ await compilarFontes('src');
 const html = await readFile('index.html', 'utf8');
 const css = await readFile('styles.css', 'utf8');
 // O executável offline incorpora as mesmas imagens copiadas para o build servido.
-const imagens = ['assets/logo-placa-de-areia-pt.png', 'assets/cabo-baixo-192.png', 'assets/arquipelago-meia-lua.png', 'assets/enseadinha-512.png',
+const imagens = ['assets/logo-placa-de-areia-pt.png', 'assets/cabo-baixo-192.png', 'assets/arquipelago-meia-lua.png', 'assets/enseadinha-512.png', 'assets/seletor-recifes-512.png', 'assets/seletor-mangue-512.png',
   'assets/fauna/spritesheet.png', 'assets/fauna/garca-patrulha.png', 'assets/fauna/garca-rasante.png'];
 let htmlOffline = html;
 for (const imagem of imagens) {

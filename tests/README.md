@@ -131,3 +131,7 @@ A fixture do desfecho parte do Salão das lanternas com cinco regulares concluí
 ## Seletores da Praia das Conchas
 
 `seletores-praia.test.ts` compara o Siri com a projeção anterior, o fundo do Cabo Baixo, os nove caminhos e dez vértices da Enseadinha e a leitura do bloqueio/desvio. O teste autônomo verifica os bytes dos três fundos de seleção empacotados. O percurso Playwright verifica a entrada nos dois mapas, o mapa travado e aberto após Fio de areia, os chefes e o save em desktop e toque emulado. Quadros nativos do renderizador no [caderno 34](../docs/processo-de-criacao/34-seletores-praia/README.md) são independentes de captura de navegador.
+
+### Seletores de Recifes e Mangue
+
+Os testes Node conferem grade inteira, recorte do siri, fallback sem imagem e os ramos existentes. O HTML autônomo carrega os dois PNGs originais byte a byte. O Playwright localiza os fundos no Canvas e percorre ramos, travas e saves após recarga, com teclado e toque emulado. Não conta como teste em dispositivo físico.

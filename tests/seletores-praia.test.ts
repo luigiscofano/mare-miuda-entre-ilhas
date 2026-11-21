@@ -47,9 +47,9 @@ test('Enseadinha mantém as nove trilhas, dez vértices, projeção e recorte ca
   const novo = quadro(base());
   assert.deepEqual(novo.imagens[0], { fonte: fundo, coords: [0, 0, 256, 192], escala: 2 });
   assert.deepEqual(novo.imagens[1], antigo.imagens[0]);
-  const recifes: Progresso = { ...base(), mundo: 'recifes' };
-  assert.deepEqual(quadro(recifes).imagens, quadro(recifes, false).imagens);
-  assert.deepEqual(quadro(recifes).marcas, quadro(recifes, false).marcas);
+  const grutas: Progresso = { ...base(), mundo: 'grutas' };
+  assert.deepEqual(quadro(grutas).imagens, quadro(grutas, false).imagens);
+  assert.deepEqual(quadro(grutas).marcas, quadro(grutas, false).marcas);
 });
 
 test('A placa de Fio de areia mantém número, libera desvio e distingue dois chefes', () => {
