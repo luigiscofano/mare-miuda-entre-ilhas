@@ -43,3 +43,7 @@ Por fase registre início, refúgios, terreno, objetivo, pistas antes do primeir
 | A pérola da maré baixa | Entrega, retorno e maré | O baixio separa as câmaras; chão firme permite ajustar os passos sem espera. |
 
 O Farol abre pelo final regular da Ressaca e já oferece duas travessias em dupla. O fragmento das duas margens exige proteger o siri inativo no baixio antes de cruzar de balsa. As duas luzes do farol exige balsas opostas, o momento certo de ocupar a placa sob patrulha e uma troca dentro da última janela de maré. [Fichas e provas de solução](../processo-de-criacao/11-farol-dupla/README.md).
+
+### Ampliação jogável: Recifes Expostos
+
+As três travessias originais formam a rota curta; sete novas travessias regulares elevam a contagem para dez. A curva começa com Degraus da vazante e Janelas do coral para treinar refúgio e sincronização. Oco da pedra e Volta pelo costão introduzem coleta com retorno e alternativas. Poças suspensas, Cintura de espuma e Três anéis da vazante desenvolvem planejamento em ciclos sucessivos. Fio de coral e Mosaico das poças são extras. Os dois chefes da matriz seguem planejados. [Fichas e soluções](../processo-de-criacao/09-recifes-ampliados/README.md).

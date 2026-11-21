@@ -74,6 +74,8 @@ Legenda adicional: H pedra alta, firme e atravessável; # rocha bloqueada. As se
 
 Aprendizado: distinguir refúgio de bloqueio → coletar dois fragmentos em janelas diferentes → preparar ida e volta em mais de um ciclo. Observe se os dois fragmentos são lidos como itens distintos e se os bolsões laterais comunicam espaço seguro, sem bordas enganadoras. Reiniciar restaura todos os fragmentos.
 
+As três fichas acima são o percurso original. O [lote de ampliação](../../docs/processo-de-criacao/09-recifes-ampliados/README.md) registra sete travessias regulares adicionais e dois desvios, com grades e soluções verificadas.
+
 ## Lote 1 · Mangue dos Siris Duplos
 
 Legenda adicional: A início do segundo siri, T raiz-alvo, P placa, D portão. Em dupla, concha e raiz/placa devem estar ocupadas ao mesmo tempo.
@@ -128,3 +130,4 @@ As três fases iniciais estão em `lote3.ts`. `K` é a pérola, `E` o encaixe A,
 | As duas luzes do farol | `RDUDDRRXRUURRRRRLRXRRXRXRRR` | 23 |
 
 Os dois mapas de `farol.ts` reaproveitam a placa `P`, o portão `D`, o embarque em `~`, os fragmentos `B` e os alvos de chegada. Nenhuma regra nova no motor.
+
