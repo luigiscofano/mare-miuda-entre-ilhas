@@ -3,7 +3,7 @@ import type { Acao, Direcao, Evento, OrientacaoFarol } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { ALTURA, DENSIDADE, desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
 import { conectarTeclado } from '../entrada/index.ts';
-import { abriuEnseada, concluirFase, entradaEm, ehIdFase, faseOpcional, moverNoMapa, mundoAtual, nomeDo, podeSairDaPraia, rotaLivre, saidaEm, totalDeFasesRegulares, viajar } from '../campanha/index.ts';
+import { abriuEnseada, campanhaConcluida, CAPITULO_FINAL, concluirFase, entradaEm, ehIdFase, faseOpcional, moverNoMapa, mundoAtual, nomeDo, podeSairDaPraia, rotaLivre, saidaEm, totalDeFasesRegulares, viajar } from '../campanha/index.ts';
 import { caminhoDoCabo } from '../campanha/cabo-baixo.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
 import { carregar, salvar } from '../persistencia/index.ts';
@@ -65,7 +65,14 @@ const volumes = {
   musica: buscar<HTMLInputElement>('#volume-musica'),
   efeitos: buscar<HTMLInputElement>('#volume-efeitos'),
 };
+type ContextoCreditos = 'inicio' | 'praia' | 'final';
+const TEXTOS_CREDITOS: Record<ContextoCreditos, string> = {
+  inicio: 'O caminho começa na Praia das Conchas.',
+  praia: 'Você chegou à ponta da praia. A primeira viagem termina aqui; volte ao mapa para seguir à Enseadinha ou embarcar pelas próximas ilhas.',
+  final: 'A luz voltou. Quando a maré subiu, o farol mostrou o caminho de casa. As ilhas continuam esperando por você.',
+};
 let tela: Tela = 'inicio';
+let contextoCreditos: ContextoCreditos = 'inicio';
 let quadroMapa: number | undefined;
 let bancada = false;
 let indice = 0;
@@ -98,6 +105,7 @@ function trocarTela(destino: Tela, focar = true): void {
 function atualizarPraia(mensagem = ''): void {
   const p = save.progresso;
   const mundo = mundoAtual(p);
+  buscar('#rever-desfecho').hidden = mundo !== 'farol' || !campanhaConcluida(p);
   const entrada = entradaEm(p.posicao, mundo);
   const concluidas = p.concluidas.filter(id =>
     mundo === 'praia-enseadinha' ? ['praia-fio-de-areia', 'praia-pocas-espelho', 'praia-mirante'].includes(id)
@@ -339,6 +347,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     mensagens.push(estado.levadas >= LIMITE_LEVADAS ? 'Três erros: tente de novo.' : 'De volta à última casa firme.');
   }
   if (estado.situacao === 'vitoria') {
+    if (fase.id === CAPITULO_FINAL) mensagens.push('A luz do farol voltou. Veja o desfecho ou volte ao mapa.');
     if (fase.ameaca?.rasante) mensagens.push(`Arena concluída: ${fase.nome}. Volte à Enseada.`);
     const arenaLocal = fase.id.startsWith('deriva-chefe-') || fase.id.startsWith('grutas-chefe-');
     if (fase.recife || arenaLocal) mensagens.push(`Arena vencida: ${fase.nome}. Volte ao mapa.`);
@@ -349,10 +358,13 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     else if (fase.ressaca) mensagens.push(`${fase.nome} vencido. Volte à Baía.`);
     if (bancada && indice < FASES_BANCADA.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');
     if (!bancada && fase.id === 'ilhota-perolada') mensagens.push('Concha Perolada encontrada. Atalho de volta aberto!');
-    else if (!bancada && !fase.ressaca && !fase.farol && !fase.ameaca?.rasante && !fase.recife && !arenaLocal && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');
+    else if (!bancada && !fase.ressaca && !fase.farol && !fase.ameaca?.rasante && !fase.recife && !arenaLocal && fase.id !== 'ponta-da-garca' && fase.id !== CAPITULO_FINAL) mensagens.push('Volte à praia para continuar.');
   }
   buscar('#feedback').textContent = mensagem || mensagens.join(' ');
-  buscar('#seguir-fase').hidden = bancada || fase.id !== 'ponta-da-garca' || estado.situacao !== 'vitoria';
+  const seguir = buscar('#seguir-fase');
+  seguir.hidden = bancada || estado.situacao !== 'vitoria'
+    || (fase.id !== 'ponta-da-garca' && fase.id !== CAPITULO_FINAL);
+  seguir.textContent = fase.id === CAPITULO_FINAL ? 'Ver desfecho' : 'Concluir viagem';
   desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso), fauna);
   audio.eventos(eventos);
 }
@@ -447,14 +459,15 @@ const reiniciar = () => {
   if (tela === 'fase') selecionarFase(indice, 'Fase reiniciada. Maré baixa.');
 };
 const voltar = () => {
-  if (tela === 'fase' && !bancada) abrirPraia();
+  if ((tela === 'fase' && !bancada) || (tela === 'creditos' && contextoCreditos === 'final')) abrirPraia();
   else if (tela !== 'inicio') trocarTela('inicio');
 };
 
-function abrirCreditos(venceu = false) {
-  buscar('#desfecho').textContent = venceu
-    ? 'Você chegou à ponta da praia. A primeira viagem termina aqui; volte ao mapa para seguir à Enseadinha ou embarcar pelas próximas ilhas.'
-    : 'O caminho começa na Praia das Conchas.';
+function abrirCreditos(contexto: ContextoCreditos): void {
+  contextoCreditos = contexto;
+  buscar('#titulo-creditos').textContent = contexto === 'final' ? 'Desfecho e créditos' : 'Créditos';
+  buscar('#desfecho').textContent = TEXTOS_CREDITOS[contexto];
+  buscar('#voltar-creditos').textContent = contexto === 'final' ? 'Voltar ao mapa' : 'Voltar à tela inicial';
   trocarTela('creditos');
 }
 
@@ -464,8 +477,15 @@ buscar('#comecar').addEventListener('click', () => {
   abrirPraia();
 });
 buscar('#bancada').addEventListener('click', () => { bancada = true; selecionarFase(0); });
-buscar('#creditos-inicio').addEventListener('click', () => abrirCreditos());
-buscar('#seguir-fase').addEventListener('click', () => abrirCreditos(true));
+buscar('#creditos-inicio').addEventListener('click', () => abrirCreditos('inicio'));
+buscar('#seguir-fase').addEventListener('click', () => {
+  if (tela !== 'fase' || bancada || estado.situacao !== 'vitoria') return;
+  if (fase.id === CAPITULO_FINAL) abrirCreditos('final');
+  else if (fase.id === 'ponta-da-garca') abrirCreditos('praia');
+});
+buscar('#rever-desfecho').addEventListener('click', () => {
+  if (tela === 'praia' && mundoAtual(save.progresso) === 'farol' && campanhaConcluida(save.progresso)) abrirCreditos('final');
+});
 buscar('#menu-praia').addEventListener('click', voltar);
 buscar('#voltar-fase').addEventListener('click', voltar);
 buscar('#voltar-creditos').addEventListener('click', voltar);

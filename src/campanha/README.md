@@ -69,3 +69,7 @@ De Corrente cruzada, **→** leva ao Mestre após concluir o marco; **←** reto
 ## Chefes das Grutas da Espuma
 
 Sentinela da Gruta (à direita de Revezamento nas câmaras) e Cofre das Espumas (abaixo da Sentinela) são chefes opcionais, em sequência. A primeira visita exige vencer a travessia histórica; a segunda, vencer a Sentinela. Os IDs, a contagem regular e a rota antiga da Baía são preservados.
+
+## Desfecho do Farol
+
+A conclusão de `farol-luz-das-duas-mares` habilita o desfecho no mapa do Farol. O estado é derivado dos IDs já gravados em `concluidas`; não depende do nó atual ou do total de fases, e abrir ou fechar os créditos não altera o progresso.
