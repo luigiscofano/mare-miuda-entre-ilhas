@@ -55,3 +55,7 @@ As três fases iniciais permanecem; sete novas regulares ampliam o treino de tro
 ### Ampliação jogável: Enseada da Garça
 
 Depois do primeiro rasante, o ramo ensina a escolher a margem, combinar previsões da água e da garça, recolher fragmentos fora do próximo alvo e revezar a placa sem deixar o parceiro na mira. A garça é determinística: suas marcas são legíveis antes do movimento. A rota original e seus dois desvios continuam disponíveis; os chefes não fazem parte deste lote. [Fichas e soluções](../processo-de-criacao/11-enseada-ampliada/README.md).
+
+### Ampliação jogável: Ilhas à Deriva
+
+A rota nova ensina a direção da corrente, o embarque na alta, a escolha de rampa, o transbordo e a volta por um cais diferente. Combina três balsas em Dois ancoradouros; em Tripulação partilhada, a carona do siri inativo reduz de 13 para 9 passos a melhor rota sem levadas. Não exige os desvios, chefes ou alteração de semântica da campanha. [Fichas e soluções](../processo-de-criacao/12-deriva-ampliada/README.md).

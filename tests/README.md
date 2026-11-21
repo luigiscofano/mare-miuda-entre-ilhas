@@ -43,3 +43,7 @@ O motor percorre as 52 soluções da campanha sem levadas. A busca das sete nova
 ## Enseada da Garça ampliada
 
 O motor reproduz as 59 soluções sem levadas. Nas sete novas, uma rota que vence sem a garça é atingida quando a patrulha real está ativa. O teste também verifica marcos, volta, saves e a saída original para a Deriva. O roteiro Playwright cobre aviso, rasante, reinício, desvio seguro e recarga com teclado e toque emulado; confirme os resultados na CI.
+
+## Ilhas à Deriva ampliadas
+
+As 66 soluções vencem sem levadas. A busca usa o motor e confirma que remover qualquer balsa impede vencer sem levadas cada travessia nova. O teste da dupla verifica que os dois chegam ao cais na mesma virada e que proibir carona do inativo eleva o mínimo de 9 para 13 passos. O roteiro Playwright cobre a previsão, o tabuleiro de 15 colunas, a dupla, o transporte observado da posição e a recarga em teclado e toque emulado; os resultados constam da CI.

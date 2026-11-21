@@ -25,3 +25,7 @@ No primeiro marco do Mangue, suba depois de Raízes vizinhas para explorar as se
 ## Enseada da Garça ampliada
 
 Suba depois de Sombra na restinga para sete travessias regulares novas. A bifurcação após Fragmento no alcance do bico pede também Abrigo entre ondas. No último marco histórico, os dois desvios em dupla seguem no mesmo lugar, assim como o atalho e o embarque para as Ilhas à Deriva. Nem o ramo novo nem os dois opcionais bloqueiam a saída.
+
+## Ilhas à Deriva ampliadas
+
+Suba depois de A primeira balsa para sete regulares. Duas rampas e Duas margens abrem o trecho das balsas alternadas. Os desvios em dupla e o atalho do trecho histórico mantêm ID e posição, e só Corrente cruzada condiciona o acesso às Grutas.

@@ -116,8 +116,7 @@ function atualizarPraia(mensagem = ''): void {
     : mundo === 'recifes' ? 'A trilha do cais leva à saída para a Enseada. A trilha ao norte abre mais travessias; os dois desvios têm marca própria.'
     : mundo === 'mangue' ? 'O caminho em frente é a rota para a Enseada. Depois de Raízes vizinhas, siga para cima para explorar o ramo dos siris.'
     : mundo === 'enseada' ? 'A rota do cais leva às Ilhas à Deriva. Suba depois de Sombra na restinga para explorar o ramo; os dois desvios em dupla continuam no último marco da rota original.'
-    : mundo === 'deriva' && concluidas === 3
-      ? 'Volte pelo atalho sul ou siga para cima no último marco para visitar o desvio em dupla.'
+    : mundo === 'deriva' ? 'Siga pela rota do cais para as Grutas. Suba depois de A primeira balsa para abrir o ramo norte; os desvios em dupla continuam no último marco da rota original.'
       : (mundo === 'grutas' || mundo === 'ressaca' || mundo === 'farol')
         ? 'Siga as travessias na ordem. O atalho para o cais só se abre depois da última.'
         : 'Complete as três travessias. O atalho sul só se abre depois da última.';
