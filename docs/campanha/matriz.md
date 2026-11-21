@@ -63,3 +63,7 @@ A rota nova ensina a direção da corrente, o embarque na alta, a escolha de ram
 ### Ampliação jogável: Grutas da Espuma
 
 O ramo ensina a voltar à primeira alavanca, contornar a maré entre câmaras, alternar qual siri carrega a pérola e deixar o outro na placa ou na alavanca. Boca do labirinto combina as etapas com portão, fragmento e reencontro. Não altera as regras nem a condição de saída para a Baía. [Fichas e soluções](../processo-de-criacao/13-grutas-ampliadas/README.md).
+
+### Ampliação jogável: Baía da Ressaca
+
+As oito travessias do ramo norte combinam bolsos firmes, coleta, duas balsas e dupla com placa. Três moedas do cais introduz a coleta em 20 passos; Cofre da vazante volta a ela com duas balsas e dois siris em 22. O atalho e a saída da rota curta para o Farol continuam funcionando sem esse ramo. A ameaça específica da ressaca e os chefes continuam no plano. [Fichas e soluções](../processo-de-criacao/14-ressaca-ampliada/README.md).

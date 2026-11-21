@@ -35,10 +35,10 @@ function existeVitoriaSemLevadas(fase: Fase, comTroca = true): boolean {
   return false;
 }
 
-test('as Grutas têm dez regulares e a campanha tem 71 soluções sem levadas', () => {
+test('as Grutas têm dez regulares e a campanha tem 79 soluções sem levadas', () => {
   assert.equal(totalDeFasesRegulares('grutas'), 10);
   assert.equal(FASES_GRUTAS_AMPLIADAS.filter(f => 'dupla' in f).length, 3);
-  assert.equal(TODAS_AS_FASES.length, 71);
+  assert.equal(TODAS_AS_FASES.length, 79);
   for (const fase of TODAS_AS_FASES) assert.ok(validarSolucao(fase), fase.id);
 });
 

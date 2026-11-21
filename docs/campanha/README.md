@@ -87,3 +87,7 @@ O mundo tem dez travessias regulares e dois desvios em dupla. A rota curta origi
 ## Ampliação das Grutas da Espuma
 
 O mundo tem dez regulares: dois solos e três desafios em dupla novos, além das cinco fases anteriores. O ramo parte do primeiro marco; o caminho histórico continua a liberar a Baía da Ressaca. [Fichas e soluções](../processo-de-criacao/13-grutas-ampliadas/README.md).
+
+## Ampliação da Baía da Ressaca
+
+A Baía passa a ter dez travessias regulares, seis em dupla. O ramo novo parte de Abrigo dos dois cais e combina refúgios, balsas, placa e duas travessias com três moedas e orçamento de passos. O caminho anterior continua a liberar o Farol. Os chefes ainda não fazem parte do jogo. [Fichas e soluções](../processo-de-criacao/14-ressaca-ampliada/README.md).

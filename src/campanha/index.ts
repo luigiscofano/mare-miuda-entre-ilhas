@@ -1,3 +1,5 @@
+import { FASES_RESSACA_AMPLIADA } from '../fases/ressaca-ampliada.ts';
+import type { IdFaseRessacaAmpliada } from '../fases/ressaca-ampliada.ts';
 import { FASES_GRUTAS_AMPLIADAS } from '../fases/grutas-ampliadas.ts';
 import type { IdFaseGrutasAmpliadas } from '../fases/grutas-ampliadas.ts';
 import { FASES_DERIVA_AMPLIADA } from '../fases/deriva-ampliada.ts';
@@ -14,7 +16,7 @@ import type { Direcao, Posicao } from '../motor/index.ts';
 export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'praia-mirante'
   | 'praia-bolso-mare' | 'praia-trilha-das-pedras' | 'praia-fragmentos-areal';
 export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
-export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | IdFaseDerivaAmpliada | IdFaseGrutasAmpliadas | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
+export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | IdFaseDerivaAmpliada | IdFaseGrutasAmpliadas | IdFaseRessacaAmpliada | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
   | 'enseada-dupla-vigia' | 'enseada-dupla-revezamento' | 'deriva-dupla-cais' | 'deriva-dupla-contramao'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
@@ -84,6 +86,12 @@ const NOS_GRUTAS = [
 const ENTRADAS_GRUTAS: readonly Entrada[] = FASES_GRUTAS_AMPLIADAS.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_GRUTAS[i],
 }));
+const NOS_RESSACA = [
+  P(2, 0), P(4, -1), P(6, -1), P(8, -1), P(10, -1), P(11, 1), P(11, 3), P(8, 3),
+] as const;
+const ENTRADAS_RESSACA: readonly Entrada[] = FASES_RESSACA_AMPLIADA.map((fase, i) => ({
+  id: fase.id, nome: fase.nome, posicao: NOS_RESSACA[i],
+}));
 const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
   praia: ENTRADAS_PRAIA,
   'praia-enseadinha': [
@@ -151,6 +159,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     PORTO,
     { id: 'ressaca-dupla-abrigo', posicao: P(2, 1), nome: 'Abrigo dos dois cais' },
     { id: 'ressaca-dupla-ancoradouros', posicao: P(4, 1), nome: 'Ancoradouros em revezamento' },
+    ...ENTRADAS_RESSACA,
   ],
   farol: [
     PORTO,
@@ -359,6 +368,22 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['ressaca-dupla-abrigo'], 'Conclua Abrigo dos dois cais para chegar aos ancoradouros.'),
     trilha(CAIS, P(4, 1), 'baixo', 'baixo', [P(2.25, 2.5), P(4.625, 2.25)],
       ['ressaca-dupla-ancoradouros'], 'O atalho abre depois do revezamento nos ancoradouros.'),
+    trilha(P(2, 1), NOS_RESSACA[0], 'cima', 'baixo', [],
+      ['ressaca-dupla-abrigo'], 'Conclua Abrigo dos dois cais para explorar a costa norte.'),
+    trilha(NOS_RESSACA[0], NOS_RESSACA[1], 'direita', 'esquerda', [P(4, 0)],
+      ['ressaca-refugio-de-pedra'], 'Conclua Refúgio de pedra para chegar aos bolsos.'),
+    trilha(NOS_RESSACA[1], NOS_RESSACA[2], 'direita', 'esquerda', [],
+      ['ressaca-bolsos-opostos'], 'Recolha os fragmentos de Bolsos opostos para encontrar a placa.'),
+    trilha(NOS_RESSACA[2], NOS_RESSACA[3], 'direita', 'esquerda', [],
+      ['ressaca-vigia-da-placa'], 'Complete Vigia da placa para alcançar as balsas.'),
+    trilha(NOS_RESSACA[3], NOS_RESSACA[4], 'direita', 'esquerda', [],
+      ['ressaca-balsas-da-ponta', 'ressaca-dupla-ancoradouros'], 'Conclua Balsas da ponta e Ancoradouros em revezamento para chegar aos dois cais.'),
+    trilha(NOS_RESSACA[4], NOS_RESSACA[5], 'direita', 'cima', [P(11, -1)],
+      ['ressaca-cais-em-paralelo'], 'Cruze os Cais em paralelo para abrir o desafio das moedas.'),
+    trilha(NOS_RESSACA[5], NOS_RESSACA[6], 'baixo', 'cima', [],
+      ['ressaca-tres-moedas-do-cais'], 'Recolha as Três moedas do cais para ir ao atracadouro.'),
+    trilha(NOS_RESSACA[6], NOS_RESSACA[7], 'esquerda', 'direita', [],
+      ['ressaca-atracadouro-torto'], 'Conclua Atracadouro torto para encontrar o cofre.'),
   ],
   farol: [
     trilha(CAIS, P(2, 1), 'direita', 'esquerda', []),

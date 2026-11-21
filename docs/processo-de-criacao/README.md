@@ -18,3 +18,9 @@ Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem subs
 
 As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/`. Esse caminho só será integrado junto dos estudos correspondentes.
 | [11 · Farol em dupla](11-farol-dupla/README.md) | Duas travessias regulares: fragmentos, balsas opostas e janela final de maré. |
+
+## Expansão da campanha
+
+| Entrega | Conteúdo |
+| --- | --- |
+| [Baía da Ressaca ampliada](14-ressaca-ampliada/README.md) | Oito travessias com refúgios, balsas, dupla e orçamento de três moedas. |

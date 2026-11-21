@@ -144,3 +144,7 @@ As sete travessias do ramo norte usam balsas e mantêm os três mapas originais 
 ## Grutas da Espuma ampliadas
 
 As cinco travessias do ramo norte reutilizam a entrega da pérola, a ordem do encaixe e da alavanca e o portão. Três exigem os dois siris. As [fichas do lote](../../docs/processo-de-criacao/13-grutas-ampliadas/README.md) trazem grades, etapas e rotas verificadas.
+
+## Baía da Ressaca ampliada
+
+As oito travessias do ramo norte estão em `ressaca-ampliada.ts`. Há quatro solos e quatro duplas; Três moedas do cais e Cofre da vazante usam o mesmo orçamento que foi prototipado no laboratório, com limites próprios de 20 e 22 passos. Consulte as [fichas e rotas](../../docs/processo-de-criacao/14-ressaca-ampliada/README.md).

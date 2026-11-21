@@ -13,3 +13,5 @@
 ## Revisão do plano
 
 A campanha tem **oito mundos com no mínimo dez fases autorais (quinze como meta de expansão) e dois chefes por mundo**. Estrutura de produção, entrega começando pela Praia, navegação por marcos e requisitos de leitura/tema nas fases: [escopo e decisão de navegação](escopo-e-leitura.md).
+
+A Baía da Ressaca alcança dez fases regulares, com seis em dupla. O próximo lote de conteúdo regular é o Arquipélago do Farol. A ameaça específica da ressaca, os chefes, trio e a revisão de lançamento ainda não estão concluídos. [Fichas da Baía](../processo-de-criacao/14-ressaca-ampliada/README.md).
