@@ -709,8 +709,37 @@ def conferir_vigia_das_ondas(pagina, toque=False):
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Vigia das ondas · chefe opcional · concluída')
     expect(pagina.locator('#progresso-praia')).to_contain_text('1/3')
+    conferir_ponta_da_ressaca(pagina, toque)
     jogar(pagina, 'D', toque, mapa=True)
     expect(pagina.locator('#posicao-praia')).to_contain_text('Fio de areia')
+
+
+def conferir_ponta_da_ressaca(pagina, toque=False):
+    jogar(pagina, 'U', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Ponta da Ressaca · chefe opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('linha 2, colunas 3 a 9')
+    jogar(pagina, 'RRR', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('linha 4, colunas 10 a 13')
+    jogar(pagina, 'DDURRRRLRRDRDDU', toque)
+    expect(pagina.locator('#passos')).to_have_text('18')
+    expect(pagina.locator('#previsao')).to_contain_text('linha 4, colunas 10 a 13')
+    expect(pagina.locator('#ancoradouros')).to_be_hidden()
+    expect(pagina.locator('#ondas-seguras')).to_be_hidden()
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+    salvar_captura(pagina, f"praia-ponta-da-ressaca-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'RRRR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Ponta da Ressaca vencido.')
+    expect(pagina.locator('#passos')).to_have_text('22')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Ponta da Ressaca · chefe opcional · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('1/3')
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Vigia das ondas')
+
 
 
 def conferir_enseadinha(pagina, toque=False):

@@ -112,7 +112,7 @@ function atualizarPraia(mensagem = ''): void {
   buscar('#orientacao-praia').textContent = mundo === 'praia'
     ? (concluidas ? 'As passagens se abrem à medida que você resolve as travessias. Depois da Ponta da garça, siga à direita para a Enseadinha.'
       : 'Faça o primeiro passo para a direita, pare no marco e entre na Primeira onda.')
-    : mundo === 'praia-enseadinha' ? 'Atravesse o braço de areia, explore os desvios ou volte ao Cabo Baixo pelo começo da trilha.'
+    : mundo === 'praia-enseadinha' ? 'Atravesse o braço de areia. Suba em Fio de areia para visitar as arenas opcionais ou volte ao Cabo Baixo pelo começo da trilha.'
     : mundo === 'arquipelago' ? 'Visite Recifes Expostos e Mangue dos Siris Duplos em qualquer ordem. A Enseada abre depois dos dois; a rota original libera as Ilhas à Deriva. Depois da Corrente cruzada, siga para as Grutas da Espuma e, após o revezamento, para a Baía da Ressaca.'
     : mundo === 'recifes' ? 'A trilha do cais leva à saída para a Enseada. A trilha ao norte abre mais travessias; os dois desvios têm marca própria.'
     : mundo === 'mangue' ? 'O caminho em frente é a rota para a Enseada. Depois de Raízes vizinhas, siga para cima para explorar o ramo dos siris.'

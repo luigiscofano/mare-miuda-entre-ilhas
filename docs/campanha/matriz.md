@@ -84,4 +84,4 @@ A primeira travessia em trio é **Três refúgios**, um desvio das Grutas que en
 
 O **Guardião do Farol** introduz pontes temporárias e três lentes, sem repetir a ancoragem ou as faixas de ataque da Baía. A **Última Virada** exige alternar o trio, casar a orientação com outra placa ocupada e reunir os três siris nos destinos. [Ficha e solução](../processo-de-criacao/21-ultima-virada/README.md).
 
-**Vigia das ondas**, primeiro chefe opcional da Praia, introduz uma faixa de espuma previsível. Ensina abrigo em pedra alta e passagem de baixio, sem coleta e sem mudar Ponta da garça. Ponta da Ressaca continua no plano.
+**Vigia das ondas**, primeiro chefe opcional da Praia, introduz uma faixa de espuma previsível. Ensina abrigo em pedra alta e passagem de baixio, sem coleta e sem mudar Ponta da garça. **Ponta da Ressaca**, segundo chefe opcional, alterna a espuma entre norte e sul. A rota exige duas janelas de baixio, uma saída da faixa pela margem e chegada à pedra alta no turno da onda.

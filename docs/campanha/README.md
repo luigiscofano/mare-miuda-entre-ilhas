@@ -119,3 +119,7 @@ O segundo chefe opcional do Farol abre à esquerda do Guardião depois de vencê
 ## Vigia das ondas
 
 Depois de Fio de areia, siga para cima para aprender a ler a faixa anunciada e usar as pedras altas. A saída da Praia e o encontro Ponta da garça não mudam. [Ficha](../processo-de-criacao/22-vigia-das-ondas/README.md).
+
+## Ponta da Ressaca
+
+Ao vencer Vigia das ondas, suba no marco dele para encarar a segunda arena opcional. As ondas alternam entre duas faixas e o caminho tem dois baixios em janelas separadas, com uma margem firme e pedras altas de refúgio. O embarque e a Ponta da garça continuam independentes. [Ficha e solução](../processo-de-criacao/23-ponta-da-ressaca/README.md).

@@ -1,3 +1,4 @@
+import { PONTA_DA_RESSACA } from '../fases/ponta-da-ressaca.ts';
 import { VIGIA_DAS_ONDAS } from '../fases/vigia-das-ondas.ts';
 import { ULTIMA_VIRADA } from '../fases/ultima-virada.ts';
 import { ECO_DOS_TRES_CAIS, TRES_LUZES_EM_REVEZAMENTO } from '../fases/trio-avancado.ts';
@@ -32,7 +33,7 @@ export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
   | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
-  | typeof VIGIA_DAS_ONDAS.id | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof GUARDIAO_FAROL.id | typeof ULTIMA_VIRADA.id | typeof TRES_REFUGIOS.id | typeof ECO_DOS_TRES_CAIS.id | typeof TRES_LUZES_EM_REVEZAMENTO.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
+  | typeof VIGIA_DAS_ONDAS.id | typeof PONTA_DA_RESSACA.id | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof GUARDIAO_FAROL.id | typeof ULTIMA_VIRADA.id | typeof TRES_REFUGIOS.id | typeof ECO_DOS_TRES_CAIS.id | typeof TRES_LUZES_EM_REVEZAMENTO.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
 export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
   posicao: Posicao;
@@ -101,6 +102,7 @@ const NOS_RESSACA = [
   P(2, 0), P(4, -1), P(6, -1), P(8, -1), P(10, -1), P(11, 1), P(11, 3), P(8, 3),
 ] as const;
 const ARENA_VIGIA = P(2, 0);
+const ARENA_PONTA_DA_RESSACA = P(2, -1);
 const ARENA_VENTO_SUL = P(6, 3);
 const ARENA_RESSACA_ALTA = P(4, 3);
 const ARENA_GUARDIAO = P(11, 4);
@@ -123,6 +125,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'volta-cabo', nome: 'Voltar ao Cabo Baixo', posicao: CAIS, destino: 'praia' },
     { id: 'praia-fio-de-areia', nome: 'Fio de areia', posicao: P(2, 1) },
     { id: VIGIA_DAS_ONDAS.id, nome: VIGIA_DAS_ONDAS.nome, posicao: ARENA_VIGIA, opcional: true, chefe: true },
+    { id: PONTA_DA_RESSACA.id, nome: PONTA_DA_RESSACA.nome, posicao: ARENA_PONTA_DA_RESSACA, opcional: true, chefe: true },
     { id: 'praia-pocas-espelho', nome: 'Poças em espelho', posicao: P(4, 1) },
     { id: 'praia-mirante', nome: 'Da praia ao mirante', posicao: P(6, 1) },
     { id: 'praia-bolso-mare', nome: 'Bolso da maré', posicao: P(3, 3), opcional: true },
@@ -281,6 +284,8 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['praia-pocas-espelho'], 'A trilha das pedras é um desvio após as poças.'),
     trilha(P(2, 1), ARENA_VIGIA, 'cima', 'baixo', [],
       ['praia-fio-de-areia'], 'Conclua Fio de areia para visitar Vigia das ondas.'),
+    trilha(ARENA_VIGIA, ARENA_PONTA_DA_RESSACA, 'cima', 'baixo', [],
+      [VIGIA_DAS_ONDAS.id], 'Vença Vigia das ondas para visitar Ponta da Ressaca.'),
     trilha(P(6, 1), P(7, 3), 'baixo', 'cima', [P(6.5, 2.375)],
       ['praia-mirante'], 'O areal é um desvio após o mirante.'),
   ],

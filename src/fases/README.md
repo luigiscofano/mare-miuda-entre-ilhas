@@ -176,3 +176,7 @@ Em `ultima-virada.ts`, cada orientação do feixe tem sua própria `placa`. A le
 ## Vigia das ondas
 
 `vigia-das-ondas.ts` usa o aviso de espuma do motor de ondas em uma única faixa. Com objetivo `atravessar`, basta alcançar a concha; não há ancoradouros nem contador de sobrevivência. [Ficha](../../docs/processo-de-criacao/22-vigia-das-ondas/README.md).
+
+## Ponta da Ressaca
+
+As faixas alternam em cada subida. Cruze o primeiro baixio, proteja-se na margem firme e ajuste o passo antes da segunda passagem. A rota sem levadas tem 22 passos. Veja a [ficha completa](../../docs/processo-de-criacao/23-ponta-da-ressaca/README.md).
