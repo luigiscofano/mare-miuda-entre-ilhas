@@ -17,3 +17,5 @@ A versão em inglês e a opção Corrente de Espuma (B) permanecem no [acervo do
 `arquipelago-meia-lua.png` é o fundo RGB de 512 × 384, usado só pelo seletor de mundos. O [caderno Meia-Lua](../docs/processo-de-criacao/33-seletor-arquipelago/README.md) preserva a camada transparente de ilhas e a fonte do exportador; nenhuma rota vem dentro do PNG de execução.
 
 A proposta `enseadinha-512.png` é o fundo nativo (512 × 384) da seleção de fases da Enseadinha, sem marcas de navegação embutidas. [Fonte e exportação reproduzível](../docs/processo-de-criacao/34-seletores-praia/README.md). O arquivo aprovado do Cabo Baixo permanece inalterado.
+
+- `seletor-recifes-512.png` e `seletor-mangue-512.png`: fundos de seletores em 512 × 384 sem marcas, com [fonte e exportador](../docs/processo-de-criacao/35-seletores-recifes-mangue/README.md).

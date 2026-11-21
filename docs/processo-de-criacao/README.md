@@ -49,3 +49,5 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 [33 · Seletor de mundos Meia-Lua](33-seletor-arquipelago/README.md): estudo sem casas aplicado ao Arquipélago, com caminhos e bloqueios dinâmicos.
 
 [34 · Seletores da Praia das Conchas](34-seletores-praia/README.md): placas do Cabo Baixo e proposta de fundo e trilhas da Enseadinha, com quadros nativos.
+
+- [35 · Seletores de Recifes e Mangue](35-seletores-recifes-mangue/README.md): dois fundos e estados de entrada e acesso ao primeiro chefe, sem alteração da campanha.

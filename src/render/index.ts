@@ -7,7 +7,7 @@ import { prepararTravessia } from '../campanha/travessia.ts';
 import { pintarCosta, temaDaCosta } from './travessia-praia.ts';
 import { pintarSeletorArquipelago, podePintarArquipelago } from './seletor-arquipelago.ts';
 
-import { pintarCadeadoPraia, pintarMarcoDaPraia, pintarSeletorEnseadinha, podePintarEnseadinha } from './seletores-praia.ts';
+import { pintarCadeadoPraia, pintarMarcoDaPraia, pintarSeletorInterno, podePintarSeletorInterno } from './seletores-praia.ts';
 
 export const LARGURA = 256;
 export const ALTURA = 192;
@@ -519,7 +519,7 @@ export function desenharCabo(
 }
 
 export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progresso, logo: HTMLImageElement,
-  transito = progresso.posicao, arquipelago?: HTMLImageElement, enseadinha?: HTMLImageElement): void {
+  transito = progresso.posicao, arquipelago?: HTMLImageElement, fundoInterno?: HTMLImageElement): void {
   const mundo = mundoAtual(progresso);
   if (mundo === 'arquipelago' && podePintarArquipelago(arquipelago)) {
     pintarSeletorArquipelago(ctx, progresso, ponto => {
@@ -530,8 +530,9 @@ export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progress
     desenharSiri(ctx, logo, x, y - 1);
     return;
   }
-  if (mundo === 'praia-enseadinha' && podePintarEnseadinha(enseadinha)) {
-    pintarSeletorEnseadinha(ctx, progresso, centroNo, enseadinha);
+  if ((mundo === 'praia-enseadinha' || mundo === 'recifes' || mundo === 'mangue')
+    && podePintarSeletorInterno(fundoInterno)) {
+    pintarSeletorInterno(ctx, progresso, centroNo, fundoInterno, mundo);
     const [x, y] = centroNo(transito);
     desenharSiri(ctx, logo, x, y - 1);
     return;

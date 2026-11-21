@@ -1,5 +1,5 @@
 import { entradaEm, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
-import type { Progresso } from '../campanha/index.ts';
+import type { Mundo, Progresso } from '../campanha/index.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
 import type { Posicao } from '../motor/index.ts';
 
@@ -14,6 +14,9 @@ const DIGITOS: Readonly<Record<string, readonly string[]>> = {
   '5': ['###', '#..', '##.', '..#', '##.'],
   '6': ['.##', '#..', '###', '#.#', '###'],
   '7': ['###', '..#', '.#.', '.#.', '#..'],
+  '8': ['###', '#.#', '###', '#.#', '###'],
+  '9': ['###', '#.#', '###', '..#', '##.'],
+  '10': ['..#..###', '.##..#.#', '..#..#.#', '..#..#.#', '.###.###'],
   desvio: ['..#..', '.###.', '#####', '.###.', '..#..'],
   chefe: ['#...#', '#.#.#', '#####', '.###.', '.###.'],
   direita: ['..#..', '...#.', '#####', '...#.', '..#..'],
@@ -61,18 +64,20 @@ export function pintarCadeadoPraia(ctx: CanvasRenderingContext2D, x: number, y: 
   placa(ctx, INK, x, y + 1, 1, 1);
 }
 
-export function podePintarEnseadinha(arte?: HTMLImageElement): arte is HTMLImageElement {
+export function podePintarSeletorInterno(arte?: HTMLImageElement): arte is HTMLImageElement {
   return Boolean(arte?.complete && arte.naturalWidth === 512 && arte.naturalHeight === 384);
 }
 
 // Os mesmos vértices alimentam o traço e a animação; nenhum azulejo novo muda a navegação.
-export function pintarSeletorEnseadinha(
+type MapaInterno = Extract<Mundo, 'praia-enseadinha' | 'recifes' | 'mangue'>;
+
+export function pintarSeletorInterno(
   ctx: CanvasRenderingContext2D, progresso: Progresso,
-  centro: (ponto: Posicao) => Ponto, arte: HTMLImageElement,
+  centro: (ponto: Posicao) => Ponto, arte: HTMLImageElement, mundo: MapaInterno,
 ) {
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(arte, 0, 0, 256, 192);
-  const caminhos = trilhasDo('praia-enseadinha').map(trecho => {
+  const caminhos = trilhasDo(mundo).map(trecho => {
     const pontos = [trecho.de, ...trecho.curvas, trecho.para].map(centro);
     return {
       aberto: rotaLivre(progresso, trecho),
@@ -102,13 +107,13 @@ export function pintarSeletorEnseadinha(
     const p = fita.ponto(.5);
     pintarCadeadoPraia(ctx, Math.round(p.coluna), Math.round(p.linha));
   }
-  let numero = 5;
-  for (const p of nosDo('praia-enseadinha')) {
-    const entrada = entradaEm(p, 'praia-enseadinha');
+  let numero = mundo === 'praia-enseadinha' ? 5 : 1;
+  for (const p of nosDo(mundo)) {
+    const entrada = entradaEm(p, mundo);
     if (!entrada) continue;
     const [x, y] = centro(p);
     const simbolo = entrada.chefe ? 'chefe' : entrada.opcional ? 'desvio'
-      : entrada.destino === 'praia' ? 'esquerda' : entrada.destino ? 'direita' : String(numero++);
+      : entrada.destino === 'praia' || entrada.destino === 'arquipelago' && mundo !== 'praia-enseadinha' ? 'esquerda' : entrada.destino ? 'direita' : String(numero++);
     placa(ctx, INK, x - 2, y - 2, 5, 5);
     placa(ctx, CLARO, x - 1, y - 1, 3, 3);
     // No ramal norte, a placa lateral não some atrás do Siri no vértice vizinho.

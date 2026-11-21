@@ -335,6 +335,7 @@ test('Build autônomo conserva os bytes dos fundos nativos de todos os seletores
   const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
   for (const [id, arquivo] of [
     ['arte-arquipelago', 'arquipelago-meia-lua.png'], ['enseadinha', 'enseadinha-512.png'], ['cabo-baixo', 'cabo-baixo-192.png'],
+    ['mapa-recifes', 'seletor-recifes-512.png'], ['mapa-mangue', 'seletor-mangue-512.png'],
   ]) {
     const original = await readFile(new URL(`../assets/${arquivo}`, import.meta.url));
     const copiado = await readFile(new URL(`../dist/assets/${arquivo}`, import.meta.url));
