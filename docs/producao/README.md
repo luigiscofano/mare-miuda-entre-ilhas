@@ -12,6 +12,8 @@
 
 **Abertos para teste:** se o indicador de um passo é suficiente; se esperar acrescenta estratégia; se três levadas criam margem justa; como a dupla retorna quando um deles erra; escala mais clara no celular. Fora de escopo nesta etapa: campanha, arte e música finais, coop simultânea, geração procedural e Pages.
 
+**Validação manual de lançamento:** use o [roteiro por aparelho](../../tests/qa-manual.md) e registre versão e evidências. Safari físico e VoiceOver não são validados pelo CI.
+
 ## Revisão do plano
 
 A campanha tem **oito mundos com no mínimo dez fases autorais (quinze como meta de expansão) e dois chefes por mundo**. Estrutura de produção, entrega começando pela Praia, navegação por marcos e requisitos de leitura/tema nas fases: [escopo e decisão de navegação](escopo-e-leitura.md).
