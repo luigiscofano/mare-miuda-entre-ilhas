@@ -35,6 +35,7 @@ export type Fase = Readonly<{
   farol?: Readonly<{ passosPorOrientacao: number; orientacoes: readonly OrientacaoFarol[] }>;
   ressaca?: Readonly<{ faixas: readonly FaixaRessaca[]; objetivo?: 'sobreviver' | 'atravessar' }>;
   recife?: ProvaRecife;
+  atracacaoNaVirada?: readonly Posicao[];
   dupla?: Readonly<{ segundoAlvo: 'T' | 'P'; terceiroAlvo?: 'Y' }>;
 }>;
 type EstadoDupla = Readonly<{ posicao: Posicao; ultimoFirme: Posicao; parceiroAtivo: boolean }>;
@@ -68,7 +69,7 @@ export type Evento =
   | Readonly<{ tipo: 'fragmento' }>
   | Readonly<{ tipo: 'falta-fragmento' }>
   | Readonly<{ tipo: 'falta-parceiro' | 'faltam-siris' }>
-  | Readonly<{ tipo: 'ancorou' | 'ancora-na-alta' | 'faltam-ancoradouros' }>
+  | Readonly<{ tipo: 'ancorou' | 'ancora-na-alta' | 'faltam-ancoradouros' | 'aguarde-desembarque' }>
   | Readonly<{ tipo: 'faltam-ondas' | 'lente-acesa' | 'lente-fora-do-feixe' | 'lente-sem-placa' | 'faltam-lentes' }>
   | Readonly<{ tipo: 'troca' }>
   | Readonly<{ tipo: 'orcamento-esgotado' }>
@@ -102,7 +103,7 @@ export function iniciar(fase: Fase): Estado {
   return { posicao, ultimoFirme: posicao, passos: 0, levadas: 0, temFragmento: false,
     fragmentos: [], ...(fase.recife && 'abrigos' in fase.recife ? { abrigosVisitados: [] } : {}),
     ...(fase.farol ? { lentesAcesas: [] } : {}),
-    ...(fase.ressaca?.objetivo === 'sobreviver' ? { ondasSeguras: 0 } : fase.ressaca && !fase.ressaca.objetivo ? { ancoradouros: [] } : {}),
+    ...(fase.atracacaoNaVirada ? { ancoradouros: [] } : fase.ressaca?.objetivo === 'sobreviver' ? { ondasSeguras: 0 } : fase.ressaca && !fase.ressaca.objetivo ? { ancoradouros: [] } : {}),
     ...(fase.etapasGruta ? { etapaGruta: 0 } : {}), ...(dupla ? { dupla } : {}),
     ...(terceiro ? { terceiro } : {}), situacao: 'jogando' };
 }
@@ -166,11 +167,26 @@ export function faixaAfeta(fase: Fase, faixa: FaixaRessaca, posicao: Posicao): b
 
 export const TOTAL_ANCORADOUROS = 3;
 
-function resolverAncoradouro(anteriores: Estado['ancoradouros'], destino: Posicao,
+export function totalAncoradouros(fase: Fase): number {
+  return fase.atracacaoNaVirada?.length ?? TOTAL_ANCORADOUROS;
+}
+
+// No Mestre das Correntes, conta a posição antes do passo, não a balsa
+// depois da virada: desembarcar e ser transportado são ações diferentes.
+function resolverAncoradouro(fase: Fase, anterior: Estado, destino: Posicao,
   casa: Celula | undefined, passos: number, eventos: Evento[],
 ): Estado['ancoradouros'] {
+  const anteriores = anterior.ancoradouros;
   if (!anteriores || casa !== 'N' || anteriores.some(pos => mesmaCasa(pos, destino))) return anteriores;
-  if (mareAlta(passos)) {
+  if (fase.atracacaoNaVirada) {
+    if (!fase.atracacaoNaVirada.some(pos => mesmaCasa(pos, destino))) return anteriores;
+    const estavaABordo = balsasNoTurno(fase, anterior.passos)
+      .some(parada => mesmaCasa(parada, jogadorAtivo(anterior)));
+    if (!estavaABordo || passos % PASSOS_POR_MARE !== 0) {
+      eventos.push({ tipo: 'aguarde-desembarque' });
+      return anteriores;
+    }
+  } else if (mareAlta(passos)) {
     eventos.push({ tipo: 'ancora-na-alta' });
     return anteriores;
   }
@@ -303,7 +319,7 @@ function resolverObjetivo(fase: Fase, celulas: readonly (Celula | undefined)[], 
     eventos.push({ tipo: 'faltam-lentes' });
     return false;
   }
-  if (ancoradouros && ancoradouros.length < TOTAL_ANCORADOUROS) {
+  if (ancoradouros && ancoradouros.length < totalAncoradouros(fase)) {
     eventos.push({ tipo: 'faltam-ancoradouros' });
     return false;
   }
@@ -437,7 +453,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
     if (celula === 'K') portadorGruta = nomeInternoDoSiri(ativo);
     if (celula === 'E') portadorGruta = undefined;
   }
-  const ancoradouros = resolverAncoradouro(anterior.ancoradouros, destino, celula, passos, eventos);
+  const ancoradouros = resolverAncoradouro(fase, anterior, destino, celula, passos, eventos);
   // O ciclo de sobrevivência conta só ondas sem levada. Uma perda devolve a
   // dupla aos marcos e reinicia a sequência sem rebobinar a maré.
   const ondasSeguras = anterior.ondasSeguras !== undefined && faixaRessacaNoTurno(fase, passos)

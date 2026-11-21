@@ -564,6 +564,71 @@ def conferir_deriva_ampliada(pagina, toque=False):
     expect(pagina.locator('#progresso-praia')).to_contain_text('9/10')
 
 
+def conferir_chefes_deriva(pagina, toque=False):
+    # Só as três fases históricas: as arenas não exigem o ramo norte.
+    pagina.evaluate("""localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+      versao: 1,
+      progresso: { mundo: 'deriva', posicao: {coluna: 6, linha: 1}, viuTutorial: true,
+        concluidas: ['deriva-primeira-balsa', 'deriva-duas-margens', 'deriva-corrente-cruzada'] },
+      audio: { musica: 0, efeitos: 0 }
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    jogar(pagina, 'R', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Mestre das Correntes · chefe opcional')
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Mestre das Correntes')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#ancoradouros')).to_have_text('Ancoradouros firmes: 0/2')
+    jogar(pagina, 'R', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Firme os dois ancoradouros')
+    tocar(pagina, '#reiniciar', toque)
+    jogar(pagina, 'DD', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('faltar um passo para a virada')
+    expect(pagina.locator('#ancoradouros')).to_have_text('Ancoradouros firmes: 0/2')
+    jogar(pagina, 'RDUDRUUULR', toque)
+    expect(pagina.locator('#ancoradouros')).to_have_text('Ancoradouros firmes: 1/2')
+    expect(pagina.locator('#grade')).to_contain_text('SC~~~n')
+    salvar_captura(pagina, f"deriva-atracacao-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'DDDLLLLUL', toque)
+    expect(pagina.locator('#ancoradouros')).to_have_text('Ancoradouros firmes: 2/2')
+    jogar(pagina, 'UUR', toque)
+    expect(pagina.locator('#passos')).to_have_text('24')
+    expect(pagina.locator('#feedback')).to_contain_text('Arena vencida: Mestre das Correntes.')
+    tocar(pagina, '#voltar-fase', toque)
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Passagem das Balsas · chefe opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('Portão 1 (fechado)')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+
+    primeira = 'DUDURRRRXR'
+    jogar(pagina, primeira, toque)
+    expect(pagina.locator('#passos')).to_have_text('9')
+    expect(pagina.locator('#posicao')).to_contain_text('Coral: coluna 6, linha 1')
+    expect(pagina.locator('#posicao')).to_contain_text('Verde (ativo): coluna 3, linha 4')
+    jogar(pagina, 'RXRRXR', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('Portão 2 (aberto)')
+    jogar(pagina, 'RXR', toque)
+    expect(pagina.locator('#erros')).to_have_text('1 / 3')
+    expect(pagina.locator('#feedback')).to_contain_text('A maré te levou')
+    tocar(pagina, '#reiniciar', toque)
+    jogar(pagina, primeira + 'RXRRXRRR', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('Portão 1 (aberto)')
+    salvar_captura(pagina, f"deriva-passagem-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'XRRXRRRRXRRRR', toque)
+    expect(pagina.locator('#passos')).to_have_text('25')
+    expect(pagina.locator('#feedback')).to_contain_text('Arena vencida: Passagem das Balsas.')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Passagem das Balsas · chefe opcional · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('3/10')
+    jogar(pagina, 'U', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Mestre das Correntes · chefe opcional · concluída')
+
+
 def conferir_grutas_ampliadas(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     # Retoma o último marco do ramo com as fases que o tornam acessível.
@@ -1188,6 +1253,7 @@ with sync_playwright() as p:
     conferir_ressaca_ampliada(desktop)
     conferir_vento_sul(desktop)
     conferir_ressaca_alta(desktop)
+    conferir_chefes_deriva(desktop)
     print(f'{motor}: desktop com Praia, Recifes → Mangue, reload, atalhos, troca e enseada futura.')
     for largura in [320, 390]:
         aparelho = navegador.new_page(viewport={'width': largura, 'height': 844}, has_touch=True,
@@ -1212,5 +1278,6 @@ with sync_playwright() as p:
         conferir_ressaca_ampliada(aparelho, toque=True)
         conferir_vento_sul(aparelho, toque=True)
         conferir_ressaca_alta(aparelho, toque=True)
+        conferir_chefes_deriva(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
     navegador.close()

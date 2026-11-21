@@ -33,5 +33,6 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 | [Vigia das ondas](22-vigia-das-ondas/README.md) | Primeira arena opcional da Praia, com faixa anunciada e refúgios de pedra. |
 | [Ponta da Ressaca](23-ponta-da-ressaca/README.md) | Segunda arena opcional da Praia, com duas faixas alternadas, refúgios e duas janelas de passagem. |
 | [Chefes dos Recifes](24-chefes-recifes/README.md) | Refúgios registrados na alta e retorno por uma comporta que muda com a coleta. |
-| [Chefes do Mangue](25-chefes-mangue/README.md) | Raízes numeradas, revezamento e rasantes avisados. |
+| [Chefes do Mangue](25-chefes-mangue/README.md) | Placas ligadas e uma ameaça anunciada em dupla. |
 | [Chefes da Enseada](26-chefes-enseada/README.md) | Rasantes horizontais e verticais, refúgios e uma travessia em dupla. |
+| [Chefes das Ilhas à Deriva](27-chefes-deriva/README.md) | Desembarques na virada, carona inativa e placas cruzadas. |

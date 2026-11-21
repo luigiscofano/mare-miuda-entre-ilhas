@@ -222,3 +222,55 @@ test('HTML offline avisa a onda e salva a conclusão de Vento Sul sem rede', asy
   assert.match(ler('#progresso-praia'), /10\/10/);
   assert.ok(JSON.parse(storage.get(chave)).progresso.concluidas.includes('ressaca-chefe-vento-sul'));
 });
+
+test('HTML offline firma as âncoras da Deriva, transporta a dupla e preserva a contagem', async () => {
+  const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
+  const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
+  assert.ok(modulo);
+  const { pegar, botoes, mapa, storage, tecla } = prepararInterface();
+  const chave = 'mare-miuda-entre-ilhas/praia-v1';
+  storage.set(chave, JSON.stringify({ versao: 1, progresso: { mundo: 'deriva', posicao: { coluna: 6, linha: 1 },
+    viuTutorial: true, concluidas: ['deriva-primeira-balsa', 'deriva-duas-margens', 'deriva-corrente-cruzada'] },
+  audio: { musica: 0, efeitos: 0 } }));
+  await import(modulo + '#chefes-deriva');
+  const ler = id => pegar(id).textContent;
+  const direcoes = { U: 'cima', D: 'baixo', L: 'esquerda', R: 'direita' };
+  const jogar = rota => [...rota].forEach(letra => {
+    if (letra === 'X') tecla(' ');
+    else botoes[direcoes[letra]].click();
+  });
+
+  pegar('#comecar').click();
+  mapa.direita.click();
+  assert.match(ler('#posicao-praia'), /Mestre das Correntes · chefe opcional/);
+  mapa.baixo.click();
+  assert.match(ler('#mensagem-praia'), /Vença Mestre das Correntes/);
+  pegar('#entrar-fase').click();
+  jogar('DD');
+  assert.match(ler('#feedback'), /faltar um passo para a virada/);
+  jogar('RDUDRUUULR');
+  assert.equal(ler('#ancoradouros'), 'Ancoradouros firmes: 1/2');
+  assert.match(ler('#grade'), /SC~~~n/);
+  jogar('DDDLLLLULUUR');
+  assert.match(ler('#feedback'), /Arena vencida: Mestre das Correntes/);
+  pegar('#voltar-fase').click();
+  mapa.baixo.click();
+  pegar('#entrar-fase').click();
+  jogar('DUDURRRRXR');
+  assert.match(ler('#posicao'), /Coral: coluna 6, linha 1.*Verde \(ativo\): coluna 3, linha 4/);
+  jogar('RXRRXR');
+  assert.match(ler('#previsao'), /Portão 2 \(aberto\)/);
+  jogar('RXR');
+  assert.equal(ler('#erros'), '1 / 3');
+  assert.match(ler('#feedback'), /A maré te levou/);
+  pegar('#reiniciar').click();
+  jogar('DUDURRRRXRRXRRXRRRXRRXRRRRXRRRR');
+  assert.match(ler('#feedback'), /Arena vencida: Passagem das Balsas/);
+  pegar('#voltar-fase').click();
+  assert.match(ler('#progresso-praia'), /3\/10/);
+  const save = JSON.parse(storage.get(chave));
+  assert.ok(save.progresso.concluidas.includes('deriva-chefe-mestre-das-correntes'));
+  assert.ok(save.progresso.concluidas.includes('deriva-chefe-passagem-das-balsas'));
+  mapa.cima.click();
+  assert.match(ler('#posicao-praia'), /Mestre das Correntes · chefe opcional · concluída/);
+});

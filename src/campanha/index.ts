@@ -13,6 +13,7 @@ import { FASES_RESSACA_AMPLIADA } from '../fases/ressaca-ampliada.ts';
 import type { IdFaseRessacaAmpliada } from '../fases/ressaca-ampliada.ts';
 import { FASES_GRUTAS_AMPLIADAS } from '../fases/grutas-ampliadas.ts';
 import type { IdFaseGrutasAmpliadas } from '../fases/grutas-ampliadas.ts';
+import { MESTRE_DAS_CORRENTES, PASSAGEM_DAS_BALSAS } from '../fases/chefes-deriva.ts';
 import { FASES_DERIVA_AMPLIADA } from '../fases/deriva-ampliada.ts';
 import type { IdFaseDerivaAmpliada } from '../fases/deriva-ampliada.ts';
 import { FASES_ENSEADA_AMPLIADA } from '../fases/enseada-ampliada.ts';
@@ -90,6 +91,8 @@ const NOS_ENSEADA = [
 const ENTRADAS_ENSEADA: readonly Entrada[] = FASES_ENSEADA_AMPLIADA.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_ENSEADA[i],
 }));
+const ARENA_CORRENTES = P(8, 1);
+const ARENA_BALSAS = P(9, 3);
 const NOS_DERIVA = [
   P(2, 0), P(4, 0), P(6, -1), P(8, -1), P(10, -1), P(11, 1), P(11, 3),
 ] as const;
@@ -187,6 +190,8 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'deriva-dupla-cais', posicao: P(7, 0), nome: 'Encontro nos dois cais', opcional: true },
     { id: 'deriva-dupla-contramao', posicao: P(9, 0), nome: 'Balsas na contramão', opcional: true },
     ...ENTRADAS_DERIVA,
+    { id: MESTRE_DAS_CORRENTES.id, nome: MESTRE_DAS_CORRENTES.nome, posicao: ARENA_CORRENTES, opcional: true, chefe: true },
+    { id: PASSAGEM_DAS_BALSAS.id, nome: PASSAGEM_DAS_BALSAS.nome, posicao: ARENA_BALSAS, opcional: true, chefe: true },
   ],
   grutas: [
     PORTO,
@@ -390,6 +395,10 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
   ],
   deriva: [
     ...sustentar('deriva-primeira-balsa', 'deriva-duas-margens', 'deriva-corrente-cruzada'),
+    trilha(P(6, 1), ARENA_CORRENTES, 'direita', 'esquerda', [],
+      ['deriva-corrente-cruzada'], 'Conclua Corrente cruzada antes de seguir para o Mestre das Correntes.'),
+    trilha(ARENA_CORRENTES, ARENA_BALSAS, 'baixo', 'cima', [P(8, 2), P(9, 2)],
+      [MESTRE_DAS_CORRENTES.id], 'Vença Mestre das Correntes antes de seguir para a Passagem das Balsas.'),
     trilha(P(6, 1), P(7, 0), 'cima', 'baixo', [P(6.375, 0.5)],
       ['deriva-corrente-cruzada'], 'Conclua Corrente cruzada para abrir o desvio em dupla.'),
     trilha(P(7, 0), P(9, 0), 'direita', 'esquerda', [P(8.125, 0.375)],

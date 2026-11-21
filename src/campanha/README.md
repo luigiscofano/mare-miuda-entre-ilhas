@@ -61,3 +61,7 @@ Depois de vencer Guardião do Farol, siga à esquerda para a segunda arena. Dire
 Na Enseadinha, ↑ no marco de Fio de areia abre Vigia das ondas após a conclusão do primeiro. ↓ volta ao mesmo marco. O embarque e os três desvios anteriores continuam independentes.
 
 Acima de Vigia das ondas, ↑ abre Ponta da Ressaca após vencê-lo. ↓ volta ao Vigia e mais ↓ retorna ao Fio de areia. O segundo chefe é opcional, preserva as posições existentes e não muda o embarque.
+
+## Chefes das Ilhas à Deriva
+
+De Corrente cruzada, **→** leva ao Mestre após concluir o marco; **←** retorna. Depois de vencer o Mestre, **↓** abre a Passagem e **↑** retorna. Os novos nós usam a lista de conclusões do save já existente; nenhum deles modifica as dez fases regulares, a saída para as Grutas ou o ramo em dupla acima de Corrente cruzada.

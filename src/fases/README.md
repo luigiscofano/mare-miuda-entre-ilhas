@@ -186,3 +186,7 @@ As faixas alternam em cada subida. Cruze o primeiro baixio, proteja-se na margem
 ## Chefes dos Recifes
 
 `chefes-recifes.ts` registra as duas arenas opcionais. A configuração `recife` usa dois pontos em pedras altas no Guardião ou duas casas de baixio ligadas ao fragmento no Vigia. [Fichas, soluções e capturas](../../docs/processo-de-criacao/24-chefes-recifes/README.md).
+
+## Chefes das Ilhas à Deriva
+
+Em `chefes-deriva.ts`, **Mestre das Correntes** usa `atracacaoNaVirada` para declarar dois ancoradouros `N`. Estar na balsa antes da virada e terminar na âncora no passo da virada é necessário. **Passagem das Balsas** usa `P` e `D` com vínculo por coordenadas; uma placa de cada margem libera o portão da outra. As duas fases reaproveitam as paradas de balsa e a virada existentes. [Fichas, soluções e capturas](../../docs/processo-de-criacao/27-chefes-deriva/README.md).

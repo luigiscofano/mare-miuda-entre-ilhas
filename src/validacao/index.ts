@@ -74,7 +74,7 @@ export function validarMapa(fase: Fase): void {
         || linha < 0 || linha >= fase.mapa.length || primeiraColuna < 0 || ultimaColuna >= largura
         || ultimaColuna <= primeiraColuna
         || [...fase.mapa[linha]].filter((_, coluna) => faixaAfeta(fase, faixa, { coluna, linha })).length < 2;
-    })) : contar('N') > 0) {
+    })) : contar('N') > 0 && !fase.atracacaoNaVirada) {
     throw new Error(`Configuração de ressaca inválida: ${fase.id}.`);
   }
   if (sobrevivencia && fase.mapa.some((linha, y) => [...linha].some((casa, x) =>
@@ -96,6 +96,15 @@ export function validarMapa(fase: Fase): void {
   if (agua.some((pos, i) => lerCelula(fase, pos) !== '~'
     || agua.slice(0, i).some(outra => mesmaCasa(outra, pos)))) {
     throw new Error(`Parada de balsa inválida ou repetida: ${fase.id}.`);
+  }
+  if (fase.atracacaoNaVirada) {
+    const ancoras = fase.atracacaoNaVirada;
+    if (faixas || !ancoras.length || contar('N') !== ancoras.length
+      || new Set(ancoras.map(chave)).size !== ancoras.length
+      || ancoras.some(pos => lerCelula(fase, pos) !== 'N' || !agua.some(parada =>
+        Math.abs(pos.coluna - parada.coluna) + Math.abs(pos.linha - parada.linha) === 1))) {
+      throw new Error(`Ancoradouro sem acesso por balsa ou com posição inválida: ${fase.id}.`);
+    }
   }
   if (!fase.ameaca) return;
   const { alvo, primeiroAtaque, periodo } = fase.ameaca;
