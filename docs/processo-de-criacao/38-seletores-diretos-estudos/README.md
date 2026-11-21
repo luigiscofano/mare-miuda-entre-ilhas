@@ -18,6 +18,8 @@ A proposta usa areia, pedra e água, sem árvores. Números mostram fases, losan
 
 [V4 · identidade dos oito mundos](v4/README.md) · [V5 · relevo e orla detalhados](v5/README.md). As duas são estudos; a V2 permanece a referência provisória até nova aprovação.
 
+[V6 · luz e conexões entre materiais](v6/README.md): revisão de encaixes, sombras de contato e transições da espuma.
+
 ## Reproduzir
 
 Com Python 3 e Pillow, execute `python3 desenhar.py` numa cópia desta pasta. A fonte produz cada quadro nativo em 320 × 240, a ampliação em 3× e a prancha em 2× por vizinho mais próximo. Cada pixel do original é opaco e quadrado; não há filtros de suavização no resultado exportado. As prévias são autorais do projeto e não incorporam recursos do Miudezas.
