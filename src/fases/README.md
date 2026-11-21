@@ -190,3 +190,7 @@ As faixas alternam em cada subida. Cruze o primeiro baixio, proteja-se na margem
 ## Chefes das Ilhas à Deriva
 
 Em `chefes-deriva.ts`, **Mestre das Correntes** usa `atracacaoNaVirada` para declarar dois ancoradouros `N`. Estar na balsa antes da virada e terminar na âncora no passo da virada é necessário. **Passagem das Balsas** usa `P` e `D` com vínculo por coordenadas; uma placa de cada margem libera o portão da outra. As duas fases reaproveitam as paradas de balsa e a virada existentes. [Fichas, soluções e capturas](../../docs/processo-de-criacao/27-chefes-deriva/README.md).
+
+## Chefes das Grutas da Espuma
+
+`chefes-grutas.ts` especializa a sequência `K/E/F` com `condicoesGruta`. Cada peça indicada aceita apenas uma janela de maré; um vínculo opcional com `P` exige que outro siri ocupe a placa no fim do turno. Peças fora da ordem ou janela não avançam. Sem condições extras, as fases antigas mantêm as regras.

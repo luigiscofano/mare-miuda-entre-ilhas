@@ -133,3 +133,7 @@ A volta do recife abre o ramo direito: Guardião das Poças primeiro e Vigia do 
 ## Chefes das Ilhas à Deriva
 
 Depois de Corrente cruzada, vá à direita para **Mestre das Correntes**. Vença-o e siga para baixo para **Passagem das Balsas**. As dez travessias regulares e os dois desvios em dupla não mudam. Os dois chefes são opcionais e não são requisitos para o embarque rumo às Grutas da Espuma. [Fichas, capturas e soluções](../processo-de-criacao/27-chefes-deriva/README.md).
+
+## Chefes das Grutas da Espuma
+
+Depois de Revezamento nas câmaras, siga à direita para a Sentinela da Gruta e, ao vencê-la, desça para o Cofre das Espumas. A maré controla quando os mecanismos respondem, e a segunda arena exige a dupla em margens diferentes. As arenas não bloqueiam a Baía ou o desvio de trio. [Fichas, capturas e soluções](../processo-de-criacao/28-chefes-grutas/README.md).

@@ -36,3 +36,4 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 | [Chefes do Mangue](25-chefes-mangue/README.md) | Placas ligadas e uma ameaça anunciada em dupla. |
 | [Chefes da Enseada](26-chefes-enseada/README.md) | Rasantes horizontais e verticais, refúgios e uma travessia em dupla. |
 | [Chefes das Ilhas à Deriva](27-chefes-deriva/README.md) | Desembarques na virada, carona inativa e placas cruzadas. |
+| [Chefes das Grutas da Espuma](28-chefes-grutas/README.md) | Pérola sincronizada com maré, alavanca condicionada à placa e coordenação em dupla. |

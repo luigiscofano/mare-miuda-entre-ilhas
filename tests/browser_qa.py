@@ -629,6 +629,54 @@ def conferir_chefes_deriva(pagina, toque=False):
     expect(pagina.locator('#posicao-praia')).to_contain_text('Mestre das Correntes · chefe opcional · concluída')
 
 
+def conferir_chefes_grutas(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+        versao: 1, progresso: {mundo: 'grutas', posicao: {coluna: 10, linha: 1},
+            viuTutorial: true, concluidas: ['grutas-encaixe', 'grutas-ordem',
+                'grutas-retorno', 'grutas-dupla-portao', 'grutas-dupla-camaras']},
+        audio: {musica: 0, efeitos: 0},
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    jogar(pagina, 'R', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Sentinela da Gruta · chefe opcional')
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Sentinela da Gruta')
+    tocar(pagina, '#entrar-fase', toque)
+    jogar(pagina, 'RRRDRRU', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('A peça exige: maré alta.')
+    expect(pagina.locator('#fragmento')).to_contain_text('Próxima etapa: Encaixe A')
+    tocar(pagina, '#reiniciar', toque)
+    jogar(pagina, 'RRRDUDUDRRU', toque)
+    expect(pagina.locator('#fragmento')).to_contain_text('Alavanca B · maré baixa (abre no próximo passo)')
+    salvar_captura(pagina, f"grutas-sentinela-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'DDDDLLLRRRRRR', toque)
+    expect(pagina.locator('#passos')).to_have_text('24')
+    expect(pagina.locator('#feedback')).to_contain_text('Arena vencida: Sentinela da Gruta.')
+    tocar(pagina, '#voltar-fase', toque)
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Cofre das Espumas · chefe opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+    jogar(pagina, 'RRXDRRURRDURRRRRXRRRXDUR', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('O outro siri precisa estar na placa')
+    expect(pagina.locator('#fragmento')).to_contain_text('Placa livre')
+    tocar(pagina, '#reiniciar', toque)
+    jogar(pagina, 'RRXDRRURRDURRRRRXRRRRRRR', toque)
+    expect(pagina.locator('#fragmento')).to_contain_text('Placa ocupada')
+    salvar_captura(pagina, f"grutas-cofre-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'XRRXRRR', toque)
+    expect(pagina.locator('#passos')).to_have_text('27')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    expect(pagina.locator('#feedback')).to_contain_text('Arena vencida: Cofre das Espumas.')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Cofre das Espumas · chefe opcional · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('5/10')
+
+
 def conferir_grutas_ampliadas(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     # Retoma o último marco do ramo com as fases que o tornam acessível.
@@ -1248,6 +1296,7 @@ with sync_playwright() as p:
     conferir_chefes_enseada(desktop)
     conferir_deriva_ampliada(desktop)
     conferir_grutas_ampliadas(desktop)
+    conferir_chefes_grutas(desktop)
     conferir_trio_grutas(desktop)
     conferir_trio_avancado(desktop)
     conferir_ressaca_ampliada(desktop)
@@ -1273,6 +1322,7 @@ with sync_playwright() as p:
         conferir_chefes_enseada(aparelho, toque=True)
         conferir_deriva_ampliada(aparelho, toque=True)
         conferir_grutas_ampliadas(aparelho, toque=True)
+        conferir_chefes_grutas(aparelho, toque=True)
         conferir_trio_grutas(aparelho, toque=True)
         conferir_trio_avancado(aparelho, toque=True)
         conferir_ressaca_ampliada(aparelho, toque=True)

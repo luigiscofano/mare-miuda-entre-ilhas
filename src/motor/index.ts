@@ -3,6 +3,8 @@ export type Direcao = 'cima' | 'baixo' | 'esquerda' | 'direita';
 export type Acao = Direcao | 'trocar';
 export type Celula = 'S' | '.' | '=' | '#' | 'C' | 'B' | 'G' | 'H' | 'A' | 'P' | 'D' | 'T' | '~' | EtapaGruta | 'O' | 'N' | 'M' | 'Y' | 'I' | 'L';
 export type EtapaGruta = 'K' | 'E' | 'F';
+export type JanelaGruta = 'descida' | 'alta' | 'baixa';
+type CondicaoGruta = Readonly<{ etapa: EtapaGruta; janela: JanelaGruta; placa?: Posicao }>;
 export type Posicao = Readonly<{ coluna: number; linha: number }>;
 export type Ameaca = Readonly<{
   alvo: Posicao;
@@ -32,6 +34,7 @@ export type Fase = Readonly<{
   orcamentoMoedas?: number;
   portoesVinculados?: readonly Readonly<{ portao: Posicao; placa: Posicao }>[];
   etapasGruta?: readonly EtapaGruta[];
+  condicoesGruta?: readonly CondicaoGruta[];
   farol?: Readonly<{ passosPorOrientacao: number; orientacoes: readonly OrientacaoFarol[] }>;
   ressaca?: Readonly<{ faixas: readonly FaixaRessaca[]; objetivo?: 'sobreviver' | 'atravessar' }>;
   recife?: ProvaRecife;
@@ -63,6 +66,8 @@ export type Evento =
   | Readonly<{ tipo: 'balsa' }>
   | Readonly<{ tipo: 'gruta-avancou'; etapa: EtapaGruta }>
   | Readonly<{ tipo: 'gruta-precisa-portador' }>
+  | Readonly<{ tipo: 'gruta-fora-da-janela'; janela: JanelaGruta }>
+  | Readonly<{ tipo: 'gruta-sem-placa' }>
   | Readonly<{ tipo: 'gruta-fora-da-ordem'; proxima: EtapaGruta }>
   | Readonly<{ tipo: 'levada'; motivos: readonly MotivoErro[] }>
   | Readonly<{ tipo: 'abrigo-visitado' | 'faltam-abrigos' | 'recife-mudou-rota' }>
@@ -248,9 +253,22 @@ export function nomeDaEtapaGruta(etapa: EtapaGruta): string {
   return { K: 'Pérola', E: 'Encaixe A', F: 'Alavanca B' }[etapa];
 }
 
+export function nomeDaJanelaGruta(janela: JanelaGruta): string {
+  return { alta: 'maré alta', baixa: 'maré baixa', descida: 'passo da descida' }[janela];
+}
+
+export function janelaGrutaAtiva(janela: JanelaGruta, passos: number): boolean {
+  const alta = mareAlta(passos);
+  if (janela === 'alta') return alta;
+  if (janela === 'baixa') return !alta;
+  return !alta && passos > 0 && passos % PASSOS_POR_MARE === 0;
+}
+
 // A cadeia só avança após um passo seguro. Um acionamento fora da ordem
 // avisa o que falta, sem apagar etapas anteriores nem gerar um turno extra.
-function resolverGruta(fase: Fase, estado: Estado, celula: Celula | undefined, eventos: Evento[]) {
+function resolverGruta(fase: Fase, estado: Estado, celula: Celula | undefined, passos: number,
+  posicoes: readonly Posicao[], eventos: Evento[],
+) {
   const etapas = fase.etapasGruta;
   const atual = estado.etapaGruta;
   if (atual === undefined || (celula !== 'K' && celula !== 'E' && celula !== 'F')) return atual;
@@ -259,6 +277,17 @@ function resolverGruta(fase: Fase, estado: Estado, celula: Celula | undefined, e
     const ativo = nomeInternoDoSiri(siriAtivo(estado));
     if (celula === 'E' && estado.portadorGruta && estado.portadorGruta !== ativo) {
       eventos.push({ tipo: 'gruta-precisa-portador' });
+      return atual;
+    }
+    const condicao = fase.condicoesGruta?.find(item => item.etapa === celula);
+    // As condições olham o turno já resolvido, não a água de antes do passo.
+    if (condicao && !janelaGrutaAtiva(condicao.janela, passos)) {
+      eventos.push({ tipo: 'gruta-fora-da-janela', janela: condicao.janela });
+      return atual;
+    }
+    const placa = condicao?.placa;
+    if (placa && !posicoes.some(pos => mesmaCasa(pos, placa))) {
+      eventos.push({ tipo: 'gruta-sem-placa' });
       return atual;
     }
     eventos.push({ tipo: 'gruta-avancou', etapa: celula });
@@ -446,7 +475,7 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
     if (fase.recife && 'ida' in fase.recife) eventos.push({ tipo: 'recife-mudou-rota' });
   }
   const celulas = posicoes.map(p => lerCelula(fase, p));
-  const etapaGruta = resolverGruta(fase, anterior, celula, eventos);
+  const etapaGruta = resolverGruta(fase, anterior, celula, passos, posicoes, eventos);
   // A pérola não muda de siri numa troca. A alavanca não precisa do portador.
   let portadorGruta = anterior.portadorGruta;
   if (dupla && etapaGruta !== anterior.etapaGruta) {

@@ -13,6 +13,7 @@ import { FASES_RESSACA_AMPLIADA } from '../fases/ressaca-ampliada.ts';
 import type { IdFaseRessacaAmpliada } from '../fases/ressaca-ampliada.ts';
 import { FASES_GRUTAS_AMPLIADAS } from '../fases/grutas-ampliadas.ts';
 import type { IdFaseGrutasAmpliadas } from '../fases/grutas-ampliadas.ts';
+import { SENTINELA_DA_GRUTA, COFRE_DAS_ESPUMAS } from '../fases/chefes-grutas.ts';
 import { MESTRE_DAS_CORRENTES, PASSAGEM_DAS_BALSAS } from '../fases/chefes-deriva.ts';
 import { FASES_DERIVA_AMPLIADA } from '../fases/deriva-ampliada.ts';
 import type { IdFaseDerivaAmpliada } from '../fases/deriva-ampliada.ts';
@@ -37,6 +38,7 @@ export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
   | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
+  | typeof SENTINELA_DA_GRUTA.id | typeof COFRE_DAS_ESPUMAS.id
   | typeof GARCA_DA_RESTINGA.id | typeof VIGIA_DAS_FALESIAS.id | typeof GUARDIAO_DAS_POCAS.id | typeof VIGIA_DO_RECIFE.id | typeof VIGIA_DAS_ONDAS.id | typeof PONTA_DA_RESSACA.id | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof GUARDIAO_DA_RAIZ.id | typeof DUPLA_NO_MANGUE.id | typeof GUARDIAO_FAROL.id | typeof ULTIMA_VIRADA.id | typeof TRES_REFUGIOS.id | typeof ECO_DOS_TRES_CAIS.id | typeof TRES_LUZES_EM_REVEZAMENTO.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
 export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
@@ -99,6 +101,8 @@ const NOS_DERIVA = [
 const ENTRADAS_DERIVA: readonly Entrada[] = FASES_DERIVA_AMPLIADA.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_DERIVA[i],
 }));
+const ARENA_SENTINELA = P(11, 1);
+const ARENA_COFRE = P(11, 3);
 const DESVIO_TRIO = P(8, 3);
 const NOS_GRUTAS = [
   P(2, 0), P(4, -1), P(6, -1), P(8, -1), P(10, -1),
@@ -202,6 +206,8 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'grutas-dupla-camaras', posicao: P(10, 1), nome: 'Revezamento nas câmaras' },
     ...ENTRADAS_GRUTAS,
     { id: TRES_REFUGIOS.id, nome: TRES_REFUGIOS.nome, posicao: DESVIO_TRIO, opcional: true },
+    { id: SENTINELA_DA_GRUTA.id, nome: SENTINELA_DA_GRUTA.nome, posicao: ARENA_SENTINELA, opcional: true, chefe: true },
+    { id: COFRE_DAS_ESPUMAS.id, nome: COFRE_DAS_ESPUMAS.nome, posicao: ARENA_COFRE, opcional: true, chefe: true },
   ],
   ressaca: [
     PORTO,
@@ -436,6 +442,10 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['grutas-coral-portador'], 'Leve a pérola com o siri coral para visitar a outra margem.'),
     trilha(NOS_GRUTAS[3], NOS_GRUTAS[4], 'direita', 'esquerda', [],
       ['grutas-alavanca-distante'], 'Acione A alavanca distante para abrir a boca do labirinto.'),
+    trilha(P(10, 1), ARENA_SENTINELA, 'direita', 'esquerda', [],
+      ['grutas-dupla-camaras'], 'Conclua Revezamento nas câmaras para encontrar a Sentinela da Gruta.'),
+    trilha(ARENA_SENTINELA, ARENA_COFRE, 'baixo', 'cima', [],
+      [SENTINELA_DA_GRUTA.id], 'Vença a Sentinela da Gruta para abrir o Cofre das Espumas.'),
     trilha(P(8, 1), DESVIO_TRIO, 'baixo', 'cima', [],
       ['grutas-dupla-portao'], 'Conclua A pérola e a placa para encontrar o terceiro siri.'),
   ],

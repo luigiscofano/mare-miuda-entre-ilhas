@@ -65,3 +65,7 @@ Acima de Vigia das ondas, ↑ abre Ponta da Ressaca após vencê-lo. ↓ volta a
 ## Chefes das Ilhas à Deriva
 
 De Corrente cruzada, **→** leva ao Mestre após concluir o marco; **←** retorna. Depois de vencer o Mestre, **↓** abre a Passagem e **↑** retorna. Os novos nós usam a lista de conclusões do save já existente; nenhum deles modifica as dez fases regulares, a saída para as Grutas ou o ramo em dupla acima de Corrente cruzada.
+
+## Chefes das Grutas da Espuma
+
+Sentinela da Gruta (à direita de Revezamento nas câmaras) e Cofre das Espumas (abaixo da Sentinela) são chefes opcionais, em sequência. A primeira visita exige vencer a travessia histórica; a segunda, vencer a Sentinela. Os IDs, a contagem regular e a rota antiga da Baía são preservados.

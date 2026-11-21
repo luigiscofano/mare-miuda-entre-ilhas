@@ -101,3 +101,7 @@ O teste reproduz a alternância das faixas, a proteção na pedra alta e as duas
 ## Chefes das Ilhas à Deriva
 
 `chefes-deriva.test.ts` valida as duas soluções, o menor total de passos, a necessidade de cada balsa, o vínculo de cada placa e a carona do siri inativo. A busca de recuperação inclui a posição anterior em terra firme, o ciclo da maré e até duas levadas. O teste de mapa verifica a rota antiga às Grutas, os desbloqueios opcionais e recarga sem contaminar a contagem regular. O roteiro Playwright cobre teclado, toque emulado pelo teste, avisos, ancoradouros, alagamento, reinício e recarga. Resultados de navegadores ficam na CI; toque emulado não é teste em aparelho físico.
+
+## Chefes das Grutas da Espuma
+
+`chefes-grutas.test.ts` verifica o relógio de cada peça, a exigência de mover os dois siris no Cofre, a recusa com a placa livre e a recuperação após até duas levadas. O mapa preserva o acesso à Baía, dez regulares e recarga. O roteiro Playwright cobre as duas arenas com teclado e toque emulado, incluindo recusa, reinício, conclusão, save e capturas sem cursor.
