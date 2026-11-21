@@ -334,7 +334,8 @@ function jogarAcao(acao: Acao): void {
 }
 
 const reiniciar = () => {
-  if (tela === 'fase') selecionarFase(indice, 'Fase reiniciada. Maré baixa.', false);
+  // Devolva o foco ao título para Espaço voltar a trocar o siri, não reativar o botão.
+  if (tela === 'fase') selecionarFase(indice, 'Fase reiniciada. Maré baixa.');
 };
 const voltar = () => {
   if (tela === 'fase' && !bancada) abrirPraia();
