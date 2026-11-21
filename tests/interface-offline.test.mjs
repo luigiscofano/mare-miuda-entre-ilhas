@@ -158,3 +158,53 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   assert.equal(registro.audio.musica, 0);
   assert.equal(storage.get('miudezas'), 'preservado');
 });
+
+test('HTML offline avisa a onda e salva a conclusão de Vento Sul sem rede', async () => {
+  const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
+  const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
+  assert.ok(modulo);
+  const { pegar, botoes, mapa, storage, quadros } = prepararInterface();
+  const chave = 'mare-miuda-entre-ilhas/praia-v1';
+  storage.set(chave, JSON.stringify({
+    versao: 1,
+    progresso: {
+      mundo: 'ressaca', posicao: { coluna: 8, linha: 3 }, viuTutorial: true,
+      concluidas: ['ressaca-dupla-abrigo', 'ressaca-dupla-ancoradouros', 'ressaca-refugio-de-pedra',
+        'ressaca-bolsos-opostos', 'ressaca-vigia-da-placa', 'ressaca-balsas-da-ponta',
+        'ressaca-cais-em-paralelo', 'ressaca-tres-moedas-do-cais',
+        'ressaca-atracadouro-torto', 'ressaca-cofre-da-vazante'],
+    },
+    audio: { musica: 0, efeitos: 0 },
+  }));
+  // O fragmento importa outra instância do módulo offline no DOM recém-criado.
+  await import(modulo + '#vento-sul');
+  const ler = id => pegar(id).textContent;
+  const jogar = rota => [...rota].forEach(letra => botoes[{
+    U: 'cima', D: 'baixo', L: 'esquerda', R: 'direita',
+  }[letra]].click());
+  pegar('#comecar').click();
+  mapa.esquerda.click();
+  assert.match(ler('#posicao-praia'), /Vento Sul · chefe opcional/);
+  quadros.length = 0;
+  pegar('#entrar-fase').click();
+  assert.match(ler('#previsao'), /Onda na subida: linha 1, colunas 2 a 4/);
+  assert.equal(ler('#ancoradouros'), 'Ancoradouros firmes: 0/3');
+  assert.ok(quadros.length && quadros.every(([, ...posicoes]) => posicoes.every(Number.isInteger)));
+
+  jogar('RRR');
+  assert.match(ler('#feedback'), /faixa da ressaca te alcançou/);
+  assert.equal(ler('#erros'), '1 / 3');
+  pegar('#reiniciar').click();
+  jogar('DDUURRRLRLRDDRRRR');
+  assert.match(ler('#feedback'), /ancoradouro na maré baixa/);
+  assert.equal(ler('#ancoradouros'), 'Ancoradouros firmes: 2/3');
+  jogar('LR');
+  assert.equal(ler('#ancoradouros'), 'Ancoradouros firmes: 3/3');
+  assert.match(ler('#grade'), /n=.H=..n/);
+  jogar('LUURR');
+  assert.match(ler('#feedback'), /Vento Sul vencido/);
+  assert.equal(ler('#erros'), '0 / 3');
+  pegar('#voltar-fase').click();
+  assert.match(ler('#progresso-praia'), /10\/10/);
+  assert.ok(JSON.parse(storage.get(chave)).progresso.concluidas.includes('ressaca-chefe-vento-sul'));
+});

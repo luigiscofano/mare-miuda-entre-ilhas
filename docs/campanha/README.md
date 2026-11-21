@@ -50,7 +50,7 @@ A curva aumenta por etapas: Praia introdutória, lógica leve no segundo mundo, 
 
 ## Praia em duas telas
 
-Cabo Baixo tem quatro marcos principais, contando o encontro existente, e a Ilhota Perolada. Após vencer a Ponta da garça, siga à direita e abra o portal para a Enseadinha. A passagem de volta no início da nova tela devolve o siri ao portal do Cabo. Três desafios principais liberam o novo embarque, sem exigir os três opcionais. O embarque antigo foi mantido para saves anteriores, e o arquipélago ainda desembarca no ponto original do Cabo. O mundo já tem dez fases regulares; os dois chefes completos seguem no plano.
+Cabo Baixo tem quatro marcos principais, contando o encontro existente, e a Ilhota Perolada. Após vencer a Ponta da garça, siga à direita e abra o portal para a Enseadinha. A passagem de volta no início da nova tela devolve o siri ao portal do Cabo. Três desafios principais liberam o novo embarque, sem exigir os três opcionais. O embarque antigo foi mantido para saves anteriores, e o arquipélago ainda desembarca no ponto original do Cabo. A Praia tem dez fases autorais (seis principais e quatro opcionais) e o encontro Ponta da garça; os dois chefes completos desse mundo seguem no plano.
 
 ## Planejamento completo
 
@@ -64,7 +64,7 @@ Corrente cruzada libera as Grutas da Espuma. O núcleo jogável atual tem três 
 
 Os desvios em dupla na Enseada e nas Ilhas reaproveitam as cores, a troca gratuita e o relógio compartilhado. A dupla volta de vez em quando, sem substituir os desafios de um siri só.
 
-As Grutas têm cinco fases regulares, das quais duas em dupla; sua última travessia abre a Baía da Ressaca. A Baía começa com duas travessias em dupla que combinam patrulha anunciada e deslocamento de balsas, sem chefes nesta etapa. O Farol abre depois de Ancoradouros em revezamento. Depois das duas travessias históricas, o mapa divide-se em dois ramais: a costa norte tem quatro desafios regulares de revisita e a rota dos guardiões tem quatro regulares, incluindo A luz das duas marés. São dez regulares no total (sete em dupla), sem chefes. [Fichas e soluções](../processo-de-criacao/15-farol-ampliado/README.md).
+As Grutas têm cinco fases regulares, das quais duas em dupla; sua última travessia abre a Baía da Ressaca. A Baía começou com duas travessias em dupla que combinam patrulha anunciada e deslocamento de balsas. O Farol abre depois de Ancoradouros em revezamento. Depois das duas travessias históricas, o mapa divide-se em dois ramais: a costa norte tem quatro desafios regulares de revisita e a rota dos guardiões tem quatro regulares, incluindo A luz das duas marés. São dez regulares no total (sete em dupla), sem chefes. [Fichas e soluções](../processo-de-criacao/15-farol-ampliado/README.md).
 
 Na Enseada e nas Ilhas, o segundo desvio regular em dupla é aberto após o primeiro. No segundo desafio da Enseada, a garça alterna margens; no da Deriva, duas balsas viajam em sentidos opostos no mesmo relógio. Esses desvios não são requisito de embarque.
 
@@ -90,4 +90,8 @@ O mundo tem dez regulares: dois solos e três desafios em dupla novos, além das
 
 ## Ampliação da Baía da Ressaca
 
-A Baía passa a ter dez travessias regulares, seis em dupla. O ramo novo parte de Abrigo dos dois cais e combina refúgios, balsas, placa e duas travessias com três moedas e orçamento de passos. O caminho anterior continua a liberar o Farol. Os chefes ainda não fazem parte do jogo. [Fichas e soluções](../processo-de-criacao/14-ressaca-ampliada/README.md).
+A Baía passa a ter dez travessias regulares, seis em dupla. O ramo novo parte de Abrigo dos dois cais e combina refúgios, balsas, placa e duas travessias com três moedas e orçamento de passos. O caminho anterior continua a liberar o Farol sem enfrentar o chefe opcional Vento Sul, que se abre depois de Cofre da vazante. [Fichas e soluções](../processo-de-criacao/14-ressaca-ampliada/README.md).
+
+## Arena Vento Sul
+
+O primeiro chefe da Baía usa a própria subida da maré para varrer uma faixa anunciada. Firme três ancoradouros na baixa antes de sair. [Ficha, aviso no tabuleiro e solução](../processo-de-criacao/16-vento-sul/README.md). O segundo chefe da Baía continua planejado.

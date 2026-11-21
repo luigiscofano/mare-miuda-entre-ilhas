@@ -59,3 +59,7 @@ O motor reproduz as 79 rotas da campanha sem levadas. `ressaca-ampliada.test.ts`
 ## Farol ampliado
 
 A busca ordenada por passos repete o motor sem levadas e preserva o relógio da maré e da patrulha. Confere o contorno da vigia (19 passos ante 17 pela placa), o orçamento da costa (mínimo de 27), as travessias com quatro e três balsas indispensáveis e ambos os portões nos dois últimos desafios em dupla. A luz das duas marés requer no mínimo 34 passos; a solução publicada tem sete trocas e três fragmentos. O roteiro de navegador entra nos dois ramais, conclui a fase final, recarrega a posição com 10/10 e volta ao arquipélago. Toque é emulado; aparelho físico não foi testado.
+
+## Arena Vento Sul
+
+`vento-sul.test.ts` cobre a previsão de faixas, a imunidade da pedra alta, levada única por ameaças simultâneas, proteção da saída até firmar as três âncoras, chegada na alta, reinício, ida e volta e persistência sem bloqueio do Farol. O roteiro Playwright lê o aviso, provoca a primeira onda, reinicia e conclui a arena por teclado e toque emulado. A verificação em aparelho físico permanece pendente.

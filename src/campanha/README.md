@@ -37,3 +37,7 @@ Suba depois de Uma pérola para o portão para cinco novas regulares. A pérola 
 ## Baía da Ressaca ampliada
 
 Suba depois de Abrigo dos dois cais para acessar oito travessias novas. Cais em paralelo exige Balsas da ponta e Ancoradouros em revezamento, mas nenhuma fase nova condiciona o atalho ao porto ou a saída para o Farol. Os nós já salvos permanecem válidos.
+
+## Arena opcional Vento Sul
+
+Ao concluir Cofre da vazante, siga à esquerda para o marco de chefe; direita volta ao Cofre. A arena é salva pelo mesmo sistema de conclusões, mas não entra no progresso das dez regulares e não bloqueia o Farol.

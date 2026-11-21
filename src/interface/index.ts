@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, executarPasso, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, passosAteVirada, totalFragmentos } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, executarPasso, faixaRessacaNoTurno, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, PASSOS_POR_MARE, passosAteVirada, mesmaCasa, TOTAL_ANCORADOUROS, totalFragmentos } from '../motor/index.ts';
 import type { Acao, Direcao, Evento } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { ALTURA, DENSIDADE, desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
@@ -118,7 +118,7 @@ function atualizarPraia(mensagem = ''): void {
     : mundo === 'enseada' ? 'A rota do cais leva às Ilhas à Deriva. Suba depois de Sombra na restinga para explorar o ramo; os dois desvios em dupla continuam no último marco da rota original.'
     : mundo === 'deriva' ? 'Siga pela rota do cais para as Grutas. Suba depois de A primeira balsa para abrir o ramo norte; os desvios em dupla continuam no último marco da rota original.'
     : mundo === 'grutas' ? 'A rota do cais leva à Baía da Ressaca. Suba depois de Uma pérola para o portão para explorar as câmaras ao norte.'
-      : mundo === 'ressaca' ? 'A rota do cais leva ao Farol. Suba depois de Abrigo dos dois cais para explorar o ramo norte e as travessias com moedas.'
+      : mundo === 'ressaca' ? 'A rota do cais leva ao Farol. Suba depois de Abrigo dos dois cais para explorar o ramo norte. Ao completar Cofre da vazante, siga à esquerda para enfrentar Vento Sul.'
       : mundo === 'farol'
         ? 'Siga as travessias na ordem. O atalho para o cais só se abre depois da última.'
         : 'Complete as três travessias. O atalho sul só se abre depois da última.';
@@ -130,7 +130,7 @@ function atualizarPraia(mensagem = ''): void {
       : `Travessias concluídas: ${concluidas}/${totalDeFasesRegulares(mundo)}.`;
   buscar('#enseada-aberta').hidden = mundo !== 'arquipelago' || !abriuEnseada(p);
   buscar('#posicao-praia').textContent = entrada
-    ? `${entrada.nome}${entrada.opcional ? ' · opcional' : ''}${p.concluidas.some(id => id === entrada.id) ? ' · concluída' : ''}.`
+    ? `${entrada.nome}${entrada.chefe ? ' · chefe opcional' : entrada.opcional ? ' · opcional' : ''}${p.concluidas.some(id => id === entrada.id) ? ' · concluída' : ''}.`
     : mundo === 'arquipelago' ? 'Bifurcação das ilhas.' : 'Cais da Praia das Conchas.';
   buscar('#mensagem-praia').textContent = mensagem;
   const entrar = buscar<HTMLButtonElement>('#entrar-fase');
@@ -180,12 +180,16 @@ function descricao(evento: Evento): string {
     case 'gruta-fora-da-ordem': return `Ainda não. Próxima etapa: ${nomeDaEtapaGruta(evento.proxima)}.`;
     case 'balsa': return 'A balsa levou o siri ao outro cais.';
     case 'virada': return evento.alta ? 'A maré subiu.' : 'A maré baixou.';
-    case 'levada': return evento.motivos.length > 1 ? 'A onda e a garça te alcançaram!'
+    case 'levada': if (evento.motivos.includes('ressaca')) return 'A faixa da ressaca te alcançou!';
+      return evento.motivos.length > 1 ? 'A onda e a garça te alcançaram!'
       : evento.motivos.includes('mare') ? 'A maré te levou!' : 'A garça te alcançou!';
     case 'orcamento-esgotado': return 'Os passos acabaram. Reinicie e tente outra rota.';
     case 'fragmento': if (fase.orcamentoMoedas) return 'Moeda recolhida.'; return totalFragmentos(fase) > 1 ? 'Fragmento recolhido.' : 'Fragmento recolhido. Volte à saída.';
     case 'falta-fragmento': if (fase.orcamentoMoedas) return 'Encontre as três moedas antes de sair.'; return totalFragmentos(fase) > 1
       ? 'Para sair, encontre todos os fragmentos.' : 'Para sair, encontre o fragmento na ilhota.';
+    case 'ancorou': return 'Ancoradouro firme!';
+    case 'ancora-na-alta': return 'Volte a este ancoradouro na maré baixa.';
+    case 'faltam-ancoradouros': return 'Firme os três ancoradouros para usar a saída.';
     case 'falta-parceiro': return 'O outro siri ainda não está no destino.'; 
     case 'troca': return 'Siri ativo trocado sem avançar a maré.';
     case 'vitoria': return 'Fase concluída!';
@@ -221,6 +225,14 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
       ? `${inventario}Próxima etapa: ${nomeDaEtapaGruta(proxima)}${coleta}`
       : `Portão aberto${coleta}`;
   }
+  const ancoradouros = buscar('#ancoradouros');
+  const firmes = estado.ancoradouros;
+  ancoradouros.hidden = !firmes;
+  ancoradouros.textContent = firmes ? `Ancoradouros firmes: ${firmes.length}/${TOTAL_ANCORADOUROS}` : '';
+  if (firmes) {
+    buscar('#grade').textContent = fase.mapa.map((fileira, linha) => [...fileira].map((casa, coluna) =>
+      casa === 'N' && firmes.some(p => mesmaCasa(p, { linha, coluna })) ? 'n' : casa).join('')).join('\n');
+  }
   const duplaAtiva = buscar('#dupla-ativa');
   duplaAtiva.hidden = !estado.dupla;
   duplaAtiva.textContent = `Siri ativo: ${estado.dupla?.parceiroAtivo ? 'Verde, pinças baixas' : 'Coral, pinças erguidas'} (Espaço para trocar)`;
@@ -232,8 +244,11 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   const destinos = balsasNoTurno(fase, estado.passos + faltam);
   const previsoes = cais.map((atual, i) => `Balsa ${i + 1}: ${coordenadas(atual)} → ${coordenadas(destinos[i])}`);
   const sinalBalsa = previsoes.length ? ` Na virada: ${previsoes.join('; ')}.` : '';
+  const ateSubir = faltam + (alta ? PASSOS_POR_MARE : 0);
+  const faixa = faixaRessacaNoTurno(fase, estado.passos + ateSubir);
+  const sinalRessaca = faixa ? ` Onda na subida: linha ${faixa.linha + 1}, colunas ${faixa.primeiraColuna + 1} a ${faixa.ultimaColuna + 1}. Pedra alta protege.` : '';
   buscar('#previsao').textContent = finalizada ? 'Tentativa encerrada.'
-    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}`;
+    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}${sinalRessaca}`;
   buscar('#posicao').textContent = `Siri na coluna ${estado.posicao.coluna + 1}, linha ${estado.posicao.linha + 1}.`;
 
   const mensagens = eventos.map(descricao);
@@ -241,9 +256,10 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     mensagens.push(estado.levadas >= LIMITE_LEVADAS ? 'Três erros: tente de novo.' : 'De volta à última casa firme.');
   }
   if (estado.situacao === 'vitoria') {
+    if (fase.ressaca) mensagens.push(`${fase.nome} vencido. Volte à Baía.`);
     if (bancada && indice < FASES_BANCADA.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');
     if (!bancada && fase.id === 'ilhota-perolada') mensagens.push('Concha Perolada encontrada. Atalho de volta aberto!');
-    else if (!bancada && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');
+    else if (!bancada && !fase.ressaca && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');
   }
   buscar('#feedback').textContent = mensagem || mensagens.join(' ');
   buscar('#seguir-fase').hidden = bancada || fase.id !== 'ponta-da-garca' || estado.situacao !== 'vitoria';

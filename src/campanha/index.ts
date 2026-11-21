@@ -1,3 +1,4 @@
+import { VENTO_SUL } from '../fases/vento-sul.ts';
 import { FASES_RESSACA_AMPLIADA } from '../fases/ressaca-ampliada.ts';
 import type { IdFaseRessacaAmpliada } from '../fases/ressaca-ampliada.ts';
 import { FASES_GRUTAS_AMPLIADAS } from '../fases/grutas-ampliadas.ts';
@@ -25,7 +26,7 @@ export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
   | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
-  | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
+  | typeof VENTO_SUL.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
 export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
   posicao: Posicao;
@@ -38,6 +39,7 @@ type Entrada = Readonly<{
   posicao: Posicao;
   nome: string;
   opcional?: boolean;
+  chefe?: boolean;
   destino?: Mundo;
 }>;
 const P = (coluna: number, linha: number): Posicao => ({ coluna, linha });
@@ -91,6 +93,7 @@ const ENTRADAS_GRUTAS: readonly Entrada[] = FASES_GRUTAS_AMPLIADAS.map((fase, i)
 const NOS_RESSACA = [
   P(2, 0), P(4, -1), P(6, -1), P(8, -1), P(10, -1), P(11, 1), P(11, 3), P(8, 3),
 ] as const;
+const ARENA_VENTO_SUL = P(6, 3);
 const ENTRADAS_RESSACA: readonly Entrada[] = FASES_RESSACA_AMPLIADA.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_RESSACA[i],
 }));
@@ -169,6 +172,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'ressaca-dupla-abrigo', posicao: P(2, 1), nome: 'Abrigo dos dois cais' },
     { id: 'ressaca-dupla-ancoradouros', posicao: P(4, 1), nome: 'Ancoradouros em revezamento' },
     ...ENTRADAS_RESSACA,
+    { id: VENTO_SUL.id, nome: VENTO_SUL.nome, posicao: ARENA_VENTO_SUL, opcional: true, chefe: true },
   ],
   farol: [
     PORTO,
@@ -394,6 +398,8 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['ressaca-tres-moedas-do-cais'], 'Recolha as Três moedas do cais para ir ao atracadouro.'),
     trilha(NOS_RESSACA[6], NOS_RESSACA[7], 'esquerda', 'direita', [],
       ['ressaca-atracadouro-torto'], 'Conclua Atracadouro torto para encontrar o cofre.'),
+    trilha(NOS_RESSACA[7], ARENA_VENTO_SUL, 'esquerda', 'direita', [],
+      ['ressaca-cofre-da-vazante'], 'Conclua Cofre da vazante para enfrentar Vento Sul.'),
   ],
   farol: [
     trilha(CAIS, P(2, 1), 'direita', 'esquerda', []),
@@ -494,10 +500,11 @@ export function moverNoMapa(progresso: Progresso, direcao: Direcao) {
   if (!saida) return { progresso, mensagem: 'Não há trilha nessa direção.' };
   if (!rotaLivre(progresso, saida.t)) return { progresso, mensagem: saida.t.motivo };
   const entrada = entradaEm(saida.destino, mundoAtual(progresso));
+  const tipo = entrada?.chefe ? 'Chefe opcional: ' : entrada?.opcional ? 'Desvio opcional: ' : '';
   return {
     progresso: { ...progresso, posicao: saida.destino },
     caminho: saida.caminho,
-    mensagem: entrada ? `${entrada.opcional ? 'Desvio opcional: ' : ''}${entrada.nome}. ${entrada.destino ? 'Entre para viajar.' : 'Entre para jogar.'}` : 'Bifurcação das ilhas.',
+    mensagem: entrada ? `${tipo}${entrada.nome}. ${entrada.destino ? 'Entre para viajar.' : 'Entre para jogar.'}` : 'Bifurcação das ilhas.',
   };
 }
 

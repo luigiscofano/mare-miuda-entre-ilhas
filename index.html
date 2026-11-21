@@ -78,7 +78,7 @@
       </dl>
       <p id="previsao" class="previsao"></p>
       <div id="moldura" class="moldura">
-        <canvas id="tabuleiro" width="256" height="192" role="img" aria-label="Mapa da fase" aria-describedby="posicao previsao">
+        <canvas id="tabuleiro" width="256" height="192" role="img" aria-label="Mapa da fase" aria-describedby="posicao previsao ancoradouros">
           Texto alternativo do mapa disponível em “Mapa em texto e ajuda”.
         </canvas>
       </div>
@@ -86,6 +86,7 @@
       <p id="sinal-concha" class="inventario" hidden>Objetivo no tabuleiro: concha brilhante.</p>
       <p id="orcamento" class="inventario" hidden></p>
       <p id="fragmento" class="inventario" hidden></p>
+      <p id="ancoradouros" class="inventario" hidden></p>
       <p id="dupla-ativa" class="inventario" hidden></p>
       <p id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
 
@@ -109,7 +110,7 @@
         <p id="ensino"></p>
         <p>Use setas, WASD ou toque nos botões. R reinicia. Passos bloqueados não contam.</p>
         <pre id="grade" aria-label="Representação por símbolos do tabuleiro"></pre>
-        <p>S: início · .: chão firme · =: baixio · #: bloqueio · C: concha · B: fragmento · G: saída · H: pedra alta · A: segundo siri · P: placa · D: portão · T: raiz · ~: água de corrente (apenas com balsa).</p>
+        <p>S: início · .: chão firme · =: baixio · #: bloqueio · C: concha · B: fragmento · G: saída · H: pedra alta · A: segundo siri · P: placa · D: portão · T: raiz · ~: água de corrente (apenas com balsa) · N: ancoradouro solto · n: ancoradouro firme.</p>
       </details>
     </section>
 

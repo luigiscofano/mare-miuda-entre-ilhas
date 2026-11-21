@@ -1,11 +1,11 @@
-import { executarPasso, iniciar, lerCelula, mesmaCasa } from '../motor/index.ts';
+import { faixaAfeta, TOTAL_ANCORADOUROS, executarPasso, iniciar, lerCelula, mesmaCasa } from '../motor/index.ts';
 import type { Acao, Fase } from '../motor/index.ts';
 
 export function validarMapa(fase: Fase): void {
   const largura = fase.mapa[0]?.length ?? 0;
   const celulas = fase.mapa.join('');
   const contar = (simbolo: string) => [...celulas].filter(valor => valor === simbolo).length;
-  if (!largura || fase.mapa.some(linha => linha.length !== largura) || /[^S.=#CBGHAPDT~KEFO]/.test(celulas)) {
+  if (!largura || fase.mapa.some(linha => linha.length !== largura) || /[^S.=#CBGHAPDT~KEFON]/.test(celulas)) {
     throw new Error(`Mapa retangular inválido: ${fase.id}.`);
   }
   if (contar('S') !== 1 || contar('C') + contar('G') !== 1 ||
@@ -29,6 +29,17 @@ export function validarMapa(fase: Fase): void {
     || acoesGruta.some(acao => contar(acao) !== Number(etapas.includes(acao))))
     : /[KEFO]/.test(celulas)) {
     throw new Error(`Mecanismos da gruta inválidos: ${fase.id}.`);
+  }
+  const faixas = fase.ressaca?.faixas;
+  if (faixas ? (contar('N') !== TOTAL_ANCORADOUROS || contar('C') !== 1 || !faixas.length
+    || faixas.some(faixa => {
+      const { linha, primeiraColuna, ultimaColuna } = faixa;
+      return ![linha, primeiraColuna, ultimaColuna].every(Number.isInteger)
+        || linha < 0 || linha >= fase.mapa.length || primeiraColuna < 0 || ultimaColuna >= largura
+        || ultimaColuna <= primeiraColuna
+        || [...fase.mapa[linha]].filter((_, coluna) => faixaAfeta(fase, faixa, { coluna, linha })).length < 2;
+    })) : contar('N') > 0) {
+    throw new Error(`Configuração de ressaca inválida: ${fase.id}.`);
   }
   const balsas = fase.balsas ?? [];
   const agua = balsas.flatMap(balsa => balsa.paradas);
