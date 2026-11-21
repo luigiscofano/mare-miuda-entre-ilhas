@@ -75,3 +75,7 @@ O percurso original conserva a chave que libera a Enseada. Os marcos novos saem 
 ## Ampliação do Mangue dos Siris Duplos
 
 O Mangue tem dez travessias regulares, sem chefes neste lote. A rota original continua a liberar a Enseada. Um ramo novo parte de Raízes vizinhas e trabalha troca, maré compartilhada, placa, porta, fragmentos e reencontro. [Fichas e soluções](../processo-de-criacao/10-mangue-ampliado/README.md).
+
+## Ampliação da Enseada da Garça
+
+A Enseada passa a dez regulares mais dois desvios históricos em dupla. O ramo novo parte de Sombra na restinga e termina em Vigia partilhada, em dupla. Não altera a abertura das Ilhas à Deriva. [Fichas e soluções](../processo-de-criacao/11-enseada-ampliada/README.md).

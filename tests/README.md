@@ -39,3 +39,7 @@ A ampliação de Recifes verifica 45 testemunhas de vitória, contagem de dez re
 ## Mangue dos Siris Duplos ampliado
 
 O motor percorre as 52 soluções da campanha sem levadas. A busca das sete novas fases confirma que não há vitória sem levadas com um dos siris imóvel; também verifica ausência de solução sem portão nas duas finais e o mínimo de trocas. O teste do mapa cobre ida, volta, teclas exclusivas, saves e saída legada para a Enseada. O roteiro Playwright usa teclado e toque emulado para trocar sem gastar passos, provocar uma levada no baixio, reiniciar, vencer e recarregar com o novo marco. Os resultados de navegadores constam da execução de CI.
+
+## Enseada da Garça ampliada
+
+O motor reproduz as 59 soluções sem levadas. Nas sete novas, uma rota que vence sem a garça é atingida quando a patrulha real está ativa. O teste também verifica marcos, volta, saves e a saída original para a Deriva. O roteiro Playwright cobre aviso, rasante, reinício, desvio seguro e recarga com teclado e toque emulado; confirme os resultados na CI.

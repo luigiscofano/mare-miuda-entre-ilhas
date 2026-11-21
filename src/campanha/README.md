@@ -21,3 +21,7 @@ A rota histórica, seus três nós e seu atalho pelo sul não mudam. No primeiro
 ## Mangue dos Siris Duplos ampliado
 
 No primeiro marco do Mangue, suba depois de Raízes vizinhas para explorar as sete novas travessias. O cruzamento logo após Trinco salgado pede também Um segura, outro passa. A rota original, seus três marcos e o atalho ao porto continuam exatamente nas mesmas posições. O ramo não entra na condição de abertura da Enseada.
+
+## Enseada da Garça ampliada
+
+Suba depois de Sombra na restinga para sete travessias regulares novas. A bifurcação após Fragmento no alcance do bico pede também Abrigo entre ondas. No último marco histórico, os dois desvios em dupla seguem no mesmo lugar, assim como o atalho e o embarque para as Ilhas à Deriva. Nem o ramo novo nem os dois opcionais bloqueiam a saída.
