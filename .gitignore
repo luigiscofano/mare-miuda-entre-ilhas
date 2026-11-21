@@ -1,3 +1,7 @@
 /dist/
 /node_modules/
 /artifacts/
+/scripts/trilha/__pycache__/
+/scripts/trilha/masters/
+/scripts/trilha/*.wav
+/scripts/trilha/*.mp3

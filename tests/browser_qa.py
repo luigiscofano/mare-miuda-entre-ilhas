@@ -4,6 +4,8 @@ from pathlib import Path
 
 from playwright.sync_api import expect, sync_playwright
 
+from browser_audio_qa import conferir_audio_no_ci
+
 DIST = Path(__file__).resolve().parents[1] / 'dist'
 OFFLINE = (DIST / 'mare-miuda-prototipo.html').as_uri()
 PRIMEIRA_PAGINA = os.getenv('MARE_QA_URL') or OFFLINE
@@ -1526,4 +1528,8 @@ with sync_playwright() as p:
         conferir_chefes_deriva(aparelho, toque=True)
         conferir_desfecho(aparelho, toque=True)
         print(f'{motor}: toque emulado {largura} × 844 na ordem Mangue → Recifes, reload e encaixe integral.')
+    # Encerre as sessões de campanha para isolar o desbloqueio e os loops.
+    for contexto in navegador.contexts:
+        contexto.close()
+    conferir_audio_no_ci(navegador, motor, os.getenv('MARE_QA_URL'))
     navegador.close()

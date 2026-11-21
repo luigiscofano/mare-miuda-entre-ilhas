@@ -22,6 +22,8 @@ Abra `dist/mare-miuda-prototipo.html` no navegador para jogar sem conexão. A ou
 
 <a id="regras"></a>
 
+A trilha **Siri na Areia — Notas Claras** acompanha os oito mundos. O áudio começa após interação, tem volumes separados de Música e Efeitos e também está incluído no HTML offline. [Como funciona o áudio](src/audio/README.md) · [Partitura e exportação](scripts/trilha/README.md).
+
 ## Documentação
 
 <details>
@@ -131,7 +133,7 @@ Placa de Areia (opção A) na abertura, em grade original de 180 × 94 pixels, c
 <details>
 <summary>Áudio e trilha</summary>
 
-A praia usa um tema original provisório sintetizado por Web Audio e sinais diferentes de subida/descida, erro, coleta e vitória. Música e efeitos têm volumes independentes e persistentes. Forma, padrões e texto ensinam as regras sem depender de áudio. Ver [áudio](src/audio/README.md).
+A Praia conserva a faixa Notas Claras aprovada. As outras sete regiões usam o mesmo tema com timbres e apoios diferentes, em transições contínuas. Os sinais de subida/descida, erro, coleta e vitória são sintetizados separadamente. Música e efeitos têm volumes independentes e persistentes. Forma, padrões e texto ensinam as regras sem depender de áudio. Ver [áudio](src/audio/README.md).
 
 </details>
 
@@ -180,7 +182,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as 98 soluções da campanha, incluindo duas arenas de chefe em cada um dos mundos Praia, Recifes, Baía e Farol, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
+Os testes cobrem as 106 soluções da campanha, incluindo 16 arenas opcionais de chefes, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
 
 </details>
 
