@@ -83,7 +83,7 @@
         <p id="previsao" class="previsao"></p>
       </div>
       <div id="moldura" class="moldura">
-        <canvas id="tabuleiro" width="256" height="192" role="img" aria-label="Mapa da fase" aria-describedby="posicao previsao ancoradouros ondas-seguras lentes-farol">
+        <canvas id="tabuleiro" width="256" height="192" role="img" aria-label="Mapa da fase" aria-describedby="posicao previsao ancoradouros ondas-seguras lentes-farol progresso-recife">
           Texto alternativo do mapa disponível em “Mapa em texto e ajuda”.
         </canvas>
       </div>
@@ -94,6 +94,7 @@
       <p id="ancoradouros" class="inventario" hidden></p>
       <p id="ondas-seguras" class="inventario" hidden></p>
       <p id="lentes-farol" class="inventario" hidden></p>
+      <p id="progresso-recife" class="inventario" hidden></p>
       <p id="dupla-ativa" class="inventario" hidden></p>
       <p id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
 
@@ -118,6 +119,7 @@
         <p>Use setas, WASD ou toque nos botões. R reinicia. Passos bloqueados não contam.</p>
         <pre id="grade" aria-label="Representação por símbolos do tabuleiro"></pre>
         <p>S: início · .: chão firme · =: baixio · #: bloqueio · C: concha · B: fragmento · G: saída · H: pedra alta · A: segundo siri · P: placa · D: portão · T: marco de um parceiro · M: começo do Amarelo · Y: outro marco · ~: água de corrente (apenas com balsa) · I: ponte de luz · L: lente · N: ancoradouro solto · n: ancoradouro firme.</p>
+        <p id="legenda-recife" hidden>R: refúgio marcado · h: refúgio visitado na alta · Q: comporta disponível na baixa · X: comporta fechada.</p>
       </details>
     </section>
 

@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
+import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passagemDoRecifeFechada, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
@@ -198,6 +198,28 @@ function marcarAlvo(ctx: CanvasRenderingContext2D, x: number, y: number, previst
   }
 }
 
+// O losango identifica o refúgio marcado. Comportas fechadas ganham grades;
+// abertas conservam a textura do baixio e exibem só as laterais.
+function desenharSinalDoRecife(ctx: CanvasRenderingContext2D, x: number, y: number, tons: Tons,
+  sinal: 'refugio' | 'refugio-visitado' | 'comporta-fechada' | 'comporta-aberta',
+): void {
+  if (sinal === 'refugio' || sinal === 'refugio-visitado') {
+    bloco(ctx, tons.linha, x + 5, y + 2, 6, 4);
+    bloco(ctx, tons.branco, x + 7, y + 1, 2, 1);
+    bloco(ctx, tons.branco, x + 6, y + 2, 4, 1);
+    bloco(ctx, tons.branco, x + 5, y + 3, 1, 1);
+    bloco(ctx, tons.branco, x + 10, y + 3, 1, 1);
+    bloco(ctx, tons.branco, x + 6, y + 4, 4, 1);
+    bloco(ctx, tons.branco, x + 7, y + 5, 2, 1);
+    if (sinal === 'refugio-visitado') bloco(ctx, tons.branco, x + 6, y + 3, 4, 1);
+    return;
+  }
+  for (const dx of [2, 12]) bloco(ctx, tons.linha, x + dx, y + 5, 2, 6);
+  if (sinal === 'comporta-fechada') {
+    for (const dy of [5, 9]) bloco(ctx, tons.linha, x + 4, y + dy, 8, 2);
+  }
+}
+
 export function marcaBloqueioAdjacente(
   posicao: Posicao, atual: Posicao, celula: string, alta: boolean, vizinhas: readonly Posicao[],
 ): boolean {
@@ -328,13 +350,22 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   const pertoDaTroca = passosAteTrocaFeixe(fase, estado.passos);
   const seguinte = pertoDaTroca === 1 ? feixeNoTurno(fase, estado.passos + 1) : feixe;
   const siris = posicoesDosSiris(estado);
+  const recife = fase.recife;
   const algumaPlaca = siris.some(pos => fase.mapa[pos.linha]?.[pos.coluna] === 'P');
   fase.mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
     const x = origemX + coluna * TAMANHO_TILE;
     const y = origemY + linha * TAMANHO_TILE;
     const pos = { coluna, linha };
     const placaOcupada = celula === 'P' ? siris.some(siri => mesmaCasa(siri, pos)) : algumaPlaca;
-    desenharCasa(ctx, celula, alta, x, y, tons, placaOcupada);
+    const comportaFechada = passagemDoRecifeFechada(fase, pos, estado.temFragmento);
+    desenharCasa(ctx, comportaFechada ? '~' : celula, alta, x, y, tons, placaOcupada);
+    if (recife && 'abrigos' in recife && recife.abrigos.some(abrigo => mesmaCasa(abrigo, pos))) {
+      const visitado = estado.abrigosVisitados?.some(abrigo => mesmaCasa(abrigo, pos));
+      desenharSinalDoRecife(ctx, x, y, tons, visitado ? 'refugio-visitado' : 'refugio');
+    }
+    if (recife && 'ida' in recife && (mesmaCasa(recife.ida, pos) || mesmaCasa(recife.volta, pos))) {
+      desenharSinalDoRecife(ctx, x, y, tons, comportaFechada ? 'comporta-fechada' : 'comporta-aberta');
+    }
     if (celula === 'B' && !estado.fragmentos.some(coleta => mesmaCasa(pos, coleta))) {
       if (fase.orcamentoMoedas) moeda(ctx, x, y, tons);
       else pintarPixels(ctx, FRAGMENTO, x + 5, y + 5, cores);

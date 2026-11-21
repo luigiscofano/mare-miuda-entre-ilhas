@@ -1,4 +1,5 @@
 import { PONTA_DA_RESSACA } from '../fases/ponta-da-ressaca.ts';
+import { GUARDIAO_DAS_POCAS, VIGIA_DO_RECIFE } from '../fases/chefes-recifes.ts';
 import { VIGIA_DAS_ONDAS } from '../fases/vigia-das-ondas.ts';
 import { ULTIMA_VIRADA } from '../fases/ultima-virada.ts';
 import { ECO_DOS_TRES_CAIS, TRES_LUZES_EM_REVEZAMENTO } from '../fases/trio-avancado.ts';
@@ -33,7 +34,7 @@ export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
   | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
-  | typeof VIGIA_DAS_ONDAS.id | typeof PONTA_DA_RESSACA.id | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof GUARDIAO_FAROL.id | typeof ULTIMA_VIRADA.id | typeof TRES_REFUGIOS.id | typeof ECO_DOS_TRES_CAIS.id | typeof TRES_LUZES_EM_REVEZAMENTO.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
+  | typeof GUARDIAO_DAS_POCAS.id | typeof VIGIA_DO_RECIFE.id | typeof VIGIA_DAS_ONDAS.id | typeof PONTA_DA_RESSACA.id | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof GUARDIAO_FAROL.id | typeof ULTIMA_VIRADA.id | typeof TRES_REFUGIOS.id | typeof ECO_DOS_TRES_CAIS.id | typeof TRES_LUZES_EM_REVEZAMENTO.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
 export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
   posicao: Posicao;
@@ -149,6 +150,8 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'recife-duas-pocas', posicao: P(4, 1), nome: 'Duas poças do recife' },
     { id: 'recife-retorno', posicao: P(6, 1), nome: 'A volta do recife' },
     ...ENTRADAS_RECIFES,
+    { id: GUARDIAO_DAS_POCAS.id, posicao: P(7, 1), nome: GUARDIAO_DAS_POCAS.nome, opcional: true, chefe: true },
+    { id: VIGIA_DO_RECIFE.id, posicao: P(7, 2), nome: VIGIA_DO_RECIFE.nome, opcional: true, chefe: true },
   ],
   mangue: [
     PORTO,
@@ -324,6 +327,10 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['recife-duas-pocas'], 'Duas poças do recife abre um desvio ao sul.'),
     trilha(NOS_RECIFES[6], NOS_RECIFES[8], 'esquerda', 'direita', [],
       ['recife-tres-aneis'], 'Os três anéis abrem o desvio do mosaico.'),
+    trilha(P(6, 1), P(7, 1), 'direita', 'esquerda', [],
+      ['recife-retorno'], 'Conclua A volta do recife para desafiar o Guardião das Poças.'),
+    trilha(P(7, 1), P(7, 2), 'baixo', 'cima', [],
+      [GUARDIAO_DAS_POCAS.id], 'Vença o Guardião das Poças para desafiar o Vigia do Recife.'),
   ],
   mangue: [
     ...sustentar('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao', true),

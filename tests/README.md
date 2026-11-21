@@ -91,3 +91,7 @@ Testa a onda atingindo areia firme, o refúgio protegendo, a rota de 16 passos s
 ## Ponta da Ressaca
 
 O teste reproduz a alternância das faixas, a proteção na pedra alta e as duas passagens obrigatórias em baixios de janelas diferentes. A busca encontra 22 passos e confere a recuperação de todos os estados sem derrota. O Playwright cobre a transição do Vigia para a segunda arena, os avisos de norte e sul, a vitória e a recarga com teclado e toque emulado.
+
+## Chefes dos Recifes
+
+`chefes-recifes.test.ts` audita as soluções de 19 e 31 passos, a recuperação após levadas, a ida/volta das comportas e o ramo opcional. O cenário de navegador cobre as duas vitórias, a mudança da passagem e a persistência sem alterar o contador regular. Consulte a CI para a evidência de teclado e toque emulado.

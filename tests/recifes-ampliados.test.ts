@@ -6,6 +6,7 @@ import {
 } from '../src/campanha/index.ts';
 import type { IdFase, Progresso } from '../src/campanha/index.ts';
 import { FASES_RECIFES, TODAS_AS_FASES } from '../src/fases/index.ts';
+import { GUARDIAO_DAS_POCAS, VIGIA_DO_RECIFE } from '../src/fases/chefes-recifes.ts';
 import { FASES_RECIFES_AMPLIADOS } from '../src/fases/recifes-ampliados.ts';
 import { DIRECOES, mesmaCasa } from '../src/motor/index.ts';
 import { carregar, salvar } from '../src/persistencia/index.ts';
@@ -39,8 +40,9 @@ test('o porto, a rota histórica e a abertura da Enseada não exigem o ramo novo
 
 test('todos os marcos têm direção única e ida e volta válidas', () => {
   const provas = FASES_RECIFES.map(fase => fase.id as IdFase);
+  provas.push(GUARDIAO_DAS_POCAS.id, VIGIA_DO_RECIFE.id);
   const trilhas = trilhasDo('recifes');
-  assert.equal(nosDo('recifes').length, 13);
+  assert.equal(nosDo('recifes').length, 15);
   for (const t of trilhas) {
     const progresso = noCais(provas);
     assert.ok(rotaLivre(progresso, t));
