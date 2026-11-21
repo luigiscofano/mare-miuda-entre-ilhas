@@ -34,3 +34,4 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 | [Ponta da Ressaca](23-ponta-da-ressaca/README.md) | Segunda arena opcional da Praia, com duas faixas alternadas, refúgios e duas janelas de passagem. |
 | [Chefes dos Recifes](24-chefes-recifes/README.md) | Refúgios registrados na alta e retorno por uma comporta que muda com a coleta. |
 | [Chefes do Mangue](25-chefes-mangue/README.md) | Raízes numeradas, revezamento e rasantes avisados. |
+| [Chefes da Enseada](26-chefes-enseada/README.md) | Rasantes horizontais e verticais, refúgios e uma travessia em dupla. |

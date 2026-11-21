@@ -469,6 +469,60 @@ def conferir_enseada_ampliada(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+def conferir_chefes_enseada(pagina, toque=False):
+    pagina.goto(PRIMEIRA_PAGINA)
+    pagina.evaluate("""() => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify({
+        versao: 1, progresso: {mundo: 'enseada', posicao: {coluna: 6, linha: 1},
+            viuTutorial: true, concluidas: ['enseada-sombra-restinga', 'enseada-abrigo-ondas',
+              'enseada-farol-baixo']},
+        audio: {musica: 0, efeitos: 0},
+    }))""")
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    jogar(pagina, 'R', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Garça da Restinga · chefe opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    jogar(pagina, 'RRRRR', toque)
+    expect(pagina.locator('#previsao')).to_contain_text('Rasante no próximo passo')
+    expect(pagina.locator('#previsao')).to_contain_text('coluna 5, linha 2; coluna 6, linha 2')
+    expect(pagina.locator('#previsao')).not_to_contain_text('coluna 8, linha 2')
+    expect(pagina.locator('#garca-rasante')).to_be_visible()
+    salvar_captura(pagina, f"enseada-garca-restinga-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'D', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('A garça alcançou um siri no rasante')
+    expect(pagina.locator('#erros')).to_have_text('1 / 3')
+    tocar(pagina, '#reiniciar', toque)
+    jogar(pagina, 'RLRLRRRRRDRRDRRRRR', toque)
+    expect(pagina.locator('#passos')).to_have_text('18')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    expect(pagina.locator('#feedback')).to_contain_text('Arena concluída: Garça da Restinga')
+    tocar(pagina, '#voltar-fase', toque)
+
+    jogar(pagina, 'D', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Vigia das Falésias · chefe opcional')
+    tocar(pagina, '#entrar-fase', toque)
+    jogar(pagina, 'RRRRXDURRR', toque)
+    expect(pagina.locator('#dupla-ativa')).to_contain_text('Verde')
+    expect(pagina.locator('#previsao')).to_contain_text('coluna 5, linha 1; coluna 5, linha 2')
+    salvar_captura(pagina, f"enseada-vigia-falesias-{pagina.viewport_size['width']}px")
+    jogar(pagina, 'L', toque)
+    expect(pagina.locator('#feedback')).to_contain_text('A garça alcançou um siri no rasante')
+    expect(pagina.locator('#erros')).to_have_text('1 / 3')
+    tocar(pagina, '#reiniciar', toque)
+    jogar(pagina, 'UDRXRRRRRRXRRRRRRRRRXRRRR', toque)
+    expect(pagina.locator('#passos')).to_have_text('22')
+    expect(pagina.locator('#erros')).to_have_text('0 / 3')
+    expect(pagina.locator('#feedback')).to_contain_text('Arena concluída: Vigia das Falésias')
+    tocar(pagina, '#voltar-fase', toque)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Vigia das Falésias · chefe opcional · concluída')
+    expect(pagina.locator('#progresso-praia')).to_contain_text('3/10')
+    jogar(pagina, 'UL', toque, mapa=True)
+    expect(pagina.locator('#posicao-praia')).to_contain_text('Corrida ao farol baixo')
+    assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+
+
 def conferir_deriva_ampliada(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     # Retoma no quarto marco do ramo para testar o tabuleiro mais largo e a dupla.
@@ -1126,6 +1180,7 @@ with sync_playwright() as p:
     conferir_mangue_ampliado(desktop)
     conferir_chefes_mangue(desktop)
     conferir_enseada_ampliada(desktop)
+    conferir_chefes_enseada(desktop)
     conferir_deriva_ampliada(desktop)
     conferir_grutas_ampliadas(desktop)
     conferir_trio_grutas(desktop)
@@ -1149,6 +1204,7 @@ with sync_playwright() as p:
         conferir_mangue_ampliado(aparelho, toque=True)
         conferir_chefes_mangue(aparelho, toque=True)
         conferir_enseada_ampliada(aparelho, toque=True)
+        conferir_chefes_enseada(aparelho, toque=True)
         conferir_deriva_ampliada(aparelho, toque=True)
         conferir_grutas_ampliadas(aparelho, toque=True)
         conferir_trio_grutas(aparelho, toque=True)

@@ -54,6 +54,8 @@ As três fases iniciais permanecem; sete novas regulares ampliam o treino de tro
 
 ### Ampliação jogável: Enseada da Garça
 
+**Garça da Restinga** desloca um rasante horizontal entre passagens e deixa pedras altas seguras. **Vigia das Falésias** alterna faixas verticais nas duas margens: Verde segura a placa, Coral atravessa e os dois chegam a destinos diferentes. As arenas são opcionais, distintas da patrulha regular.
+
 Depois do primeiro rasante, o ramo ensina a escolher a margem, combinar previsões da água e da garça, recolher fragmentos fora do próximo alvo e revezar a placa sem deixar o parceiro na mira. A garça é determinística: suas marcas são legíveis antes do movimento. A rota original e seus dois desvios continuam disponíveis; os chefes não fazem parte deste lote. [Fichas e soluções](../processo-de-criacao/11-enseada-ampliada/README.md).
 
 ### Ampliação jogável: Ilhas à Deriva
@@ -85,7 +87,3 @@ A primeira travessia em trio é **Três refúgios**, um desvio das Grutas que en
 O **Guardião do Farol** introduz pontes temporárias e três lentes, sem repetir a ancoragem ou as faixas de ataque da Baía. A **Última Virada** exige alternar o trio, casar a orientação com outra placa ocupada e reunir os três siris nos destinos. [Ficha e solução](../processo-de-criacao/21-ultima-virada/README.md).
 
 **Vigia das ondas**, primeiro chefe opcional da Praia, introduz uma faixa de espuma previsível. Ensina abrigo em pedra alta e passagem de baixio, sem coleta e sem mudar Ponta da garça. **Ponta da Ressaca**, segundo chefe opcional, alterna a espuma entre norte e sul. A rota exige duas janelas de baixio, uma saída da faixa pela margem e chegada à pedra alta no turno da onda.
-
-### Arenas jogáveis: Mangue
-
-Guardião da Raiz estreia vínculos entre placas e raízes numeradas, com revezamento nos dois lados. Dupla no Mangue troca o segundo portão por um rasante previsível que pune deixar o outro siri na placa. As menores rotas sem levada são 28 e 34 passos. [Fichas e avisos](../processo-de-criacao/25-chefes-mangue/README.md).

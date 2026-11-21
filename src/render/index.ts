@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passagemDoRecifeFechada, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, portaoLiberado, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
+import { balsasNoTurno, casasDoRasante, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passagemDoRecifeFechada, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, portaoLiberado, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
@@ -342,7 +342,7 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   const vizinhas = estado.situacao === 'jogando'
     ? DIRECOES.map(d => destinoPermitido(fase, estado, d)).filter(v => v !== undefined)
     : [];
-  const alvo = alvoDaGarca(fase.ameaca, estado.passos + 1);
+  const rasante = casasDoRasante(fase, estado.passos + 1);
   const faltam = passosAteVirada(estado.passos);
   const faixa = !alta && estado.situacao === 'jogando' ? faixaRessacaNoTurno(fase, estado.passos + faltam) : undefined;
   const balsas = balsasNoTurno(fase, estado.passos);
@@ -394,8 +394,8 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       for (const h of [5, 8, 11]) bloco(ctx, '#eadab0', x + 4, y + h, 8, 1);
     }
     if (faixa && faixaAfeta(fase, faixa, pos)) desenharAvisoRessaca(ctx, x, y, tons, faltam === 1);
-    if (alvo && mesmaCasa(alvo, pos)) marcarAlvo(ctx, x, y, true, tons);
-    else if (fase.ameaca && !fase.ameaca.rota?.length && mesmaCasa(fase.ameaca.alvo, pos)) marcarAlvo(ctx, x, y, false, tons);
+    if (rasante.some(casa => mesmaCasa(casa, pos))) marcarAlvo(ctx, x, y, true, tons);
+    else if (fase.ameaca && !fase.ameaca.rasante && !fase.ameaca.rota?.length && mesmaCasa(fase.ameaca.alvo, pos)) marcarAlvo(ctx, x, y, false, tons);
   }));
 
   const ativo = siriAtivo(estado);

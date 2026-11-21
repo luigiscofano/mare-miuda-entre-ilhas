@@ -2,6 +2,7 @@ import { GUARDIAO_DA_RAIZ, DUPLA_NO_MANGUE } from '../fases/chefes-mangue.ts';
 import { PONTA_DA_RESSACA } from '../fases/ponta-da-ressaca.ts';
 import { GUARDIAO_DAS_POCAS, VIGIA_DO_RECIFE } from '../fases/chefes-recifes.ts';
 import { VIGIA_DAS_ONDAS } from '../fases/vigia-das-ondas.ts';
+import { GARCA_DA_RESTINGA, VIGIA_DAS_FALESIAS } from '../fases/chefes-enseada.ts';
 import { ULTIMA_VIRADA } from '../fases/ultima-virada.ts';
 import { ECO_DOS_TRES_CAIS, TRES_LUZES_EM_REVEZAMENTO } from '../fases/trio-avancado.ts';
 import { TRES_REFUGIOS } from '../fases/trio-grutas.ts';
@@ -35,7 +36,7 @@ export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
   | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
-  | typeof GUARDIAO_DAS_POCAS.id | typeof VIGIA_DO_RECIFE.id | typeof VIGIA_DAS_ONDAS.id | typeof PONTA_DA_RESSACA.id | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof GUARDIAO_DA_RAIZ.id | typeof DUPLA_NO_MANGUE.id | typeof GUARDIAO_FAROL.id | typeof ULTIMA_VIRADA.id | typeof TRES_REFUGIOS.id | typeof ECO_DOS_TRES_CAIS.id | typeof TRES_LUZES_EM_REVEZAMENTO.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
+  | typeof GARCA_DA_RESTINGA.id | typeof VIGIA_DAS_FALESIAS.id | typeof GUARDIAO_DAS_POCAS.id | typeof VIGIA_DO_RECIFE.id | typeof VIGIA_DAS_ONDAS.id | typeof PONTA_DA_RESSACA.id | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof GUARDIAO_DA_RAIZ.id | typeof DUPLA_NO_MANGUE.id | typeof GUARDIAO_FAROL.id | typeof ULTIMA_VIRADA.id | typeof TRES_REFUGIOS.id | typeof ECO_DOS_TRES_CAIS.id | typeof TRES_LUZES_EM_REVEZAMENTO.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
 export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
   posicao: Posicao;
@@ -81,6 +82,8 @@ const NOS_MANGUE = [
 const ENTRADAS_MANGUE: readonly Entrada[] = FASES_MANGUE_AMPLIADO.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_MANGUE[i],
 }));
+const ARENA_RESTINGA = P(8, 1);
+const ARENA_FALESIAS = P(9, 3);
 const NOS_ENSEADA = [
   P(2, 0), P(4, 0), P(6, -1), P(8, -1), P(10, -1), P(11, 1), P(11, 3),
 ] as const;
@@ -173,6 +176,8 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'enseada-dupla-vigia', posicao: P(7, 0), nome: 'Vigia em dupla', opcional: true },
     { id: 'enseada-dupla-revezamento', posicao: P(9, 0), nome: 'Revezamento na restinga', opcional: true },
     ...ENTRADAS_ENSEADA,
+    { id: GARCA_DA_RESTINGA.id, nome: GARCA_DA_RESTINGA.nome, posicao: ARENA_RESTINGA, opcional: true, chefe: true },
+    { id: VIGIA_DAS_FALESIAS.id, nome: VIGIA_DAS_FALESIAS.nome, posicao: ARENA_FALESIAS, opcional: true, chefe: true },
   ],
   deriva: [
     PORTO,
@@ -364,6 +369,10 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['enseada-farol-baixo'], 'Conclua Corrida ao farol baixo para abrir o desvio em dupla.'),
     trilha(P(7, 0), P(9, 0), 'direita', 'esquerda', [P(8.125, 0.375)],
       ['enseada-dupla-vigia'], 'Conclua Vigia em dupla para seguir pela restinga.'),
+    trilha(P(6, 1), ARENA_RESTINGA, 'direita', 'esquerda', [],
+      ['enseada-farol-baixo'], 'Conclua Corrida ao farol baixo para enfrentar Garça da Restinga.'),
+    trilha(ARENA_RESTINGA, ARENA_FALESIAS, 'baixo', 'cima', [P(8, 2), P(9, 2)],
+      [GARCA_DA_RESTINGA.id], 'Enfrente Garça da Restinga para abrir Vigia das Falésias.'),
     trilha(P(2, 1), NOS_ENSEADA[0], 'cima', 'baixo', [],
       ['enseada-sombra-restinga'], 'Conclua Sombra na restinga para abrir o ramo norte da enseada.'),
     trilha(NOS_ENSEADA[0], NOS_ENSEADA[1], 'direita', 'esquerda', [],

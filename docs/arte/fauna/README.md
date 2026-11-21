@@ -15,7 +15,7 @@ O Coral é o recorte original da Placa de Areia. Verde e Amarelo mantêm exatame
 | --- | --- |
 | ![Patrulha](../../../assets/fauna/garca-patrulha.png) | ![Rasante](../../../assets/fauna/garca-rasante.png) |
 
-A garça aparece ao lado da previsão, sem cobrir nenhuma casa. Patrulha é a postura padrão da ameaça; o rasante aparece quando o próximo passo está marcado. O X e o texto de destino continuam sendo os avisos de risco no tabuleiro. A pose não é uma regra ou um relógio novo.
+A garça aparece ao lado da previsão, sem cobrir nenhuma casa. Patrulha é a postura padrão da ameaça; o rasante aparece quando o próximo passo está marcado. O X e o texto de destino continuam sendo os avisos de risco no tabuleiro. A pose não é uma regra ou um relógio novo. Nas arenas da Enseada o mesmo X marca cada casa da faixa; pedras altas ficam sem marca e servem de refúgio.
 
 ## Fontes e exportação
 

@@ -84,8 +84,8 @@ test('novas trilhas têm volta e saves, e não alteram o acesso legado à Deriva
     assert.equal(entradaEm(ramo.posicao, 'enseada')?.id, id);
     ramo = concluirFase(ramo, id);
   }
-  assert.equal(nosDo('enseada').length, 13);
-  const todas = concluirFase(ramo, 'enseada-dupla-vigia');
+  assert.equal(nosDo('enseada').length, 15);
+  const todas = concluirFase(concluirFase(ramo, 'enseada-dupla-vigia'), 'enseada-chefe-garca-da-restinga');
   const trilhas = trilhasDo('enseada');
   for (const t of trilhas) {
     assert.deepEqual(moverNoMapa({ ...todas, posicao: t.de }, t.ida).progresso.posicao, t.para);

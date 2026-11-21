@@ -1,4 +1,4 @@
-import { alvoDaGarca, balsasNoTurno, executarPasso, faixaRessacaNoTurno, feixeNoTurno, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, passagemDoRecifeFechada, PASSOS_POR_MARE, passosAteTrocaFeixe, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, TOTAL_ANCORADOUROS, totalFragmentos } from '../motor/index.ts';
+import { balsasNoTurno, casasDoRasante, executarPasso, faixaRessacaNoTurno, feixeNoTurno, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, passagemDoRecifeFechada, PASSOS_POR_MARE, passosAteTrocaFeixe, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, TOTAL_ANCORADOUROS, totalFragmentos } from '../motor/index.ts';
 import type { Acao, Direcao, Evento, OrientacaoFarol } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { ALTURA, DENSIDADE, desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
@@ -188,6 +188,7 @@ function descricao(evento: Evento): string {
     case 'balsa': return 'A balsa levou o siri ao outro cais.';
     case 'virada': return evento.alta ? 'A maré subiu.' : 'A maré baixou.';
     case 'levada': if (evento.motivos.includes('farol')) return 'A ponte de luz apagou sob um siri!';
+      if (fase.ameaca?.rasante && evento.motivos.includes('garca')) return 'A garça alcançou um siri no rasante!';
       if (evento.motivos.includes('ressaca')) return 'A faixa da ressaca te alcançou!';
       return evento.motivos.length > 1 ? 'A onda e a garça te alcançaram!'
       : evento.motivos.includes('mare') ? 'A maré te levou!' : 'A garça te alcançou!';
@@ -283,11 +284,14 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   duplaAtiva.textContent = `Siri ativo: ${SIRIS[ativo]}, ${INSIGNIAS[ativo]} (Espaço ou botão Trocar siri)`;
   buscar('#trocar-siri').hidden = !estado.dupla || finalizada;
   const coordenadas = (p: { coluna: number; linha: number }) => `coluna ${p.coluna + 1}, linha ${p.linha + 1}`;
-  const alvo = alvoDaGarca(fase.ameaca, estado.passos + 1);
+  const rasante = casasDoRasante(fase, estado.passos + 1);
+  const alvo = rasante[0];
   const mostrarGarca = Boolean(fase.ameaca && !finalizada);
   buscar('#garca-patrulha').hidden = !mostrarGarca || Boolean(alvo);
   buscar('#garca-rasante').hidden = !mostrarGarca || !alvo;
-  const sinalGarca = alvo ? ` Garça no próximo passo: ${coordenadas(alvo)}.` : mostrarGarca ? ' Garça em patrulha.' : '';
+  const sinalGarca = !alvo ? (mostrarGarca ? ' Garça em patrulha.' : '') : fase.ameaca?.rasante
+    ? ` Rasante no próximo passo: ${rasante.map(coordenadas).join('; ')}. Pedra alta protege.`
+    : ` Garça no próximo passo: ${coordenadas(alvo)}.`;
   const cais = balsasNoTurno(fase, estado.passos);
   const destinos = balsasNoTurno(fase, estado.passos + faltam);
   const previsoes = cais.map((atual, i) => `Balsa ${i + 1}: ${coordenadas(atual)} → ${coordenadas(destinos[i])}`);
@@ -323,6 +327,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     mensagens.push(estado.levadas >= LIMITE_LEVADAS ? 'Três erros: tente de novo.' : 'De volta à última casa firme.');
   }
   if (estado.situacao === 'vitoria') {
+    if (fase.ameaca?.rasante) mensagens.push(`Arena concluída: ${fase.nome}. Volte à Enseada.`);
     if (fase.recife) mensagens.push(`Arena vencida: ${fase.nome}. Volte ao mapa.`);
     if (fase.farol?.orientacoes.some(o => o.placa)) mensagens.push(`Arena vencida: ${fase.nome}. Volte ao mapa.`);
     else if (fase.farol) mensagens.push('Guardião do Farol vencido. Volte ao mapa.');
@@ -331,7 +336,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     else if (fase.ressaca) mensagens.push(`${fase.nome} vencido. Volte à Baía.`);
     if (bancada && indice < FASES_BANCADA.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');
     if (!bancada && fase.id === 'ilhota-perolada') mensagens.push('Concha Perolada encontrada. Atalho de volta aberto!');
-    else if (!bancada && !fase.ressaca && !fase.farol && !fase.recife && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');
+    else if (!bancada && !fase.ressaca && !fase.farol && !fase.ameaca?.rasante && !fase.recife && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');
   }
   buscar('#feedback').textContent = mensagem || mensagens.join(' ');
   buscar('#seguir-fase').hidden = bancada || fase.id !== 'ponta-da-garca' || estado.situacao !== 'vitoria';
