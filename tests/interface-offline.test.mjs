@@ -330,3 +330,13 @@ test('HTML offline abre e revisita o desfecho no mesmo marco com apenas seis fas
   pegar('#voltar-creditos').click();
   assert.match(pegar('#posicao-praia').textContent, /Salão das lanternas · concluída/);
 });
+
+test('Build autônomo conserva os bytes nativos do fundo do Arquipélago', async () => {
+  const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
+  const original = await readFile(new URL('../assets/arquipelago-meia-lua.png', import.meta.url));
+  const copiado = await readFile(new URL('../dist/assets/arquipelago-meia-lua.png', import.meta.url));
+  const embutido = html.match(/id="arte-arquipelago" src="data:image\/png;base64,([^"]+)"/)?.[1];
+  assert.ok(embutido);
+  assert.deepEqual(Buffer.from(embutido, 'base64'), original);
+  assert.deepEqual(copiado, original);
+});

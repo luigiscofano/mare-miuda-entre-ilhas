@@ -13,3 +13,5 @@ A versão em inglês e a opção Corrente de Espuma (B) permanecem no [acervo do
 `cabo-baixo-192.png` é o fundo nativo do estudo aprovado, preservado byte por byte (192 × 144). A camada de seleção é desenhada pelo jogo; o protagonista vem do recorte da placa, não do fundo. Estudos de novos fundos permanecem separados.
 
 `fauna/` guarda os cinco PNGs aprovados e a folha nativa de 155 × 23. A cópia do Coral na folha documenta a referência; o jogo continua a recortá-lo da marca. Verde e Amarelo vêm da folha e preservam a geometria. As duas poses da garça são usadas na previsão da Travessia. [Fontes e exportação](../docs/arte/fauna/README.md).
+
+`arquipelago-meia-lua.png` é o fundo RGB de 512 × 384, usado só pelo seletor de mundos. O [caderno Meia-Lua](../docs/processo-de-criacao/33-seletor-arquipelago/README.md) preserva a camada transparente de ilhas e a fonte do exportador; nenhuma rota vem dentro do PNG de execução.

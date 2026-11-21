@@ -5,6 +5,7 @@ import type { Mundo, Progresso } from '../campanha/index.ts';
 import { caminhoDoCabo, marcadorCabo } from '../campanha/cabo-baixo.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
 import { pintarCosta, temaDaCosta } from './travessia-praia.ts';
+import { pintarSeletorArquipelago, podePintarArquipelago } from './seletor-arquipelago.ts';
 
 export const LARGURA = 256;
 export const ALTURA = 192;
@@ -519,8 +520,18 @@ export function desenharCabo(
   }
 }
 
-export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progresso, logo: HTMLImageElement, transito = progresso.posicao): void {
+export function desenharPraia(ctx: CanvasRenderingContext2D, progresso: Progresso, logo: HTMLImageElement,
+  transito = progresso.posicao, arquipelago?: HTMLImageElement): void {
   const mundo = mundoAtual(progresso);
+  if (mundo === 'arquipelago' && podePintarArquipelago(arquipelago)) {
+    pintarSeletorArquipelago(ctx, progresso, ponto => {
+      const [x, y] = centroNo(ponto);
+      return [x * DENSIDADE, y * DENSIDADE];
+    }, arquipelago);
+    const [x, y] = centroNo(transito);
+    desenharSiri(ctx, logo, x, y - 1);
+    return;
+  }
   const tons = CORES_MUNDO[mundo];
   const trilhas = trilhasDo(mundo);
   ctx.imageSmoothingEnabled = false;

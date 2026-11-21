@@ -45,3 +45,5 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 [31 · Travessias da Enseada e da Deriva](31-travessias-enseada-deriva/README.md): duas propostas visuais com quadros das duas marés.
 
 [32 · Travessias das Grutas, da Baía e do Farol](32-travessias-grutas-ressaca-farol/README.md): últimas três propostas de tabuleiro, com os mecanismos em contraste nas duas marés.
+
+[33 · Seletor de mundos Meia-Lua](33-seletor-arquipelago/README.md): estudo sem casas aplicado ao Arquipélago, com caminhos e bloqueios dinâmicos.

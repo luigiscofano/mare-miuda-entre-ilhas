@@ -233,13 +233,25 @@ SOLUCOES = {
 }
 
 
+def cor_do_marco_da_enseada(pagina):
+    return pagina.locator('#mapa-praia').evaluate(
+        '(canvas) => Array.from(canvas.getContext("2d").getImageData(320, 152, 1, 1).data)'
+    )
+
+
 def conferir_lote(pagina, toque=False, recifes_primeiro=True):
     tocar(pagina, '#voltar-creditos', toque)
     tocar(pagina, '#comecar', toque)
     expect(pagina.locator('#entrar-fase')).to_have_text('Seguir para o arquipélago')
     tocar(pagina, '#entrar-fase', toque)
     expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
+    pagina.wait_for_function(
+        "() => {const img = document.querySelector('#arte-arquipelago');"
+        "return img.complete && img.naturalWidth === 512 && img.naturalHeight === 384;}"
+    )
     conferir_siri_canonico(pagina, '#mapa-praia')
+    assert cor_do_marco_da_enseada(pagina) == [224, 238, 225, 255]
+    salvar_captura(pagina, f'arquipelago-cadeado-{pagina.viewport_size["width"]}px')
     ordem = ['Recifes Expostos', 'Mangue dos Siris Duplos']
     if not recifes_primeiro:
         ordem.reverse()
@@ -277,9 +289,11 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
         expect(pagina.locator('#titulo-praia')).to_have_text('Arquipélago')
         if indice == 0:
             expect(pagina.locator('#enseada-aberta')).to_be_hidden()
+            assert cor_do_marco_da_enseada(pagina) == [224, 238, 225, 255]
 
     jogar(pagina, 'LUR' if recifes_primeiro else 'R', toque, mapa=True)
     expect(pagina.locator('#enseada-aberta')).to_be_visible()
+    assert cor_do_marco_da_enseada(pagina) == [49, 82, 96, 255]
     if not toque:
         salvar_captura(pagina, 'arquipelago-desktop')
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')

@@ -37,6 +37,7 @@ function storageLocal() {
 
 const tabuleiro = montarCanvas('#tabuleiro', '#moldura');
 const arteCabo = buscar<HTMLImageElement>('#cabo-baixo');
+const arteArquipelago = buscar<HTMLImageElement>('#arte-arquipelago');
 const fauna = buscar<HTMLImageElement>('#folha-fauna');
 const mapaPraia = montarCanvas('#mapa-praia', '#moldura-praia');
 const storage = storageLocal();
@@ -163,7 +164,7 @@ function atualizarPraia(mensagem = ''): void {
   else if (entrada?.destino) entrar.textContent = entrada.id.startsWith('rumo-') ? 'Visitar região' : entrada.nome;
   else entrar.textContent = 'Entrar na fase';
   if (podeDesenharCabo(mundo, arteCabo)) desenharCabo(mapaPraia.ctx, p, arteCabo, logo);
-  else desenharPraia(mapaPraia.ctx, p, logo);
+  else desenharPraia(mapaPraia.ctx, p, logo, undefined, arteArquipelago);
 }
 
 logo.addEventListener('load', () => {
@@ -177,6 +178,10 @@ fauna.addEventListener('load', () => {
 
 arteCabo.addEventListener('load', () => {
   if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'praia') atualizarPraia();
+});
+
+arteArquipelago.addEventListener('load', () => {
+  if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'arquipelago') atualizarPraia();
 });
 
 function abrirPraia(mensagem = ''): void {
@@ -433,7 +438,7 @@ function mover(direcao: Direcao): void {
       if (fracao >= 1) { concluir(); return; }
       const ponto = percurso.ponto(fracao);
       if (caminhoVisual) desenharCabo(mapaPraia.ctx, save.progresso, arteCabo, logo, ponto);
-      else desenharPraia(mapaPraia.ctx, save.progresso, logo, ponto);
+      else desenharPraia(mapaPraia.ctx, save.progresso, logo, ponto, arteArquipelago);
       quadroMapa = window.requestAnimationFrame(animar);
     };
     quadroMapa = window.requestAnimationFrame(animar);
