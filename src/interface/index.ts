@@ -1,4 +1,4 @@
-import { balsasNoTurno, casasDoRasante, executarPasso, faixaRessacaNoTurno, feixeNoTurno, iniciar, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, passagemDoRecifeFechada, PASSOS_POR_MARE, passosAteTrocaFeixe, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, totalAncoradouros, totalFragmentos } from '../motor/index.ts';
+import { balsasNoTurno, casasDoRasante, executarPasso, faixaRessacaNoTurno, feixeNoTurno, iniciar, janelaGrutaAtiva, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, nomeDaJanelaGruta, passagemDoRecifeFechada, PASSOS_POR_MARE, passosAteTrocaFeixe, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, totalAncoradouros, totalFragmentos } from '../motor/index.ts';
 import type { Acao, Direcao, Evento, OrientacaoFarol } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { ALTURA, DENSIDADE, desenhar, desenharCabo, desenharPraia, LARGURA, podeDesenharCabo } from '../render/index.ts';
@@ -118,7 +118,7 @@ function atualizarPraia(mensagem = ''): void {
     : mundo === 'mangue' ? 'O caminho em frente é a rota para a Enseada. Depois de Raízes vizinhas, suba para o ramo dos siris. À direita de Reencontro na ponta do mangue estão as arenas opcionais.'
     : mundo === 'enseada' ? 'A rota do cais leva às Ilhas à Deriva. Suba depois de Sombra na restinga para explorar o ramo; os dois desvios em dupla continuam no último marco da rota original.'
     : mundo === 'deriva' ? 'A rota do cais leva às Grutas. Suba em A primeira balsa para o ramo norte. Em Corrente cruzada, suba para os desvios em dupla ou vá à direita para os chefes.'
-    : mundo === 'grutas' ? 'A rota do cais leva à Baía da Ressaca. Suba depois de Uma pérola para o portão para explorar as câmaras ao norte.'
+    : mundo === 'grutas' ? 'A rota do cais leva à Baía da Ressaca. Suba depois de Uma pérola para o portão para explorar as câmaras ao norte. Vá à direita depois de Revezamento nas câmaras para as arenas opcionais.'
       : mundo === 'ressaca' ? 'A rota do cais leva ao Farol. Suba depois de Abrigo dos dois cais para explorar o ramo norte. Desça depois de Cais em paralelo para o trio. Depois do Cofre da vazante, siga à esquerda para Vento Sul.'
       : mundo === 'farol'
         ? 'Explore a costa norte ou siga pela rota dos guardiões. Depois de A luz das duas marés, vá à esquerda para o trio ou desça para o Guardião. Vencê-lo abre a Última Virada.'
@@ -183,6 +183,8 @@ function descricao(evento: Evento): string {
     case 'bloqueado': return 'Passo bloqueado. A maré não avançou.';
     case 'gruta-avancou': return evento.etapa === 'K' ? 'Pérola no inventário.'
       : evento.etapa === 'E' ? 'Encaixe A acionado.' : 'Alavanca B acionada.';
+    case 'gruta-fora-da-janela': return `A peça exige: ${nomeDaJanelaGruta(evento.janela)}.`;
+    case 'gruta-sem-placa': return 'O outro siri precisa estar na placa para acionar a alavanca.';
     case 'gruta-precisa-portador': return 'Quem recolheu a pérola precisa levá-la ao Encaixe A.';
     case 'gruta-fora-da-ordem': return `Ainda não. Próxima etapa: ${nomeDaEtapaGruta(evento.proxima)}.`;
     case 'balsa': return 'A balsa levou o siri ao outro cais.';
@@ -242,8 +244,13 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
       : estado.portadorGruta === 'parceiro' ? 'Pérola com o siri verde · '
       : estado.portadorGruta === 'principal' ? 'Pérola com o siri coral · '
       : levando ? 'Pérola no inventário · ' : '';
+    const condicao = fase.condicoesGruta?.find(item => item.etapa === proxima);
+    const placa = condicao?.placa;
+    const janela = condicao ? ` · ${nomeDaJanelaGruta(condicao.janela)} (${
+      janelaGrutaAtiva(condicao.janela, estado.passos + 1) ? 'abre no próximo passo' : 'fechada no próximo passo'})` : '';
+    const apoio = placa ? ` · Placa ${posicoesDosSiris(estado).some(pos => mesmaCasa(pos, placa)) ? 'ocupada' : 'livre'}` : '';
     fragmento.textContent = proxima
-      ? `${inventario}Próxima etapa: ${nomeDaEtapaGruta(proxima)}${coleta}`
+      ? `${inventario}Próxima etapa: ${nomeDaEtapaGruta(proxima)}${janela}${apoio}${coleta}`
       : `Portão aberto${coleta}`;
   }
   const ancoradouros = buscar('#ancoradouros');
@@ -333,8 +340,8 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   }
   if (estado.situacao === 'vitoria') {
     if (fase.ameaca?.rasante) mensagens.push(`Arena concluída: ${fase.nome}. Volte à Enseada.`);
-    const arenaDeriva = fase.id.startsWith('deriva-chefe-');
-    if (fase.recife || arenaDeriva) mensagens.push(`Arena vencida: ${fase.nome}. Volte ao mapa.`);
+    const arenaLocal = fase.id.startsWith('deriva-chefe-') || fase.id.startsWith('grutas-chefe-');
+    if (fase.recife || arenaLocal) mensagens.push(`Arena vencida: ${fase.nome}. Volte ao mapa.`);
     if (fase.farol?.orientacoes.some(o => o.placa)) mensagens.push(`Arena vencida: ${fase.nome}. Volte ao mapa.`);
     else if (fase.farol) mensagens.push('Guardião do Farol vencido. Volte ao mapa.');
     if (fase.ressaca?.objetivo === 'sobreviver') mensagens.push('Ressaca Alta vencida. Volte à Baía.');
@@ -342,7 +349,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     else if (fase.ressaca) mensagens.push(`${fase.nome} vencido. Volte à Baía.`);
     if (bancada && indice < FASES_BANCADA.length - 1) mensagens.push('Você já pode selecionar a próxima fase.');
     if (!bancada && fase.id === 'ilhota-perolada') mensagens.push('Concha Perolada encontrada. Atalho de volta aberto!');
-    else if (!bancada && !fase.ressaca && !fase.farol && !fase.ameaca?.rasante && !fase.recife && !arenaDeriva && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');
+    else if (!bancada && !fase.ressaca && !fase.farol && !fase.ameaca?.rasante && !fase.recife && !arenaLocal && fase.id !== 'ponta-da-garca') mensagens.push('Volte à praia para continuar.');
   }
   buscar('#feedback').textContent = mensagem || mensagens.join(' ');
   buscar('#seguir-fase').hidden = bancada || fase.id !== 'ponta-da-garca' || estado.situacao !== 'vitoria';

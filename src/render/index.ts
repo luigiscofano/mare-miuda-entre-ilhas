@@ -1,4 +1,4 @@
-import { balsasNoTurno, casasDoRasante, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, mareAlta, mesmaCasa, passagemDoRecifeFechada, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, portaoLiberado, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
+import { balsasNoTurno, casasDoRasante, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, janelaGrutaAtiva, mareAlta, mesmaCasa, passagemDoRecifeFechada, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, portaoLiberado, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
 import type { Estado, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
@@ -250,6 +250,15 @@ function desenharMecanismoDaGruta(
   if (celula === 'K' && concluida) return;
   bloco(ctx, tons.branco, x + 4, y + 4, 7, 7);
   pintarPixels(ctx, MARCAS_GRUTA[celula], x + 5, y + 5, paleta(tons));
+  const condicao = fase.condicoesGruta?.find(item => item.etapa === celula);
+  if (!concluida && condicao) {
+    // A seta indica a direção da maré; o ponto marca a descida exata.
+    const cor = janelaGrutaAtiva(condicao.janela, estado.passos + 1) ? tons.branco : tons.linha;
+    const alta = condicao.janela === 'alta';
+    bloco(ctx, cor, x + 11, y + (alta ? 6 : 8), 3, 1);
+    bloco(ctx, cor, x + 12, y + 6, 1, 3);
+    if (condicao.janela === 'descida') bloco(ctx, cor, x + 14, y + 5, 1, 1);
+  }
   if (concluida) bloco(ctx, tons.linha, x + 5, y + 12, 5, 1);
 }
 

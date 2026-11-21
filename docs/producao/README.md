@@ -20,4 +20,4 @@ O Farol tem duas arenas opcionais. O Guardião ensina pontes temporárias e trê
 
 A Praia tem duas arenas opcionais: [Vigia das ondas](../processo-de-criacao/22-vigia-das-ondas/README.md) ensina a primeira faixa; [Ponta da Ressaca](../processo-de-criacao/23-ponta-da-ressaca/README.md) alterna norte e sul entre duas janelas da maré. Ponta da garça continua como encontro legado.
 
-A Enseada ganha duas [arenas opcionais](../processo-de-criacao/26-chefes-enseada/README.md). As dez regulares da Enseada permanecem. A Deriva também ganhou [duas arenas opcionais](../processo-de-criacao/27-chefes-deriva/README.md), com desembarques sincronizados e carona inativa. O próximo lote de chefes pode seguir para as Grutas da Espuma.
+A Enseada ganha duas [arenas opcionais](../processo-de-criacao/26-chefes-enseada/README.md). As dez regulares da Enseada permanecem. A Deriva também ganhou [duas arenas opcionais](../processo-de-criacao/27-chefes-deriva/README.md), com desembarques sincronizados e carona inativa. As Grutas ganharam [duas arenas opcionais](../processo-de-criacao/28-chefes-grutas/README.md) com janelas de maré e placa em outra margem. O acesso à Baía não depende delas.

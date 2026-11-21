@@ -43,6 +43,13 @@ export function validarMapa(fase: Fase): void {
     : /[KEFO]/.test(celulas)) {
     throw new Error(`Mecanismos da gruta inválidos: ${fase.id}.`);
   }
+  const condicoes = fase.condicoesGruta;
+  if (condicoes && (!condicoes.length || new Set(condicoes.map(item => item.etapa)).size !== condicoes.length
+    || condicoes.some(({ etapa, janela, placa }) => !etapas?.includes(etapa)
+      || !['descida', 'alta', 'baixa'].includes(janela)
+      || (placa !== undefined && (!fase.dupla || lerCelula(fase, placa) !== 'P'))))) {
+    throw new Error(`Condições de maré da gruta inválidas: ${fase.id}.`);
+  }
   const farol = fase.farol;
   if (farol) {
     const { passosPorOrientacao, orientacoes } = farol;

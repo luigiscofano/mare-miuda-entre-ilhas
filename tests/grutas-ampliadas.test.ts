@@ -4,6 +4,7 @@ import {
   concluirFase, entradaEm, moverNoMapa, nosDo, saidaEm, totalDeFasesRegulares, trilhasDo, viajar,
 } from '../src/campanha/index.ts';
 import type { Progresso } from '../src/campanha/index.ts';
+import { SENTINELA_DA_GRUTA } from '../src/fases/chefes-grutas.ts';
 import { FASES_GRUTAS_AMPLIADAS } from '../src/fases/grutas-ampliadas.ts';
 import { DIRECOES, executarPasso, iniciar, mesmaCasa } from '../src/motor/index.ts';
 import type { Acao, Fase } from '../src/motor/index.ts';
@@ -94,11 +95,12 @@ test('os novos marcos persistem, e a rota antiga basta para chegar à Baía', ()
     assert.equal(entradaEm(ramo.posicao, 'grutas')?.id, id);
     ramo = concluirFase(ramo, id);
   }
-  assert.equal(nosDo('grutas').length, 12);
+  assert.equal(nosDo('grutas').length, 14);
+  const comArenas = concluirFase(ramo, SENTINELA_DA_GRUTA.id);
   const trilhas = trilhasDo('grutas');
   for (const t of trilhas) {
-    assert.deepEqual(moverNoMapa({ ...ramo, posicao: t.de }, t.ida).progresso.posicao, t.para);
-    assert.deepEqual(moverNoMapa({ ...ramo, posicao: t.para }, t.volta).progresso.posicao, t.de);
+    assert.deepEqual(moverNoMapa({ ...comArenas, posicao: t.de }, t.ida).progresso.posicao, t.para);
+    assert.deepEqual(moverNoMapa({ ...comArenas, posicao: t.para }, t.volta).progresso.posicao, t.de);
   }
   for (const posicao of nosDo('grutas')) {
     for (const direcao of DIRECOES) {
