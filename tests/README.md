@@ -71,3 +71,7 @@ O motor valida três ondas seguras seguidas, perda causada pelo siri inativo, re
 ## Trio nas Grutas
 
 Os testes verificam troca gratuita, ocupação das casas, placa mantida por um integrante inativo, transporte simultâneo de dois ocupantes de balsa e uma única levada quando os dois inativos são atingidos. A busca prova o mínimo de 19 passos, que todos os siris devem se mover e que o portão é indispensável para uma rota segura. O Playwright entra pelo desvio, confere posição e aviso do ativo, joga e recarrega a conclusão em teclado e toque emulado. O texto acessível foi inspecionado no DOM; o anúncio real com leitor de tela ainda não foi verificado.
+
+## Trio na Baía e no Farol
+
+`trio-avancado.test.ts` reproduz as soluções de 23 e 40 passos, busca alternativas sem levadas, desativa um siri ou mecanismo por vez e verifica ida, volta e save. O teste de navegador acompanha a carona do coral enquanto Verde anda, o transporte de pérola e a abertura do portão, e confirma as conclusões sem alterar a contagem regular. A emulação móvel continua distinta de um aparelho físico.

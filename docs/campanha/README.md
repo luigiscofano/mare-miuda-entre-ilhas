@@ -103,3 +103,7 @@ Depois de Vento Sul, siga à esquerda para sobreviver a três faixas anunciadas 
 ## Estreia do trio nas Grutas
 
 Depois de **A pérola e a placa**, siga para baixo no mapa para o desvio **Três refúgios**. O trio divide o comando e a maré, e vence com três alvos ocupados. O desafio não entra nas dez regulares nem impede a viagem à Baía. [Ficha](../processo-de-criacao/18-trio-grutas/README.md).
+
+## Trio na Baía e no Farol
+
+Depois da introdução em Três refúgios, **Eco dos três cais** combina duas balsas com placa e fragmento. **Três luzes em revezamento** combina duas balsas, placa e a ordem da pérola, do encaixe e da alavanca. Os desvios têm porta de entrada e volta, sem mudar as dez regulares de cada mundo nem os dois chefes da Baía. [Fichas e soluções](../processo-de-criacao/19-trio-avancado/README.md).

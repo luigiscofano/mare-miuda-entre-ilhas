@@ -164,3 +164,7 @@ A arena opcional da Baía abre após Cofre da vazante. `N` é um ancoradouro que
 ## Três refúgios
 
 `trio-grutas.ts` usa `M` para a posição inicial do Amarelo e `Y` para o terceiro alvo. O campo `dupla.terceiroAlvo` estende o grupo sem alterar os mapas solo ou em dupla. A concha, o marco `T` e o novo marco precisam ser ocupados no mesmo turno seguro. [Ficha e solução](../../docs/processo-de-criacao/18-trio-grutas/README.md).
+
+## Trio na Baía e no Farol
+
+`trio-avancado.ts` reúne **Eco dos três cais**, com duas balsas, placa e fragmento, e **Três luzes em revezamento**, com duas balsas, placa e pérola até a Alavanca B. Reaproveitam os símbolos `M` e `Y` do trio das Grutas e o mesmo relógio. [Fichas, grades e rotas](../../docs/processo-de-criacao/19-trio-avancado/README.md).

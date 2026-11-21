@@ -1,3 +1,4 @@
+import { ECO_DOS_TRES_CAIS, TRES_LUZES_EM_REVEZAMENTO } from '../fases/trio-avancado.ts';
 import { TRES_REFUGIOS } from '../fases/trio-grutas.ts';
 import { RESSACA_ALTA } from '../fases/ressaca-alta.ts';
 import { VENTO_SUL } from '../fases/vento-sul.ts';
@@ -28,7 +29,7 @@ export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
   | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
-  | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof TRES_REFUGIOS.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
+  | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof TRES_REFUGIOS.id | typeof ECO_DOS_TRES_CAIS.id | typeof TRES_LUZES_EM_REVEZAMENTO.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
 export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
   posicao: Posicao;
@@ -98,6 +99,8 @@ const NOS_RESSACA = [
 ] as const;
 const ARENA_VENTO_SUL = P(6, 3);
 const ARENA_RESSACA_ALTA = P(4, 3);
+const DESVIO_TRIO_RESSACA = P(9, 1);
+const DESVIO_TRIO_FAROL = P(8, 3);
 const ENTRADAS_RESSACA: readonly Entrada[] = FASES_RESSACA_AMPLIADA.map((fase, i) => ({
   id: fase.id, nome: fase.nome, posicao: NOS_RESSACA[i],
 }));
@@ -177,6 +180,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'ressaca-dupla-abrigo', posicao: P(2, 1), nome: 'Abrigo dos dois cais' },
     { id: 'ressaca-dupla-ancoradouros', posicao: P(4, 1), nome: 'Ancoradouros em revezamento' },
     ...ENTRADAS_RESSACA,
+    { id: ECO_DOS_TRES_CAIS.id, nome: ECO_DOS_TRES_CAIS.nome, posicao: DESVIO_TRIO_RESSACA, opcional: true },
     { id: VENTO_SUL.id, nome: VENTO_SUL.nome, posicao: ARENA_VENTO_SUL, opcional: true, chefe: true },
     { id: RESSACA_ALTA.id, nome: RESSACA_ALTA.nome, posicao: ARENA_RESSACA_ALTA, opcional: true, chefe: true },
   ],
@@ -185,6 +189,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'farol-fragmento-margens', posicao: P(2, 1), nome: 'O fragmento das duas margens' },
     { id: 'farol-duas-luzes', posicao: P(4, 1), nome: 'As duas luzes do farol' },
     ...ENTRADAS_FAROL,
+    { id: TRES_LUZES_EM_REVEZAMENTO.id, nome: TRES_LUZES_EM_REVEZAMENTO.nome, posicao: DESVIO_TRIO_FAROL, opcional: true },
   ],
 };
 
@@ -402,6 +407,8 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['ressaca-balsas-da-ponta', 'ressaca-dupla-ancoradouros'], 'Conclua Balsas da ponta e Ancoradouros em revezamento para chegar aos dois cais.'),
     trilha(NOS_RESSACA[4], NOS_RESSACA[5], 'direita', 'cima', [P(11, -1)],
       ['ressaca-cais-em-paralelo'], 'Cruze os Cais em paralelo para abrir o desafio das moedas.'),
+    trilha(NOS_RESSACA[4], DESVIO_TRIO_RESSACA, 'baixo', 'cima', [P(9, -1)],
+      ['ressaca-cais-em-paralelo'], 'Conclua Cais em paralelo para visitar o desvio do trio.'),
     trilha(NOS_RESSACA[5], NOS_RESSACA[6], 'baixo', 'cima', [],
       ['ressaca-tres-moedas-do-cais'], 'Recolha as Três moedas do cais para ir ao atracadouro.'),
     trilha(NOS_RESSACA[6], NOS_RESSACA[7], 'esquerda', 'direita', [],
@@ -436,6 +443,8 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       'Conclua Lentes em contramaré e Salão das lanternas para abrir o atalho entre as rotas.'),
     trilha(P(10, 1), P(11, 3), 'baixo', 'cima', [P(10, 2), P(11, 2)],
       ['farol-salao-das-lanternas'], 'Complete Salão das lanternas para chegar à luz final.'),
+    trilha(NOS_FAROL[7], DESVIO_TRIO_FAROL, 'esquerda', 'direita', [],
+      ['farol-luz-das-duas-mares'], 'Conclua A luz das duas marés para abrir o último desafio em trio.'),
   ],
 };
 

@@ -484,6 +484,67 @@ def conferir_trio_grutas(pagina, toque=False):
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
 
 
+
+def conferir_trio_avancado(pagina, toque=False):
+    casos = [
+        ('ressaca', (10, -1), 'D', 'U', 'Eco dos três cais', '7/10', [
+            'ressaca-dupla-abrigo', 'ressaca-dupla-ancoradouros', 'ressaca-refugio-de-pedra',
+            'ressaca-bolsos-opostos', 'ressaca-vigia-da-placa', 'ressaca-balsas-da-ponta',
+            'ressaca-cais-em-paralelo',
+        ]),
+        ('farol', (11, 3), 'L', 'R', 'Três luzes em revezamento', '6/10', [
+            'farol-fragmento-margens', 'farol-duas-luzes', 'farol-faroleiros-de-vigia',
+            'farol-turno-dos-guardioes', 'farol-salao-das-lanternas', 'farol-luz-das-duas-mares',
+        ]),
+    ]
+    for mundo, marco, ida, volta, nome, contagem, concluidas in casos:
+        pagina.goto(PRIMEIRA_PAGINA)
+        registro = {
+            'versao': 1, 'progresso': {'mundo': mundo, 'posicao': {'coluna': marco[0], 'linha': marco[1]},
+                'viuTutorial': True, 'concluidas': concluidas}, 'audio': {'musica': 0, 'efeitos': 0},
+        }
+        pagina.evaluate(
+            "registro => localStorage.setItem('mare-miuda-entre-ilhas/praia-v1', JSON.stringify(registro))",
+            registro,
+        )
+        pagina.reload()
+        tocar(pagina, '#comecar', toque)
+        jogar(pagina, ida, toque, mapa=True)
+        expect(pagina.locator('#posicao-praia')).to_contain_text(f'{nome} · opcional')
+        tocar(pagina, '#entrar-fase', toque)
+        if mundo == 'ressaca':
+            jogar(pagina, 'RXXRR', toque)
+            expect(pagina.locator('#feedback')).to_contain_text('A balsa levou o siri ao outro cais.')
+            jogar(pagina, 'RRRXRXRR', toque)
+            expect(pagina.locator('#posicao')).to_contain_text('Coral: coluna 6, linha 1')
+            expect(pagina.locator('#posicao')).to_contain_text('Verde (ativo)')
+            salvar_captura(pagina, f"ressaca-trio-{pagina.viewport_size['width']}px")
+            jogar(pagina, 'XRXRXRRRRRRXXRRRRXRR', toque)
+            expect(pagina.locator('#passos')).to_have_text('23')
+        else:
+            jogar(pagina, 'XRRRXRRXRRRXXRRXXR', toque)
+            expect(pagina.locator('#fragmento')).to_contain_text('Pérola com o siri verde')
+            jogar(pagina, 'RRXRRRLRXRRRRRXRRRR', toque)
+            expect(pagina.locator('#fragmento')).to_contain_text('Próxima etapa: Alavanca B')
+            expect(pagina.locator('#posicao')).to_contain_text('Amarelo: coluna 9, linha 5')
+            jogar(pagina, 'XXR', toque)
+            expect(pagina.locator('#fragmento')).to_contain_text('Portão aberto')
+            salvar_captura(pagina, f"farol-trio-{pagina.viewport_size['width']}px")
+            jogar(pagina, 'XRRXRRRRRXRRRRR', toque)
+            expect(pagina.locator('#passos')).to_have_text('40')
+        expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+        expect(pagina.locator('#erros')).to_have_text('0 / 3')
+        assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
+        tocar(pagina, '#voltar-fase', toque)
+        pagina.reload()
+        tocar(pagina, '#comecar', toque)
+        expect(pagina.locator('#posicao-praia')).to_contain_text(f'{nome} · opcional · concluída')
+        expect(pagina.locator('#progresso-praia')).to_contain_text(contagem)
+        jogar(pagina, volta, toque, mapa=True)
+        expect(pagina.locator('#posicao-praia')).to_contain_text(
+            'Cais em paralelo' if mundo == 'ressaca' else 'A luz das duas marés')
+
+
 def conferir_ressaca_ampliada(pagina, toque=False):
     pagina.goto(PRIMEIRA_PAGINA)
     # Retoma o último marco para verificar a travessia cronometrada na interface.
@@ -816,6 +877,7 @@ with sync_playwright() as p:
     conferir_deriva_ampliada(desktop)
     conferir_grutas_ampliadas(desktop)
     conferir_trio_grutas(desktop)
+    conferir_trio_avancado(desktop)
     conferir_ressaca_ampliada(desktop)
     conferir_vento_sul(desktop)
     conferir_ressaca_alta(desktop)
@@ -836,6 +898,7 @@ with sync_playwright() as p:
         conferir_deriva_ampliada(aparelho, toque=True)
         conferir_grutas_ampliadas(aparelho, toque=True)
         conferir_trio_grutas(aparelho, toque=True)
+        conferir_trio_avancado(aparelho, toque=True)
         conferir_ressaca_ampliada(aparelho, toque=True)
         conferir_vento_sul(aparelho, toque=True)
         conferir_ressaca_alta(aparelho, toque=True)

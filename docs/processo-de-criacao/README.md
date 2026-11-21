@@ -27,3 +27,4 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 | [Vento Sul](16-vento-sul/README.md) | Primeira arena de chefe da Baía: faixa de ressaca e ancoradouros. |
 | [Ressaca Alta](17-ressaca-alta/README.md) | Segunda arena da Baía: sobrevivência em dupla e dois destinos distintos. |
 | [Três refúgios](18-trio-grutas/README.md) | Introdução do trio em um desvio das Grutas da Espuma. |
+| [Trio na Baía e no Farol](19-trio-avancado/README.md) | Dois desvios de dificuldade crescente, com balsas, placa e pérola em etapas. |

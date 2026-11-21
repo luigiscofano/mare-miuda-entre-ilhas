@@ -87,7 +87,7 @@ test('o ramo retorna em todas as direções, persiste no save e não bloqueia o 
     ramo = concluirFase(ramo, id);
   }
   assert.equal(totalDeFasesRegulares('ressaca'), 10);
-  assert.equal(nosDo('ressaca').length, 13);
+  assert.equal(nosDo('ressaca').length, 14);
   const trilhas = trilhasDo('ressaca');
   const comVentoVencido = concluirFase(ramo, 'ressaca-chefe-vento-sul');
   for (const t of trilhas) {
