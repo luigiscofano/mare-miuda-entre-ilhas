@@ -58,6 +58,8 @@ Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem subs
 
 - [37 · Seletores das Grutas, da Baía e do Farol](37-seletores-mundos-finais/README.md): três fundos editáveis e os estados de acesso às arenas opcionais.
 
+[38 · Estudos do seletor direto](38-seletores-diretos-estudos/README.md): três direções de tela e a fonte editável, separadas dos seletores caminháveis anteriores.
+
 ## Cadernos complementares já presentes
 
 A numeração reflete frentes paralelas, não uma sequência única de versões. Estes cadernos também fazem parte do histórico:
