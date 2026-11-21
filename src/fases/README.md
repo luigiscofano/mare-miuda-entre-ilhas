@@ -156,3 +156,7 @@ Oito mapas de `farol-ampliado.ts` combinam as regras existentes, cinco em dupla.
 ## Vento Sul
 
 A arena opcional da Baía abre após Cofre da vazante. `N` é um ancoradouro que firma quando o siri termina um passo seguro na baixa; no mapa em texto, `n` marca a âncora firme. `ressaca.faixas` define em ordem a linha e as colunas atingidas a cada subida. Refúgios `H` são imunes à onda. Veja a [ficha e solução](../../docs/processo-de-criacao/16-vento-sul/README.md).
+
+## Ressaca Alta
+
+`ressaca-alta.ts` reaproveita o aviso de faixas da subida. O objetivo de sobrevivência usa o tamanho do ciclo para contar ondas seguras consecutivas e só termina com a dupla nos alvos `C` e `T`. O contador zera com uma levada; a maré não volta. [Ficha e solução](../../docs/processo-de-criacao/17-ressaca-alta/README.md).

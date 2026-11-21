@@ -87,11 +87,12 @@ test('o ramo retorna em todas as direções, persiste no save e não bloqueia o 
     ramo = concluirFase(ramo, id);
   }
   assert.equal(totalDeFasesRegulares('ressaca'), 10);
-  assert.equal(nosDo('ressaca').length, 12);
+  assert.equal(nosDo('ressaca').length, 13);
   const trilhas = trilhasDo('ressaca');
+  const comVentoVencido = concluirFase(ramo, 'ressaca-chefe-vento-sul');
   for (const t of trilhas) {
-    assert.deepEqual(moverNoMapa({ ...ramo, posicao: t.de }, t.ida).progresso.posicao, t.para);
-    assert.deepEqual(moverNoMapa({ ...ramo, posicao: t.para }, t.volta).progresso.posicao, t.de);
+    assert.deepEqual(moverNoMapa({ ...comVentoVencido, posicao: t.de }, t.ida).progresso.posicao, t.para);
+    assert.deepEqual(moverNoMapa({ ...comVentoVencido, posicao: t.para }, t.volta).progresso.posicao, t.de);
   }
   for (const posicao of nosDo('ressaca')) {
     for (const direcao of DIRECOES) {

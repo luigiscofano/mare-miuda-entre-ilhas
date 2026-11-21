@@ -95,3 +95,7 @@ A Baía passa a ter dez travessias regulares, seis em dupla. O ramo novo parte d
 ## Arena Vento Sul
 
 O primeiro chefe da Baía usa a própria subida da maré para varrer uma faixa anunciada. Firme três ancoradouros na baixa antes de sair. [Ficha, aviso no tabuleiro e solução](../processo-de-criacao/16-vento-sul/README.md). O segundo chefe da Baía continua planejado.
+
+## Arena Ressaca Alta
+
+Depois de Vento Sul, siga à esquerda para sobreviver a três faixas anunciadas e conduzir a dupla a dois destinos. As arenas são opcionais, mantêm dez regulares na Baía e não mudam a passagem ao Farol. [Ficha e solução](../processo-de-criacao/17-ressaca-alta/README.md).
