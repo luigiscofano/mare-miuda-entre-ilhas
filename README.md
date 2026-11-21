@@ -182,7 +182,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as 106 soluções da campanha, incluindo 16 arenas opcionais de chefes, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Roteiro de validação manual](tests/qa-manual.md). [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
+Os testes cobrem as 106 soluções da campanha, incluindo 16 arenas opcionais de chefes, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Roteiro de validação manual](tests/qa-manual.md). Os PRs com QA no Chromium bem-sucedido disponibilizam também um ZIP jogável privado na aba Actions, sem deploy. [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
 
 </details>
 
