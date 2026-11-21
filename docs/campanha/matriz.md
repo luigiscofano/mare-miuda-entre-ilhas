@@ -47,3 +47,7 @@ O Farol abre pelo final regular da Ressaca e já oferece duas travessias em dupl
 ### Ampliação jogável: Recifes Expostos
 
 As três travessias originais formam a rota curta; sete novas travessias regulares elevam a contagem para dez. A curva começa com Degraus da vazante e Janelas do coral para treinar refúgio e sincronização. Oco da pedra e Volta pelo costão introduzem coleta com retorno e alternativas. Poças suspensas, Cintura de espuma e Três anéis da vazante desenvolvem planejamento em ciclos sucessivos. Fio de coral e Mosaico das poças são extras. Os dois chefes da matriz seguem planejados. [Fichas e soluções](../processo-de-criacao/09-recifes-ampliados/README.md).
+
+### Ampliação jogável: Mangue dos Siris Duplos
+
+As três fases iniciais permanecem; sete novas regulares ampliam o treino de troca, segurança do parceiro inativo, fechamento da porta, coleta separada e reencontro. Depois da porteira usa três trocas no mínimo para uma vitória sem levadas. No circuito final, não há vitória sem levadas com até três trocas ou com o portão bloqueado. Nenhuma fase nova é condição para a Enseada. [Fichas e soluções](../processo-de-criacao/10-mangue-ampliado/README.md).

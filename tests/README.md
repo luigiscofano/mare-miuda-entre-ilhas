@@ -8,6 +8,8 @@ Após o build, `npm run test:offline` carrega o módulo embutido com DOM e Canva
 
 Na fatia vertical, o teste de navegador de desktop visita a bifurcação, conclui a ilhota, recarrega com progresso, volta pelo atalho e chega aos créditos. A emulação de 320 e 390 pixels percorre a rota sem a ilhota. As verificações de teclado e toque não correspondem a Safari ou aparelho físico; ver o resultado no PR antes de afirmar que o workflow rodou. A suíte usa o Chromium do Playwright por padrão; a variável `CHROMIUM_PATH` permite apontar uma instalação local identificada.
 
+No Mangue, o teste de navegador confirma que Reiniciar devolve o foco ao título da fase e que Espaço troca de siri sem gastar um passo, inclusive na tentativa seguinte.
+
 ## Lote 1: regressão e teste com pessoas
 
 O motor reproduz as 11 soluções. Os testes do lote cobrem retorno conjunto sem colisão, garça e água no mesmo turno, troca gratuita, placa, as duas ordens dos mundos, acesso à Enseada e leitura de save v0.2. O fluxo Chromium percorre Praia, Recifes → Mangue em desktop e Mangue → Recifes em toque emulado, com reload e saída pelo atalho. O fluxo experimental WebKit usa servidor localhost no runner; mesmo se aprovado, não equivale ao Safari em aparelho físico.
@@ -33,3 +35,7 @@ A ampliação da dupla checa as duas novas testemunhas sem levadas, a impossibil
 O Farol verifica a travessia com balsa e placa, a ausência de solução sem troca ou sem qualquer balsa, o portão sem gasto de passo, a patrulha sobre o inativo, a janela de dois passos para a troca no baixio, conclusão e recarga. O teste de navegador joga as duas fases por teclado e por toque emulado.
 
 A ampliação de Recifes verifica 45 testemunhas de vitória, contagem de dez regulares e dois desvios, atalhos, atribuição única de direção no seletor e persistência de marcos em saves novos e antigos. O roteiro Playwright visita um regular e um opcional usando teclado e toque emulado, reinicia a página e confere que o opcional não altera a contagem. As verificações do navegador devem ser confirmadas no resultado do workflow.
+
+## Mangue dos Siris Duplos ampliado
+
+O motor percorre as 52 soluções da campanha sem levadas. A busca das sete novas fases confirma que não há vitória sem levadas com um dos siris imóvel; também verifica ausência de solução sem portão nas duas finais e o mínimo de trocas. O teste do mapa cobre ida, volta, teclas exclusivas, saves e saída legada para a Enseada. O roteiro Playwright usa teclado e toque emulado para trocar sem gastar passos, provocar uma levada no baixio, reiniciar, vencer e recarregar com o novo marco. Os resultados de navegadores constam da execução de CI.

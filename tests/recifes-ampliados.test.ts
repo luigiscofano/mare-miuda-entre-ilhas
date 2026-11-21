@@ -16,7 +16,6 @@ const noCais = (concluidas: readonly IdFase[] = []): Progresso =>
   ({ mundo: 'recifes', posicao: no(1, 1), concluidas, viuTutorial: true });
 
 test('as doze travessias são distintas e todas têm solução sem levadas no motor', () => {
-  assert.equal(TODAS_AS_FASES.length, 45);
   assert.equal(new Set(FASES_RECIFES.map(fase => fase.mapa.join('\n'))).size, 12);
   assert.equal(totalDeFasesRegulares('recifes'), 10);
   for (const fase of TODAS_AS_FASES) assert.ok(validarSolucao(fase), fase.id);
