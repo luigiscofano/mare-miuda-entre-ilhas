@@ -50,7 +50,7 @@ A curva aumenta por etapas: Praia introdutória, lógica leve no segundo mundo, 
 
 ## Praia em duas telas
 
-Cabo Baixo tem quatro marcos principais, contando o encontro existente, e a Ilhota Perolada. Após vencer a Ponta da garça, siga à direita e abra o portal para a Enseadinha. A passagem de volta no início da nova tela devolve o siri ao portal do Cabo. Três desafios principais liberam o novo embarque, sem exigir os três opcionais. O embarque antigo foi mantido para saves anteriores, e o arquipélago ainda desembarca no ponto original do Cabo. A Praia tem dez fases autorais (seis principais e quatro opcionais) e o encontro Ponta da garça; os dois chefes completos desse mundo seguem no plano.
+Cabo Baixo tem quatro marcos principais, contando o encontro existente, e a Ilhota Perolada. Após vencer a Ponta da garça, siga à direita e abra o portal para a Enseadinha. A passagem de volta no início da nova tela devolve o siri ao portal do Cabo. Três desafios principais liberam o novo embarque, sem exigir os três opcionais. O embarque antigo foi mantido para saves anteriores, e o arquipélago ainda desembarca no ponto original do Cabo. A Praia tem dez fases autorais (seis principais e quatro opcionais) e o encontro Ponta da garça; Vigia das ondas é o primeiro chefe opcional; Ponta da Ressaca continua no plano.
 
 ## Planejamento completo
 
@@ -115,3 +115,7 @@ O primeiro chefe opcional do Farol abre abaixo de A luz das duas marés. O feixe
 ## Última Virada
 
 O segundo chefe opcional do Farol abre à esquerda do Guardião depois de vencê-lo. As três lentes usam placas distintas: para acender uma, o siri chega enquanto o feixe aponta para ela e outro sustenta o controle. A arena não bloqueia o desvio do trio nem a rota das regulares. [Ficha e solução](../processo-de-criacao/21-ultima-virada/README.md).
+
+## Vigia das ondas
+
+Depois de Fio de areia, siga para cima para aprender a ler a faixa anunciada e usar as pedras altas. A saída da Praia e o encontro Ponta da garça não mudam. [Ficha](../processo-de-criacao/22-vigia-das-ondas/README.md).

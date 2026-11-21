@@ -30,3 +30,4 @@ As fontes dos estudos PT/EN vão em `docs/processo-de-criacao/identidade-visual/
 | [Trio na Baía e no Farol](19-trio-avancado/README.md) | Dois desvios de dificuldade crescente, com balsas, placa e pérola em etapas. |
 | [Fauna no jogo](../arte/fauna/README.md) | Recorte canônico em três paletas, insígnias, duas poses da garça e quadros do tabuleiro. |
 | [Última Virada](21-ultima-virada/README.md) | Segunda arena do Farol, com três siris e placas de sintonia. |
+| [Vigia das ondas](22-vigia-das-ondas/README.md) | Primeira arena opcional da Praia, com faixa anunciada e refúgios de pedra. |
