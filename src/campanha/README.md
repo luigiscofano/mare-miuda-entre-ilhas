@@ -13,3 +13,7 @@ Na Enseada e na Deriva, ↑ no marco da terceira travessia abre o desvio opciona
 Nas Grutas, as três travessias anteriores dão acesso a dois nós regulares, e o segundo abre a Baía da Ressaca no arquipélago. A Baía tem dois nós em sequência, porto e atalho após a conclusão. IDs e nós anteriores continuam válidos no save.
 
 No arquipélago, Ancoradouros em revezamento abre a saída de cima na Baía da Ressaca. O Farol tem dois nós regulares, porto e atalho após a segunda travessia, sem exigir qualquer desvio.
+
+## Recifes Expostos ampliados
+
+A rota histórica, seus três nós e seu atalho pelo sul não mudam. No primeiro marco, suba depois de Acima da espuma para acessar o ramo norte. O ramo tem sete travessias regulares, com uma confluência após o costão: Poças suspensas exige o costão e Duas poças do recife. Os desvios **Fio de coral** e **Mosaico das poças** têm marca própria e não entram no contador de dez regulares. O acesso à Enseada permanece compatível com os saves anteriores.

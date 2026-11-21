@@ -2,7 +2,7 @@
 
 *Tiny Tide: Between Islands*
 
-Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A Praia das Conchas tem dez fases regulares e um encontro em duas telas conectadas: Cabo Baixo e Enseadinha. O primeiro lote acrescenta seis travessias autorais em Recifes Expostos e Mangue dos Siris Duplos. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
+Quebra-cabeça de aventura por turnos: um siri atravessa ilhas onde a água sobe ou desce a cada três passos válidos. A Praia das Conchas tem dez fases regulares e um encontro em duas telas conectadas: Cabo Baixo e Enseadinha. Recifes Expostos tem dez travessias regulares e dois desvios opcionais. As três travessias iniciais do Mangue dos Siris Duplos permanecem disponíveis. O protótipo cinza de três travessias continua na bancada de testes e no histórico. É um projeto independente: não altera o Miudezas nem carrega seu código, seus recursos ou suas partidas salvas.
 
 **Estado:** Fundação e protótipo preservados; fatia vertical Praia das Conchas e primeiro lote de campanha implementados para teste. A abertura usa Placa de Areia aprovada; o restante da arte e do áudio ainda é provisório. Não existe publicação do jogo nesta fase.
 
@@ -82,7 +82,7 @@ Na fatia vertical a Praia das Conchas já é caminhável: rota principal e ramo 
 A campanha parte de um tutorial acessível na Praia, passa por lógica leve e combinação de regras, e chega a mapas maiores com escolhas consequentes, fuga e chefes por turnos. A bancada inclui uma prova independente de três moedas com orçamento de passos. [Curva de dificuldade](docs/producao/escopo-e-leitura.md#curva-de-dificuldade-da-campanha).
 
 
-Passagem da primeira onda, A sombra da garça e Busca e volta. Essas três fases estão na bancada e também na rota da praia. A praia acrescenta O segredo da ilhota e A ponta da garça. Recifes e Mangue têm três fases cada, com novas travessias e uma resolução final. Cada mapa tem objetivo, instrução e solução reproduzível no motor. [Diagramas e soluções](src/fases/README.md).
+Passagem da primeira onda, A sombra da garça e Busca e volta. Essas três fases estão na bancada e também na rota da praia. A praia acrescenta O segredo da ilhota e A ponta da garça. Recifes tem dez travessias regulares e dois desvios. O ramo norte parte do primeiro marco; a saída para a Enseada continua dependendo das três travessias históricas de Recifes e das três do Mangue, sem exigir o ramo novo. [Fichas dos Recifes ampliados](docs/processo-de-criacao/09-recifes-ampliados/README.md). Cada mapa tem objetivo, instrução e solução reproduzível no motor. [Diagramas e soluções](src/fases/README.md).
 
 </details>
 
@@ -170,7 +170,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as 36 soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
+Os testes cobrem as 45 soluções, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
 
 </details>
 
@@ -204,3 +204,4 @@ Projeto de Luigi Scofano de Araujo. O protótipo e a fatia vertical não incorpo
 ---
 
 **© 2026 Luigi Scofano de Araujo. Todos os direitos reservados.**
+

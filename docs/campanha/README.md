@@ -67,3 +67,7 @@ Os desvios em dupla na Enseada e nas Ilhas reaproveitam as cores, a troca gratui
 As Grutas têm cinco fases regulares, das quais duas em dupla; sua última travessia abre a Baía da Ressaca. A Baía começa com duas travessias em dupla que combinam patrulha anunciada e deslocamento de balsas, sem chefes nesta etapa. O Farol acrescenta duas travessias regulares em dupla e abre depois de Ancoradouros em revezamento. Nenhuma das duas fases é chefe.
 
 Na Enseada e nas Ilhas, o segundo desvio regular em dupla é aberto após o primeiro. No segundo desafio da Enseada, a garça alterna margens; no da Deriva, duas balsas viajam em sentidos opostos no mesmo relógio. Esses desvios não são requisito de embarque.
+
+## Ampliação dos Recifes Expostos
+
+O percurso original conserva a chave que libera a Enseada. Os marcos novos saem de um braço ao norte da primeira travessia: sete regulares e dois desvios facultativos, totalizando doze travessias em Recifes. O ramo não é pré-requisito do arquipélago. Os chefes ficam para outro lote. [Fichas e soluções](../processo-de-criacao/09-recifes-ampliados/README.md).

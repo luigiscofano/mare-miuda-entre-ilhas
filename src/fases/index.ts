@@ -1,3 +1,4 @@
+import { FASES_RECIFES_AMPLIADOS } from './recifes-ampliados.ts';
 import { FASES_ENSEADINHA } from './praia-enseadinha.ts';
 import { FASES_DERIVA, FASES_ENSEADA } from './lote2.ts';
 import { FASES_GRUTAS } from './lote3.ts';
@@ -82,6 +83,7 @@ export const FASES_RECIFES: readonly Fase[] = [
     mapa: ['SG####', '=#.###', 'H=.###', '.#=B.#', '###..#'],
     solucao: rota('DDDUDURRUDUDDRRLRLLUUDUDLLDUDUUUR'),
   },
+  ...FASES_RECIFES_AMPLIADOS,
 ];
 
 export const FASES_MANGUE: readonly Fase[] = [

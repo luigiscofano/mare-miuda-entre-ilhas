@@ -102,7 +102,7 @@ function atualizarPraia(mensagem = ''): void {
     mundo === 'praia-enseadinha' ? ['praia-fio-de-areia', 'praia-pocas-espelho', 'praia-mirante'].includes(id)
     : (mundo === 'enseada' || mundo === 'deriva') ? id.startsWith(mundo + '-') && !faseOpcional(mundo, id)
     : (mundo === 'grutas' || mundo === 'ressaca' || mundo === 'farol') ? id.startsWith(mundo + '-') && !faseOpcional(mundo, id)
-    : mundo === 'recifes' ? id.startsWith('recife-') : mundo === 'mangue' ? id.startsWith('mangue-')
+    : mundo === 'recifes' ? id.startsWith('recife-') && !faseOpcional(mundo, id) : mundo === 'mangue' ? id.startsWith('mangue-')
     : ['primeira-onda', 'sombra-da-garca', 'busca-e-volta', 'ponta-da-garca'].includes(id)).length;
   const perola = p.concluidas.includes('ilhota-perolada');
   const tituloMapa = nomeDo(mundo);
@@ -113,6 +113,7 @@ function atualizarPraia(mensagem = ''): void {
       : 'Faça o primeiro passo para a direita, pare no marco e entre na Primeira onda.')
     : mundo === 'praia-enseadinha' ? 'Atravesse o braço de areia, explore os desvios ou volte ao Cabo Baixo pelo começo da trilha.'
     : mundo === 'arquipelago' ? 'Visite Recifes Expostos e Mangue dos Siris Duplos em qualquer ordem. A Enseada abre depois dos dois; suas três travessias liberam as Ilhas à Deriva. Depois da Corrente cruzada, siga para as Grutas da Espuma e, após o revezamento, para a Baía da Ressaca.'
+    : mundo === 'recifes' ? 'A trilha do cais leva à saída para a Enseada. A trilha ao norte abre mais travessias; os dois desvios têm marca própria.'
     : (mundo === 'enseada' || mundo === 'deriva') && concluidas === 3
       ? 'Volte pelo atalho sul ou siga para cima no último marco para visitar o desvio em dupla.'
       : (mundo === 'grutas' || mundo === 'ressaca' || mundo === 'farol')

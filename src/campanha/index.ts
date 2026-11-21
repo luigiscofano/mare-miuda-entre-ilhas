@@ -1,10 +1,12 @@
+import { FASES_RECIFES_AMPLIADOS } from '../fases/recifes-ampliados.ts';
+import type { IdFaseRecifesAmpliados } from '../fases/recifes-ampliados.ts';
 import { mesmaCasa } from '../motor/index.ts';
 import type { Direcao, Posicao } from '../motor/index.ts';
 
 export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'praia-mirante'
   | 'praia-bolso-mare' | 'praia-trilha-das-pedras' | 'praia-fragmentos-areal';
 export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
-export type IdFase = IdFasePraia | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
+export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
   | 'enseada-dupla-vigia' | 'enseada-dupla-revezamento' | 'deriva-dupla-cais' | 'deriva-dupla-contramao'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
@@ -41,6 +43,15 @@ const PORTAL_CABO = P(8, 1);
 const SAIDA_ENSEADINHA = P(8, 1);
 const CRUZAMENTO = P(4, 3);
 const PORTO = { id: 'porto', posicao: CAIS, nome: 'Voltar ao arquipélago', destino: 'arquipelago' } as const;
+// O ramo novo nasce no primeiro marco sem deslocar os nós do save antigo.
+const NOS_RECIFES = [
+  P(2, 0), P(4, 0), P(6, 0), P(8, 0), P(8, 1), P(10, 1), P(10, 3),
+  P(4, 2), P(8, 3),
+] as const;
+const ENTRADAS_RECIFES: readonly Entrada[] = FASES_RECIFES_AMPLIADOS.map((fase, i) => ({
+  id: fase.id, nome: fase.nome, posicao: NOS_RECIFES[i],
+  opcional: fase.id === 'recife-fio-coral' || fase.id === 'recife-mosaico',
+}));
 const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
   praia: ENTRADAS_PRAIA,
   'praia-enseadinha': [
@@ -68,6 +79,7 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'recife-pedra-firme', posicao: P(2, 1), nome: 'Acima da espuma' },
     { id: 'recife-duas-pocas', posicao: P(4, 1), nome: 'Duas poças do recife' },
     { id: 'recife-retorno', posicao: P(6, 1), nome: 'A volta do recife' },
+    ...ENTRADAS_RECIFES,
   ],
   mangue: [
     PORTO,
@@ -206,7 +218,27 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
     trilha(P(9, 3), P(10, 1), 'cima', 'baixo', [P(10.125, 2.25)],
       ['ressaca-dupla-ancoradouros'], 'Conclua Ancoradouros em revezamento para chegar ao Farol.'),
   ],
-  recifes: sustentar('recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno'),
+  recifes: [
+    ...sustentar('recife-pedra-firme', 'recife-duas-pocas', 'recife-retorno'),
+    trilha(P(2, 1), NOS_RECIFES[0], 'cima', 'baixo', [],
+      ['recife-pedra-firme'], 'Conclua Acima da espuma para explorar o recife ao norte.'),
+    trilha(NOS_RECIFES[0], NOS_RECIFES[1], 'direita', 'esquerda', [],
+      ['recife-degraus'], 'Os Degraus da vazante levam às janelas do coral.'),
+    trilha(NOS_RECIFES[1], NOS_RECIFES[2], 'direita', 'esquerda', [],
+      ['recife-janelas'], 'Cruze as janelas do coral para alcançar a próxima pedra.'),
+    trilha(NOS_RECIFES[2], NOS_RECIFES[3], 'direita', 'esquerda', [],
+      ['recife-pedra-oco'], 'Pegue o fragmento no oco da pedra para abrir o costão.'),
+    trilha(NOS_RECIFES[3], NOS_RECIFES[4], 'baixo', 'cima', [],
+      ['recife-volta-costao', 'recife-duas-pocas'], 'Conclua Volta pelo costão e Duas poças do recife para acessar as poças suspensas.'),
+    trilha(NOS_RECIFES[4], NOS_RECIFES[5], 'direita', 'esquerda', [],
+      ['recife-pocas-suspensas'], 'Recupere os dois fragmentos nas poças suspensas para seguir.'),
+    trilha(NOS_RECIFES[5], NOS_RECIFES[6], 'baixo', 'cima', [],
+      ['recife-cintura'], 'Atravesse a cintura de espuma para chegar aos três anéis.'),
+    trilha(P(4, 1), NOS_RECIFES[7], 'baixo', 'cima', [],
+      ['recife-duas-pocas'], 'Duas poças do recife abre um desvio ao sul.'),
+    trilha(NOS_RECIFES[6], NOS_RECIFES[8], 'esquerda', 'direita', [],
+      ['recife-tres-aneis'], 'Os três anéis abrem o desvio do mosaico.'),
+  ],
   mangue: sustentar('mangue-dois-encontros', 'mangue-placa', 'mangue-reuniao', true),
   enseada: [
     ...sustentar('enseada-sombra-restinga', 'enseada-abrigo-ondas', 'enseada-farol-baixo', true),
