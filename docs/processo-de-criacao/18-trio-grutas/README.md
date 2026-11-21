@@ -10,7 +10,7 @@ Conclua **A pérola e a placa**, nas Grutas da Espuma, e siga para baixo no mapa
 
 **Espaço** ou **Trocar siri** percorre Coral, Verde e Amarelo. Trocar seleciona o próximo siri sem mover ninguém nem avançar a maré. Um passo válido usa o mesmo relógio para os três. Se algum ficar no baixio quando a água sobe, o grupo retorna junto ao último conjunto de casas firmes e perde uma única tentativa. Balsas seguem o mesmo princípio: transportam todo ocupante na virada, esteja ele selecionado ou não.
 
-As pinças erguidas do Coral, baixas do Verde e laterais do Amarelo diferenciam as silhuetas, além da cor. A marca embaixo do ativo e o texto indicam quem responde aos comandos. O mapa em texto descreve as três posições; a troca nomeia o novo siri.
+Nesta primeira implementação, as silhuetas das pinças diferenciavam os três. A captura acima fica como registro dessa etapa. Na versão atual, a geometria é idêntica e as insígnias assumem a distinção sem cor ([fauna](../../arte/fauna/README.md)). A marca embaixo do ativo e o texto indicam quem responde aos comandos. O mapa em texto descreve as três posições; a troca nomeia o novo siri.
 
 ## Ficha da travessia
 

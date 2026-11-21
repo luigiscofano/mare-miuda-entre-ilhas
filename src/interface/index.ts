@@ -37,6 +37,7 @@ function storageLocal() {
 
 const tabuleiro = montarCanvas('#tabuleiro', '#moldura');
 const arteCabo = buscar<HTMLImageElement>('#cabo-baixo');
+const fauna = buscar<HTMLImageElement>('#folha-fauna');
 const mapaPraia = montarCanvas('#mapa-praia', '#moldura-praia');
 const storage = storageLocal();
 let save = carregar(storage);
@@ -159,7 +160,11 @@ function atualizarPraia(mensagem = ''): void {
 
 logo.addEventListener('load', () => {
   if (tela === 'praia' && quadroMapa === undefined) atualizarPraia();
-  if (tela === 'fase') desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso));
+  if (tela === 'fase') desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso), fauna);
+});
+
+fauna.addEventListener('load', () => {
+  if (tela === 'fase') desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso), fauna);
 });
 
 arteCabo.addEventListener('load', () => {
@@ -172,7 +177,7 @@ function abrirPraia(mensagem = ''): void {
 }
 
 const SIRIS = ['Coral', 'Verde', 'Amarelo'] as const;
-const SILHUETAS = ['pinças erguidas', 'pinças baixas', 'pinças de lado'] as const;
+const INSIGNIAS = ['círculo', 'quadrado', 'triângulo'] as const;
 function descricao(evento: Evento): string {
   switch (evento.tipo) {
     case 'bloqueado': return 'Passo bloqueado. A maré não avançou.';
@@ -251,11 +256,14 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   const duplaAtiva = buscar('#dupla-ativa');
   duplaAtiva.hidden = !estado.dupla;
   const ativo = siriAtivo(estado);
-  duplaAtiva.textContent = `Siri ativo: ${SIRIS[ativo]}, ${SILHUETAS[ativo]} (Espaço ou botão Trocar siri)`;
+  duplaAtiva.textContent = `Siri ativo: ${SIRIS[ativo]}, ${INSIGNIAS[ativo]} (Espaço ou botão Trocar siri)`;
   buscar('#trocar-siri').hidden = !estado.dupla || finalizada;
   const coordenadas = (p: { coluna: number; linha: number }) => `coluna ${p.coluna + 1}, linha ${p.linha + 1}`;
   const alvo = alvoDaGarca(fase.ameaca, estado.passos + 1);
-  const sinalGarca = alvo ? ` Garça no próximo passo: ${coordenadas(alvo)}.` : '';
+  const mostrarGarca = Boolean(fase.ameaca && !finalizada);
+  buscar('#garca-patrulha').hidden = !mostrarGarca || Boolean(alvo);
+  buscar('#garca-rasante').hidden = !mostrarGarca || !alvo;
+  const sinalGarca = alvo ? ` Garça no próximo passo: ${coordenadas(alvo)}.` : mostrarGarca ? ' Garça em patrulha.' : '';
   const cais = balsasNoTurno(fase, estado.passos);
   const destinos = balsasNoTurno(fase, estado.passos + faltam);
   const previsoes = cais.map((atual, i) => `Balsa ${i + 1}: ${coordenadas(atual)} → ${coordenadas(destinos[i])}`);
@@ -291,7 +299,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   }
   buscar('#feedback').textContent = mensagem || mensagens.join(' ');
   buscar('#seguir-fase').hidden = bancada || fase.id !== 'ponta-da-garca' || estado.situacao !== 'vitoria';
-  desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso));
+  desenhar(tabuleiro.ctx, fase, estado, logo, bancada ? false : mundoAtual(save.progresso), fauna);
   audio.eventos(eventos);
 }
 
