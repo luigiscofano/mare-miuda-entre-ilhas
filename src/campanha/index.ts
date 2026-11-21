@@ -1,3 +1,4 @@
+import { GUARDIAO_DA_RAIZ, DUPLA_NO_MANGUE } from '../fases/chefes-mangue.ts';
 import { PONTA_DA_RESSACA } from '../fases/ponta-da-ressaca.ts';
 import { GUARDIAO_DAS_POCAS, VIGIA_DO_RECIFE } from '../fases/chefes-recifes.ts';
 import { VIGIA_DAS_ONDAS } from '../fases/vigia-das-ondas.ts';
@@ -34,7 +35,7 @@ export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado
   | 'deriva-primeira-balsa' | 'deriva-duas-margens' | 'deriva-corrente-cruzada'
   | 'grutas-encaixe' | 'grutas-ordem' | 'grutas-retorno'
   | 'grutas-dupla-portao' | 'grutas-dupla-camaras' | 'ressaca-dupla-abrigo' | 'ressaca-dupla-ancoradouros'
-  | typeof GUARDIAO_DAS_POCAS.id | typeof VIGIA_DO_RECIFE.id | typeof VIGIA_DAS_ONDAS.id | typeof PONTA_DA_RESSACA.id | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof GUARDIAO_FAROL.id | typeof ULTIMA_VIRADA.id | typeof TRES_REFUGIOS.id | typeof ECO_DOS_TRES_CAIS.id | typeof TRES_LUZES_EM_REVEZAMENTO.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
+  | typeof GUARDIAO_DAS_POCAS.id | typeof VIGIA_DO_RECIFE.id | typeof VIGIA_DAS_ONDAS.id | typeof PONTA_DA_RESSACA.id | typeof VENTO_SUL.id | typeof RESSACA_ALTA.id | typeof GUARDIAO_DA_RAIZ.id | typeof DUPLA_NO_MANGUE.id | typeof GUARDIAO_FAROL.id | typeof ULTIMA_VIRADA.id | typeof TRES_REFUGIOS.id | typeof ECO_DOS_TRES_CAIS.id | typeof TRES_LUZES_EM_REVEZAMENTO.id | 'farol-fragmento-margens' | 'farol-duas-luzes' | IdFaseFarolAmpliado;
 export type Mundo = 'praia' | 'praia-enseadinha' | 'arquipelago' | 'recifes' | 'mangue' | 'enseada' | 'deriva' | 'grutas' | 'ressaca' | 'farol';
 export type Progresso = Readonly<{
   posicao: Posicao;
@@ -102,6 +103,8 @@ const ENTRADAS_GRUTAS: readonly Entrada[] = FASES_GRUTAS_AMPLIADAS.map((fase, i)
 const NOS_RESSACA = [
   P(2, 0), P(4, -1), P(6, -1), P(8, -1), P(10, -1), P(11, 1), P(11, 3), P(8, 3),
 ] as const;
+const ARENA_RAIZ = P(8, 1);
+const ARENA_DUPLA_MANGUE = P(8, 2);
 const ARENA_VIGIA = P(2, 0);
 const ARENA_PONTA_DA_RESSACA = P(2, -1);
 const ARENA_VENTO_SUL = P(6, 3);
@@ -159,6 +162,8 @@ const ENTRADAS: Readonly<Record<Mundo, readonly Entrada[]>> = {
     { id: 'mangue-placa', posicao: P(4, 1), nome: 'Um segura, outro passa' },
     { id: 'mangue-reuniao', posicao: P(6, 1), nome: 'Reencontro na ponta do mangue' },
     ...ENTRADAS_MANGUE,
+    { id: GUARDIAO_DA_RAIZ.id, nome: GUARDIAO_DA_RAIZ.nome, posicao: ARENA_RAIZ, opcional: true, chefe: true },
+    { id: DUPLA_NO_MANGUE.id, nome: DUPLA_NO_MANGUE.nome, posicao: ARENA_DUPLA_MANGUE, opcional: true, chefe: true },
   ],
   enseada: [
     PORTO,
@@ -348,6 +353,10 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
       ['mangue-cotovelo'], 'Conclua Cotovelo das raízes para chegar à porteira.'),
     trilha(NOS_MANGUE[5], NOS_MANGUE[6], 'esquerda', 'direita', [],
       ['mangue-porteira-encontro'], 'Reúna a dupla depois da porteira para abrir o circuito.'),
+    trilha(P(6, 1), ARENA_RAIZ, 'direita', 'esquerda', [],
+      ['mangue-reuniao'], 'Conclua Reencontro na ponta do mangue para enfrentar o Guardião da Raiz.'),
+    trilha(ARENA_RAIZ, ARENA_DUPLA_MANGUE, 'baixo', 'cima', [],
+      [GUARDIAO_DA_RAIZ.id], 'Vença o Guardião da Raiz para abrir Dupla no Mangue.'),
   ],
   enseada: [
     ...sustentar('enseada-sombra-restinga', 'enseada-abrigo-ondas', 'enseada-farol-baixo', true),

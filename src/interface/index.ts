@@ -103,7 +103,7 @@ function atualizarPraia(mensagem = ''): void {
     mundo === 'praia-enseadinha' ? ['praia-fio-de-areia', 'praia-pocas-espelho', 'praia-mirante'].includes(id)
     : (mundo === 'enseada' || mundo === 'deriva') ? id.startsWith(mundo + '-') && !faseOpcional(mundo, id)
     : (mundo === 'grutas' || mundo === 'ressaca' || mundo === 'farol') ? id.startsWith(mundo + '-') && !faseOpcional(mundo, id)
-    : mundo === 'recifes' ? id.startsWith('recife-') && !faseOpcional(mundo, id) : mundo === 'mangue' ? id.startsWith('mangue-')
+    : mundo === 'recifes' ? id.startsWith('recife-') && !faseOpcional(mundo, id) : mundo === 'mangue' ? id.startsWith('mangue-') && !faseOpcional(mundo, id)
     : ['primeira-onda', 'sombra-da-garca', 'busca-e-volta', 'ponta-da-garca'].includes(id)).length;
   const perola = p.concluidas.includes('ilhota-perolada');
   const tituloMapa = nomeDo(mundo);
@@ -115,7 +115,7 @@ function atualizarPraia(mensagem = ''): void {
     : mundo === 'praia-enseadinha' ? 'Atravesse o braço de areia. Suba em Fio de areia para visitar as arenas opcionais ou volte ao Cabo Baixo pelo começo da trilha.'
     : mundo === 'arquipelago' ? 'Visite Recifes Expostos e Mangue dos Siris Duplos em qualquer ordem. A Enseada abre depois dos dois; a rota original libera as Ilhas à Deriva. Depois da Corrente cruzada, siga para as Grutas da Espuma e, após o revezamento, para a Baía da Ressaca.'
     : mundo === 'recifes' ? 'A trilha do cais leva à Enseada. Explore as travessias ao norte ou siga à direita após A volta do recife para enfrentar os chefes.'
-    : mundo === 'mangue' ? 'O caminho em frente é a rota para a Enseada. Depois de Raízes vizinhas, siga para cima para explorar o ramo dos siris.'
+    : mundo === 'mangue' ? 'O caminho em frente é a rota para a Enseada. Depois de Raízes vizinhas, suba para o ramo dos siris. À direita de Reencontro na ponta do mangue estão as arenas opcionais.'
     : mundo === 'enseada' ? 'A rota do cais leva às Ilhas à Deriva. Suba depois de Sombra na restinga para explorar o ramo; os dois desvios em dupla continuam no último marco da rota original.'
     : mundo === 'deriva' ? 'Siga pela rota do cais para as Grutas. Suba depois de A primeira balsa para abrir o ramo norte; os desvios em dupla continuam no último marco da rota original.'
     : mundo === 'grutas' ? 'A rota do cais leva à Baía da Ressaca. Suba depois de Uma pérola para o portão para explorar as câmaras ao norte.'
@@ -307,8 +307,13 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   const sinalFarol = atualFarol && proximoFarol
     ? ` Feixe atual: ${descreverFeixe(atualFarol, true)} Em ${passosDoFeixe} ${passosDoFeixe === 1 ? 'passo' : 'passos'}: ` +
       descreverFeixe(proximoFarol) : '';
+  const vinculos = fase.portoesVinculados?.map(({ portao, placa }, indice) => {
+    const aberto = posicoesDosSiris(estado).some(pos => mesmaCasa(pos, placa));
+    return `Raiz ${indice + 1} (${aberto ? 'aberta' : 'fechada'}): placa em ${coordenadas(placa)}; portão em ${coordenadas(portao)}.`;
+  });
+  const sinalPortoes = vinculos ? ` ${vinculos.join(' ')}` : '';
   buscar('#previsao').textContent = finalizada ? 'Tentativa encerrada.'
-    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}${sinalRessaca}${sinalFarol}`;
+    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}${sinalRessaca}${sinalFarol}${sinalPortoes}`;
   buscar('#posicao').textContent = estado.dupla
     ? posicoesDosSiris(estado).map((pos, i) => `${SIRIS[i]}${i === ativo ? ' (ativo)' : ''}: ${coordenadas(pos)}.`).join(' ')
     : `Siri na ${coordenadas(estado.posicao)}.`;

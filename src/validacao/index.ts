@@ -21,8 +21,15 @@ export function validarMapa(fase: Fase): void {
   if (temTrio ? (contar('M') !== 1 || contar('Y') !== 1) : /[MY]/.test(celulas)) {
     throw new Error(`Configuração do trio inválida: ${fase.id}.`);
   }
-  if ((!fase.dupla && /[APDT]/.test(celulas)) || (contar('D') && contar('P') !== 1)) {
+  if ((!fase.dupla && /[APDT]/.test(celulas)) || (contar('D') && !fase.portoesVinculados && contar('P') !== 1)) {
     throw new Error(`Mecanismo sem dupla ou placa: ${fase.id}.`);
+  }
+  const portoes = fase.portoesVinculados;
+  if (portoes && (!fase.dupla || portoes.length < 2 || contar('D') !== portoes.length
+    || contar('P') !== portoes.length || new Set(portoes.map(item => chave(item.portao))).size !== portoes.length
+    || new Set(portoes.map(item => chave(item.placa))).size !== portoes.length
+    || portoes.some(({ portao, placa }) => lerCelula(fase, portao) !== 'D' || lerCelula(fase, placa) !== 'P'))) {
+    throw new Error(`Vínculos de portões inválidos: ${fase.id}.`);
   }
   if (fase.orcamentoMoedas !== undefined &&
     (!Number.isSafeInteger(fase.orcamentoMoedas) || fase.orcamentoMoedas < 1 || contar('B') !== 3)) {

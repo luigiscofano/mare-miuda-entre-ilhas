@@ -97,10 +97,11 @@ test('as duas rotas do seletor preservam o save e deixam a Enseada independente 
     assert.equal(entradaEm(ramo.posicao, 'mangue')?.id, id);
     ramo = concluirFase(ramo, id);
   }
-  assert.equal(nosDo('mangue').length, 11);
+  assert.equal(nosDo('mangue').length, 13);
+  const todosOsMarcos = concluirFase(ramo, 'mangue-chefe-guardiao-da-raiz');
   for (const t of trilhasDo('mangue')) {
-    assert.deepEqual(moverNoMapa({ ...ramo, posicao: t.de }, t.ida).progresso.posicao, t.para);
-    assert.deepEqual(moverNoMapa({ ...ramo, posicao: t.para }, t.volta).progresso.posicao, t.de);
+    assert.deepEqual(moverNoMapa({ ...todosOsMarcos, posicao: t.de }, t.ida).progresso.posicao, t.para);
+    assert.deepEqual(moverNoMapa({ ...todosOsMarcos, posicao: t.para }, t.volta).progresso.posicao, t.de);
   }
   for (const posicao of nosDo('mangue')) {
     for (const direcao of DIRECOES) {

@@ -184,3 +184,7 @@ As faixas alternam em cada subida. Cruze o primeiro baixio, proteja-se na margem
 ## Chefes dos Recifes
 
 `chefes-recifes.ts` registra as duas arenas opcionais. A configuração `recife` usa dois pontos em pedras altas no Guardião ou duas casas de baixio ligadas ao fragmento no Vigia. [Fichas, soluções e capturas](../../docs/processo-de-criacao/24-chefes-recifes/README.md).
+
+## Chefes do Mangue
+
+`chefes-mangue.ts` guarda Guardião da Raiz e Dupla no Mangue. O primeiro usa `portoesVinculados` para ligar cada `D` à sua `P`; onde não há vínculos, a regra de placa única permanece. O segundo reaproveita a placa única e o rasante anunciado. [Fichas e soluções](../../docs/processo-de-criacao/25-chefes-mangue/README.md).

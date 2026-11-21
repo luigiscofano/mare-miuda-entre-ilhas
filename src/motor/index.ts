@@ -24,6 +24,7 @@ export type Fase = Readonly<{
   ameaca?: Ameaca;
   balsas?: readonly Readonly<{ paradas: readonly [Posicao, Posicao] }>[];
   orcamentoMoedas?: number;
+  portoesVinculados?: readonly Readonly<{ portao: Posicao; placa: Posicao }>[];
   etapasGruta?: readonly EtapaGruta[];
   farol?: Readonly<{ passosPorOrientacao: number; orientacoes: readonly OrientacaoFarol[] }>;
   ressaca?: Readonly<{ faixas: readonly FaixaRessaca[]; objetivo?: 'sobreviver' | 'atravessar' }>;
@@ -321,17 +322,23 @@ export function jogadorAtivo(estado: Estado): Posicao {
   return posicoesDosSiris(estado)[siriAtivo(estado)];
 }
 
+// Portões sem vínculo mantêm a regra original de uma única placa.
+export function portaoLiberado(fase: Fase, portao: Posicao, siris: readonly Posicao[]): boolean {
+  const vinculo = fase.portoesVinculados?.find(item => mesmaCasa(item.portao, portao));
+  if (fase.portoesVinculados) return vinculo !== undefined && lerCelula(fase, vinculo.placa) === 'P' && siris.some(pos => mesmaCasa(pos, vinculo.placa));
+  return siris.some(pos => lerCelula(fase, pos) === 'P');
+}
+
 export function destinoPermitido(fase: Fase, estado: Estado, direcao: Direcao): Posicao | undefined {
   const origem = jogadorAtivo(estado);
   const outros = posicoesDosSiris(estado).filter((_, i) => i !== siriAtivo(estado));
   const destino = calcularDestino(origem, direcao);
   const celula = lerCelula(fase, destino);
-  const placa = outros.some(outro => lerCelula(fase, outro) === 'P');
   if (!celula || celula === '#' || (celula === '=' && mareAlta(estado.passos)) ||
     passagemDoRecifeFechada(fase, destino, estado.temFragmento) ||
     (celula === 'I' && !ponteIluminada(fase, destino, estado.passos)) ||
     (celula === '~' && !balsasNoTurno(fase, estado.passos).some(p => mesmaCasa(p, destino))) ||
-    (celula === 'D' && !placa) || (celula === 'O' && !portaoDaGrutaAberto(fase, estado)) || outros.some(outro => mesmaCasa(outro, destino))) return;
+    (celula === 'D' && !portaoLiberado(fase, destino, outros)) || (celula === 'O' && !portaoDaGrutaAberto(fase, estado)) || outros.some(outro => mesmaCasa(outro, destino))) return;
   return destino;
 }
 
