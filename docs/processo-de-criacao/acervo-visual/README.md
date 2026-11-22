@@ -2,6 +2,10 @@
 
 [Voltar ao processo](../README.md) · [Estado da base jogável](../estado-atual.md)
 
+## Referência visual complementar
+
+A [prancha oficial de areia e água dos oito mundos](../../arte/areia-e-agua/README.md) isola os terrenos e a virada da maré. Ela fica separada das versões históricas e não altera o inventário abaixo.
+
 ## O que foi preservado
 
 Este acervo incorpora **340 arquivos em 25 pastas** na árvore de documentação, sem recodificar PNGs nem alterar os READMEs e fontes históricos. Os links abaixo abrem as cópias locais versionadas; o [inventário completo](inventario.json) registra o caminho, tamanho, hash Git, PR, commit exato e link de origem de cada arquivo. A identidade visual de arquivo não entra no jogo.

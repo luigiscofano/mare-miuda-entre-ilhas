@@ -44,6 +44,17 @@ Quadros do renderizador em **512 × 384**, sem cursor, nos estados jogáveis ind
 
 [Guia de arte e fontes](docs/arte/README.md) · [Fauna e sprites](docs/arte/fauna/README.md) · [Pranchas e versões históricas](docs/processo-de-criacao/acervo-visual/README.md)
 
+<details>
+<summary>Areia e água dos oito mundos</summary>
+
+A mesma costa, com dois baixios centrais, em maré baixa e alta. A comparação usa as artes dos oito mundos, da Praia das Conchas ao Arquipélago do Farol, incluindo a Baía das Brasas.
+
+![Uma mesma costa em maré baixa e alta nos oito mundos, mostrando a areia seca e os dois baixios centrais antes e depois da subida.](docs/arte/areia-e-agua/Mare-Miuda-Areia-e-Agua-dos-Oito-Mundos.png)
+
+[Detalhes da prancha e crédito](docs/arte/areia-e-agua/README.md)
+
+</details>
+
 ## Documentação
 
 <details>
