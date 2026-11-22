@@ -1,5 +1,9 @@
 # Estado documentado da base jogável
 
+## Expansão em revisão
+
+A proposta atual acrescenta **123 fases regulares**: 18 na Praia e 15 em cada um dos outros sete mundos. Nos PRs encadeados, o catálogo completo tem **200 regulares (25 por mundo), 16 chefes e 13 bônus**, 229 entradas ao todo. Veja as [fichas e a verificação da expansão](../campanha/expansao/README.md). Os números descritos abaixo correspondem à referência histórica indicada, não à expansão. Sem publicação.
+
 [README principal](../../README.md) · [Processo de criação](README.md) · [Acervo visual](acervo-visual/README.md)
 
 ## Conferência posterior: prévia privada
