@@ -365,9 +365,10 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
       descreverFeixe(proximoFarol) : '';
   const vinculos = fase.portoesVinculados?.map(({ portao, placa }, indice) => {
     const aberto = posicoesDosSiris(estado).some(pos => mesmaCasa(pos, placa));
-    const deriva = fase.id === 'deriva-chefe-passagem-das-balsas';
-    const nome = deriva ? 'Portão' : 'Raiz';
-    const situacao = deriva ? (aberto ? 'aberto' : 'fechado') : (aberto ? 'aberta' : 'fechada');
+    const portaoComum = fase.id === 'deriva-chefe-passagem-das-balsas'
+      || (IDS_DA_EXPANSAO.has(fase.id) && mundoAtual(save.progresso) !== 'mangue');
+    const nome = portaoComum ? 'Portão' : 'Raiz';
+    const situacao = portaoComum ? (aberto ? 'aberto' : 'fechado') : (aberto ? 'aberta' : 'fechada');
     return `${nome} ${indice + 1} (${situacao}): placa em ${coordenadas(placa)}; portão em ${coordenadas(portao)}.`;
   });
   const sinalPortoes = vinculos ? ` ${vinculos.join(' ')}` : '';
@@ -381,7 +382,10 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   if (eventos.some(evento => evento.tipo === 'levada')) {
     mensagens.push(estado.levadas >= LIMITE_LEVADAS ? 'Três erros: tente de novo.' : 'De volta à última casa firme.');
   }
-  if (estado.situacao === 'vitoria') {
+  if (estado.situacao === 'vitoria' && modoCampanha() && IDS_DA_EXPANSAO.has(fase.id)) {
+    // Compartilhar a mecânica de um chefe não transforma a travessia em arena.
+    mensagens.push('Volte ao seletor para continuar.');
+  } else if (estado.situacao === 'vitoria') {
     if (fase.id === CAPITULO_FINAL) mensagens.push('A luz do farol voltou. Veja o desfecho ou volte ao mapa.');
     if (fase.ameaca?.rasante) mensagens.push(`Arena concluída: ${fase.nome}. Volte à Enseada.`);
     const arenaLocal = fase.id.startsWith('deriva-chefe-') || fase.id.startsWith('grutas-chefe-');
