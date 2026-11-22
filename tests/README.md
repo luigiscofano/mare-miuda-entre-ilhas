@@ -2,6 +2,10 @@
  
 ## Versão com seleção direta
 
+## Expansão da campanha
+
+`npm test` valida os registros novos, o encadeamento, o catálogo e o save. O roteiro `python tests/browser_seletor_direto_qa.py`, após `npm run build`, usa arquivo offline ou `MARE_QA_URL` e testa a expansão por teclado e toque emulado, com retorno de foco e recarga.
+
 Execute `npm run build` e depois `python3 tests/browser_seletor_direto_qa.py`. No CI, Chromium roda a versão local e WebKit a versão servida. O roteiro testa as nove telas regionais, bloqueio por teclado, primeira vitória/recarga, retorno ao Arquipélago, recorte do siri, bancada e trilhas de áudio reais. `seletor-direto.test.ts` compara todas as opções com o alcance do grafo durante a campanha, e a suíte offline atravessa novamente a Praia, Vento Sul, chefes da Deriva e o desfecho.
 
 Os demais relatos neste README descrevem rodadas anteriores. Para executar o roteiro histórico completo `tests/browser_qa.py` e conferir as capturas antigas dos seletores caminháveis, use uma revisão anterior à seleção direta com os respectivos arquivos e build. O roteiro de arte antigo não está no CI do seletor direto. A emulação não comprova iPhone físico nem VoiceOver.
@@ -158,5 +162,3 @@ O CI chama os testes nativos de áudio ao final de `tests/browser_qa.py`: Chromi
 ## Ilha de Improviso
 
 O ensaio offline usa a solução produzida pelo próprio gerador para percorrer a fase, reiniciar, gerar a próxima e repetir pelo histórico após a recarga. Confere o save da campanha byte a byte. O roteiro de navegador também verifica formulário, toque, teclado, troca de siri e largura em dispositivos emulados.
-
-Use o [roteiro manual](qa-manual.md) para documentar toque, áudio e VoiceOver em iPhone físico. Automação não substitui essa etapa.

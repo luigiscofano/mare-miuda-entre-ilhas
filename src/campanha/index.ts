@@ -1,3 +1,5 @@
+import { IDS_DA_EXPANSAO } from '../fases/expansao/index.ts';
+import type { IdFaseDaExpansao } from '../fases/expansao/tipos.ts';
 import { GUARDIAO_DA_RAIZ, DUPLA_NO_MANGUE } from '../fases/chefes-mangue.ts';
 import { PONTA_DA_RESSACA } from '../fases/ponta-da-ressaca.ts';
 import { GUARDIAO_DAS_POCAS, VIGIA_DO_RECIFE } from '../fases/chefes-recifes.ts';
@@ -31,7 +33,7 @@ import type { Direcao, Posicao } from '../motor/index.ts';
 export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'praia-mirante'
   | 'praia-bolso-mare' | 'praia-trilha-das-pedras' | 'praia-fragmentos-areal';
 export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
-export type IdFase = IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | IdFaseDerivaAmpliada | IdFaseGrutasAmpliadas | IdFaseRessacaAmpliada | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
+export type IdFase = IdFaseDaExpansao | IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | IdFaseDerivaAmpliada | IdFaseGrutasAmpliadas | IdFaseRessacaAmpliada | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
   | 'enseada-dupla-vigia' | 'enseada-dupla-revezamento' | 'deriva-dupla-cais' | 'deriva-dupla-contramao'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
@@ -571,8 +573,8 @@ export function criarProgresso(): Progresso {
   return { posicao: CAIS, concluidas: [], viuTutorial: false };
 }
 export function ehIdFase(id: unknown): id is IdFase {
-  return Object.values(ENTRADAS).some(entradas => entradas.some(entrada =>
-    entrada.id === id && !entrada.destino));
+  return typeof id === 'string' && (IDS_DA_EXPANSAO.has(id) || Object.values(ENTRADAS).some(entradas =>
+    entradas.some(entrada => entrada.id === id && !entrada.destino)));
 }
 export function totalDeFasesRegulares(mundo: Mundo): number {
   return ENTRADAS[mundo].filter(entrada => !entrada.destino && !entrada.opcional).length;
@@ -608,5 +610,5 @@ export function concluirFase(progresso: Progresso, id: IdFase): Progresso {
   return { ...progresso, concluidas: [...progresso.concluidas, id] };
 }
 
-// A seleção direta usa os mesmos marcos do mapa, sem manter um segundo catálogo.
+// Marcos físicos, incluindo as posições usadas pelos saves legados.
 export const entradasDo = (mundo: Mundo): readonly Entrada[] => ENTRADAS[mundo];

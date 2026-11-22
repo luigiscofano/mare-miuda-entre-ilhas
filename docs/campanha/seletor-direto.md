@@ -13,3 +13,7 @@ Acessibilidade: Tab percorre botões em ordem de leitura. Enter e Espaço ativam
 O [adaptador de interface](../../src/interface/seletor.ts) organiza grupos de botões HTML por tema e mantém cada `data-marco` ligado ao ID estável da campanha. A composição atual é provisória: círculo de areia, coral serrilhado, margens de mangue, asas da Enseada, dois cais, arco das Grutas, ondas da Baía e estrela do Farol. A geometria está isolada na apresentação; os pontos/cores dos quadros futuros não precisam mudar os IDs, o grafo ou o DOM acessível. Em telas estreitas, as linhas podem quebrar sem esconder informações.
 
 Os fundos, fontes, pranchas e renderizadores anteriores não foram sobrescritos. Consulte [o processo de criação](../processo-de-criacao/README.md), especialmente os cadernos 34–37. As propostas não substituem o cenário dentro da travessia ou o mapa caminhável do Arquipélago. Arte final e publicação são etapas à parte.
+
+## Novos trechos regulares
+
+A [expansão](expansao/README.md) insere pequenos blocos após marcos regulares. O primeiro desafio de um bloco exige só o marco e cada desafio seguinte exige a vitória anterior. A expansão usa o ID próprio da nova fase e a posição salva do marco existente, sem adicionar nós nem alterar saídas, bônus, chefes ou o encerramento. Abas de navegação do navegador não mudam: dentro do jogo, ao voltar de uma fase nova o foco retorna ao seu botão.

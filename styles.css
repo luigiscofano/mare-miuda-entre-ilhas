@@ -110,7 +110,9 @@ button:disabled { cursor: default; opacity: .64; }
 /* Prévia estrutural: as oito composições não dependem dos PNGs de fase. */
 #seletor-fases { display: grid; gap: 1rem; margin: .75rem 0; }
 #seletor-fases section { display: grid; gap: .4rem; }
-#seletor-fases h3 { margin: 0; }
+#seletor-fases h3, #seletor-fases h4 { margin: 0; }
+.seletor-sequencia { border-block-start: 1px solid var(--seletor-cor); padding-block: .45rem; }
+.seletor-sequencia h4 { font-size: .9rem; }
 .seletor-fileira { display: flex; flex-wrap: wrap; justify-content: center; gap: .45rem; }
 .seletor-marco {
   flex: 1 1 0;

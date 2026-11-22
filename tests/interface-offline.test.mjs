@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
+import { opcoesDoSeletor } from '../src/campanha/seletor.ts';
+import { criarProgresso } from '../src/campanha/index.ts';
 import { gerarMareAMao } from '../src/mare-a-mao/index.ts';
+
+const contadorEsperado = (mundo, concluidas) => {
+  const opcoes = opcoesDoSeletor({ ...criarProgresso(), mundo });
+  const total = opcoes.filter(o => o.categoria === 'regular').length;
+  return `Travessias concluídas: ${concluidas}/${total}`;
+};
 
 // Este ensaio carrega o módulo realmente embutido no arquivo offline.
 // Simula DOM/Canvas para isolar comandos e desenho; não substitui o Chromium.
@@ -171,7 +179,7 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   const jogar = rota => [...rota].forEach(d => botoes[movimento[d]].click());
   const voltar = () => pegar('#voltar-fase').click();
   abrirMarco('primeira-onda'); jogar('RRR'); voltar();
-  assert.match(ler('#progresso-praia'), /1\/4/);
+  assert.ok(ler('#progresso-praia').startsWith(contadorEsperado('praia', 1)));
   assert.equal(buscarMarco('primeira-onda').dataset.estado, 'concluida');
   abrirMarco('ilhota-perolada'); jogar('RLDDRRRRU'); voltar();
   assert.match(ler('#progresso-praia'), /Concha Perolada: encontrada/);
@@ -235,7 +243,7 @@ test('HTML offline avisa a onda e salva a conclusão de Vento Sul sem rede', asy
   assert.match(ler('#feedback'), /Vento Sul vencido/);
   assert.equal(ler('#erros'), '0 / 3');
   pegar('#voltar-fase').click();
-  assert.match(ler('#progresso-praia'), /10\/10/);
+  assert.equal(ler('#progresso-praia'), `${contadorEsperado('ressaca', 10)}.`);
   assert.ok(JSON.parse(storage.get(chave)).progresso.concluidas.includes('ressaca-chefe-vento-sul'));
 });
 
@@ -279,7 +287,7 @@ test('HTML offline firma as âncoras da Deriva, transporta a dupla e preserva a 
   jogar('DUDURRRRXRRXRRXRRRXRRXRRRRXRRRR');
   assert.match(ler('#feedback'), /Arena vencida: Passagem das Balsas/);
   pegar('#voltar-fase').click();
-  assert.match(ler('#progresso-praia'), /3\/10/);
+  assert.equal(ler('#progresso-praia'), `${contadorEsperado('deriva', 3)}.`);
   const save = JSON.parse(storage.get(chave));
   assert.ok(save.progresso.concluidas.includes('deriva-chefe-mestre-das-correntes'));
   assert.ok(save.progresso.concluidas.includes('deriva-chefe-passagem-das-balsas'));
@@ -332,7 +340,7 @@ test('HTML offline abre e revisita o desfecho no mesmo marco com apenas seis fas
   ui.storage.set(chave, salvo);
   await import(modulo + '#desfecho-recarregado');
   pegar('#comecar').click();
-  assert.match(pegar('#progresso-praia').textContent, /6\/10/);
+  assert.equal(pegar('#progresso-praia').textContent, `${contadorEsperado('farol', 6)}.`);
   assert.equal(pegar('#rever-desfecho').hidden, false);
   pegar('#rever-desfecho').click();
   assert.match(pegar('#desfecho').textContent, /A luz voltou/);

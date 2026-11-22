@@ -1,5 +1,8 @@
 """Smoke com o seletor direto e o arquipélago original no navegador real."""
+import json
 import os
+from pathlib import Path
+import subprocess
 
 from playwright.sync_api import expect, sync_playwright
 
@@ -18,6 +21,29 @@ REGIOES = [
     ('ressaca', 'ressaca', 'ressaca-dupla-abrigo', 13),
     ('farol', 'farol', 'farol-fragmento-margens', 13),
 ]
+
+
+def catalogo_expansao():
+    # Usa a mesma base da interface, inclusive em um PR que contém só um lote.
+    raiz = Path(__file__).resolve().parents[1]
+    js = """
+        import { entradasDo } from './src/campanha/index.ts';
+        import { travessiasDaExpansao } from './src/fases/expansao/index.ts';
+        const mundos = process.argv.slice(1);
+        console.log(JSON.stringify(Object.fromEntries(mundos.map(m => {
+          const originais = entradasDo(m).filter(entrada => !entrada.destino && !entrada.opcional);
+          const ids = originais.map(e => e.id);
+          const novas = travessiasDaExpansao(m).filter(t => ids.includes(t.depoisDe));
+          return [m, { novas, ids }];
+        }))));
+    """
+    return json.loads(subprocess.check_output(
+        ['node', '--input-type=module', '-e', js, *[m for m, *_ in REGIOES]], cwd=raiz, text=True,
+    ))
+
+
+CATALOGO = catalogo_expansao()
+ACOES = dict(cima='U', baixo='D', esquerda='L', direita='R', trocar='X')
 
 
 def marco(id):
@@ -78,11 +104,53 @@ def conferir_mundos(pagina, toque):
         seletor = pagina.locator('#seletor-fases')
         expect(seletor).to_have_attribute('data-tema', tema)
         # Portas e portos são botões de viagem, não fases extras.
-        expect(seletor.locator('button:not([data-categoria="viagem"])')).to_have_count(total)
+        expect(seletor.locator('button:not([data-categoria="viagem"])')).to_have_count(total + len(CATALOGO[mundo]["novas"]))
         tocar(pagina, marco(fase), toque)
         expect(pagina.locator('#nome-fase')).to_be_visible()
         expect(pagina.locator('#passos')).to_have_text('0')
         sem_excesso(pagina)
+
+
+def conferir_expansao(pagina, toque):
+    mundo = next((m for m, *_ in REGIOES if CATALOGO[m]['novas']), None)
+    if mundo is None:
+        return
+    dados = CATALOGO[mundo]
+    primeira, seguinte = dados['novas'][:2]
+    fase = primeira['fase']
+    id = fase['id']
+    pagina.goto(PRIMEIRA_PAGINA)
+    gravar_fixture(pagina, mundo)
+    tocar(pagina, '#comecar', toque)
+    nova = pagina.locator(marco(id))
+    expect(nova).to_have_attribute('aria-disabled', 'true')
+    nova.focus()
+    pagina.keyboard.press('Enter')
+    expect(pagina.locator('#fase')).to_be_hidden()
+    gravar_fixture(pagina, mundo, dados['ids'])
+    tocar(pagina, '#comecar', toque)
+    expect(nova).to_have_attribute('data-estado', 'disponivel')
+    mesma_ancora = seguinte['depoisDe'] == primeira['depoisDe']
+    proxima = pagina.locator(marco(seguinte['fase']['id']))
+    if mesma_ancora:
+        expect(proxima).to_have_attribute('data-estado', 'bloqueada')
+    if toque:
+        nova.tap()
+    else:
+        nova.focus()
+        pagina.keyboard.press('Enter')
+    expect(pagina.locator('#nome-fase')).to_have_text(fase['nome'])
+    jogar(pagina, ''.join(ACOES[acao] for acao in fase['solucao']), toque)
+    expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
+    tocar(pagina, '#voltar-fase', toque)
+    expect(nova).to_be_focused()
+    expect(nova).to_have_attribute('data-estado', 'concluida')
+    if mesma_ancora:
+        expect(proxima).to_have_attribute('data-estado', 'disponivel')
+    sem_excesso(pagina)
+    pagina.reload()
+    tocar(pagina, '#comecar', toque)
+    expect(nova).to_have_attribute('data-estado', 'concluida')
 
 
 def conferir_arquipelago(pagina, toque):
@@ -113,6 +181,7 @@ if __name__ == '__main__':
                 conferir_jogo(pagina, toque)
                 conferir_primeiras_fases(pagina, toque)
                 conferir_mundos(pagina, toque)
+                conferir_expansao(pagina, toque)
                 conferir_arquipelago(pagina, toque)
                 conferir_ilha_improviso(pagina, toque)
                 print(f'{motor}: {largura}px, bancada, travessia, seleção, 8 mundos, save e arquipélago')
