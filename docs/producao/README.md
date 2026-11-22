@@ -1,5 +1,7 @@
 # Roteiro de produção
 
+> **Meta atual da campanha:** 25 travessias regulares por mundo, além dos bônus e dos dois chefes de cada mundo. A [expansão](../campanha/expansao/README.md) acrescenta 123 provas de dificuldade gradual, com soluções verificadas no motor. Os marcos abaixo são históricos.
+
 > **Leitura atualizada:** esta página conserva planejamento e atualizações históricos. A base do PR #72 já contém oito mundos, 77 entradas não opcionais, 16 chefes opcionais e 13 bônus/alternativas não-chefes. Consulte o [estado datado e os critérios de contagem](../processo-de-criacao/estado-atual.md) antes de interpretar expressões antigas como “planejado”, “futuro” ou “pendente”. Arte preliminar e lançamento continuam sujeitos à revisão. A trilha Notas Claras e suas sete variações integram uma proposta separada da base histórica; consulte [áudio](../../src/audio/README.md) para implementação e limites de teste.
 
 | Marco | Entrega | Barreira antes de avançar |

@@ -1,3 +1,209 @@
 import type { TravessiaDaExpansao } from './tipos.ts';
 
-export const RESSACA: readonly TravessiaDaExpansao<'ressaca'>[] = [];
+export const RESSACA: readonly TravessiaDaExpansao<'ressaca'>[] = [
+  {
+    fase: {
+      id: "ressaca-exp-dobras",
+      nome: "Dobras da arrebentação",
+      mapa: ["S==H####C", ".#..####.", "...==H.=.", "##.....##"],
+      objetivo: "Chegue à concha no alto da baía.",
+      ensino: "Use o meio da dobra para preparar dois passos no baixio; sair do outro lado é o terceiro passo.",
+      solucao: ["baixo", "cima", "baixo", "baixo", "direita", "direita", "baixo", "direita", "direita", "direita", "cima", "direita", "direita", "direita", "cima", "cima"],
+    },
+    depoisDe: "ressaca-dupla-abrigo",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-leques",
+      nome: "Leques de espuma",
+      mapa: ["##B..###", "##=..#B.", "S.=H..=G", "..#.=H..", "##..####"],
+      objetivo: "Traga os dois fragmentos para a saída.",
+      ensino: "A concha só abre com os dois fragmentos. No leque leste, use o caminho acima da saída para não repetir o baixio.",
+      solucao: ["direita", "direita", "direita", "cima", "cima", "baixo", "cima", "esquerda", "direita", "baixo", "baixo", "direita", "direita", "direita", "cima", "direita", "baixo"],
+    },
+    depoisDe: "ressaca-refugio-de-pedra",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-mastro",
+      nome: "Sombra do mastro",
+      mapa: ["##B..##", "##.#=##", "..H=.B#", "S.#.##G", ".==H=..", "..#####"],
+      objetivo: "Busque os fragmentos nas duas voltas e saia pelo sul.",
+      ensino: "O rasante varre uma linha anunciada. Espere no refúgio abrindo espaço com passos seguros.",
+      ameaca: {
+        alvo: {"coluna": 3, "linha": 0},
+        primeiroAtaque: 5,
+        periodo: 4,
+        rota: [{"coluna": 4, "linha": 2}, {"coluna": 3, "linha": 4}],
+        rasante: {"eixo": "linha", "alcance": 1},
+      },
+      solucao: ["cima", "baixo", "cima", "baixo", "cima", "baixo", "cima", "baixo", "cima", "baixo", "cima", "direita", "direita", "direita", "direita", "direita", "esquerda", "direita", "esquerda", "cima", "cima", "esquerda", "esquerda", "baixo", "baixo", "direita", "baixo", "baixo", "cima", "baixo", "direita", "direita", "direita", "cima"],
+    },
+    depoisDe: "ressaca-bolsos-opostos",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-revezamento",
+      nome: "Revezamento do costão",
+      mapa: ["S=H..D.C", "..##.###", "A.P....T", "########"],
+      objetivo: "Abra o portão e ocupe a concha e o marco.",
+      ensino: "Quem sustenta a placa pode soltá-la assim que o parceiro atravessar. O corredor de baixo leva ao marco sem passar pelo portão.",
+      dupla: {"segundoAlvo": "T"},
+      solucao: ["direita", "direita", "direita", "direita", "trocar", "direita", "direita", "trocar", "direita", "direita", "direita", "trocar", "direita", "direita", "direita", "direita", "direita"],
+    },
+    depoisDe: "ressaca-vigia-da-placa",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-cotovelo",
+      nome: "Cotovelo flutuante",
+      mapa: ["S..~~.H##", "..###.###", "#####~###", "#########", "##B.~H=G#", "##.....##"],
+      objetivo: "Faça a curva por duas balsas, recolha o fragmento e saia.",
+      ensino: "A primeira balsa se aproxima do cais na subida. A segunda é vertical e chega ao banco do fragmento na descida.",
+      balsas: [{"paradas": [{"coluna": 3, "linha": 0}, {"coluna": 4, "linha": 0}]}, {"paradas": [{"coluna": 4, "linha": 4}, {"coluna": 5, "linha": 2}]}],
+      solucao: ["direita", "direita", "direita", "direita", "baixo", "baixo", "esquerda", "esquerda", "baixo", "direita", "direita", "direita", "cima", "direita", "direita"],
+    },
+    depoisDe: "ressaca-balsas-da-ponta",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-pontal",
+      nome: "Pontal em contramão",
+      mapa: ["S..~~~~.B.", "...######.", "#########.", "G..~~.H.=.", "...#..####"],
+      objetivo: "Recolha o fragmento e volte pela segunda balsa.",
+      ensino: "Na volta, use a beira do cais para conferir se a balsa já está no lado leste.",
+      balsas: [{"paradas": [{"coluna": 3, "linha": 0}, {"coluna": 6, "linha": 0}]}, {"paradas": [{"coluna": 3, "linha": 3}, {"coluna": 4, "linha": 3}]}],
+      solucao: ["direita", "direita", "direita", "direita", "esquerda", "direita", "direita", "esquerda", "direita", "direita", "baixo", "baixo", "baixo", "esquerda", "esquerda", "esquerda", "esquerda", "esquerda", "esquerda", "esquerda", "esquerda"],
+    },
+    depoisDe: "ressaca-balsas-da-ponta",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-corredores",
+      nome: "Corredores do vento",
+      mapa: ["S.=H#..DC", "..#...###", "..##=####", "A.H...P.T"],
+      objetivo: "Faça a passagem do portão e reúna os siris.",
+      ensino: "O corredor do meio liga as duas margens. Deixe um siri na placa enquanto o outro contorna o paredão.",
+      dupla: {"segundoAlvo": "T"},
+      solucao: ["direita", "direita", "direita", "baixo", "direita", "direita", "cima", "direita", "trocar", "direita", "direita", "direita", "direita", "direita", "direita", "trocar", "direita", "direita", "trocar", "direita", "direita"],
+    },
+    depoisDe: "ressaca-dupla-ancoradouros",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-balizas",
+      nome: "Balizas desencontradas",
+      mapa: ["S.~~~.BDG#", "..########", "##########", "A..~~H.P.T", "...###...#"],
+      objetivo: "Cruze com os dois siris e recupere o fragmento do norte.",
+      ensino: "Uma balsa pode recolher o parceiro enquanto você movimenta o siri no outro cais.",
+      dupla: {"segundoAlvo": "T"},
+      balsas: [{"paradas": [{"coluna": 2, "linha": 0}, {"coluna": 4, "linha": 0}]}, {"paradas": [{"coluna": 4, "linha": 3}, {"coluna": 3, "linha": 3}]}],
+      solucao: ["direita", "direita", "trocar", "direita", "direita", "direita", "trocar", "direita", "direita", "trocar", "direita", "direita", "direita", "trocar", "direita", "direita", "trocar", "direita", "direita"],
+    },
+    depoisDe: "ressaca-cais-em-paralelo",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-coroa",
+      nome: "Coroa de marisco",
+      mapa: ["B.##B..", "..=...#", "#=##.#G", "..S=H=.", "..##.#.", "#B...#."],
+      objetivo: "Recolha as três moedas e alcance a saída em até 29 passos válidos.",
+      ensino: "Depois de buscar a moeda do sul, compare o baixio no centro com o contorno firme do oeste.",
+      orcamentoMoedas: 29,
+      solucao: ["esquerda", "cima", "cima", "cima", "esquerda", "baixo", "direita", "baixo", "baixo", "baixo", "cima", "baixo", "baixo", "direita", "direita", "direita", "cima", "cima", "cima", "cima", "cima", "baixo", "baixo", "baixo", "direita", "direita", "cima"],
+    },
+    depoisDe: "ressaca-tres-moedas-do-cais",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-ondas",
+      nome: "A primeira faixa",
+      mapa: ["S...H..#", "..##.=..", "...#.=.C", "##......"],
+      objetivo: "Use os refúgios e atravesse a baía.",
+      ensino: "Na subida da maré, a espuma varre a faixa marcada. A areia elevada protege; também vale sair da faixa inteira antes da virada.",
+      ressaca: {
+        objetivo: "atravessar",
+        faixas: [{"linha": 0, "primeiraColuna": 0, "ultimaColuna": 4}, {"linha": 3, "primeiraColuna": 2, "ultimaColuna": 7}, {"linha": 1, "primeiraColuna": 4, "ultimaColuna": 7}],
+      },
+      solucao: ["baixo", "cima", "baixo", "cima", "direita", "direita", "direita", "direita", "direita", "direita", "baixo", "baixo", "direita"],
+    },
+    depoisDe: "ressaca-atracadouro-torto",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-argolas",
+      nome: "Argolas da vazante",
+      mapa: ["S..N#..C", "...H#..#", "..#H..N#", "N.=.=.##", "...H####"],
+      objetivo: "Firme as três argolas na baixa e chegue à concha.",
+      ensino: "Uma argola só conta quando você pisa nela com a água já baixa; o aviso da faixa mostra onde não ficar na subida.",
+      ressaca: {
+        faixas: [{"linha": 0, "primeiraColuna": 0, "ultimaColuna": 6}, {"linha": 3, "primeiraColuna": 0, "ultimaColuna": 5}, {"linha": 2, "primeiraColuna": 3, "ultimaColuna": 6}],
+      },
+      solucao: ["baixo", "cima", "baixo", "cima", "baixo", "baixo", "baixo", "cima", "cima", "cima", "direita", "direita", "direita", "baixo", "baixo", "direita", "direita", "direita", "cima", "cima", "direita"],
+    },
+    depoisDe: "ressaca-atracadouro-torto",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-flutuantes",
+      nome: "Portinhola dos flutuantes",
+      mapa: ["S..~~~..DC#", "...########", "###########", "A.=H.~~H.PT", "...##~~..##"],
+      objetivo: "Use as duas balsas e termine nos dois destinos.",
+      ensino: "Confira duas vezes a próxima virada: além de mover as balsas, a subida espalha espuma sobre um dos cais.",
+      dupla: {"segundoAlvo": "T"},
+      balsas: [{"paradas": [{"coluna": 3, "linha": 0}, {"coluna": 5, "linha": 0}]}, {"paradas": [{"coluna": 5, "linha": 3}, {"coluna": 6, "linha": 3}]}],
+      ressaca: {
+        objetivo: "atravessar",
+        faixas: [{"linha": 0, "primeiraColuna": 1, "ultimaColuna": 3}, {"linha": 3, "primeiraColuna": 1, "ultimaColuna": 5}, {"linha": 3, "primeiraColuna": 7, "ultimaColuna": 9}],
+      },
+      solucao: ["direita", "direita", "direita", "direita", "esquerda", "direita", "trocar", "direita", "direita", "direita", "direita", "esquerda", "direita", "esquerda", "direita", "direita", "direita", "direita", "direita", "trocar", "direita", "direita", "direita", "trocar", "direita"],
+    },
+    depoisDe: "ressaca-cofre-da-vazante",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-boias",
+      nome: "Três boias de encontro",
+      mapa: ["S=H..C", "######", "A.H=.T", "######", "M..H.Y"],
+      objetivo: "Leve três siris aos três destinos.",
+      ensino: "A troca percorre coral, verde e amarelo, sem gastar turno. Todos dividem o mesmo relógio da maré, inclusive quando estão parados.",
+      dupla: {"segundoAlvo": "T", "terceiroAlvo": "Y"},
+      solucao: ["direita", "direita", "direita", "direita", "direita", "trocar", "direita", "direita", "direita", "direita", "direita", "trocar", "direita", "direita", "direita", "direita", "direita"],
+    },
+    depoisDe: "ressaca-cofre-da-vazante",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-laminas",
+      nome: "Lâminas da marola",
+      mapa: ["S..H...=DC", "..########", "##########", "A.H==H.P.T", "...#######", "M..~~~H.Y#", "...#######"],
+      objetivo: "Leve o trio aos destinos na outra margem.",
+      ensino: "A faixa muda a cada subida. Prepare o siri do meio para chegar à placa sem abandonar ninguém em baixio.",
+      dupla: {"segundoAlvo": "T", "terceiroAlvo": "Y"},
+      balsas: [{"paradas": [{"coluna": 3, "linha": 5}, {"coluna": 5, "linha": 5}]}],
+      ressaca: {
+        objetivo: "atravessar",
+        faixas: [{"linha": 0, "primeiraColuna": 1, "ultimaColuna": 7}, {"linha": 5, "primeiraColuna": 0, "ultimaColuna": 6}, {"linha": 3, "primeiraColuna": 1, "ultimaColuna": 8}],
+      },
+      solucao: ["direita", "direita", "direita", "direita", "direita", "direita", "trocar", "trocar", "direita", "direita", "direita", "direita", "trocar", "trocar", "direita", "direita", "direita", "direita", "direita", "direita", "direita", "trocar", "direita", "direita", "trocar", "direita", "direita", "direita", "trocar", "direita", "direita"],
+    },
+    depoisDe: "ressaca-cofre-da-vazante",
+  },
+  {
+    fase: {
+      id: "ressaca-exp-rebentacao",
+      nome: "Cais da última rebentação",
+      mapa: ["S..~~~H=...DC", "...##########", "#############", "A==H..P.H...T", "..##..#######", "#############", "M.~~~H.=...Y#", "..###.#######"],
+      objetivo: "Reúna o trio depois do portão e das balsas.",
+      ensino: "A mesma virada que desloca uma balsa pode varrer o cais de outro siri. Organize primeiro quem precisa de refúgio.",
+      dupla: {"segundoAlvo": "T", "terceiroAlvo": "Y"},
+      balsas: [{"paradas": [{"coluna": 3, "linha": 0}, {"coluna": 5, "linha": 0}]}, {"paradas": [{"coluna": 4, "linha": 6}, {"coluna": 2, "linha": 6}]}],
+      ressaca: {
+        objetivo: "atravessar",
+        faixas: [{"linha": 3, "primeiraColuna": 0, "ultimaColuna": 7}, {"linha": 0, "primeiraColuna": 2, "ultimaColuna": 8}, {"linha": 6, "primeiraColuna": 1, "ultimaColuna": 10}],
+      },
+      solucao: ["trocar", "direita", "direita", "direita", "direita", "direita", "direita", "trocar", "trocar", "direita", "direita", "direita", "direita", "trocar", "trocar", "direita", "direita", "direita", "trocar", "direita", "direita", "direita", "direita", "direita", "direita", "trocar", "direita", "direita", "direita", "direita", "direita", "trocar", "direita", "direita", "direita", "direita", "direita", "direita", "trocar", "trocar", "direita"],
+    },
+    depoisDe: "ressaca-cofre-da-vazante",
+  },
+];
