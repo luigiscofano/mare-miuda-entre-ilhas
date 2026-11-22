@@ -160,6 +160,8 @@ A concha tem um brilho de pixels chapados e identificação textual. Os cantos d
 
 Na bancada, a arte cinza lê terreno, maré e previsão de ameaça. A Praia usa a paleta V32, com espuma costeira, baixios de areia molhada ou cobertos e marcados pelos quatro cantos, rochas em aglomerados e concha rosa. A prévia de Recifes e Mangue usa mar azul com poças e corais ou água oliva com raízes e lama, respectivamente, e uma concha própria para cada região. A Enseada tem areia clara, juncos e concha violeta; a Deriva tem canais de jade e concha dourada em crescente. O X do rasante e as balsas navegáveis continuam distinguíveis. Grutas, Ressaca e Farol usam propostas de ardósia, azul de tempestade e azul-índigo, com conchas e margens distintas. A pérola, a espuma de risco e as pontes de luz mantêm seus sinais. A densidade do cenário e do arquipélago segue em revisão; a Placa de Areia da abertura foi mantida. O siri principal é o recorte nativo da Placa de Areia na Travessia, na bancada e nos seletores, sem trocar a arte dos mapas. Verde e Amarelo são o mesmo recorte em outras paletas: insígnias acima dos sprites identificam cada um também sem cor. A nova garça aparece na previsão, em patrulha ou rasante, sem cobrir o X no tabuleiro. [Fauna e capturas](docs/arte/fauna/README.md). Os fragmentos permanecem em matrizes de pixels editáveis em TypeScript. Nenhum recurso do jogo original é importado. [Guia de arte](docs/arte/README.md).
 
+[Estudo visual: alagamento em 81 configurações](docs/arte/animacao/README.md) · [MP4 de referência](docs/arte/animacao/Mare-Miuda-Alagamento-81-Configuracoes.mp4). A prancha em movimento compara a subida, a descida e a passagem da água à frente do siri; não representa uma animação já implementada no jogo.
+
 </details>
 
 ---
