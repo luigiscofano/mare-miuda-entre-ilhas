@@ -1,5 +1,5 @@
 # Expansão das travessias
-Aqui estão as fichas das 93 travessias novas incluídas neste catálogo.
+Aqui estão as fichas das 123 travessias novas incluídas neste catálogo.
 
 - [Praia das Conchas](praia.md): +18 travessias regulares.
 - [Recifes Expostos](recifes.md): +15 travessias regulares.
@@ -7,6 +7,8 @@ Aqui estão as fichas das 93 travessias novas incluídas neste catálogo.
 - [Enseada da Garça](enseada.md): +15 travessias regulares.
 - [Ilhas à Deriva](deriva.md): +15 travessias regulares.
 - [Grutas da Espuma](grutas.md): +15 travessias regulares.
+- [Baía da Ressaca](ressaca.md): +15 travessias regulares.
+- [Arquipélago do Farol](farol.md): +15 travessias regulares.
 
 Cada trecho começa depois de uma travessia regular existente; as novas provas seguintes no mesmo trecho se abrem em sequência. Viagens, bônus, chefes e desfecho não exigem as novas fases. Na Praia, o total soma os seletores Cabo Baixo e Enseadinha.
 

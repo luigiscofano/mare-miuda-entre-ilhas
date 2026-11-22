@@ -1,6 +1,6 @@
 # Game design e level design: campanha dos oito mundos
 
-**Catálogo desta prévia:** 170 travessias regulares, mais 16 chefes e 13 bônus. A expansão mantém os extras fora do contador e leva a 25 regulares cada mundo já ampliado. [Fichas e soluções](expansao/README.md). As tabelas abaixo registram o planejamento original.
+**Catálogo desta prévia:** 200 travessias regulares, mais 16 chefes e 13 bônus. A expansão mantém os extras fora do contador e leva a 25 regulares cada mundo já ampliado. [Fichas e soluções](expansao/README.md). As tabelas abaixo registram o planejamento original.
 > **Leitura atualizada:** esta página conserva planejamento e atualizações históricos. A base do PR #72 já contém oito mundos, 77 entradas não opcionais, 16 chefes opcionais e 13 bônus/alternativas não-chefes. Consulte o [estado datado e os critérios de contagem](../processo-de-criacao/estado-atual.md) antes de interpretar expressões antigas como “planejado”, “futuro” ou “pendente”. Arte preliminar e lançamento continuam sujeitos à revisão.
 
 **Plano histórico:** pelo menos 10 fases regulares autorais e 2 chefes por mundo. A meta anterior da expansão era de quinze fases. Os chefes, incluindo tutorial e arenas completas, não entram nessa contagem. As rotas propostas abaixo são orçamentos de conteúdo, não listas de fases entregues. Cada mundo tem retorno visível ao mapa e desafios opcionais que não são chaves do progresso principal.
