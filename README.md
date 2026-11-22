@@ -6,7 +6,7 @@
 
 Um siri cruza um arquipélago em um quebra-cabeça de aventura por turnos. A cada três passos válidos a maré vira: a água cobre atalhos, revela caminhos e muda como você atravessa cada ilha. O jogo é independente do Miudezas: não carrega seu código, seus recursos nem suas partidas salvas.
 
-**Prévia privada, ainda não lançada · 8 mundos · 139 desafios no catálogo da campanha · 8 arranjos da trilha aprovada.**
+**Prévia privada, ainda não lançada · 8 mundos · 169 desafios no catálogo da campanha · 8 arranjos da trilha aprovada.**
 
 [Baixar ZIP privado](https://github.com/luigiscofano/mare-miuda-entre-ilhas/actions/runs/44938701024/artifacts/14721380432) · [Como jogar localmente](#como-jogar-localmente) · [Visuais](#visuais-do-jogo) · [Documentação](#documentação) · [Processo de criação](docs/processo-de-criacao/README.md)
 
@@ -116,14 +116,14 @@ Escolha a fase pelo nome, sem andar dentro da região. Os botões mostram **Disp
 | --- | ---: | --- |
 | Praia das Conchas | 25 | Começa com o ciclo de maré, travessias curtas e a primeira ameaça anunciada. Inclui o encontro Ponta da garça. |
 | Recifes Expostos | 25 | Introduz pedra alta, rotas de baixa e coletas em mais de uma etapa. |
-| Mangue dos Siris Duplos | 10 | Apresenta a troca de siri, o contador compartilhado e os primeiros objetivos em dupla. |
-| Enseada da Garça | 10 | Combina previsão do rasante, abrigo e virada da água; a dupla reaparece. |
+| Mangue dos Siris Duplos | 25 | Apresenta a troca de siri, o contador compartilhado e os primeiros objetivos em dupla. |
+| Enseada da Garça | 25 | Combina previsão do rasante, abrigo e virada da água; a dupla reaparece. |
 | Ilhas à Deriva | 10 | Balsas, correntes e desembarques planejados; há travessias solo e em dupla. |
 | Grutas da Espuma | 10 | Pérola, encaixe, alavanca e portão. O trio estreia no desvio Três refúgios. |
 | Baía da Ressaca | 10 | Ondas em faixas, moedas com limite de passos e coordenação em dupla ou trio. |
 | Arquipélago do Farol | 10 | Pontes de luz, lentes e combinações avançadas antes do desfecho. |
 
-**Como contar os 139 desafios:** 110 travessias regulares, 16 arenas opcionais de chefe (duas por mundo) e 13 bônus ou alternativas sem chefe. Nem toda entrada não opcional é necessária na rota mais curta até os créditos. A bancada tem quatro testes, três reaproveitados da campanha e um exclusivo, e não soma quatro ao total.
+**Como contar os 169 desafios:** 140 travessias regulares, 16 arenas opcionais de chefe (duas por mundo) e 13 bônus ou alternativas sem chefe. Nem toda entrada não opcional é necessária na rota mais curta até os créditos. A bancada tem quatro testes, três reaproveitados da campanha e um exclusivo, e não soma quatro ao total.
 
 [Mapa e progressão](docs/campanha/README.md) · [Matriz de game design e level design](docs/campanha/matriz.md) · [Fichas e soluções](src/fases/README.md) · [Critérios de contagem](docs/processo-de-criacao/estado-atual.md)
 
@@ -225,7 +225,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as 139 soluções da campanha, incluindo 16 arenas opcionais de chefes, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Roteiro de validação manual](tests/qa-manual.md). Os PRs com QA no Chromium bem-sucedido disponibilizam também um ZIP jogável privado na aba Actions, sem deploy. [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
+Os testes cobrem as 169 soluções da campanha, incluindo 16 arenas opcionais de chefes, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Roteiro de validação manual](tests/qa-manual.md). Os PRs com QA no Chromium bem-sucedido disponibilizam também um ZIP jogável privado na aba Actions, sem deploy. [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
 
 </details>
 
