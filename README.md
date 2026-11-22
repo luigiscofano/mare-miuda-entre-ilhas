@@ -73,6 +73,21 @@ Quadros do renderizador em **512 × 384**, sem cursor, nos estados jogáveis ind
 ---
 
 <details>
+<summary>Fase beta e versões anteriores</summary>
+
+### Fase beta
+
+[Arquivo jogável e galeria da fase beta](docs/arte/fase-beta/README.md): seis pranchas com as 31 fases da Praia das Conchas nas duas marés, fontes e registro histórico das ondas. A edição privada fica preservada à parte, sem alterar o jogo corrente.
+
+### Protótipo inicial em preto e branco
+
+[Protótipo cinza v0.1.0](docs/arte/prototipo-cinza/README.md): HTML autônomo original, três fases reproduzidas, sprites nativos e fontes fixadas no Git.
+
+</details>
+
+---
+
+<details>
 <summary>Sobre e origem</summary>
 
 O jogo parte da ideia de maré do minigame Maré Miúda. Neste repositório, o estado, as fases e a renderização têm implementação nova, sem dependência do original. Nomes de trabalho: Maré Miúda: Entre Ilhas e Tiny Tide: Between Islands.
@@ -258,5 +273,5 @@ Projeto de Luigi Scofano de Araujo. O protótipo e a fatia vertical não incorpo
 
 ---
 
-**© 2026 Luigi Scofano de Araujo. Todos os direitos reservados.**
+**© 2026 Luigi Scofano de Araújo. Todos os direitos reservados.**
 

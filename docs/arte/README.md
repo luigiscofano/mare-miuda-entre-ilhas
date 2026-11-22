@@ -66,3 +66,10 @@ Os [fundos nativos e quadros de comparação](../processo-de-criacao/35-seletore
 ## Seletores das Grutas, da Baía e do Farol
 
 [Fundos, fontes e quadros](../processo-de-criacao/37-seletores-mundos-finais/README.md). A arte de cada região preserva os sinais jogáveis e a paleta de cada ambiente. O farol cenográfico não é um objetivo: a camada do jogo indica as rotas, inclusive a reta do último chefe.
+
+## Arquivo de versões
+
+- [Fase beta](fase-beta/README.md): galeria da Praia das Conchas, arte de referência e edição jogável fixada no Git.
+- [Protótipo inicial em preto e branco](prototipo-cinza/README.md): HTML cinza original, três tabuleiros reproduzidos e sprites.
+
+© 2026 Luigi Scofano de Araújo. Todos os direitos reservados.
