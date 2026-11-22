@@ -1,5 +1,7 @@
 # Processo de criação
 
+**Edições jogáveis preservadas:** [protótipo inicial em preto e branco](../arte/prototipo-cinza/README.md) e [fase beta](../arte/fase-beta/README.md). Ambas ficam fora do jogo corrente.
+
 **Nova etapa em revisão:** [expansão das travessias](../campanha/expansao/README.md). Acrescenta 123 fases regulares ao catálogo sem substituir os arquivos ou capturas das versões anteriores.
 
 **Comece pelo [estado atual da base de teste](estado-atual.md).** Para consultar propostas anteriores sem confundi-las com o jogo, veja o [acervo visual e sua proveniência](acervo-visual/README.md).
@@ -75,3 +77,5 @@ A numeração reflete frentes paralelas, não uma sequência única de versões.
 - [Guardião do Farol](20-guardiao-farol/README.md).
 
 “12 · Deriva ampliada” é um nome de pasta da campanha, não uma autorização para importar o PR #12. A consolidação do acervo exclui o gameplay desse PR.
+
+© 2026 Luigi Scofano de Araújo. Todos os direitos reservados.
