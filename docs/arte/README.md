@@ -9,6 +9,10 @@ Grade lógica de 256 × 192 e casas de 16 × 16. O Canvas desenha retângulos in
 
 A próxima etapa testará a densidade de sprites e fundos em conjunto, três direções de logo em PT/EN e exportação em escala inteira nearest-neighbor. Capturas não devem ter cursor. Estudos e capturas devem ser rotulados separadamente.
 
+## Estudos de animação
+
+O [estudo de alagamento](animacao/README.md) compara 81 configurações locais na subida e na descida da maré. O [MP4 de referência](animacao/Mare-Miuda-Alagamento-81-Configuracoes.mp4) inclui um exemplo de cobertura parcial do siri. É material de direção visual, separado do jogo.
+
 ## Palco colorido de teste
 
 Nos seletores e cenários não migrados, a paleta de teste usa `#24585e` (mar), `#32747a` (ondulações), `#f4d398` (areia), `#243c41` (contorno), `#df7756` (carapaça) e variações chapadas. As trilhas e entradas usam o mesmo módulo de 16 pixels. Portões não dependem só de cor: têm uma barra transversal. A fase mantém marca em X e aviso textual ao prever o ataque. O cenário de bancada continua cinza, com o siri da marca em sua paleta original.
