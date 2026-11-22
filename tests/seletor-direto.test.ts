@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import { concluirFase, criarProgresso, entradasDo, mundoAtual, rotaLivre, trilhasDo, viajar } from '../src/campanha/index.ts';
 import type { IdFase, Mundo, Progresso } from '../src/campanha/index.ts';
 import { opcoesDoSeletor, selecionarMarco } from '../src/campanha/seletor.ts';
+import { EXPANSAO } from '../src/fases/expansao/index.ts';
 import { TODAS_AS_FASES } from '../src/fases/index.ts';
 
 const MUNDOS: Mundo[] = ['praia', 'praia-enseadinha', 'recifes', 'mangue', 'enseada', 'deriva', 'grutas', 'ressaca', 'farol'];
@@ -10,10 +11,10 @@ const CHAVE = ({ coluna, linha }: { coluna: number; linha: number }) => `${colun
 
 test('cada entrada do catálogo aparece uma vez, sem expor a bancada', () => {
   const fases = MUNDOS.flatMap(mundo => opcoesDoSeletor({ ...criarProgresso(), mundo }).filter(o => o.fase));
-  assert.equal(fases.length, 106);
-  assert.equal(new Set(fases.map(o => o.fase)).size, 106);
+  assert.equal(fases.length, 106 + EXPANSAO.length);
+  assert.equal(new Set(fases.map(o => o.fase)).size, 106 + EXPANSAO.length);
   assert.deepEqual(new Set(fases.map(o => o.fase)), new Set(TODAS_AS_FASES.map(f => f.id)));
-  assert.equal(fases.filter(o => o.categoria === 'regular').length, 77);
+  assert.equal(fases.filter(o => o.categoria === 'regular').length, 77 + EXPANSAO.length);
   assert.equal(fases.filter(o => o.categoria === 'bonus').length, 13);
   assert.equal(fases.filter(o => o.categoria === 'chefe').length, 16);
   assert.deepEqual(opcoesDoSeletor({ ...criarProgresso(), mundo: 'arquipelago' }), []);
@@ -33,7 +34,7 @@ test('para todos os mundos, seleção direta e trilhas abertas têm o mesmo alca
           if (visitados.has(de) || visitados.has(para)) { visitados.add(de); visitados.add(para); }
         }
       }
-      const opcoes = opcoesDoSeletor(p).filter(o => o.id !== 'embarque-cabo');
+      const opcoes = opcoesDoSeletor(p).filter(o => o.id !== 'embarque-cabo' && !o.depoisDe);
       for (const o of opcoes) {
         const livre = visitados.has(CHAVE(o.posicao));
         assert.equal(o.estado !== 'bloqueada', livre, o.id);

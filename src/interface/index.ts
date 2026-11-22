@@ -1,9 +1,10 @@
+import { IDS_DA_EXPANSAO } from '../fases/expansao/index.ts';
 import { balsasNoTurno, casasDoRasante, executarPasso, faixaRessacaNoTurno, feixeNoTurno, iniciar, janelaGrutaAtiva, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, nomeDaJanelaGruta, passagemDoRecifeFechada, PASSOS_POR_MARE, passosAteTrocaFeixe, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, totalAncoradouros, totalFragmentos } from '../motor/index.ts';
 import type { Acao, Direcao, Evento, OrientacaoFarol } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { ALTURA, DENSIDADE, desenhar, desenharPraia, LARGURA } from '../render/index.ts';
 import { conectarTeclado } from '../entrada/index.ts';
-import { abriuEnseada, campanhaConcluida, CAPITULO_FINAL, concluirFase, entradaEm, entradasDo, ehIdFase, moverNoMapa, mundoAtual, nomeDo, rotaLivre, saidaEm, totalDeFasesRegulares, viajar } from '../campanha/index.ts';
+import { abriuEnseada, campanhaConcluida, CAPITULO_FINAL, concluirFase, entradaEm, ehIdFase, moverNoMapa, mundoAtual, nomeDo, rotaLivre, saidaEm, viajar } from '../campanha/index.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
 import { carregar, salvar } from '../persistencia/index.ts';
 import { criarAudio } from '../audio/index.ts';
@@ -11,7 +12,7 @@ import { gerarMareAMao, DIFICULDADES_MARE_A_MAO, MUNDOS_MARE_A_MAO, type OpcoesM
 import {
   incluirNoHistorico, lerHistoricoMare, salvarHistoricoMare, type EntradaMareAMao,
 } from './historico-mare-a-mao.ts';
-import { selecionarMarco } from '../campanha/seletor.ts';
+import { opcoesDoSeletor, selecionarMarco } from '../campanha/seletor.ts';
 import { renderizarSeletor } from './seletor.ts';
 
 function buscar<T extends HTMLElement = HTMLElement>(seletor: string): T {
@@ -164,12 +165,14 @@ function atualizarPraia(mensagem = ''): void {
   paineis.praia.setAttribute('aria-busy', String(quadroMapa !== undefined));
   buscar('#viagem-praia').textContent = mundo === 'praia' ? '1/2 · Cabo Baixo' : mundo === 'praia-enseadinha' ? '2/2 · Enseadinha' : '';
   if (direto) {
-    const concluidas = entradasDo(mundo).filter(e => !e.destino && !e.opcional && p.concluidas.some(id => id === e.id)).length;
+    const opcoes = opcoesDoSeletor(p);
+    const travessias = opcoes.filter(opcao => opcao.categoria === 'regular');
+    const concluidas = travessias.filter(opcao => opcao.estado === 'concluida').length;
     buscar('#orientacao-praia').textContent = 'Escolha uma fase disponível. As passagens se abrem com o mesmo progresso da campanha.';
     buscar('#progresso-praia').textContent = mundo === 'praia'
-      ? `Rota principal: ${concluidas}/4 · Concha Perolada: ${p.concluidas.includes('ilhota-perolada') ? 'encontrada' : 'não encontrada'}.`
-      : `Travessias concluídas: ${concluidas}/${totalDeFasesRegulares(mundo)}.`;
-    renderizarSeletor(document, seletor, p, ativarMarco);
+      ? `Travessias concluídas: ${concluidas}/${travessias.length} · Concha Perolada: ${p.concluidas.includes('ilhota-perolada') ? 'encontrada' : 'não encontrada'}.`
+      : `Travessias concluídas: ${concluidas}/${travessias.length}.`;
+    renderizarSeletor(document, seletor, p, opcoes, ativarMarco);
     return;
   }
   buscar('#mapa-praia').setAttribute('aria-label', 'Mapa caminhável: Arquipélago');
@@ -208,10 +211,12 @@ arteArquipelago.addEventListener('load', () => {
   if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'arquipelago') atualizarPraia();
 });
 
-function abrirPraia(mensagem = ''): void {
+function abrirPraia(mensagem = '', focarMarco?: string): void {
   trocarTela('praia', false);
   atualizarPraia(mensagem);
-  buscar('#titulo-praia').focus();
+  // O retorno de uma travessia nova mantém o foco e a rolagem no seu trecho.
+  const marco = focarMarco && document.querySelector<HTMLButtonElement>(`[data-marco="${focarMarco}"]`);
+  (marco || buscar('#titulo-praia')).focus();
 }
 
 const SIRIS = ['Coral', 'Verde', 'Amarelo'] as const;
@@ -565,7 +570,9 @@ const voltar = () => {
     abrirMareAMao();
     return;
   }
-  if ((tela === 'fase' && !bancada) || (tela === 'creditos' && contextoCreditos !== 'inicio')) abrirPraia();
+  if (tela === 'fase' && !bancada) {
+    abrirPraia('', IDS_DA_EXPANSAO.has(fase.id) ? fase.id : undefined);
+  } else if (tela === 'creditos' && contextoCreditos !== 'inicio') abrirPraia();
   else if (tela !== 'inicio') trocarTela('inicio');
 };
 

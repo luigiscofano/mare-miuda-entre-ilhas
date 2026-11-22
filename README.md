@@ -6,7 +6,7 @@
 
 Um siri cruza um arquipélago em um quebra-cabeça de aventura por turnos. A cada três passos válidos a maré vira: a água cobre atalhos, revela caminhos e muda como você atravessa cada ilha. O jogo é independente do Miudezas: não carrega seu código, seus recursos nem suas partidas salvas.
 
-**Prévia privada, ainda não lançada · 8 mundos · 106 desafios no catálogo da campanha · 8 arranjos da trilha aprovada.**
+**Prévia privada, ainda não lançada · 8 mundos · 139 desafios no catálogo da campanha · 8 arranjos da trilha aprovada.**
 
 [Baixar ZIP privado](https://github.com/luigiscofano/mare-miuda-entre-ilhas/actions/runs/44938701024/artifacts/14721380432) · [Como jogar localmente](#como-jogar-localmente) · [Visuais](#visuais-do-jogo) · [Documentação](#documentação) · [Processo de criação](docs/processo-de-criacao/README.md)
 
@@ -110,12 +110,12 @@ O núcleo combina contagem de passos, leitura espacial e previsão. O jogador n�
 <details>
 <summary>Campanha e mapa-múndi</summary>
 
-Escolha a fase pelo nome, sem andar dentro da região. Os botões mostram **Disponível**, **Bloqueada** (com motivo) ou **Concluída**. Bônus, chefes opcionais e viagens ficam em grupos próprios. O **Arquipélago** conserva o mapa caminhável e seus portos. A Praia das Conchas tem dois seletores, **Cabo Baixo** e **Enseadinha**, com a mesma passagem entre eles. Depois da Praia, Recifes e Mangue podem ser visitados em qualquer ordem. As duas rotas principais abrem a Enseada, e o percurso segue por Deriva, Grutas, Baía e Farol. O desfecho é revisitável: **A luz das duas marés** encerra a campanha sem exigir chefes nem bônus.
+Escolha a fase pelo nome, sem andar dentro da região. Os botões mostram **Disponível**, **Bloqueada** (com motivo) ou **Concluída**. Bônus, chefes opcionais e viagens ficam em grupos próprios. O **Arquipélago** conserva o mapa caminhável e seus portos. Os [novos trechos](docs/campanha/expansao/README.md) se abrem em sequência depois de marcos já existentes. A rota original e as viagens não exigem essas travessias novas. A Praia das Conchas tem dois seletores, **Cabo Baixo** e **Enseadinha**, com a mesma passagem entre eles. Depois da Praia, Recifes e Mangue podem ser visitados em qualquer ordem. As duas rotas principais abrem a Enseada, e o percurso segue por Deriva, Grutas, Baía e Farol. O desfecho é revisitável: **A luz das duas marés** encerra a campanha sem exigir chefes nem bônus.
 
-| Mundo | Entradas não opcionais | Mecânica e progressão |
+| Mundo | Travessias regulares | Mecânica e progressão |
 | --- | ---: | --- |
-| Praia das Conchas | 7 | Começa com o ciclo de maré, travessias curtas e a primeira ameaça anunciada. Inclui o encontro Ponta da garça. |
-| Recifes Expostos | 10 | Introduz pedra alta, rotas de baixa e coletas em mais de uma etapa. |
+| Praia das Conchas | 25 | Começa com o ciclo de maré, travessias curtas e a primeira ameaça anunciada. Inclui o encontro Ponta da garça. |
+| Recifes Expostos | 25 | Introduz pedra alta, rotas de baixa e coletas em mais de uma etapa. |
 | Mangue dos Siris Duplos | 10 | Apresenta a troca de siri, o contador compartilhado e os primeiros objetivos em dupla. |
 | Enseada da Garça | 10 | Combina previsão do rasante, abrigo e virada da água; a dupla reaparece. |
 | Ilhas à Deriva | 10 | Balsas, correntes e desembarques planejados; há travessias solo e em dupla. |
@@ -123,7 +123,7 @@ Escolha a fase pelo nome, sem andar dentro da região. Os botões mostram **Disp
 | Baía da Ressaca | 10 | Ondas em faixas, moedas com limite de passos e coordenação em dupla ou trio. |
 | Arquipélago do Farol | 10 | Pontes de luz, lentes e combinações avançadas antes do desfecho. |
 
-**Como contar os 106 desafios:** 77 entradas não opcionais, 16 arenas opcionais de chefe (duas por mundo) e 13 bônus ou alternativas sem chefe. Nem toda entrada não opcional é necessária na rota mais curta até os créditos. A bancada tem quatro testes, três reaproveitados da campanha e um exclusivo, e não soma quatro ao total.
+**Como contar os 139 desafios:** 110 travessias regulares, 16 arenas opcionais de chefe (duas por mundo) e 13 bônus ou alternativas sem chefe. Nem toda entrada não opcional é necessária na rota mais curta até os créditos. A bancada tem quatro testes, três reaproveitados da campanha e um exclusivo, e não soma quatro ao total.
 
 [Mapa e progressão](docs/campanha/README.md) · [Matriz de game design e level design](docs/campanha/matriz.md) · [Fichas e soluções](src/fases/README.md) · [Critérios de contagem](docs/processo-de-criacao/estado-atual.md)
 
@@ -225,7 +225,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as 106 soluções da campanha, incluindo 16 arenas opcionais de chefes, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Roteiro de validação manual](tests/qa-manual.md). Os PRs com QA no Chromium bem-sucedido disponibilizam também um ZIP jogável privado na aba Actions, sem deploy. [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
+Os testes cobrem as 139 soluções da campanha, incluindo 16 arenas opcionais de chefes, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Roteiro de validação manual](tests/qa-manual.md). Os PRs com QA no Chromium bem-sucedido disponibilizam também um ZIP jogável privado na aba Actions, sem deploy. [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
 
 </details>
 

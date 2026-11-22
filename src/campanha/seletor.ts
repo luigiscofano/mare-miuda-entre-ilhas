@@ -1,3 +1,4 @@
+import { travessiasDaExpansao } from '../fases/expansao/index.ts';
 import { ehIdFase, entradasDo, mundoAtual, posicoesVisitaveis, podeSairDaPraia, rotaLivre, trilhasDo } from './index.ts';
 import type { IdFase, Mundo, Progresso } from './index.ts';
 import { mesmaCasa } from '../motor/index.ts';
@@ -13,6 +14,7 @@ export type OpcaoDoSeletor = Readonly<{
   fase?: IdFase;
   estado: 'bloqueada' | 'disponivel' | 'concluida';
   motivo?: string;
+  depoisDe?: IdFase;
 }>;
 
 function bloqueio(p: Progresso, posicao: Posicao, alcancavel: (pos: Posicao) => boolean): string {
@@ -28,7 +30,7 @@ export function opcoesDoSeletor(p: Progresso): readonly OpcaoDoSeletor[] {
   if (mundo === 'arquipelago') return [];
   const visitaveis = posicoesVisitaveis(mundo, p.concluidas);
   const alcancavel = (pos: Posicao) => visitaveis.some(item => mesmaCasa(item, pos));
-  const opcoes = entradasDo(mundo).map((entrada): OpcaoDoSeletor => {
+  const opcoesOriginais = entradasDo(mundo).map((entrada): OpcaoDoSeletor => {
     const { id, nome, posicao, destino } = entrada;
     const fase = ehIdFase(id) ? id : undefined;
     const livre = alcancavel(posicao);
@@ -38,6 +40,26 @@ export function opcoesDoSeletor(p: Progresso): readonly OpcaoDoSeletor[] {
       estado: !livre ? 'bloqueada' : fase && p.concluidas.includes(fase) ? 'concluida' : 'disponivel',
       motivo: livre ? undefined : bloqueio(p, posicao, alcancavel),
     };
+  });
+  const expansao = travessiasDaExpansao(mundo);
+  const concluidas = new Set(p.concluidas);
+  const opcoes = opcoesOriginais.flatMap((ancora): OpcaoDoSeletor[] => {
+    if (!ancora.fase || ancora.categoria !== 'regular') return [ancora];
+    // A expansão herda a posição salva da travessia de referência. Não cria
+    // nós extras no mapa nem muda as exigências das rotas já existentes.
+    const novas = expansao.filter(({ depoisDe }) => depoisDe === ancora.fase);
+    let anterior = ancora;
+    const sequencia = novas.map(({ fase }): OpcaoDoSeletor => {
+      const livre = anterior.estado === 'concluida';
+      anterior = {
+        id: fase.id, fase: fase.id, nome: fase.nome, posicao: ancora.posicao, categoria: 'regular',
+        depoisDe: ancora.fase,
+        estado: !livre ? 'bloqueada' : concluidas.has(fase.id) ? 'concluida' : 'disponivel',
+        motivo: livre ? undefined : `Conclua ${anterior.nome} para liberar esta travessia.`,
+      };
+      return anterior;
+    });
+    return [ancora, ...sequencia];
   });
   // A saída original do Cabo continua disponível no mesmo marco legado.
   const encontro = opcoes.find(o => o.fase === 'ponta-da-garca');

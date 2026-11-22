@@ -1,5 +1,9 @@
 # Fases, grade e soluções
 
+## Expansão de travessias regulares
+
+Os [mapas novos](expansao/) são tipados por mundo e cadastrados em `TODAS_AS_FASES`. Cada ficha declara um marco regular já existente e contém uma solução sem levadas. Consulte o [registro com objetivos, pistas e soluções](../../docs/campanha/expansao/README.md).
+
 Estado inicial padrão: maré baixa, zero passos, zero erros e sem fragmento. Símbolos: S início, . firme, = baixio, # bloqueio, C concha, B fragmento, G saída com fragmento. Todas reiniciam no início pelo botão ou R. Não têm checkpoints intermediários nem opcionais no protótipo.
 
 ## 01 · Passagem da primeira onda
