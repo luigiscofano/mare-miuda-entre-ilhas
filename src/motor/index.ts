@@ -6,6 +6,11 @@ export type EtapaGruta = 'K' | 'E' | 'F';
 export type JanelaGruta = 'descida' | 'alta' | 'baixa';
 type CondicaoGruta = Readonly<{ etapa: EtapaGruta; janela: JanelaGruta; placa?: Posicao }>;
 export type Posicao = Readonly<{ coluna: number; linha: number }>;
+export const FORMAS_DE_FENDA = ['redonda', 'estreita', 'bifurcada'] as const;
+export type Fenda = Readonly<{
+  forma: typeof FORMAS_DE_FENDA[number];
+  bocas: readonly [Posicao, Posicao];
+}>;
 export type Ameaca = Readonly<{
   alvo: Posicao;
   primeiroAtaque: number;
@@ -38,6 +43,7 @@ export type Fase = Readonly<{
   farol?: Readonly<{ passosPorOrientacao: number; orientacoes: readonly OrientacaoFarol[] }>;
   ressaca?: Readonly<{ faixas: readonly FaixaRessaca[]; objetivo?: 'sobreviver' | 'atravessar' }>;
   recife?: ProvaRecife;
+  fendas?: readonly Fenda[];
   atracacaoNaVirada?: readonly Posicao[];
   dupla?: Readonly<{ segundoAlvo: 'T' | 'P'; terceiroAlvo?: 'Y' }>;
 }>;
@@ -62,6 +68,8 @@ export type Estado = Readonly<{
 export type MotivoErro = 'mare' | 'garca' | 'ressaca' | 'farol';
 export type Evento =
   | Readonly<{ tipo: 'bloqueado' }>
+  | Readonly<{ tipo: 'fenda-bloqueada'; motivo: 'ocupada' | 'interditada' }>
+  | Readonly<{ tipo: 'fenda-atravessada'; forma: Fenda['forma'] }>
   | Readonly<{ tipo: 'virada'; alta: boolean }>
   | Readonly<{ tipo: 'balsa' }>
   | Readonly<{ tipo: 'gruta-avancou'; etapa: EtapaGruta }>
@@ -139,7 +147,7 @@ export function alvoDaGarca(ameaca: Ameaca | undefined, passo: number): Posicao 
 }
 
 // Solo firme também é atingido. O voo passa por cima dos obstáculos,
-// mas a pedra alta oculta o siri e nunca recebe a marca do rasante.
+// mas o refúgio elevado oculta o siri e nunca recebe a marca do rasante.
 export function casasDoRasante(fase: Fase, passo: number): Posicao[] {
   const alvo = alvoDaGarca(fase.ameaca, passo);
   if (!alvo) return [];
@@ -398,17 +406,49 @@ export function portaoLiberado(fase: Fase, portao: Posicao, siris: readonly Posi
   return siris.some(pos => lerCelula(fase, pos) === 'P');
 }
 
-export function destinoPermitido(fase: Fase, estado: Estado, direcao: Direcao): Posicao | undefined {
-  const origem = jogadorAtivo(estado);
-  const outros = posicoesDosSiris(estado).filter((_, i) => i !== siriAtivo(estado));
-  const destino = calcularDestino(origem, direcao);
+export function bocaSubmersa(fase: Fase, boca: Posicao, passos: number): boolean {
+  return lerCelula(fase, boca) === '=' && mareAlta(passos);
+}
+
+export function fendaAtiva(fase: Fase, fenda: Fenda, passos: number): boolean {
+  return !fenda.bocas.some(boca => bocaSubmersa(fase, boca, passos));
+}
+
+type PrevisaoPasso =
+  | Readonly<{ entrada: Posicao; motivo: 'bloqueado' | 'ocupada' | 'interditada' }>
+  | Readonly<{ entrada: Posicao; destino: Posicao; fenda?: Fenda; saidaVaiAlagar?: boolean }>;
+
+function passagemLivre(fase: Fase, estado: Estado, destino: Posicao, outros: readonly Posicao[]): boolean {
   const celula = lerCelula(fase, destino);
-  if (!celula || celula === '#' || (celula === '=' && mareAlta(estado.passos)) ||
-    passagemDoRecifeFechada(fase, destino, estado.temFragmento) ||
-    (celula === 'I' && !ponteIluminada(fase, destino, estado.passos)) ||
-    (celula === '~' && !balsasNoTurno(fase, estado.passos).some(p => mesmaCasa(p, destino))) ||
-    (celula === 'D' && !portaoLiberado(fase, destino, outros)) || (celula === 'O' && !portaoDaGrutaAberto(fase, estado)) || outros.some(outro => mesmaCasa(outro, destino))) return;
-  return destino;
+  return !!celula && celula !== '#' && !bocaSubmersa(fase, destino, estado.passos) &&
+    !passagemDoRecifeFechada(fase, destino, estado.temFragmento) &&
+    (celula !== 'I' || ponteIluminada(fase, destino, estado.passos)) &&
+    (celula !== '~' || balsasNoTurno(fase, estado.passos).some(p => mesmaCasa(p, destino))) &&
+    (celula !== 'D' || portaoLiberado(fase, destino, outros)) &&
+    (celula !== 'O' || portaoDaGrutaAberto(fase, estado)) &&
+    !outros.some(outro => mesmaCasa(outro, destino));
+}
+
+export function preverPasso(fase: Fase, estado: Estado, direcao: Direcao): PrevisaoPasso {
+  const posicoes = posicoesDosSiris(estado);
+  const ativo = siriAtivo(estado);
+  const outros = posicoes.filter((_, i) => i !== ativo);
+  const entrada = calcularDestino(posicoes[ativo], direcao);
+  if (!passagemLivre(fase, estado, entrada, outros)) return { entrada, motivo: 'bloqueado' };
+  const fenda = fase.fendas?.find(par => par.bocas.some(boca => mesmaCasa(boca, entrada)));
+  if (!fenda || !fendaAtiva(fase, fenda, estado.passos)) return { entrada, destino: entrada };
+
+  // Só a casa em que se pisa ativa o par. A saída não dispara outra viagem.
+  const destino = mesmaCasa(fenda.bocas[0], entrada) ? fenda.bocas[1] : fenda.bocas[0];
+  if (outros.some(outro => mesmaCasa(outro, destino))) return { entrada, motivo: 'ocupada' };
+  if (!passagemLivre(fase, estado, destino, outros)) return { entrada, motivo: 'interditada' };
+  return { entrada, destino, fenda, saidaVaiAlagar: bocaSubmersa(fase, destino, estado.passos + 1) };
+}
+
+// A marca de movimento aponta para a boca pisada, não para a saída distante.
+export function destinoPermitido(fase: Fase, estado: Estado, direcao: Direcao): Posicao | undefined {
+  const previsao = preverPasso(fase, estado, direcao);
+  return 'destino' in previsao ? previsao.entrada : undefined;
 }
 
 function terminouOrcamento(fase: Fase, passos: number, eventos: Evento[]): boolean {
@@ -429,14 +469,17 @@ export function executarPasso(fase: Fase, anterior: Estado, acao: Acao): Transic
     return { estado: { ...anterior, dupla: { ...dupla, parceiroAtivo: proximo === 1 },
       ...(terceiro ? { terceiro: { ...terceiro, ativo: proximo === 2 } } : {}) }, eventos: [{ tipo: 'troca' }] };
   }
-  const entrada = destinoPermitido(fase, anterior, acao);
-  if (!entrada) {
-    return { estado: anterior, eventos: [{ tipo: 'bloqueado' }] };
+  const previsao = preverPasso(fase, anterior, acao);
+  if ('motivo' in previsao) {
+    const { motivo } = previsao;
+    const evento: Evento = motivo === 'bloqueado' ? { tipo: 'bloqueado' } : { tipo: 'fenda-bloqueada', motivo };
+    return { estado: anterior, eventos: [evento] };
   }
   const passos = anterior.passos + 1;
   const eventos: Evento[] = [];
+  if (previsao.fenda) eventos.push({ tipo: 'fenda-atravessada', forma: previsao.fenda.forma });
   let posicoes = posicoesDosSiris(anterior);
-  posicoes[ativo] = entrada;
+  posicoes[ativo] = previsao.destino;
   if (passos % PASSOS_POR_MARE === 0) {
     eventos.push({ tipo: 'virada', alta: mareAlta(passos) });
     const balsasAntes = balsasNoTurno(fase, anterior.passos);

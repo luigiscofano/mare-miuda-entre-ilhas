@@ -16,7 +16,7 @@ export const GARCA_DA_RESTINGA = {
   ameaca: { alvo: p(6, 2), rota: [p(7, 1), p(3, 1)], primeiroAtaque: 4, periodo: 2,
     rasante: { alcance: 3, eixo: 'linha' } },
   objetivo: 'Atravesse a restinga e alcance a concha sem se expor aos rasantes.',
-  ensino: 'A garça anuncia uma linha de casas no próximo passo. Mude de fileira ou suba numa pedra alta antes do rasante.',
+  ensino: 'A garça anuncia uma linha de casas no próximo passo. Mude de fileira ou use o refúgio de areia elevada antes do rasante.',
   solucao: rota('RLRLRRRRRDRRDRRRRR'),
 } as const satisfies Fase;
 

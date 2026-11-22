@@ -26,7 +26,7 @@ test('Todas as fases têm testemunhas aceitas pelo motor real', () => {
   assert.equal(new Set(TODAS_AS_FASES.map(fase => fase.id)).size, TODAS_AS_FASES.length);
   for (const f of TODAS_AS_FASES) assert.ok(validarSolucao(f), f.id);
 });
-test('Pedra alta é refúgio e rocha continua bloqueada', () => {
+test('Areia elevada é refúgio e rocha continua bloqueada', () => {
   const fase = FASES_RECIFES[0];
   const inicio = iniciar(fase);
   assert.strictEqual(executarPasso(fase, inicio, 'baixo').estado, inicio);

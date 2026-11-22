@@ -74,7 +74,7 @@ function verificarRecuperacao(fase: Fase) {
   return { total: fila.length, recuperaveis: recuperaveis.size };
 }
 
-test('o rasante horizontal avisa as casas reais e pedra alta protege mesmo no centro do voo', () => {
+test('o rasante horizontal avisa as casas reais e o refúgio elevado protege mesmo no centro do voo', () => {
   const fase = GARCA_DA_RESTINGA;
   assert.deepEqual(casasDoRasante(fase, 5), []);
   assert.deepEqual(casasDoRasante(fase, 6), [4, 5, 6, 8, 9, 10].map(c => p(c, 1)));

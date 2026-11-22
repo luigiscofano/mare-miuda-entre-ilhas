@@ -15,7 +15,7 @@ REGIOES = [
     ('praia-enseadinha', 'praia', 'praia-fio-de-areia', 8),
     ('recifes', 'recifes', 'recife-pedra-firme', 14),
     ('mangue', 'mangue', 'mangue-dois-encontros', 12),
-    ('enseada', 'enseada', 'enseada-sombra-restinga', 14),
+    ('enseada', 'enseada', 'enseada-sombra-restinga', 16),
     ('deriva', 'deriva', 'deriva-primeira-balsa', 14),
     ('grutas', 'grutas', 'grutas-encaixe', 13),
     ('ressaca', 'ressaca', 'ressaca-dupla-abrigo', 13),

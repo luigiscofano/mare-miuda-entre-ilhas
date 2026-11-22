@@ -1,3 +1,4 @@
+import { FENDAS_DA_ENSEADA } from './fendas-da-enseada.ts';
 import { EXPANSAO } from './expansao/index.ts';
 import { GUARDIAO_DA_RAIZ, DUPLA_NO_MANGUE } from './chefes-mangue.ts';
 import { PONTA_DA_RESSACA } from './ponta-da-ressaca.ts';
@@ -48,8 +49,8 @@ export const FASES: readonly Fase[] = [
   {
     id: 'busca-e-volta',
     nome: 'Busca e volta',
-    objetivo: 'Pegue o fragmento na ilhota e leve-o de volta à saída.',
-    ensino: 'A saída exige o fragmento. Caminhe na ilha firme até a maré baixar antes de voltar pelo baixio.',
+    objetivo: 'Pegue a pérola na ilhota e leve-a de volta à saída.',
+    ensino: 'A saída exige a pérola. Caminhe na ilha firme até a maré baixar antes de voltar pelo baixio.',
     mapa: ['SG#', '=##', '.B#'],
     solucao: ['baixo', 'baixo', 'direita', 'esquerda', 'direita', 'esquerda', 'cima', 'cima', 'direita'],
   },
@@ -69,7 +70,7 @@ export const FASES_PRAIA: readonly Fase[] = [
   {
     id: 'ponta-da-garca',
     nome: 'A ponta da garça',
-    objetivo: 'Busque o fragmento e chegue à saída depois da curva, evitando a garça.',
+    objetivo: 'Busque a pérola e chegue à saída depois da curva, evitando a garça.',
     ensino: 'O sexto passo fecha um ciclo da água, mas a garça também ataca nesse turno. Veja o aviso antes de coletar.',
     mapa: ['S=....', '###.#G', '....B.'],
     ameaca: { alvo: { coluna: 4, linha: 2 }, primeiroAtaque: 6, periodo: 4 },
@@ -86,20 +87,20 @@ const rota = (letras: string) => [...letras].map(letra => comandos[letra as Coma
 export const FASES_RECIFES: readonly Fase[] = [
   {
     id: 'recife-pedra-firme', nome: 'Acima da espuma',
-    objetivo: 'Use a pedra alta como refúgio e alcance a concha.',
-    ensino: 'Pedra alta é firme e atravessável; rocha escura bloqueia. Volte à pedra quando a água baixar.',
+    objetivo: 'Use o refúgio de areia elevada e alcance a concha.',
+    ensino: 'Você pode pisar no refúgio de areia elevada; nenhuma pedra é transitável. Na baixa, volte ao refúgio.',
     mapa: ['S=H==C', '##.###'], solucao: rota('RRDUDURRR'),
   },
   {
     id: 'recife-duas-pocas', nome: 'Duas poças do recife',
-    objetivo: 'Recolha os dois fragmentos em lados opostos e retorne à saída.',
+    objetivo: 'Recolha as duas pérolas em lados opostos e retorne à saída.',
     ensino: 'As poças só se ligam na baixa. Os bolsões laterais têm chão firme para preparar o retorno.',
     mapa: ['###G###', 'B=.S.=B', '..#..#.'], solucao: rota('RRRDUDULLLRLLLLDRLRURRU'),
   },
   {
     id: 'recife-retorno', nome: 'A volta do recife',
-    objetivo: 'Busque o fragmento na enseadinha e volte por três baixios até a saída.',
-    ensino: 'Quando a maré subir, use os bolsões próximos à pedra para montar a volta em vários ciclos.',
+    objetivo: 'Busque a pérola na enseadinha e volte por três baixios até a saída.',
+    ensino: 'Quando a maré subir, use os bolsões próximos ao refúgio para montar a volta em vários ciclos.',
     mapa: ['SG####', '=#.###', 'H=.###', '.#=B.#', '###..#'],
     solucao: rota('DDDUDURRUDUDDRRLRLLUUDUDLLDUDUUUR'),
   },
@@ -116,7 +117,7 @@ export const FASES_MANGUE: readonly Fase[] = [
   {
     id: 'mangue-placa', nome: 'Um segura, outro passa',
     objetivo: 'Mantenha um siri na placa enquanto o outro cruza o portão e chega à concha.',
-    ensino: 'O siri de trás só abre a passagem enquanto pisa na placa. A pedra alta é segura na maré alta.',
+    ensino: 'O siri de trás só abre a passagem enquanto pisa na placa. O refúgio de areia elevada é seguro na maré alta.',
     mapa: ['S=HDC', '.####', 'A.P##'],
     dupla: { segundoAlvo: 'P' }, solucao: rota('RRXRRXRR'),
   },
@@ -130,7 +131,7 @@ export const FASES_MANGUE: readonly Fase[] = [
   ...FASES_MANGUE_AMPLIADO,
 ];
 
-export const TODAS_AS_FASES = [...FASES_PRAIA, ...FASES_ENSEADINHA, VIGIA_DAS_ONDAS, PONTA_DA_RESSACA, ...FASES_RECIFES, GUARDIAO_DAS_POCAS, VIGIA_DO_RECIFE, ...FASES_MANGUE, GUARDIAO_DA_RAIZ, DUPLA_NO_MANGUE, ...FASES_ENSEADA, ...FASES_ENSEADA_AMPLIADA, GARCA_DA_RESTINGA, VIGIA_DAS_FALESIAS, ...FASES_DERIVA, ...FASES_DERIVA_AMPLIADA, MESTRE_DAS_CORRENTES, PASSAGEM_DAS_BALSAS, DUPLA_ENSEADA, DUPLA_ENSEADA_REVEZAMENTO, DUPLA_DERIVA, DUPLA_DERIVA_CONTRAMAO, ...FASES_GRUTAS, ...GRUTAS_DUPLA, ...FASES_GRUTAS_AMPLIADAS, TRES_REFUGIOS, SENTINELA_DA_GRUTA, COFRE_DAS_ESPUMAS, ...RESSACA_DUPLA, ...FASES_RESSACA_AMPLIADA, VENTO_SUL, RESSACA_ALTA, ECO_DOS_TRES_CAIS, ...FASES_FAROL, ...FASES_FAROL_AMPLIADO, GUARDIAO_FAROL, TRES_LUZES_EM_REVEZAMENTO, ULTIMA_VIRADA, ...EXPANSAO.map(({ fase }) => fase)];
+export const TODAS_AS_FASES = [...FASES_PRAIA, ...FASES_ENSEADINHA, VIGIA_DAS_ONDAS, PONTA_DA_RESSACA, ...FASES_RECIFES, GUARDIAO_DAS_POCAS, VIGIA_DO_RECIFE, ...FASES_MANGUE, GUARDIAO_DA_RAIZ, DUPLA_NO_MANGUE, ...FASES_ENSEADA, ...FASES_ENSEADA_AMPLIADA, GARCA_DA_RESTINGA, VIGIA_DAS_FALESIAS, ...FASES_DERIVA, ...FASES_DERIVA_AMPLIADA, MESTRE_DAS_CORRENTES, PASSAGEM_DAS_BALSAS, DUPLA_ENSEADA, DUPLA_ENSEADA_REVEZAMENTO, DUPLA_DERIVA, DUPLA_DERIVA_CONTRAMAO, ...FASES_GRUTAS, ...GRUTAS_DUPLA, ...FASES_GRUTAS_AMPLIADAS, TRES_REFUGIOS, SENTINELA_DA_GRUTA, COFRE_DAS_ESPUMAS, ...RESSACA_DUPLA, ...FASES_RESSACA_AMPLIADA, VENTO_SUL, RESSACA_ALTA, ECO_DOS_TRES_CAIS, ...FASES_FAROL, ...FASES_FAROL_AMPLIADO, GUARDIAO_FAROL, TRES_LUZES_EM_REVEZAMENTO, ULTIMA_VIRADA, ...EXPANSAO.map(({ fase }) => fase), ...FENDAS_DA_ENSEADA];
 
 export const TRES_MOEDAS: Fase = {
   id: 'laboratorio-tres-moedas', nome: 'Três moedas na restinga',

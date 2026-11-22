@@ -1,9 +1,12 @@
 import type { Mundo } from '../campanha/index.ts';
 import type { Posicao } from '../motor/index.ts';
+import { graosDaCasa, tonsDosGraos } from './graos-de-areia.ts';
 import { ENFEITES_DA_PRAIA } from './enfeites-da-praia.ts';
 import { TEMA_DERIVA, TEMA_ENSEADA } from './costas-enseada-deriva.ts';
 import { TEMA_FAROL, TEMA_GRUTAS, TEMA_RESSACA } from './costas-grutas-ressaca-farol.ts';
-import { RAIZ_DE_MARGEM, TEMA_MANGUE, TEMA_RECIFES } from './costas-recifes-mangue.ts';
+import { TEMA_MANGUE, TEMA_RECIFES } from './costas-recifes-mangue.ts';
+import { obstaculosOceanicos } from './obstaculos-oceanicos.ts';
+import type { Retangulo } from './obstaculos-oceanicos.ts';
 
 // Cada casa é desenhada na superfície nativa, sem interpolar os 32 × 32 pixels.
 export const CASA_PRAIA_NATIVA = 32;
@@ -23,7 +26,6 @@ export const CORES_PRAIA = {
 } as const;
 
 type Mapa = readonly string[];
-type Retangulo = Readonly<{ x: number; y: number; largura: number; altura: number }>;
 type Desenho = Readonly<{
   contexto: CanvasRenderingContext2D;
   origemX: number;
@@ -31,7 +33,7 @@ type Desenho = Readonly<{
 }>;
 type Cores = Readonly<Record<keyof typeof CORES_PRAIA, string>>;
 
-type Enfeite = Readonly<{ desenho: readonly string[]; paleta: Readonly<Record<string, string>> }>;
+type Enfeite = Readonly<{ desenho: readonly string[]; paleta: Readonly<Record<string, string>>; estrutura?: true }>;
 
 export type TemaDeCosta = Readonly<{
   cores: Cores;
@@ -97,77 +99,15 @@ function sprite(ctx: CanvasRenderingContext2D, desenho: readonly string[],
   });
 }
 
-const PEDRA_GRANDE = [
-  '.......ddddddd.......',
-  '.....ddttttttfdd.....',
-  '....dtsssttttfffd....',
-  '...dtssssttttfffd....',
-  '..dtsssttttfffcffd...',
-  '..dtttttttfffcfffd...',
-  '..dttttffffccffffd...',
-  '..dffffffffffmmfd....',
-  '...dffffffffmmmd.....',
-  '....ddffmmmmmdd......',
-  '......ddddddd........',
-] as const;
-const PEDRA_MEDIA = [
-  '.....dddddd...',
-  '...ddttttffd..',
-  '..dtssstfffd..',
-  '.dtsttfffffmd.',
-  '.dttfffffffmd.',
-  '.dfffffmmmmd..',
-  '..ddmmmmddd...',
-  '....dddd......',
-] as const;
-const PEDRA_PEQUENA = [
-  '...ddddd..', '..dttfffd.', '.dtsfffcfd', '.dfffffmd.', '..dmmddd..', '...ddd....',
-] as const;
-function rocha(ctx: CanvasRenderingContext2D, x: number, y: number, semente: number,
-  { cores, tipo: costa }: TemaDeCosta, refugio = false) {
-  const paletaPedra = {
-    d: cores.rochaEscura, f: cores.rochaFace, c: cores.rochaFaceClara,
-    t: cores.rochaTopo, s: cores.rochaSol, m: cores.rochaMeio,
-  };
-  // As bases se encostam para formar um afloramento, não três peças soltas.
-  ret(ctx, refugio ? cores.areiaBorda : cores.fundo, x + 4, y + 23, 24, 3);
-  ret(ctx, refugio ? cores.areiaPonto : cores.raso, x + 7, y + 26, 19, 1);
-  if (refugio) {
-    ret(ctx, cores.areiaClara, x + 7, y + 16, 17, 4);
-    ret(ctx, cores.areiaClara, x + 9, y + 20, 14, 2);
-    ret(ctx, cores.areiaBorda, x + 10, y + 22, 13, 2);
-    if (costa === 'recifes') {
-      // O refúgio tem tampa clara e estratos baixos: não parece uma barreira alta.
-      ret(ctx, cores.rochaTopo, x + 8, y + 21, 15, 1);
-      ret(ctx, cores.rochaMeio, x + 10, y + 23, 11, 1);
-      ret(ctx, cores.rochaSol, x + 11, y + 17, 7, 1);
-    }
-    return;
-  }
-  const tipo = (semente >>> 7) % 7;
-  if (tipo < 2) {
-    sprite(ctx, PEDRA_GRANDE, paletaPedra, x + 4 + tipo * 3, y + 5 + tipo);
-    sprite(ctx, PEDRA_MEDIA, paletaPedra, x + 3, y + 14 + tipo * 2);
-    sprite(ctx, PEDRA_PEQUENA, paletaPedra, x + 18, y + 17);
-  } else if (tipo < 4) {
-    sprite(ctx, PEDRA_MEDIA, paletaPedra, x + 12 - tipo, y + 10);
-    sprite(ctx, PEDRA_MEDIA, paletaPedra, x + 15, y + 15 + tipo);
-    sprite(ctx, PEDRA_PEQUENA, paletaPedra, x + 5, y + 18);
-  } else if (tipo < 6) {
-    sprite(ctx, PEDRA_PEQUENA, paletaPedra, x + 15, y + 11 - tipo);
-    sprite(ctx, PEDRA_GRANDE, paletaPedra, x + 5, y + 11);
-    sprite(ctx, PEDRA_PEQUENA, paletaPedra, x + 17, y + 19);
-  } else {
-    sprite(ctx, PEDRA_MEDIA, paletaPedra, x + 13, y + 16);
-    sprite(ctx, PEDRA_MEDIA, paletaPedra, x + 4, y + 15);
-    sprite(ctx, PEDRA_PEQUENA, paletaPedra, x + 11, y + 9);
-  }
-  if (costa === 'recifes' || costa === 'enseada' || costa === 'grutas') {
-    // Apenas a face de um dos blocos recebe o veio; o desenho continua angular.
-    const recuo = tipo % 3;
-    ret(ctx, cores.rochaFaceClara, x + 10 + recuo, y + 17, 8);
-    ret(ctx, cores.rochaTopo, x + 11 + recuo, y + 18, 6);
-  }
+function pintarRefugio(ctx: CanvasRenderingContext2D, x: number, y: number, { cores }: TemaDeCosta): void {
+  // O ressalto atravessa quase a casa inteira: é areia da própria trilha,
+  // não uma peça que o siri precisa contornar. A faixa escura é só relevo.
+  ret(ctx, cores.areiaPonto, x + 1, y + 10, N - 2, 16);
+  ret(ctx, cores.areiaClara, x + 2, y + 10, N - 4, 4);
+  ret(ctx, cores.areiaClara, x + 5, y + 8, N - 10, 2);
+  ret(ctx, cores.areia, x + 1, y + 14, N - 2, 7);
+  ret(ctx, cores.areiaPonto, x + 1, y + 21, N - 2, 3);
+  ret(ctx, cores.areiaBorda, x + 2, y + 24, N - 4, 2);
 }
 
 const ERVAS = [
@@ -207,30 +147,62 @@ function marCalmo(ctx: CanvasRenderingContext2D, largura: number, altura: number
   }
 }
 
-function pintarEnfeitesNoMar(ctx: CanvasRenderingContext2D, grade: Retangulo, largura: number, altura: number,
-  enfeites: readonly Enfeite[]): void {
-  // Reserve folga em torno dos limites da grade. O jogador nunca confunde
-  // um enfeite do oceano com uma casa transitável, mesmo nas arenas maiores.
-  const xCentro = Math.floor(largura / 2);
-  const yCentro = Math.floor(altura / 2);
-  const posicoes = [[grade.x - 68, yCentro - 26], [grade.x + grade.largura + 26, yCentro + 10],
-    [xCentro - 58, grade.y + grade.altura + 29]] as const;
-  enfeites.forEach(({ desenho, paleta }, indice) => {
-    const [x, y] = posicoes[indice];
-    if (x < 7 || y < 7 || x + desenho[0].length > largura - 7 || y + desenho.length > altura - 7) return;
-    sprite(ctx, desenho, paleta, x, y);
+function pintarEstruturasNoMar(ctx: CanvasRenderingContext2D, grade: Retangulo,
+  largura: number, altura: number, idFase: string, { cores, enfeites }: TemaDeCosta): void {
+  obstaculosOceanicos(grade, largura, altura, idFase).forEach((caixa, indice) => {
+    const tematica = enfeites[indice];
+    if (tematica?.estrutura) {
+      pintarMatrizNaCaixa(ctx, caixa, tematica);
+      return;
+    }
+    // Rebatemos as faixas de cada forma na área livre, sempre em pixels
+    // inteiros. O afloramento tem uma base comum e conta como uma peça.
+    const { x, y, largura: l, altura: a, forma } = caixa;
+    const bloco = (cor: string, u: number, v: number, w: number, h: number) => {
+      const inicio = Math.round(u * l / 16);
+      const fim = Math.round((u + w) * l / 16);
+      const topo = Math.round(v * a / 12);
+      const fundo = Math.round((v + h) * a / 12);
+      if (fim > inicio && fundo > topo) ret(ctx, cor, x + inicio, y + topo, fim - inicio, fundo - topo);
+    };
+    if (forma === 'afloramento') {
+      bloco(cores.rochaEscura, 0, 7, 16, 4);
+      bloco(cores.rochaFace, 1, 6, 6, 4);
+      bloco(cores.rochaFaceClara, 5, 3, 7, 6);
+      bloco(cores.rochaFace, 10, 6, 5, 4);
+      bloco(cores.rochaTopo, 1, 5, 5, 2);
+      bloco(cores.rochaTopo, 6, 2, 5, 3);
+      bloco(cores.rochaTopo, 11, 5, 4, 2);
+      bloco(cores.rochaSol, 6, 2, 3, 1);
+    } else {
+      const canto = forma === 'bloco' ? 1 : 2;
+      bloco(cores.rochaEscura, canto, 6, 16 - canto * 2, 5);
+      bloco(cores.rochaFace, canto, 4, 16 - canto * 2, 6);
+      bloco(cores.rochaTopo, canto + 1, 3, 14 - canto * 2, 3);
+      bloco(cores.rochaTopo, canto + 2, 2, 12 - canto * 2, 2);
+      bloco(cores.rochaSol, canto + 2, 2, 7 - canto, 1);
+      bloco(cores.rochaFaceClara, canto + 1, 6, 10 - canto, 2);
+    }
   });
 }
 
-function localDeRocha(mapa: Mapa, coluna: number, linha: number): boolean {
-  const costa = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-    .some(([dc, dl]) => chao(celula(mapa, coluna + dc, linha + dl), false));
-  if (!costa) return false;
-  // Deixe intervalos de água entre fileiras de afloramentos. As extremidades
-  // mantêm a forma inteira; águas abertas continuam fora da trilha.
-  const cercada = (celula(mapa, coluna - 1, linha) === '#' && celula(mapa, coluna + 1, linha) === '#')
-    || (celula(mapa, coluna, linha - 1) === '#' && celula(mapa, coluna, linha + 1) === '#');
-  return !cercada || (coluna + linha) % 3 === 0;
+function pintarMatrizNaCaixa(ctx: CanvasRenderingContext2D, caixa: Retangulo, { desenho, paleta }: Enfeite): void {
+  const largura = Math.max(...desenho.map(linha => linha.length));
+  const altura = desenho.length;
+  const proporcao = Math.min(1, caixa.largura / largura, caixa.altura / altura);
+  const l = Math.max(1, Math.floor(largura * proporcao));
+  const a = Math.max(1, Math.floor(altura * proporcao));
+  const x = caixa.x + Math.floor((caixa.largura - l) / 2);
+  const y = caixa.y + Math.floor((caixa.altura - a) / 2);
+  // Só os temas com estrutura reconhecível ocupam a caixa. Ondas e espuma
+  // não contam como uma peça. O desenho sempre usa pixels físicos inteiros.
+  for (let j = 0; j < a; j++) {
+    const linha = desenho[Math.min(altura - 1, Math.floor((j + 0.5) * altura / a))];
+    for (let i = 0; i < l; i++) {
+      const cor = paleta[linha[Math.min(largura - 1, Math.floor((i + 0.5) * largura / l))]];
+      if (cor) ret(ctx, cor, x + i, y + j, 1);
+    }
+  }
 }
 
 function faixaDaCosta(ctx: CanvasRenderingContext2D, casa: Retangulo, raio: number, cor: string) {
@@ -306,9 +278,6 @@ function baixioSubmerso(ctx: CanvasRenderingContext2D, x: number, y: number, cor
 
 function areia(ctx: CanvasRenderingContext2D, x: number, y: number, v: number, decorar: boolean, { cores, tipo }: TemaDeCosta): void {
   ret(ctx, cores.areia, x, y, N, N);
-  const sementes = [v & 31, (v >>> 5) & 31, (v >>> 10) & 31, (v >>> 15) & 31];
-  sementes.forEach((n, i) => ret(ctx, i === 0 ? cores.areiaClara : cores.areiaPonto,
-    x + 5 + n % 18, y + 5 + ((n * 3 + i * 7) % 20), 1 + n % 4));
   if (decorar && v % 5 === 0) {
     ret(ctx, cores.areiaPonto, x + 6, y + 22, 11, 2);
     sprite(ctx, ERVAS[(v >>> 4) % ERVAS.length],
@@ -355,9 +324,9 @@ function areia(ctx: CanvasRenderingContext2D, x: number, y: number, v: number, d
 
 export function pintarCosta(
   { contexto: ctx, origemX, origemY }: Desenho, mapa: Mapa, alta: boolean,
-  largura: number, altura: number, tema: TemaDeCosta,
+  largura: number, altura: number, tema: TemaDeCosta, idFase = '',
 ): void {
-  const { cores, tipo, enfeites, raios } = tema;
+  const { cores, raios } = tema;
   ctx.save();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   marCalmo(ctx, largura, altura, tema);
@@ -365,8 +334,6 @@ export function pintarCosta(
     tipo, coluna, linha, x: origemX + coluna * N, y: origemY + linha * N,
     largura: N, altura: N, v: variante(coluna, linha, largura + mapa[0].length * 47 + mapa.length * 17),
   })));
-  pintarEnfeitesNoMar(ctx, { x: origemX, y: origemY, largura: mapa[0].length * N, altura: mapa.length * N },
-    largura, altura, enfeites);
   const bancos = casas.filter(casa => chao(casa.tipo, alta));
   for (const [raio, cor] of [[raios[0], cores.fundo], [raios[1], cores.raso], [raios[2], cores.beira], [raios[3], cores.aguaClara]] as const) {
     for (const casa of bancos) faixaDaCosta(ctx, casa, raio, cor);
@@ -377,18 +344,18 @@ export function pintarCosta(
     if (tipo === '=') baixioDescoberto(ctx, x, y, mapa, casa, v, tema);
   }
   for (const casa of bancos) sombraDeAreia(ctx, casa.x, casa.y, aoRedor(mapa, casa, alta), casa.v, cores);
-  for (const { tipo: casa, x, y, v, coluna, linha } of casas) {
-    // Rocha junto à trilha sinaliza limite. O oceano distante já sinaliza bloqueio
-    // sem preencher cada casa intransitável com o mesmo afloramento.
-    if (casa === '#' && localDeRocha(mapa, coluna, linha)) {
-      if (tipo === 'mangue' && v % 3 !== 0) {
-        const { desenho, paleta } = RAIZ_DE_MARGEM[(coluna + 2 * linha + (v >>> 9)) % RAIZ_DE_MARGEM.length];
-        const recuo = Math.floor((N - desenho[0].length) / 2);
-        sprite(ctx, desenho, paleta, x + recuo, y + 27 - desenho.length);
-      } else rocha(ctx, x, y, v, tema);
-    } else if (casa === 'H') rocha(ctx, x, y, v, tema, true);
+  const tonsGraos = tonsDosGraos(cores.areia, cores.barranco);
+  for (const { tipo, x, y, v } of bancos) {
+    if (tipo === '=') continue;
+    // Os alvos, os objetos e o siri são pintados depois deste detalhe do chão.
+    for (const grao of graosDaCasa(v)) ret(ctx, tonsGraos[grao.tom], x + grao.x, y + grao.y, grao.lado, grao.lado);
+  }
+  for (const { tipo: casa, x, y } of casas) {
+    if (casa === 'H') pintarRefugio(ctx, x, y, tema);
     else if (casa === 'C') concha(ctx, x, y, tema);
     else if (casa === '=' && alta) baixioSubmerso(ctx, x, y, cores);
   }
+  pintarEstruturasNoMar(ctx, { x: origemX, y: origemY, largura: mapa[0].length * N, altura: mapa.length * N },
+    largura, altura, idFase, tema);
   ctx.restore();
 }

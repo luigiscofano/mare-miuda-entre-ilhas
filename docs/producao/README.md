@@ -1,7 +1,5 @@
 # Roteiro de produção
 
-> **Meta atual da campanha:** 25 travessias regulares por mundo, além dos bônus e dos dois chefes de cada mundo. A [expansão](../campanha/expansao/README.md) acrescenta 123 provas de dificuldade gradual, com soluções verificadas no motor. Os marcos abaixo são históricos.
-
 > **Leitura atualizada:** esta página conserva planejamento e atualizações históricos. A base do PR #72 já contém oito mundos, 77 entradas não opcionais, 16 chefes opcionais e 13 bônus/alternativas não-chefes. Consulte o [estado datado e os critérios de contagem](../processo-de-criacao/estado-atual.md) antes de interpretar expressões antigas como “planejado”, “futuro” ou “pendente”. Arte preliminar e lançamento continuam sujeitos à revisão. A trilha Notas Claras e suas sete variações integram uma proposta separada da base histórica; consulte [áudio](../../src/audio/README.md) para implementação e limites de teste.
 
 | Marco | Entrega | Barreira antes de avançar |
@@ -13,8 +11,6 @@
 | Lançamento | Revisão de dificuldade, navegação, acessibilidade, performance, documentação e autorizações. | Campanha completa no teclado e no toque, save/reload, sem bloqueadores. Distinguir emulação, Safari e aparelho. |
 
 **Abertos para teste:** se o indicador de um passo é suficiente; se esperar acrescenta estratégia; se três levadas criam margem justa; como a dupla retorna quando um deles erra; escala mais clara no celular. Fora de escopo nesta etapa: campanha, arte e música finais, coop simultânea, geração procedural e Pages.
-
-**Validação manual de lançamento:** use o [roteiro por aparelho](../../tests/qa-manual.md) e registre versão e evidências. Safari físico e VoiceOver não são validados pelo CI.
 
 ## Revisão do plano
 

@@ -1,4 +1,4 @@
-import { casasDoRasante, faixaAfeta, TOTAL_ANCORADOUROS, executarPasso, iniciar, lerCelula, mesmaCasa } from '../motor/index.ts';
+import { casasDoRasante, FORMAS_DE_FENDA, faixaAfeta, TOTAL_ANCORADOUROS, executarPasso, iniciar, lerCelula, mesmaCasa } from '../motor/index.ts';
 import type { Acao, Fase } from '../motor/index.ts';
 
 const chave = ({ coluna, linha }: { coluna: number; linha: number }) => `${coluna}:${linha}`;
@@ -13,6 +13,17 @@ export function validarMapa(fase: Fase): void {
   if (contar('S') !== 1 || contar('C') + contar('G') !== 1 ||
     (contar('G') > 0 && contar('B') === 0) || (contar('B') > 0 && contar('G') === 0)) {
     throw new Error(`Início ou objetivo inválido: ${fase.id}.`);
+  }
+  if (fase.fendas) {
+    const bocas = fase.fendas.flatMap(fenda => fenda.bocas);
+    if (!fase.fendas.length || new Set(fase.fendas.map(fenda => fenda.forma)).size !== fase.fendas.length
+      || fase.fendas.some(fenda => fenda.bocas.length !== 2 || !FORMAS_DE_FENDA.includes(fenda.forma))
+      || new Set(bocas.map(chave)).size !== bocas.length || bocas.some(boca => {
+        const celula = lerCelula(fase, boca);
+        return !Number.isInteger(boca.coluna) || !Number.isInteger(boca.linha) || (celula !== '.' && celula !== '=');
+      })) {
+      throw new Error(`Bocas de fenda inválidas: ${fase.id}.`);
+    }
   }
   if (fase.dupla && (contar('A') !== 1 || contar(fase.dupla.segundoAlvo) !== 1)) {
     throw new Error(`Configuração dupla inválida: ${fase.id}.`);

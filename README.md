@@ -6,7 +6,7 @@
 
 Um siri cruza um arquipélago em um quebra-cabeça de aventura por turnos. A cada três passos válidos a maré vira: a água cobre atalhos, revela caminhos e muda como você atravessa cada ilha. O jogo é independente do Miudezas: não carrega seu código, seus recursos nem suas partidas salvas.
 
-**Prévia privada, ainda não lançada · 8 mundos · 229 desafios no catálogo da campanha · 8 arranjos da trilha aprovada.**
+**Prévia privada, ainda não lançada · 8 mundos · 231 desafios no catálogo da campanha · 8 arranjos da trilha aprovada.**
 
 [Baixar ZIP privado](https://github.com/luigiscofano/mare-miuda-entre-ilhas/actions/runs/44938701024/artifacts/14721380432) · [Como jogar localmente](#como-jogar-localmente) · [Visuais](#visuais-do-jogo) · [Documentação](#documentação) · [Processo de criação](docs/processo-de-criacao/README.md)
 
@@ -52,7 +52,7 @@ Quadros do renderizador em **512 × 384**, sem cursor, nos estados jogáveis ind
 1. [Fundação](docs/processo-de-criacao/01-fundacao/README.md): regras, decisões de arquitetura e plano dos mundos.
 2. [Protótipo cinza](docs/processo-de-criacao/02-prototipo/README.md): HTML autônomo v0.1.0 preservado, fichas, soluções e alcance dos testes.
 3. [Fatia vertical: Praia das Conchas](docs/processo-de-criacao/03-fatia-vertical/README.md): mapa, trilhas, arte provisória, edição de áudio, salvamento e encontro de encerramento.
-4. [Primeiro lote: Recifes e Mangue](docs/processo-de-criacao/04-lote-1/README.md): arquipélago, pedra alta, dois fragmentos, dupla, placa e porta.
+4. [Primeiro lote: Recifes e Mangue](docs/processo-de-criacao/04-lote-1/README.md): arquipélago, refúgio elevado, dois fragmentos, dupla, placa e porta.
 
 [Siris duplos em outros mundos](docs/processo-de-criacao/09-siris-duplos/README.md) registra as primeiras provas jogáveis e a ampliação dos desvios da Enseada e da Deriva. [Grutas e Ressaca em dupla](docs/processo-de-criacao/10-duplas-grutas-ressaca/README.md) acompanha as quatro fases regulares. [Farol em dupla](docs/processo-de-criacao/11-farol-dupla/README.md) registra duas fases regulares e o encaixe entre balsas, baixios e patrulha.
 
@@ -115,15 +115,15 @@ Escolha a fase pelo nome, sem andar dentro da região. Os botões mostram **Disp
 | Mundo | Travessias regulares | Mecânica e progressão |
 | --- | ---: | --- |
 | Praia das Conchas | 25 | Começa com o ciclo de maré, travessias curtas e a primeira ameaça anunciada. Inclui o encontro Ponta da garça. |
-| Recifes Expostos | 25 | Introduz pedra alta, rotas de baixa e coletas em mais de uma etapa. |
+| Recifes Expostos | 25 | Introduz refúgio de areia elevada, rotas de baixa e coletas em mais de uma etapa. |
 | Mangue dos Siris Duplos | 25 | Apresenta a troca de siri, o contador compartilhado e os primeiros objetivos em dupla. |
-| Enseada da Garça | 25 | Combina previsão do rasante, abrigo e virada da água; a dupla reaparece. |
+| Enseada da Garça | 25 | Combina rasante, abrigo e virada da água. Dois desvios opcionais ensinam a [Fenda de Recife](docs/campanha/fenda-de-recife.md). |
 | Ilhas à Deriva | 25 | Balsas, correntes e desembarques planejados; há travessias solo e em dupla. |
 | Grutas da Espuma | 25 | Pérola, encaixe, alavanca e portão. O trio estreia no desvio Três refúgios. |
 | Baía da Ressaca | 25 | Ondas em faixas, moedas com limite de passos e coordenação em dupla ou trio. |
 | Arquipélago do Farol | 25 | Pontes de luz, lentes e combinações avançadas antes do desfecho. |
 
-**Como contar os 229 desafios:** 200 travessias regulares, 16 arenas opcionais de chefe (duas por mundo) e 13 bônus ou alternativas sem chefe. Nem toda entrada não opcional é necessária na rota mais curta até os créditos. A bancada tem quatro testes, três reaproveitados da campanha e um exclusivo, e não soma quatro ao total.
+**Como contar os 231 desafios:** 200 travessias regulares, 16 arenas opcionais de chefe (duas por mundo) e 15 bônus ou alternativas sem chefe. Nem toda entrada não opcional é necessária na rota mais curta até os créditos. A bancada tem quatro testes, três reaproveitados da campanha e um exclusivo, e não soma quatro ao total.
 
 [Mapa e progressão](docs/campanha/README.md) · [Matriz de game design e level design](docs/campanha/matriz.md) · [Fichas e soluções](src/fases/README.md) · [Critérios de contagem](docs/processo-de-criacao/estado-atual.md)
 
@@ -159,6 +159,12 @@ A concha tem um brilho de pixels chapados e identificação textual. Os cantos d
 
 
 Na bancada, a arte cinza lê terreno, maré e previsão de ameaça. A Praia usa a paleta V32, com espuma costeira, baixios de areia molhada ou cobertos e marcados pelos quatro cantos, rochas em aglomerados e concha rosa. A prévia de Recifes e Mangue usa mar azul com poças e corais ou água oliva com raízes e lama, respectivamente, e uma concha própria para cada região. A Enseada tem areia clara, juncos e concha violeta; a Deriva tem canais de jade e concha dourada em crescente. O X do rasante e as balsas navegáveis continuam distinguíveis. Grutas, Ressaca e Farol usam propostas de ardósia, azul de tempestade e azul-índigo, com conchas e margens distintas. A pérola, a espuma de risco e as pontes de luz mantêm seus sinais. A densidade do cenário e do arquipélago segue em revisão; a Placa de Areia da abertura foi mantida. O siri principal é o recorte nativo da Placa de Areia na Travessia, na bancada e nos seletores, sem trocar a arte dos mapas. Verde e Amarelo são o mesmo recorte em outras paletas: insígnias acima dos sprites identificam cada um também sem cor. A nova garça aparece na previsão, em patrulha ou rasante, sem cobrir o X no tabuleiro. [Fauna e capturas](docs/arte/fauna/README.md). Os fragmentos permanecem em matrizes de pixels editáveis em TypeScript. Nenhum recurso do jogo original é importado. [Guia de arte](docs/arte/README.md).
+
+Cada Travessia da campanha e da Ilha de Improviso tem **três estruturas no oceano**. Um afloramento de várias pedras conta como uma só; espuma, reflexos e piso de areia não contam. Ficam fora das casas e não alteram a rota, a maré, as balsas nem a validação de um movimento. Nos mapas maiores, o desenho se ajusta à margem sem redimensionar o tabuleiro ou o siri. [Regra e verificação](docs/arte/README.md#três-estruturas-no-oceano).
+
+Nas fases de coleta com saída `G`, os itens `B` são pérolas que podem ser creme, rosa, azul ou lilás. A cor depende da posição original e não muda após a coleta. A Concha de Chegada dessas fases é uma ostra: fica fechada enquanto falta alguma pérola e abre após a última. As moedas e a pérola da gruta que vai ao encaixe continuam como antes. [Arte das pérolas](docs/arte/README.md#pérolas-de-coleta).
+
+Nas fases com ondas, a espuma na maré baixa marca as casas da próxima faixa e ganha contraste quando falta um passo. A crista frontal aparece brevemente quando a maré sobe, mesmo se o siri estiver seguro. Refúgios não recebem espuma de perigo ou impacto.
 
 </details>
 
@@ -225,7 +231,7 @@ Veja [Como jogar localmente](#como-jogar-localmente). O build produz uma versão
 <details>
 <summary>Testes e acessibilidade</summary>
 
-Os testes cobrem as 229 soluções da campanha, incluindo 16 arenas opcionais de chefes, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Roteiro de validação manual](tests/qa-manual.md). Os PRs com QA no Chromium bem-sucedido disponibilizam também um ZIP jogável privado na aba Actions, sem deploy. [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
+Os testes cobrem as 231 soluções da campanha, incluindo 16 arenas opcionais de chefes, o relógio compartilhado da dupla, as duas ordens dos mundos e passos limítrofes, rejeição de movimentos, eventos simultâneos, terceiro erro, inventário, reinício, rotas do mapa e persistência. O teste offline carrega o HTML final em DOM/Canvas simulados e verifica tanto a bancada quanto o mapa. Teclado e toque têm caminhos equivalentes; mapa em texto, foco visível, padrões e indicadores não dependem de cor. [Cobertura e limites](tests/README.md). [Roteiro de validação manual](tests/qa-manual.md). Os PRs com QA no Chromium bem-sucedido disponibilizam também um ZIP jogável privado na aba Actions, sem deploy. [Fichas e decisões das Grutas](docs/processo-de-criacao/08-grutas/README.md).
 
 </details>
 

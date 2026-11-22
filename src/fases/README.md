@@ -68,7 +68,9 @@ S=....
 
 ## Lote 1 · Recifes Expostos
 
-Legenda adicional: H pedra alta, firme e atravessável; # rocha bloqueada. As sequências usam U↑, D↓, L←, R→, X troca de siri sem consumir passo.
+Legenda adicional: H refúgio transitável de areia elevada; # área intransitável, sem pedra atravessável. As sequências usam U↑, D↓, L←, R→, X troca de siri sem consumir passo.
+
+Nos mapas com saída `G` e sem orçamento de moedas, `B` representa uma pérola de coleta. Essa mudança é visual e de texto: as posições, a contagem e a condição de saída são as mesmas. A Concha de Chegada `G` aparece fechada até a última pérola e abre quando a coleta estiver completa. As moedas da Baía e do Farol e a pérola de encaixe `K` mantêm suas funções e imagens. Nas fichas históricas, “fragmento” descreve a aparência anterior da peça `B`.
 
 | Fase | Mapa (as barras separam linhas) | Solução |
 | --- | --- | --- |
@@ -189,7 +191,7 @@ As faixas alternam em cada subida. Cruze o primeiro baixio, proteja-se na margem
 
 ## Chefes dos Recifes
 
-`chefes-recifes.ts` registra as duas arenas opcionais. A configuração `recife` usa dois pontos em pedras altas no Guardião ou duas casas de baixio ligadas ao fragmento no Vigia. [Fichas, soluções e capturas](../../docs/processo-de-criacao/24-chefes-recifes/README.md).
+`chefes-recifes.ts` registra as duas arenas opcionais. A configuração `recife` usa dois pontos em refúgios elevados no Guardião ou duas casas de baixio ligadas ao fragmento no Vigia. [Fichas, soluções e capturas](../../docs/processo-de-criacao/24-chefes-recifes/README.md).
 
 ## Chefes das Ilhas à Deriva
 
@@ -198,3 +200,8 @@ Em `chefes-deriva.ts`, **Mestre das Correntes** usa `atracacaoNaVirada` para dec
 ## Chefes das Grutas da Espuma
 
 `chefes-grutas.ts` especializa a sequência `K/E/F` com `condicoesGruta`. Cada peça indicada aceita apenas uma janela de maré; um vínculo opcional com `P` exige que outro siri ocupe a placa no fim do turno. Peças fora da ordem ou janela não avançam. Sem condições extras, as fases antigas mantêm as regras.
+
+
+## Fenda de Recife
+
+As duas fases de ensino da Fenda de Recife estão em [fendas-da-enseada.ts](fendas-da-enseada.ts). São opcionais, usam as mesmas peças de chão/baixio e preservam os mapas anteriores. Veja [mapas, pistas e soluções](../../docs/campanha/fenda-de-recife.md).

@@ -58,8 +58,8 @@ test('Ressaca: a espuma decorativa não persiste como faixa após o ataque', () 
   const alta = quadro(RESSACA_ALTA, 'ressaca', 3);
   const { cores } = temaDaCosta('ressaca')!;
   assert.equal(corEm(previsao, 0, 0), cores.mar);
-  assert.equal(corEm(previsao, 102, 118), '#fff1d2');
-  assert.notEqual(corEm(alta, 102, 118), '#fff1d2');
+  assert.equal(corEm(previsao, 48, 129), '#fff0d6');
+  assert.notEqual(corEm(alta, 48, 129), '#fff0d6');
   assert.equal(corEm(alta, 293, 117), cores.cantos);
   assert.ok(alta.some(m => m.cor === cores.conchaEscura && m.l === 1 && m.a === 1));
 });

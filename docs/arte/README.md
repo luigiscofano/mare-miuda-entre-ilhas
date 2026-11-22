@@ -23,15 +23,37 @@ A variante A, Placa de Areia, foi escolhida para a abertura. É usada sem modifi
 
 ## Primeiro lote: arte de teste, não direção final
 
-Recifes usam mar mais frio, corais chapados e o topo claro da pedra segura; Mangue usa paleta oliva, raízes, placa e portão com formas distintas. O protagonista usa o recorte da marca; Verde e Amarelo usam a mesma silhueta, com paletas e insígnias próprias. O ativo recebe um traço sob os pés. Os desenhos usam a mesma grade, sem pinceladas ou pixels fora da grade. Mapa e cenário são suficientes para testes de regra, mas **a densidade e a composição estão abertas**. A Placa de Areia continua exatamente igual; os estudos de ampliação visual são trabalho separado.
+Recifes usam mar mais frio, corais chapados e o patamar claro dos refúgios de areia elevada; Mangue usa paleta oliva, raízes, placa e portão com formas distintas. O protagonista usa o recorte da marca; Verde e Amarelo usam a mesma silhueta, com paletas e insígnias próprias. O ativo recebe um traço sob os pés. Os desenhos usam a mesma grade, sem pinceladas ou pixels fora da grade. Mapa e cenário são suficientes para testes de regra, mas **a densidade e a composição estão abertas**. A Placa de Areia continua exatamente igual; os estudos de ampliação visual são trabalho separado.
 
 ### Cabo Baixo, mapa de seleção
 
 O fundo aprovado mantém 192 × 144 pixels na moldura de desenho. Números, desvio opcional e portão são desenhados pelo seletor em âncoras da imagem base. O siri da placa segue as âncoras do seletor, sem cobrir os números. O fundo não incorpora o personagem. A Enseadinha agora tem uma proposta de fundo próprio em 512 × 384, com ilhotas ortogonais, espuma e camadas de luz. Números, desvios, chefes, saídas e cadeados são desenhados sobre o fundo, seguindo o progresso. Veja [quadros, fontes e legenda](../processo-de-criacao/34-seletores-praia/README.md).
 
+## Três estruturas no oceano
+
+Cada fase da campanha e da Ilha de Improviso tem três estruturas fora da área das casas. O bloco, o seixo e o afloramento da Praia são exemplos; no restante da campanha, os temas contribuem com suas próprias rochas, recifes, raízes, cristais ou outras peças sólidas. Uma composição agrupada é uma estrutura. Espuma e reflexos continuam sendo água, e refúgio com piso seguro nunca entra na contagem. Uma casa de água intransitável da malha não recebe uma pedra adicional.
+
+
+A areia elevada dos refúgios `H` é uma camada contínua da trilha, sem o corpo escuro e isolado das rochas. O siri pode pisar nela; pedras não são piso em nenhum mundo. Nas capturas históricas abaixo, a antiga aparência de pedra alta representava o mesmo refúgio que hoje é areia elevada.
+As [âncoras](../../src/render/obstaculos-oceanicos.ts) derivam da moldura do tabuleiro, não da maré. Na Trilha das Pedras o afloramento fica embaixo, à esquerda. Em mapas grandes, a arte cabe nas margens da mesma superfície 512 × 384, desenhada com coordenadas inteiras, sem cortar o sprite. O renderizador só muda a camada visível; regras, casas e soluções ficam iguais. A bancada em cinza não representa um mundo e mantém a arte de diagnóstico.
+
+Verificação: `node --test tests/obstaculos-oceanicos.test.ts` exercita as 231 fases da campanha e os oito temas de Improviso nas duas marés, incluindo a grade 15 × 11. As prévias mais recentes de arte são estudos separados, não aplicados ao renderizador deste ajuste.
+
+## Pérolas de coleta
+
+A matriz aprovada tem 20 × 20 pixels nativos, incluindo a sombra curta, e cabe centralizada na célula de 32 × 32 sem interpolação. A mesma silhueta tem quatro paletas distintas: creme, rosa, azul e lilás. A ordem linha-coluna da malha inicial define a cor. Coletar um item não altera a aparência dos que ficaram. Não é necessário distinguir cores para cumprir o objetivo.
+
+A arte mostra apenas os itens `B` nas fases com saída de coleta `G` que não usam orçamento de moedas. O motor mantém os mesmos símbolos, inventário e condições. Nessas fases, a Concha de Chegada em `G` é uma ostra: fechada antes da coleta completa, aberta depois. A arte aprovada foi reduzida a 21 × 22 pixels por vizinho mais próximo, mantendo seus oito tons, a cavidade e os cantos de movimento livres em uma casa de 32 × 32. A pérola `K` das Grutas e as conchas das outras fases continuam como estavam. Verifique com `node --test tests/perolas-coletaveis.test.ts`.
+
+## Espuma de aviso e onda frontal
+
+O primeiro desenho aprovado vira duas matrizes sólidas em [onda-frontal.ts](../../src/render/onda-frontal.ts), com vizinho mais próximo na casa de 32 × 32. Na maré baixa a espuma fica nas casas da próxima faixa, com mais contraste no último passo. A virada para alta acionada pelo motor dispara uma única crista frontal por 360 ms, com o mesmo conjunto de casas se o siri estiver protegido ou sofrer uma levada. Refúgio, obstáculo e mar aberto não recebem a marca. A crista não desliza nem pisca, inclusive com movimento reduzido. Um novo passo válido, reinício, saída ou fim do tempo retira a imagem; bloqueios e redesenhos não reiniciam o tempo.
+
+A camada não muda o relógio nem as consequências do motor. O texto continua anunciando o perigo. Verifique em **Vigia das ondas**, liberado após **Fio de areia** na Enseadinha, ou rode `node --test tests/onda-frontal.test.ts`.
+
 ## Travessia da Praia: direção V32
 
-[Prancha aprovada e aplicação no jogo](../processo-de-criacao/29-travessia-praia/README.md). A [fonte do terreno](../../src/render/travessia-praia.ts) é editável em TypeScript: retângulos inteiros para água e contorno; matrizes de uma cor por pixel para concha, rochas e folhagens. O oceano tem apenas três [enfeites nativos](../../src/render/enfeites-da-praia.ts), recortados do primeiro quadro da prancha nas caixas (16, 123, 61, 150), (354, 166, 395, 198) e (119, 365, 150, 393), base 412 × 412. O fundo chapado vira vazio e só o maior componente conectado de cada recorte é mantido. Nenhum recorte recebe escala fracionária.
+[Prancha aprovada e aplicação no jogo](../processo-de-criacao/29-travessia-praia/README.md). A [fonte do terreno](../../src/render/travessia-praia.ts) é editável em TypeScript: retângulos inteiros para água e contorno; matrizes de uma cor por pixel para concha, rochas e folhagens. Na V32 histórica, o oceano usava três [enfeites nativos](../../src/render/enfeites-da-praia.ts), recortados do primeiro quadro da prancha nas caixas (16, 123, 61, 150), (354, 166, 395, 198) e (119, 365, 150, 393), base 412 × 412. O fundo chapado vira vazio e só o maior componente conectado de cada recorte é mantido. Essa extração não é a regra de posicionamento da versão jogável atual.
 
 Para verificar em movimento, rode `npm run build` e abra a **Passagem da primeira onda** no mapa, não na bancada cinza. Examine a faixa entre o início e a concha antes e depois de três movimentos. O cenário deve manter formas distintas, o mesmo recorte do siri e cantos sem suavização.
 
@@ -66,3 +88,7 @@ Os [fundos nativos e quadros de comparação](../processo-de-criacao/35-seletore
 ## Seletores das Grutas, da Baía e do Farol
 
 [Fundos, fontes e quadros](../processo-de-criacao/37-seletores-mundos-finais/README.md). A arte de cada região preserva os sinais jogáveis e a paleta de cada ambiente. O farol cenográfico não é um objetivo: a camada do jogo indica as rotas, inclusive a reta do último chefe.
+
+## Grãos na areia seca
+
+Todas as casas de areia seca recebem um grão quadrado de 2 × 2 e um de 3 × 3 pixels nativos. São dois tons chapados mais escuros que o chão, com posição determinada pela célula. Baixios, água e obstáculos não recebem estes grãos. Objetivos, sinais e personagens são desenhados depois.

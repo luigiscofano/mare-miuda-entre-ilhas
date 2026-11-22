@@ -18,7 +18,7 @@ export const FASES_ENSEADA_AMPLIADA = [
   {
     id: 'enseada-vigia-das-pedras', nome: 'Vigia das pedras',
     objetivo: 'Alcance a concha além das duas posições da garça.',
-    ensino: 'A pedra alta evita a subida da água, mas não protege do rasante. A garça alterna os dois alvos.',
+    ensino: 'O refúgio de areia elevada não alaga, mas não protege do rasante. A garça alterna os dois alvos.',
     mapa: ['S=H..=C', '..H#H##'],
     ameaca: { alvo: ponto(2, 0), rota: [ponto(4, 0)], primeiroAtaque: 4, periodo: 5 },
     solucao: rota('RRRRDURR'),
@@ -33,15 +33,15 @@ export const FASES_ENSEADA_AMPLIADA = [
   },
   {
     id: 'enseada-fragmento-do-bico', nome: 'Fragmento no alcance do bico',
-    objetivo: 'Pegue o fragmento e volte à saída.',
-    ensino: 'Chegar até o fragmento não basta: deixe-o para o turno seguro e prepare a volta.',
+    objetivo: 'Pegue a pérola e volte à saída.',
+    ensino: 'Chegar até a pérola não basta: deixe-a para o turno seguro e prepare a volta.',
     mapa: ['SG=H..', '###.#B', '###H..'],
     ameaca: { alvo: ponto(5, 1), primeiroAtaque: 10, periodo: 4 },
     solucao: rota('RRRDURRDULLDULL'),
   },
   {
     id: 'enseada-fresta-da-vazante', nome: 'Fresta da vazante',
-    objetivo: 'Busque o fragmento além do banco dobrado e volte.',
+    objetivo: 'Busque a pérola além do banco dobrado e volte.',
     ensino: 'Dois baixios seguidos pedem a janela inteira. A volta pelo sul tem só um, mas a garça alterna os alvos.',
     mapa: ['SGH==H.B', '##.##.#.', '##H=HH..'],
     ameaca: { alvo: ponto(5, 1), rota: [ponto(7, 0), ponto(2, 0)], primeiroAtaque: 10, periodo: 4 },
@@ -49,7 +49,7 @@ export const FASES_ENSEADA_AMPLIADA = [
   },
   {
     id: 'enseada-ecos-do-rasante', nome: 'Ecos do rasante',
-    objetivo: 'Recolha dois fragmentos, em braços diferentes, e retire-se pelo centro.',
+    objetivo: 'Recolha duas pérolas, em braços diferentes, e retire-se pelo centro.',
     ensino: 'A patrulha alterna os pontos-chave. Planeje os dois retornos à ilha firme, não só a primeira travessia entre margens.',
     mapa: ['B.H=H####', '.#..H==B#', '#..S.H=.#', '##H=HG###'],
     ameaca: { alvo: ponto(2, 0), rota: [ponto(7, 1), ponto(5, 3)], primeiroAtaque: 12, periodo: 3 },

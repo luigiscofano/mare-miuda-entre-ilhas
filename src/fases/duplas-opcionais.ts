@@ -29,7 +29,7 @@ export const DUPLA_ENSEADA_REVEZAMENTO: Fase = {
   mapa: ['S=H.D.BG', '##..####', 'A=H.PB.T', '##..####'],
   dupla: { segundoAlvo: 'T' },
   ameaca: { alvo: p(3, 0), rota: [p(4, 2), p(5, 0), p(2, 2)], primeiroAtaque: 4, periodo: 2 },
-  objetivo: 'Reúna os dois fragmentos e chegue à saída e ao marco com a dupla.',
+  objetivo: 'Reúna as duas pérolas e chegue à saída e ao marco com a dupla.',
   ensino: 'O rasante alterna as duas margens, inclusive sobre a placa. Use o caminho entre elas para acertar o relógio e a hora de revezar.',
   solucao: rota('RRDUDURXRRRRXRRXRRXRRXR'),
 };
@@ -39,7 +39,7 @@ export const DUPLA_DERIVA_CONTRAMAO: Fase = {
   mapa: ['S..~#########', '###~#########', 'A.P~D..~~~.BG', '.==.#=####.##', '##T.######B##'],
   dupla: { segundoAlvo: 'T' },
   balsas: [{ paradas: [p(3, 0), p(3, 2)] }, { paradas: [p(9, 2), p(7, 2)] }],
-  objetivo: 'Abra o canal em dupla, recolha os fragmentos e alcance a saída e o marco.',
+  objetivo: 'Abra o canal em dupla, recolha as pérolas e alcance a saída e o marco.',
   ensino: 'As duas balsas viram juntas, mas em sentidos diferentes. A placa libera o canal; deixe o outro siri atravessar antes de voltar ao marco.',
   solucao: rota('RRRXRRXRRXDDRXRRRDDUURRXL'),
 };

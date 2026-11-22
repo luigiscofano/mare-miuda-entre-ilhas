@@ -119,7 +119,7 @@ function preparar(opcoes: OpcoesMareAMao, mundo: number, dificuldade: number, id
     }
   }
 
-  const tarefa = fragmento ? 'Recolha o fragmento e chegue à saída.' : 'Chegue à concha.';
+  const tarefa = fragmento ? 'Recolha a pérola e chegue à Concha de Chegada.' : 'Chegue à concha.';
   const dicas = ['Atravesse os baixios antes da subida. Em terra firme, avançar e voltar prepara a próxima baixa.'];
   if (garca) dicas.push('Confira o alvo da garça antes do próximo passo.');
   if (siris > 1) dicas.push('Use Espaço ou Trocar siri. Os siris compartilham o relógio.');

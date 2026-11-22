@@ -39,3 +39,5 @@ Para agilizar **apenas Chrome**, os estados de teste de save em `tests/browser_s
 **Referências:** [Controles e execução](../README.md#como-jogar-localmente), [cobertura de testes](README.md), [roteiro automatizado](browser_seletor_direto_qa.py) e [save local](../src/persistencia/index.ts). Nenhum desses testes automáticos comprova VoiceOver ou iPhone físico.
 
 Para a expansão, execute o [roteiro por trecho](../docs/campanha/expansao/README.md#como-verificar).
+
+- [ ] **Fenda de Recife:** na Enseada, confira que **Bônus e desvios** mostra as duas experiências após **Abrigo entre ondas**. Faça as [duas rotas de ensino](../docs/campanha/fenda-de-recife.md#fichas-de-ensino), compare o aviso e a arte das bocas na baixa e na alta, teste a levada do terceiro passo e recarregue para conferir save e foco no seletor.

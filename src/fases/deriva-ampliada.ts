@@ -41,7 +41,7 @@ export const FASES_DERIVA_AMPLIADA = [
   },
   {
     id: 'deriva-ida-e-retorno', nome: 'Ida e retorno pela corrente',
-    objetivo: 'Busque o fragmento do outro lado e volte ao cais inicial.',
+    objetivo: 'Busque a pérola do outro lado e volte ao cais inicial.',
     ensino: 'São duas balsas e cais diferentes para ida e volta. A balsa da ida não está no mesmo lugar quando você sai da margem.',
     mapa: ['SG.~~~~H.B', '..#####...', '..~~~~~~..'],
     balsas: [{ paradas: [ponto(3, 0), ponto(6, 0)] }, { paradas: [ponto(2, 2), ponto(7, 2)] }],
@@ -49,15 +49,15 @@ export const FASES_DERIVA_AMPLIADA = [
   },
   {
     id: 'deriva-dois-ancoradouros', nome: 'Dois ancoradouros',
-    objetivo: 'Recolha os dois fragmentos de margens opostas e siga até a saída de leste.',
-    ensino: 'Planeje o primeiro desembarque e volte pelo outro braço. Depois, entre no ancoradouro que leva ao segundo fragmento.',
+    objetivo: 'Recolha as duas pérolas de margens opostas e siga até a saída de leste.',
+    ensino: 'Planeje o primeiro desembarque e volte pelo outro braço. Depois, entre no ancoradouro que leva à segunda pérola.',
     mapa: ['B.~~~~S..~~~BG', '..####...#####', '..~~~~...#####'],
     balsas: [{ paradas: [ponto(5, 0), ponto(2, 0)] }, { paradas: [ponto(2, 2), ponto(5, 2)] }, { paradas: [ponto(9, 0), ponto(11, 0)] }],
     solucao: rota('DULLLDDRRRUURRRRR'),
   },
   {
     id: 'deriva-tripulacao-partilhada', nome: 'Tripulação partilhada',
-    objetivo: 'Embarque com os dois siris, recolha o fragmento e chegue à saída e à raiz.',
+    objetivo: 'Embarque com os dois siris, recolha a pérola e chegue à saída e à raiz.',
     ensino: 'Deixe um siri a bordo e troque. O passo do parceiro pode virar a maré e transportar quem não está ativo.',
     mapa: ['S.~#~.BG', '########', 'A~##~..T'],
     balsas: [{ paradas: [ponto(2, 0), ponto(4, 0)] }, { paradas: [ponto(1, 2), ponto(4, 2)] }],

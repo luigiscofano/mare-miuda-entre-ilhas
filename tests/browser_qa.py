@@ -111,13 +111,13 @@ def conferir_jogo(pagina, toque=False):
     expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
     pagina.locator('[data-fase="3"]').tap() if toque else pagina.locator('[data-fase="3"]').click()
     jogar(pagina, 'R', toque)
-    expect(pagina.locator('#feedback')).to_contain_text('encontre o fragmento')
+    expect(pagina.locator('#feedback')).to_contain_text('Encontre a pérola')
     pagina.locator('#reiniciar').tap() if toque else pagina.keyboard.press('r')
     jogar(pagina, 'DDRLRLUUR', toque)
     expect(pagina.locator('#feedback')).to_contain_text('Fase concluída!')
-    expect(pagina.locator('#fragmento')).to_have_text('Fragmento no inventário')
+    expect(pagina.locator('#fragmento')).to_have_text('Pérolas: 1/1')
     pagina.locator('#reiniciar').tap() if toque else pagina.keyboard.press('r')
-    expect(pagina.locator('#fragmento')).to_have_text('Fragmento ainda na ilha')
+    expect(pagina.locator('#fragmento')).to_have_text('Pérolas: 0/1')
     expect(pagina.locator('#mare')).to_have_text('Baixa')
     expect(pagina.locator('#erros')).to_have_text('0 / 3')
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth'), 'A página transbordou.'
@@ -275,7 +275,7 @@ def conferir_lote(pagina, toque=False, recifes_primeiro=True):
                 quantidade = 3 if nome == 'Recifes Expostos' else 5
                 jogar(pagina, solucao[:quantidade], toque)
                 if nome == 'Recifes Expostos':
-                    expect(pagina.locator('#fragmento')).to_have_text('Fragmentos: 1/2')
+                    expect(pagina.locator('#fragmento')).to_have_text('Pérolas: 1/2')
                     salvar_captura(pagina, 'recifes-partida-desktop')
                 else:
                     expect(pagina.locator('#dupla-ativa')).to_contain_text('Verde')
@@ -793,7 +793,7 @@ def conferir_grutas_ampliadas(pagina, toque=False):
     jogar(pagina, 'R', toque)
     inventario = pagina.locator('#fragmento')
     expect(inventario).to_contain_text('Pérola com o siri coral')
-    expect(inventario).to_contain_text('Fragmento ainda na ilha')
+    expect(inventario).to_contain_text('Pérolas de coleta: 0/1')
     jogar(pagina, 'RRRR', toque)
     expect(inventario).to_contain_text('Alavanca B')
     jogar(pagina, 'LXRRRRRR', toque)
@@ -801,7 +801,7 @@ def conferir_grutas_ampliadas(pagina, toque=False):
     expect(pagina.locator('#dupla-ativa')).to_contain_text('Verde')
     jogar(pagina, 'XDDRRRRXRRRXU', toque)
     expect(inventario).to_contain_text('Portão aberto')
-    expect(inventario).to_contain_text('Fragmento no inventário')
+    expect(inventario).to_contain_text('Pérolas de coleta: 1/1')
     assert pagina.evaluate('document.documentElement.scrollWidth === window.innerWidth')
     salvar_captura(pagina, f"grutas-boca-do-labirinto-{pagina.viewport_size['width']}px")
     jogar(pagina, 'DRR', toque)
@@ -1025,15 +1025,22 @@ def conferir_ressaca_alta(pagina, toque=False):
     jogar(pagina, 'RR', toque)
     expect(pagina.locator('#passos')).to_have_text('2')
     # Leia a crista em células vazias dos dois lados do Coral, não sob seu sprite.
-    espuma = [255, 241, 210, 255]
-    cristas = (38, 70, 198, 326)
-    excecoes = (134, 166, 454)  # Refúgio, rocha e concha fora do alcance.
-    assert all(pixel_da_travessia(pagina, x, 118) == espuma for x in cristas)
-    assert all(pixel_da_travessia(pagina, x, 118) != espuma for x in excecoes)
+    espuma = [255, 240, 214, 255]
+    cristas = (48, 80, 208, 336)
+    excecoes = (144, 176, 464)  # Refúgio, rocha e concha fora do alcance.
+    assert all(pixel_da_travessia(pagina, x, 129) == espuma for x in cristas)
+    assert all(pixel_da_travessia(pagina, x, 129) != espuma for x in excecoes)
     salvar_captura(pagina, f'ressaca-travessia-faixa-{pagina.viewport_size["width"]}px')
     jogar(pagina, 'R', toque)
     expect(pagina.locator('#passos')).to_have_text('3')
-    assert all(pixel_da_travessia(pagina, x, 118) == [197, 160, 120, 255] for x in cristas)
+    # O quadro de impacto é breve; a arena estabiliza sem a espuma após a virada.
+    pagina.wait_for_function("""() => {
+        const contexto = document.querySelector('#tabuleiro').getContext('2d');
+        return [48, 80, 208, 336].every(x => {
+            const cor = contexto.getImageData(x, 129, 1, 1).data;
+            return cor[0] === 197 && cor[1] === 160 && cor[2] === 120;
+        });
+    }""")
     salvar_captura(pagina, f'ressaca-travessia-alta-{pagina.viewport_size["width"]}px')
     expect(pagina.locator('#ondas-seguras')).to_have_text('Ondas seguras seguidas: 1/3')
     expect(pagina.locator('#previsao')).to_contain_text('linha 5, colunas 1 a 13')

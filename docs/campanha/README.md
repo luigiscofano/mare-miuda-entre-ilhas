@@ -14,7 +14,7 @@ As contagens históricas abaixo descrevem os lotes documentados. Para o catálog
 | Mundo | Introdução → aplicação → combinação → domínio |
 | --- | --- |
 | Praia das Conchas | Contar passos → sair antes da subida → dois baixios com refúgio → desvio opcional. |
-| Recifes Expostos | Pedra alta vs. intransitável → refúgio → dois fragmentos → ida e volta em mais de um ciclo. |
+| Recifes Expostos | Refúgio elevado vs. rocha intransitável → refúgio → dois fragmentos → ida e volta em mais de um ciclo. |
 | Mangue dos Siris Duplos | Troca de personagem → duas posições → contador compartilhado → reunião por rotas distintas. |
 | Enseada da Garça | Ver marca → abrigo → ameaça com maré → dois cruzamentos planejados. |
 | Ilhas à Deriva | Prever posição da balsa → travessia → resgate e retorno → duas balsas com refúgio. |
@@ -129,11 +129,11 @@ O segundo chefe opcional do Farol abre à esquerda do Guardião depois de vencê
 
 ## Vigia das ondas
 
-Depois de Fio de areia, siga para cima para aprender a ler a faixa anunciada e usar as pedras altas. A saída da Praia e o encontro Ponta da garça não mudam. [Ficha](../processo-de-criacao/22-vigia-das-ondas/README.md).
+Depois de Fio de areia, siga para cima para aprender a ler a faixa anunciada e usar os refúgios elevados. A saída da Praia e o encontro Ponta da garça não mudam. [Ficha](../processo-de-criacao/22-vigia-das-ondas/README.md).
 
 ## Ponta da Ressaca
 
-Ao vencer Vigia das ondas, suba no marco dele para encarar a segunda arena opcional. As ondas alternam entre duas faixas e o caminho tem dois baixios em janelas separadas, com uma margem firme e pedras altas de refúgio. O embarque e a Ponta da garça continuam independentes. [Ficha e solução](../processo-de-criacao/23-ponta-da-ressaca/README.md).
+Ao vencer Vigia das ondas, suba no marco dele para encarar a segunda arena opcional. As ondas alternam entre duas faixas e o caminho tem dois baixios em janelas separadas, com uma margem firme e refúgios elevados. O embarque e a Ponta da garça continuam independentes. [Ficha e solução](../processo-de-criacao/23-ponta-da-ressaca/README.md).
 
 ## Chefes dos Recifes Expostos
 
@@ -150,3 +150,8 @@ Depois de Revezamento nas câmaras, siga à direita para a Sentinela da Gruta e,
 ## Desfecho e créditos
 
 **A luz das duas marés** encerra a história. Não é necessário ter 10/10 regulares nem vencer chefes ou desvios do trio. A ação **Ver desfecho** aparece na vitória; depois, **Rever desfecho** fica disponível no mapa do Farol. Voltar preserva o marco atual, e partidas antigas já concluídas liberam a ação sem migração. **As duas luzes do farol** é uma etapa anterior e não libera o desfecho.
+
+
+## Fenda de Recife
+
+Na Enseada, a [Fenda de Recife](fenda-de-recife.md) é ensinada em dois desvios opcionais. Os 25 regulares, o embarque e os chefes não mudam.

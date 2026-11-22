@@ -89,8 +89,8 @@ export const TEMA_ENSEADA: TemaDeCosta = {
     conchaLuz: '#d6c0c6', conchaBrilho: '#fff0ce',
   },
   enfeites: [
-    { desenho: LAJE_DA_ENSEADA, paleta: LAJES },
-    { desenho: JUNCO_DA_RESTINGA, paleta: RESTINGA },
+    { desenho: LAJE_DA_ENSEADA, estrutura: true, paleta: LAJES },
+    { desenho: JUNCO_DA_RESTINGA, estrutura: true, paleta: RESTINGA },
     { desenho: ESPUMA_AFASTADA, paleta: ESPUMA },
   ],
   desenhoConcha: CONCHA_PONTA_VIOLETA,
@@ -113,8 +113,8 @@ export const TEMA_DERIVA: TemaDeCosta = {
     conchaLuz: '#f5ce83', conchaBrilho: '#fff3c6',
   },
   enfeites: [
-    { desenho: RAMO_DO_CANAL, paleta: FOLHAS },
-    { desenho: BOIA_OCEANICA, paleta: BOIA },
+    { desenho: RAMO_DO_CANAL, estrutura: true, paleta: FOLHAS },
+    { desenho: BOIA_OCEANICA, estrutura: true, paleta: BOIA },
     { desenho: VAGA_DE_JADE, paleta: VAGA },
   ],
   desenhoConcha: CONCHA_CRESCENTE,

@@ -1,6 +1,6 @@
 # Game design e level design: campanha dos oito mundos
 
-**Catálogo desta prévia:** 200 travessias regulares, mais 16 chefes e 13 bônus. A expansão mantém os extras fora do contador e leva a 25 regulares cada mundo já ampliado. [Fichas e soluções](expansao/README.md). As tabelas abaixo registram o planejamento original.
+**Catálogo desta prévia:** 200 travessias regulares, mais 16 chefes e 15 bônus. [Dois desvios de fenda](fenda-de-recife.md) estreiam na Enseada sem serem exigidos na rota principal. A expansão mantém os extras fora do contador e leva a 25 regulares cada mundo já ampliado. [Fichas e soluções](expansao/README.md). As tabelas abaixo registram o planejamento original.
 > **Leitura atualizada:** esta página conserva planejamento e atualizações históricos. A base do PR #72 já contém oito mundos, 77 entradas não opcionais, 16 chefes opcionais e 13 bônus/alternativas não-chefes. Consulte o [estado datado e os critérios de contagem](../processo-de-criacao/estado-atual.md) antes de interpretar expressões antigas como “planejado”, “futuro” ou “pendente”. Arte preliminar e lançamento continuam sujeitos à revisão.
 
 **Plano histórico:** pelo menos 10 fases regulares autorais e 2 chefes por mundo. A meta anterior da expansão era de quinze fases. Os chefes, incluindo tutorial e arenas completas, não entram nessa contagem. As rotas propostas abaixo são orçamentos de conteúdo, não listas de fases entregues. Cada mundo tem retorno visível ao mapa e desafios opcionais que não são chaves do progresso principal.
@@ -8,7 +8,7 @@
 | Mundo | Núcleo ensinado e progressão | Rota principal curta | Ramificações e opcionais | Dois chefes planejados |
 | --- | --- | --- | --- | --- |
 | Praia das Conchas | Baixa e alta, refúgio firme, aviso da garça estática, busca e volta. | 6 regulares; aprendizado sem pressão, depois refúgios/poças/mirante; saída antiga preservada. | 4 regulares: Ilhota e três desvios da Enseadinha. | Vigia das ondas (abrigo e sinal); Ponta da Ressaca (duas janelas seguras). A Ponta da garça atual é um encontro, não chefe completo. |
-| Recifes Expostos | Rocha bloqueia; pedra alta resiste à maré; rota e retorno competem. | 6 regulares; alternar exposição e refúgio, depois dois fragmentos e retorno. | 4 regulares; recife baixo, coletáveis e bolsões fundos. | Guardião das Poças (dois refúgios); Vigia do Recife (volta por outra rota). |
+| Recifes Expostos | Rocha bloqueia; refúgio elevado resiste à maré; rota e retorno competem. | 6 regulares; alternar exposição e refúgio, depois dois fragmentos e retorno. | 4 regulares; recife baixo, coletáveis e bolsões fundos. | Guardião das Poças (dois refúgios); Vigia do Recife (volta por outra rota). |
 | Mangue dos Siris Duplos | Troca gratuita, ciclo compartilhado e placa; olhar ambos antes de mover. | 6 regulares; introduzir os dois, abrir a passagem, reunir em segurança. | 4 regulares; duas rotas, desvios e raízes incomuns. | Guardião da Raiz (duas posições); Dupla no Mangue (revezamento com ameaça anunciada). |
 | Enseada da Garça | Aviso da próxima casa, abrigo, patrulha previsível e fuga no próprio ritmo. | 6 regulares de perseguição; começar com padrão a dois pontos, combinar com maré. | 4 regulares de coleta, atalhos ou sequência alternativa. | Garça da Restinga (travessia); Vigia das Falésias (duas metas na arena). |
 | Ilhas à Deriva | Balsa montável anda na virada da maré, com destino anunciado. | 6 regulares; uma balsa e dois cais, resgate, duas trajetórias e refúgio. | 4 regulares; caminhos costeiros, itens não obrigatórios e desvios com tempo. | Mestre das Correntes (dois desembarques no passo da virada); Passagem das Balsas (carona inativa e portões em revezamento). |
@@ -57,7 +57,7 @@ As três fases iniciais permanecem; sete novas regulares ampliam o treino de tro
 
 ### Ampliação jogável: Enseada da Garça
 
-**Garça da Restinga** desloca um rasante horizontal entre passagens e deixa pedras altas seguras. **Vigia das Falésias** alterna faixas verticais nas duas margens: Verde segura a placa, Coral atravessa e os dois chegam a destinos diferentes. As arenas são opcionais, distintas da patrulha regular.
+**Garça da Restinga** desloca um rasante horizontal entre passagens e deixa refúgios elevados seguros. **Vigia das Falésias** alterna faixas verticais nas duas margens: Verde segura a placa, Coral atravessa e os dois chegam a destinos diferentes. As arenas são opcionais, distintas da patrulha regular.
 
 Depois do primeiro rasante, o ramo ensina a escolher a margem, combinar previsões da água e da garça, recolher fragmentos fora do próximo alvo e revezar a placa sem deixar o parceiro na mira. A garça é determinística: suas marcas são legíveis antes do movimento. A rota original e seus dois desvios continuam disponíveis; os chefes não fazem parte deste lote. [Fichas e soluções](../processo-de-criacao/11-enseada-ampliada/README.md).
 
@@ -89,6 +89,6 @@ A primeira travessia em trio é **Três refúgios**, um desvio das Grutas que en
 
 O **Guardião do Farol** introduz pontes temporárias e três lentes, sem repetir a ancoragem ou as faixas de ataque da Baía. A **Última Virada** exige alternar o trio, casar a orientação com outra placa ocupada e reunir os três siris nos destinos. [Ficha e solução](../processo-de-criacao/21-ultima-virada/README.md).
 
-**Vigia das ondas**, primeiro chefe opcional da Praia, introduz uma faixa de espuma previsível. Ensina abrigo em pedra alta e passagem de baixio, sem coleta e sem mudar Ponta da garça. **Ponta da Ressaca**, segundo chefe opcional, alterna a espuma entre norte e sul. A rota exige duas janelas de baixio, uma saída da faixa pela margem e chegada à pedra alta no turno da onda.
+**Vigia das ondas**, primeiro chefe opcional da Praia, introduz uma faixa de espuma previsível. Ensina abrigo em refúgio elevado e passagem de baixio, sem coleta e sem mudar Ponta da garça. **Ponta da Ressaca**, segundo chefe opcional, alterna a espuma entre norte e sul. A rota exige duas janelas de baixio, uma saída da faixa pela margem e chegada ao refúgio elevado no turno da onda.
 
 **Mestre das Correntes** abre com a Corrente cruzada e registra os ancoradouros apenas ao desembarcar no passo da virada. **Passagem das Balsas** usa a mesma maré para sincronizar três balsas e liberar dois portões por placas cruzadas. As Grutas abrem pelo cais original, independentemente das arenas. [Fichas e soluções](../processo-de-criacao/27-chefes-deriva/README.md).

@@ -9,7 +9,7 @@ const balsa = (baixa: Posicao, alta: Posicao) => ({ paradas: [baixa, alta] as co
 export const FASES_FAROL_AMPLIADO = [
   {
     id: 'farol-faroleiros-de-vigia', nome: 'Faroleiros de vigia',
-    objetivo: 'Recolha o fragmento e ocupe a saída e o marco sem cair no rasante.',
+    objetivo: 'Recolha a pérola e ocupe a saída e o marco sem cair no rasante.',
     ensino: 'O portão encurta o revezamento, mas existe um contorno. Confira os alvos da garça antes de deixar um siri na placa.',
     mapa: ['S=H.##B#', '##..P..#', 'A.H=D.G#', '.####.T#'],
     dupla: { segundoAlvo: 'T' },
@@ -19,7 +19,7 @@ export const FASES_FAROL_AMPLIADO = [
   },
   {
     id: 'farol-turno-dos-guardioes', nome: 'Turno dos guardiões',
-    objetivo: 'Alinhe as duas balsas, recupere os fragmentos e reúna a dupla depois do portão.',
+    objetivo: 'Alinhe as duas balsas, recupere as pérolas e reúna a dupla depois do portão.',
     ensino: 'Deixe o parceiro em terra firme ou embarcado antes de mover o siri ativo. Leia o aviso da garça perto da placa e do marco.',
     mapa: ['S..~~~H=B.DG', '...#####.###', '########..##', 'AB.~~~H=.PT#', '...####.#.##'],
     balsas: [balsa(p(3, 0), p(5, 0)), balsa(p(5, 3), p(3, 3))],
@@ -46,8 +46,8 @@ export const FASES_FAROL_AMPLIADO = [
   },
   {
     id: 'farol-salao-das-lanternas', nome: 'Salão das lanternas',
-    objetivo: 'Leve a pérola ao encaixe, acione a alavanca e reúna a dupla além dos dois portões.',
-    ensino: 'O siri que recolhe a pérola precisa encaixá-la; o outro aciona a alavanca e segura a placa. Depois da passagem, contorne pela galeria sul.',
+    objetivo: 'Leve a pérola da gruta ao Encaixe A, acione a alavanca e reúna a dupla além dos dois portões.',
+    ensino: 'Recolha também a pérola de coleta. O siri que recolhe a pérola de encaixe precisa encaixá-la; o outro aciona a alavanca e segura a placa. Depois da passagem, contorne pela galeria sul.',
     mapa: ['SK=H.E.######', '####.#O..B###', '########.DG##', 'A.=H.FPH##T##', '...####....##'],
     dupla: { segundoAlvo: 'T' },
     etapasGruta: ['K', 'E', 'F'],
@@ -55,7 +55,7 @@ export const FASES_FAROL_AMPLIADO = [
   },
   {
     id: 'farol-quatro-cais', nome: 'Quatro cais do farol',
-    objetivo: 'Recolha os três fragmentos, atravesse quatro cais e volte à saída no oeste.',
+    objetivo: 'Recolha as três pérolas, atravesse quatro cais e volte à saída no oeste.',
     ensino: 'As balsas alternam os sentidos. Você pode andar no cais para ajustar o momento da partida antes de embarcar.',
     mapa: ['S..~~.B.#####', '..#####..####', '#######..~~B#', '...####..##.#', 'G.B~~~..###.#', '######...~~~.'],
     balsas: [balsa(p(3, 0), p(4, 0)), balsa(p(10, 2), p(9, 2)), balsa(p(5, 4), p(3, 4)), balsa(p(9, 5), p(11, 5))],
@@ -63,7 +63,7 @@ export const FASES_FAROL_AMPLIADO = [
   },
   {
     id: 'farol-lentes-em-contramare', nome: 'Lentes em contramaré',
-    objetivo: 'Leve a pérola ao encaixe, acione a alavanca, busque o fragmento e reúna a dupla.',
+    objetivo: 'Leve a pérola da gruta ao Encaixe A, acione a alavanca, busque a pérola de coleta e reúna a dupla.',
     ensino: 'O coral cuida da lente na margem norte. O verde vira a maré na outra margem, alcança a alavanca e sustenta a placa até a travessia.',
     mapa: ['SK=H~~~..E###', '...######.OB#', '##########.##', 'A..~~~H...DG#', '...####=F####', '######..P.T##'],
     balsas: [balsa(p(4, 0), p(6, 0)), balsa(p(5, 3), p(3, 3))],
@@ -73,7 +73,7 @@ export const FASES_FAROL_AMPLIADO = [
   },
   {
     id: 'farol-luz-das-duas-mares', nome: 'A luz das duas marés',
-    objetivo: 'Abra os dois portões, recolha os três fragmentos e ocupe a saída e o marco.',
+    objetivo: 'Abra os dois portões, recolha as três pérolas e ocupe a saída e o marco.',
     ensino: 'A alavanca na margem sul abre o portão da lente. Na última balsa, faça uma ida e volta para completar a coleta e só então coordene a placa e a chegada.',
     mapa: ['S.KH~~~..=EOB##', '...####.###.###', '###########~B##', 'A.B~~~H....####', '...####=F##~###', '######..P....DG', '##########T####'],
     balsas: [balsa(p(4, 0), p(6, 0)), balsa(p(5, 3), p(3, 3)), balsa(p(11, 2), p(11, 4))],

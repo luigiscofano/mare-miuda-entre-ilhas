@@ -19,7 +19,7 @@ export const VIGIA_DO_RECIFE = {
   nome: 'Vigia do Recife',
   mapa: ['###.H######', 'SG.H=.H..B#', '.#.#####..#', '...H=H=H..#', '###.#.#.###'],
   recife: { ida: ponto(4, 1), volta: ponto(4, 3) },
-  objetivo: 'Pegue o fragmento e volte à saída pela passagem sul.',
-  ensino: 'O fragmento é o contrapeso das comportas. Pegá-lo fecha a ida ao norte e abre a volta ao sul. A passagem aberta ainda depende da maré baixa.',
+  objetivo: 'Pegue a pérola e volte à saída pela passagem sul.',
+  ensino: 'A pérola é o contrapeso das comportas. Pegá-la fecha a ida ao norte e abre a volta ao sul. A passagem aberta ainda depende da maré baixa.',
   solucao: rota('DUDURRRRRRLRRRRDDLLLLDUDULLLUUL'),
 } as const satisfies Fase;

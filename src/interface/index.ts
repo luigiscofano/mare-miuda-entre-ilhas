@@ -1,5 +1,6 @@
+import { coletaPerolas, textoDaColeta } from '../campanha/coletaveis.ts';
 import { IDS_DA_EXPANSAO } from '../fases/expansao/index.ts';
-import { balsasNoTurno, casasDoRasante, executarPasso, faixaRessacaNoTurno, feixeNoTurno, iniciar, janelaGrutaAtiva, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, nomeDaJanelaGruta, passagemDoRecifeFechada, PASSOS_POR_MARE, passosAteTrocaFeixe, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, totalAncoradouros, totalFragmentos } from '../motor/index.ts';
+import { DIRECOES, bocaSubmersa, preverPasso, balsasNoTurno, casasDoRasante, executarPasso, faixaRessacaNoTurno, feixeNoTurno, iniciar, janelaGrutaAtiva, LIMITE_LEVADAS, mareAlta, nomeDaEtapaGruta, nomeDaJanelaGruta, passagemDoRecifeFechada, PASSOS_POR_MARE, passosAteTrocaFeixe, passosAteVirada, mesmaCasa, posicoesDosSiris, siriAtivo, totalAncoradouros, totalFragmentos } from '../motor/index.ts';
 import type { Acao, Direcao, Evento, OrientacaoFarol } from '../motor/index.ts';
 import { FASES_BANCADA, TODAS_AS_FASES } from '../fases/index.ts';
 import { ALTURA, DENSIDADE, desenhar, desenharPraia, LARGURA } from '../render/index.ts';
@@ -14,6 +15,7 @@ import {
 } from './historico-mare-a-mao.ts';
 import { opcoesDoSeletor, selecionarMarco } from '../campanha/seletor.ts';
 import { renderizarSeletor } from './seletor.ts';
+import { criarOndaVisual } from './onda-visual.ts';
 
 function buscar<T extends HTMLElement = HTMLElement>(seletor: string): T {
   const elemento = document.querySelector<T>(seletor);
@@ -119,6 +121,15 @@ let indice = 0;
 let fase = FASES_BANCADA[0];
 let estado = iniciar(fase);
 
+function pintarFase(): void {
+  desenhar(tabuleiro.ctx, fase, estado, logo, temaDaFase(), fauna, ondaVisual.faixa());
+}
+
+const ondaVisual = criarOndaVisual((fim, ms) => {
+  const timer = setTimeout(fim, ms);
+  return () => clearTimeout(timer);
+}, () => { if (tela === 'fase') pintarFase(); });
+
 function gravar() {
   buscar('#aviso-save').hidden = salvar(storage, save);
 }
@@ -131,6 +142,7 @@ function atualizarAmbiente() {
 }
 
 function trocarTela(destino: Tela, focar = true): void {
+  if (destino !== 'fase') ondaVisual.reiniciar();
   if (destino !== 'praia' && quadroMapa !== undefined) {
     window.cancelAnimationFrame(quadroMapa);
     quadroMapa = undefined;
@@ -200,11 +212,11 @@ function atualizarPraia(mensagem = ''): void {
 
 logo.addEventListener('load', () => {
   if (tela === 'praia' && quadroMapa === undefined && mundoAtual(save.progresso) === 'arquipelago') atualizarPraia();
-  if (tela === 'fase') desenhar(tabuleiro.ctx, fase, estado, logo, temaDaFase(), fauna);
+  if (tela === 'fase') pintarFase();
 });
 
 fauna.addEventListener('load', () => {
-  if (tela === 'fase') desenhar(tabuleiro.ctx, fase, estado, logo, temaDaFase(), fauna);
+  if (tela === 'fase') pintarFase();
 });
 
 arteArquipelago.addEventListener('load', () => {
@@ -224,6 +236,10 @@ const INSIGNIAS = ['círculo', 'quadrado', 'triângulo'] as const;
 function descricao(evento: Evento): string {
   switch (evento.tipo) {
     case 'bloqueado': return 'Passo bloqueado. A maré não avançou.';
+    case 'fenda-atravessada': return `O siri atravessou a fenda ${evento.forma}.`;
+    case 'fenda-bloqueada': return evento.motivo === 'ocupada'
+      ? 'Saída da fenda ocupada por outro siri. A maré não avançou.'
+      : 'Saída da fenda bloqueada. A maré não avançou.';
     case 'gruta-avancou': return evento.etapa === 'K' ? 'Pérola no inventário.'
       : evento.etapa === 'E' ? 'Encaixe A acionado.' : 'Alavanca B acionada.';
     case 'gruta-fora-da-janela': return `A peça exige: ${nomeDaJanelaGruta(evento.janela)}.`;
@@ -241,8 +257,18 @@ function descricao(evento: Evento): string {
     case 'abrigo-visitado': return 'Refúgio marcado na maré alta.';
     case 'faltam-abrigos': return 'Visite os dois refúgios marcados na maré alta antes de sair.';
     case 'recife-mudou-rota': return 'A comporta norte fechou. Volte pela passagem sul na baixa.';
-    case 'fragmento': if (fase.orcamentoMoedas) return 'Moeda recolhida.'; return totalFragmentos(fase) > 1 ? 'Fragmento recolhido.' : 'Fragmento recolhido. Volte à saída.';
-    case 'falta-fragmento': if (fase.orcamentoMoedas) return 'Encontre as três moedas antes de sair.'; return totalFragmentos(fase) > 1
+    case 'fragmento':
+      if (fase.orcamentoMoedas !== undefined) return 'Moeda recolhida.';
+      if (coletaPerolas(fase)) {
+        if (fase.etapasGruta) return 'Pérola de coleta recolhida.';
+        return totalFragmentos(fase) > 1 ? 'Pérola recolhida.' : 'Pérola recolhida. Volte à Concha de Chegada.';
+      }
+      return totalFragmentos(fase) > 1 ? 'Fragmento recolhido.' : 'Fragmento recolhido. Volte à saída.';
+    case 'falta-fragmento':
+      if (fase.orcamentoMoedas !== undefined) return 'Encontre as três moedas antes de sair.';
+      if (coletaPerolas(fase)) return totalFragmentos(fase) > 1 ? 'Encontre todas as pérolas antes de sair.'
+        : 'Encontre a pérola antes de sair.';
+      return totalFragmentos(fase) > 1
       ? 'Para sair, encontre todos os fragmentos.' : 'Para sair, encontre o fragmento na ilhota.';
     case 'ancorou': return 'Ancoradouro firme!';
     case 'aguarde-desembarque': return 'Para firmar este ancoradouro, desembarque nele quando faltar um passo para a virada.';
@@ -275,7 +301,11 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   limite.hidden = fase.orcamentoMoedas === undefined;
   limite.textContent = fase.orcamentoMoedas === undefined ? '' : `Passos restantes: ${fase.orcamentoMoedas - estado.passos}`;
   fragmento.hidden = !total;
-  fragmento.textContent = fase.orcamentoMoedas ? `Moedas: ${estado.fragmentos.length}/3` : total > 1 ? `Fragmentos: ${estado.fragmentos.length}/${total}`
+  if (fase.orcamentoMoedas !== undefined) fragmento.textContent = `Moedas: ${estado.fragmentos.length}/3`;
+  else if (coletaPerolas(fase)) {
+    const rotulo = fase.etapasGruta ? 'Pérolas de coleta' : 'Pérolas';
+    fragmento.textContent = `${rotulo}: ${estado.fragmentos.length}/${total}`;
+  } else fragmento.textContent = total > 1 ? `Fragmentos: ${estado.fragmentos.length}/${total}`
     : estado.temFragmento ? 'Fragmento no inventário' : 'Fragmento ainda na ilha';
   if (fase.etapasGruta) {
     fragmento.hidden = false;
@@ -342,7 +372,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   buscar('#garca-patrulha').hidden = !mostrarGarca || Boolean(alvo);
   buscar('#garca-rasante').hidden = !mostrarGarca || !alvo;
   const sinalGarca = !alvo ? (mostrarGarca ? ' Garça em patrulha.' : '') : fase.ameaca?.rasante
-    ? ` Rasante no próximo passo: ${rasante.map(coordenadas).join('; ')}. Pedra alta protege.`
+    ? ` Rasante no próximo passo: ${rasante.map(coordenadas).join('; ')}. O refúgio elevado protege.`
     : ` Garça no próximo passo: ${coordenadas(alvo)}.`;
   const cais = balsasNoTurno(fase, estado.passos);
   const destinos = balsasNoTurno(fase, estado.passos + faltam);
@@ -350,7 +380,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   const sinalBalsa = previsoes.length ? ` Na virada: ${previsoes.join('; ')}.` : '';
   const ateSubir = faltam + (alta ? PASSOS_POR_MARE : 0);
   const faixa = faixaRessacaNoTurno(fase, estado.passos + ateSubir);
-  const sinalRessaca = faixa ? ` Onda na subida: linha ${faixa.linha + 1}, colunas ${faixa.primeiraColuna + 1} a ${faixa.ultimaColuna + 1}. Pedra alta protege.` : '';
+  const sinalRessaca = faixa ? ` Onda na subida: linha ${faixa.linha + 1}, colunas ${faixa.primeiraColuna + 1} a ${faixa.ultimaColuna + 1}. O refúgio elevado protege.` : '';
   const atualFarol = feixeNoTurno(fase, estado.passos);
   const passosDoFeixe = passosAteTrocaFeixe(fase, estado.passos);
   const proximoFarol = feixeNoTurno(fase, estado.passos + passosDoFeixe);
@@ -372,8 +402,24 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     return `${nome} ${indice + 1} (${situacao}): placa em ${coordenadas(placa)}; portão em ${coordenadas(portao)}.`;
   });
   const sinalPortoes = vinculos ? ` ${vinculos.join(' ')}` : '';
+  const pares = fase.fendas?.map(({ forma, bocas: [a, b] }) => {
+    const submersas = [a, b].filter(boca => bocaSubmersa(fase, boca, estado.passos));
+    const acesso = submersas.length
+      ? `Fechada: ${submersas.map(coordenadas).join('; ')} sob a água. Boca seca é piso comum.`
+      : 'Aberta nos dois sentidos.';
+    return `Fenda ${forma}: ${coordenadas(a)} ↔ ${coordenadas(b)}. ${acesso}`;
+  });
+  const indicacoes = fase.fendas ? DIRECOES.flatMap(direcao => {
+    const passo = preverPasso(fase, estado, direcao);
+    if ('motivo' in passo) return passo.motivo === 'bloqueado' ? []
+      : [`${direcao}: saída da fenda ${passo.motivo === 'ocupada' ? 'ocupada' : 'bloqueada'}.`];
+    if (!passo.fenda) return [];
+    const risco = passo.saidaVaiAlagar ? ' Atenção: a saída alaga neste próximo passo.' : '';
+    return [`${direcao}: entrada em ${coordenadas(passo.entrada)}, saída em ${coordenadas(passo.destino)}.${risco}`];
+  }) : [];
+  const sinalFenda = pares ? ` ${[...pares, ...indicacoes].join(' ')}` : '';
   buscar('#previsao').textContent = finalizada ? 'Tentativa encerrada.'
-    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}${sinalRessaca}${sinalFarol}${sinalPortoes}`;
+    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalBalsa}${sinalRessaca}${sinalFarol}${sinalPortoes}${sinalFenda}`;
   buscar('#posicao').textContent = estado.dupla
     ? posicoesDosSiris(estado).map((pos, i) => `${SIRIS[i]}${i === ativo ? ' (ativo)' : ''}: ${coordenadas(pos)}.`).join(' ')
     : `Siri na ${coordenadas(estado.posicao)}.`;
@@ -382,7 +428,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
   if (eventos.some(evento => evento.tipo === 'levada')) {
     mensagens.push(estado.levadas >= LIMITE_LEVADAS ? 'Três erros: tente de novo.' : 'De volta à última casa firme.');
   }
-  if (estado.situacao === 'vitoria' && modoCampanha() && IDS_DA_EXPANSAO.has(fase.id)) {
+  if (estado.situacao === 'vitoria' && modoCampanha() && (IDS_DA_EXPANSAO.has(fase.id) || fase.fendas)) {
     // Compartilhar a mecânica de um chefe não transforma a travessia em arena.
     mensagens.push('Volte ao seletor para continuar.');
   } else if (estado.situacao === 'vitoria') {
@@ -406,7 +452,7 @@ function atualizarFase(eventos: readonly Evento[] = [], mensagem = ''): void {
     || (fase.id !== 'ponta-da-garca' && fase.id !== CAPITULO_FINAL);
   seguir.textContent = fase.id === CAPITULO_FINAL ? 'Ver desfecho' : 'Concluir viagem';
   buscar('#nova-mare-a-mao').hidden = !desafioAvulso || estado.situacao === 'jogando';
-  desenhar(tabuleiro.ctx, fase, estado, logo, temaDaFase(), fauna);
+  pintarFase();
   audio.eventos(eventos);
 }
 
@@ -417,13 +463,14 @@ function selecionarFase(novoIndice: number, mensagem?: string, focar = true): vo
 }
 
 function prepararFase(mensagem?: string, focar = true): void {
+  ondaVisual.reiniciar();
   estado = iniciar(fase);
   buscar('#nome-fase').textContent = fase.nome;
-  buscar('#objetivo').textContent = fase.objetivo;
+  buscar('#objetivo').textContent = textoDaColeta(fase, fase.objetivo);
   const sinalConcha = buscar('#sinal-concha');
   sinalConcha.hidden = !fase.mapa.some(linha => linha.includes('C'));
-  buscar('#ensino').textContent = fase.ensino;
-  buscar('#lembrete-fase').textContent = fase.ensino;
+  buscar('#ensino').textContent = textoDaColeta(fase, fase.ensino);
+  buscar('#lembrete-fase').textContent = textoDaColeta(fase, fase.ensino);
   buscar('#lembrete-fase').hidden = bancada;
   buscar('#grade').textContent = fase.mapa.join('\n');
   buscar<HTMLDetailsElement>('#ajuda').open = false;
@@ -558,6 +605,7 @@ function jogarAcao(acao: Acao): void {
   if (tela !== 'fase' || estado.situacao !== 'jogando') return;
   const transicao = executarPasso(fase, estado, acao);
   estado = transicao.estado;
+  ondaVisual.aposAcao(fase, estado.passos, transicao.eventos);
   if (modoCampanha() && estado.situacao === 'vitoria' && ehIdFase(fase.id)) {
     save = { ...save, progresso: concluirFase(save.progresso, fase.id) };
     gravar();
@@ -575,7 +623,7 @@ const voltar = () => {
     return;
   }
   if (tela === 'fase' && !bancada) {
-    abrirPraia('', IDS_DA_EXPANSAO.has(fase.id) ? fase.id : undefined);
+    abrirPraia('', (IDS_DA_EXPANSAO.has(fase.id) || fase.fendas) ? fase.id : undefined);
   } else if (tela === 'creditos' && contextoCreditos !== 'inicio') abrirPraia();
   else if (tela !== 'inicio') trocarTela('inicio');
 };

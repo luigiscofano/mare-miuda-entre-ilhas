@@ -1,10 +1,15 @@
-import { balsasNoTurno, casasDoRasante, DIRECOES, destinoPermitido, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, janelaGrutaAtiva, mareAlta, mesmaCasa, passagemDoRecifeFechada, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, portaoLiberado, posicoesDosSiris, siriAtivo } from '../motor/index.ts';
-import type { Estado, Fase, Posicao } from '../motor/index.ts';
+import { bocaSubmersa, fendaAtiva, balsasNoTurno, casasDoRasante, DIRECOES, preverPasso, faixaAfeta, faixaRessacaNoTurno, feixeNoTurno, jogadorAtivo, janelaGrutaAtiva, mareAlta, mesmaCasa, passagemDoRecifeFechada, passosAteTrocaFeixe, passosAteVirada, portaoDaGrutaAberto, portaoLiberado, posicoesDosSiris, siriAtivo, totalFragmentos } from '../motor/index.ts';
+import type { Estado, FaixaRessaca, Fase, Posicao } from '../motor/index.ts';
 import { entradaEm, mundoAtual, nosDo, rotaLivre, trilhasDo } from '../campanha/index.ts';
 import type { Mundo, Progresso } from '../campanha/index.ts';
 import { caminhoDoCabo, marcadorCabo } from '../campanha/cabo-baixo.ts';
+import { desenharBocaDeFenda, desenharSaidaDeFenda } from './fenda-recife.ts';
 import { prepararTravessia } from '../campanha/travessia.ts';
+import { coletaPerolas, indiceDaPerola } from '../campanha/coletaveis.ts';
 import { pintarCosta, temaDaCosta } from './travessia-praia.ts';
+import { paletaDaPerola, PEROLA_COLETAVEL } from './perolas-coletaveis.ts';
+import { CORES_ONDA, CORES_ESPUMA_IMINENTE, ESPUMA_DE_AVISO, ONDA_FRONTAL } from './onda-frontal.ts';
+import { CORES_OSTRA, OSTRA_ABERTA, OSTRA_FECHADA } from './ostra-de-chegada.ts';
 import { pintarSeletorArquipelago, podePintarArquipelago } from './seletor-arquipelago.ts';
 
 import { mapaComFundoInterno, pintarCadeadoPraia, pintarMarcoDaPraia, pintarSeletorInterno, podePintarSeletorInterno } from './seletores-praia.ts';
@@ -93,6 +98,17 @@ function pintarPixels(ctx: CanvasRenderingContext2D, sprite: readonly string[], 
   }));
 }
 
+function desenharSpriteNativoNaCasa(ctx: CanvasRenderingContext2D, sprite: readonly string[],
+  x: number, y: number, paleta: Readonly<Record<string, string>>): void {
+  const lado = TAMANHO_TILE * DENSIDADE;
+  const recuoX = Math.floor((lado - sprite[0].length) / 2);
+  const recuoY = Math.floor((lado - sprite.length) / 2);
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  pintarPixels(ctx, sprite, x * DENSIDADE + recuoX, y * DENSIDADE + recuoY, paleta);
+  ctx.restore();
+}
+
 function bloco(ctx: CanvasRenderingContext2D, cor: string, x: number, y: number, largura: number, altura: number) {
   ctx.fillStyle = cor;
   ctx.fillRect(x, y, largura, altura);
@@ -117,11 +133,11 @@ function desenharPisoLegado(ctx: CanvasRenderingContext2D, celula: string, alta:
     bloco(ctx, '#94979f', x + 5, y + 5, 6, 2);
   }
   if (celula === 'H') {
-    // Duas faces e o topo claro diferenciam o refúgio transitável da rocha.
-    bloco(ctx, tons.roca, x + 2, y + 8, 12, 5);
-    bloco(ctx, tons.linha, x + 3, y + 7, 10, 3);
-    bloco(ctx, tons.branco, x + 4, y + 4, 8, 4);
-    bloco(ctx, tons.areiaSombra, x + 6, y + 3, 4, 2);
+    // A bancada mantém a mesma ideia de piso elevado, também em cinza.
+    bloco(ctx, tons.branco, x + 2, y + 4, 12, 2);
+    bloco(ctx, tons.areia, x + 1, y + 6, 14, 4);
+    bloco(ctx, tons.areiaSombra, x + 1, y + 10, 14, 2);
+    bloco(ctx, tons.areiaSombra, x + 2, y + 12, 12, 1);
   }
 }
 
@@ -269,13 +285,14 @@ function desenharMecanismoDaGruta(
   if (concluida) bloco(ctx, tons.linha, x + 5, y + 12, 5, 1);
 }
 
-// Espuma no topo da célula, distinta dos cantos de movimento e da mira da garça.
-function desenharAvisoRessaca(ctx: CanvasRenderingContext2D, x: number, y: number, tons: Tons, imediata: boolean) {
-  bloco(ctx, tons.linha, x + 1, y + 1, 14, 5);
-  for (const i of [2, 7, 12]) {
-    bloco(ctx, tons.branco, x + i, y + 4, 3, 1);
-    if (imediata) bloco(ctx, tons.branco, x + i + 1, y + 3, 2, 1);
-  }
+function desenharOnda(ctx: CanvasRenderingContext2D, x: number, y: number,
+  estado: 'aviso' | 'iminente' | 'impacto'): void {
+  const desenho = estado === 'impacto' ? ONDA_FRONTAL : ESPUMA_DE_AVISO;
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  pintarPixels(ctx, desenho.pixels, x * DENSIDADE + desenho.x, y * DENSIDADE + desenho.y,
+    estado === 'iminente' ? CORES_ESPUMA_IMINENTE : CORES_ONDA);
+  ctx.restore();
 }
 
 function desenharAncoradouro(ctx: CanvasRenderingContext2D, x: number, y: number, tons: Tons, firme: boolean) {
@@ -346,7 +363,7 @@ function desenharFundoDaTravessia(ctx: CanvasRenderingContext2D, tema: Mundo | f
   }
 }
 
-export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, logo: HTMLImageElement, tema: Mundo | false = false, fauna?: HTMLImageElement): void {
+export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Estado, logo: HTMLImageElement, tema: Mundo | false = false, fauna?: HTMLImageElement, impacto?: FaixaRessaca): void {
   const tons: Tons = tema ? CORES_MUNDO[tema] : TONS_CINZA;
   const cores = paleta(tons);
   ctx.imageSmoothingEnabled = false;
@@ -364,15 +381,16 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       [...fileira].map((casa, coluna) =>
         passagemDoRecifeFechada(fase, { coluna, linha }, estado.temFragmento) ? '~' : casa).join('')) : fase.mapa;
     pintarCosta({ contexto: ctx, origemX: origemX * DENSIDADE, origemY: origemY * DENSIDADE },
-      mapa, alta, LARGURA * DENSIDADE, ALTURA * DENSIDADE, costa);
+      mapa, alta, LARGURA * DENSIDADE, ALTURA * DENSIDADE, costa, fase.id);
   } else {
     bloco(ctx, tons.margem, origemX - 4, origemY - 4, gradeLargura + 8, gradeAltura + 8);
   }
 
   const atual = jogadorAtivo(estado);
-  const vizinhas = estado.situacao === 'jogando'
-    ? DIRECOES.map(d => destinoPermitido(fase, estado, d)).filter(v => v !== undefined)
+  const passosLegais = estado.situacao === 'jogando'
+    ? DIRECOES.map(d => preverPasso(fase, estado, d)).filter(passo => 'destino' in passo)
     : [];
+  const vizinhas = passosLegais.map(passo => passo.entrada);
   const rasante = casasDoRasante(fase, estado.passos + 1);
   const faltam = passosAteVirada(estado.passos);
   const faixa = !alta && estado.situacao === 'jogando' ? faixaRessacaNoTurno(fase, estado.passos + faltam) : undefined;
@@ -382,6 +400,8 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
   const seguinte = pertoDaTroca === 1 ? feixeNoTurno(fase, estado.passos + 1) : feixe;
   const siris = posicoesDosSiris(estado);
   const recife = fase.recife;
+  const temOstra = coletaPerolas(fase);
+  const abriuOstra = temOstra && estado.fragmentos.length >= totalFragmentos(fase);
   fase.mapa.forEach((fileira, linha) => [...fileira].forEach((celula, coluna) => {
     const x = origemX + coluna * TAMANHO_TILE;
     const y = origemY + linha * TAMANHO_TILE;
@@ -391,7 +411,18 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
     const comportaFechada = passagemDoRecifeFechada(fase, pos, estado.temFragmento);
     const piso = comportaFechada ? '~' : celula;
     if (!costa) desenharPisoLegado(ctx, piso, alta, x, y, tons);
-    desenharMecanismosBase(ctx, piso, x, y, tons, placaOcupada);
+    // Sinais ficam sob as linguagens de posição e objetivo; o refúgio
+    // não recebe nem espuma de ameaça nem o quadro de impacto.
+    if (impacto && faixaAfeta(fase, impacto, pos)) desenharOnda(ctx, x, y, 'impacto');
+    else if (faixa && faixaAfeta(fase, faixa, pos)) desenharOnda(ctx, x, y, faltam === 1 ? 'iminente' : 'aviso');
+    if (piso === 'G' && temOstra) {
+      desenharSpriteNativoNaCasa(ctx, abriuOstra ? OSTRA_ABERTA : OSTRA_FECHADA, x, y, CORES_OSTRA);
+    } else desenharMecanismosBase(ctx, piso, x, y, tons, placaOcupada);
+    const fenda = fase.fendas?.find(par => par.bocas.some(boca => mesmaCasa(boca, pos)));
+    // Na alta o baixio coberto conserva a arte normal da água, sem marca da fenda.
+    if (fenda && !bocaSubmersa(fase, pos, estado.passos)) {
+      desenharBocaDeFenda(ctx, fenda.forma, fendaAtiva(fase, fenda, estado.passos), x, y);
+    }
     if (celula === 'P' || celula === 'D') {
       const indice = fase.portoesVinculados?.findIndex(item => mesmaCasa(item.placa, pos) || mesmaCasa(item.portao, pos)) ?? -1;
       const numero = DIGITOS[String(indice + 1)];
@@ -408,7 +439,9 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       desenharSinalDoRecife(ctx, x, y, tons, comportaFechada ? 'comporta-fechada' : 'comporta-aberta');
     }
     if (celula === 'B' && !estado.fragmentos.some(coleta => mesmaCasa(pos, coleta))) {
-      if (fase.orcamentoMoedas) moeda(ctx, x, y, tons);
+      const indice = indiceDaPerola(fase, pos);
+      if (fase.orcamentoMoedas !== undefined) moeda(ctx, x, y, tons);
+      else if (indice !== undefined) desenharSpriteNativoNaCasa(ctx, PEROLA_COLETAVEL, x, y, paletaDaPerola(indice));
       else pintarPixels(ctx, FRAGMENTO, x + 5, y + 5, cores);
     }
     if (feixe) desenharFeixe(ctx, celula, pos, x, y, tons, feixe, seguinte, estado);
@@ -421,13 +454,14 @@ export function desenhar(ctx: CanvasRenderingContext2D, fase: Fase, estado: Esta
       cantos(ctx, x, y, tons.branco, 2, 3);
     }
     if (vizinhas.some(v => mesmaCasa(v, pos))) cantos(ctx, x, y, tons.linha, 2, 3);
+    const saida = passosLegais.find(passo => passo.fenda && mesmaCasa(passo.destino, pos));
+    if (saida) desenharSaidaDeFenda(ctx, x, y, Boolean(saida.saidaVaiAlagar));
     if (mesmaCasa(atual, pos)) cantos(ctx, x, y, tons.linha, 1, 5);
     if (balsas.some(balsa => mesmaCasa(balsa, pos))) {
       bloco(ctx, tons.linha, x + 2, y + 3, 12, 10);
       bloco(ctx, '#bb965f', x + 3, y + 4, 10, 8);
       for (const h of [5, 8, 11]) bloco(ctx, '#eadab0', x + 4, y + h, 8, 1);
     }
-    if (faixa && faixaAfeta(fase, faixa, pos)) desenharAvisoRessaca(ctx, x, y, tons, faltam === 1);
     if (rasante.some(casa => mesmaCasa(casa, pos))) marcarAlvo(ctx, x, y, true, tons);
     else if (fase.ameaca && !fase.ameaca.rasante && !fase.ameaca.rota?.length && mesmaCasa(fase.ameaca.alvo, pos)) marcarAlvo(ctx, x, y, false, tons);
   }));

@@ -1,3 +1,4 @@
+import { FENDAS_DA_ENSEADA } from '../src/fases/fendas-da-enseada.ts';
 import { EXPANSAO } from '../src/fases/expansao/index.ts';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -49,7 +50,7 @@ function menorVitoriaSemLevadas(fase: Fase): number | undefined {
 test('o Farol tem dez regulares; as oito novas encerram sem levadas', () => {
   assert.equal(totalDeFasesRegulares('farol'), 10);
   assert.equal(FASES_FAROL_AMPLIADO.filter(f => 'dupla' in f).length, 5);
-  assert.equal(TODAS_AS_FASES.length, 106 + EXPANSAO.length);
+  assert.equal(TODAS_AS_FASES.length, 106 + EXPANSAO.length + FENDAS_DA_ENSEADA.length);
   assert.equal(new Set(TODAS_AS_FASES.map(f => f.id)).size, TODAS_AS_FASES.length);
   for (const fase of TODAS_AS_FASES) assert.ok(validarSolucao(fase), fase.id);
 });

@@ -47,7 +47,7 @@ function busca(fase: Fase, permiteLevadas = false) {
   return { minimo, estados: fila.length, recuperaveis: recuperaveis.size };
 }
 
-test('a espuma avisa o ataque a solo firme e a pedra alta protege', () => {
+test('a espuma avisa o ataque a solo firme e o refúgio elevado protege', () => {
   const faixa = fase.ressaca.faixas[0];
   assert.deepEqual([3, 9, 15].map(t => faixaRessacaNoTurno(fase, t)), [faixa, faixa, faixa]);
   assert.equal(faixaRessacaNoTurno(fase, 6), undefined);

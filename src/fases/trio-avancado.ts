@@ -20,8 +20,8 @@ export const ECO_DOS_TRES_CAIS = {
     { paradas: [ponto(2, 0), ponto(5, 0)] },
     { paradas: [ponto(2, 4), ponto(3, 4)] },
   ],
-  objetivo: 'Atravesse os dois braços de balsa, recupere o fragmento e reúna os três siris na saída e nos marcos.',
-  ensino: 'Você pode deixar um siri embarcado e virar a maré com outro. Use as pedras altas no canal do meio e segure a placa até o portão ser cruzado.',
+  objetivo: 'Atravesse os dois braços de balsa, recupere a pérola e reúna os três siris na saída e nos marcos.',
+  ensino: 'Você pode deixar um siri embarcado e virar a maré com outro. Use os refúgios elevados no canal do meio e segure a placa até o portão ser cruzado.',
   solucao: rota('RXXRRRRRXRXRRXRXRXRRRRRRXXRRRRXRR'),
 } as const satisfies Fase;
 

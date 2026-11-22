@@ -19,6 +19,6 @@ export const PONTA_DA_RESSACA = {
     { linha: 3, primeiraColuna: 9, ultimaColuna: 12 },
   ] },
   objetivo: 'Cruze os dois baixios em janelas diferentes e alcance a concha.',
-  ensino: 'A espuma alterna entre norte e sul a cada subida. Saia da primeira faixa pela margem do meio e acerte a baixa para o segundo baixio. Termine a travessia na pedra alta antes da onda do sul.',
+  ensino: 'A espuma alterna entre norte e sul a cada subida. Saia da primeira faixa pela margem do meio e acerte a baixa para o segundo baixio. Termine a travessia no refúgio de areia elevada antes da onda do sul.',
   solucao: rota('RRRDDURRRRLRRDRDDURRRR'),
 } as const satisfies Fase;

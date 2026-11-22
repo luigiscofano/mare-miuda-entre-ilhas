@@ -157,13 +157,13 @@ test('HTML offline executa a bancada, a Praia, os créditos e o save sem rede', 
   assert.match(ler('#feedback'), /Fase concluída/);
   fases[2].click();
   botoes.direita.click();
-  assert.match(ler('#feedback'), /encontre o fragmento/);
+  assert.match(ler('#feedback'), /encontre a pérola/i);
   pegar('#reiniciar').click();
   ['baixo','baixo','direita','esquerda','direita','esquerda','cima','cima','direita'].forEach(dir => botoes[dir].click());
   assert.match(ler('#feedback'), /Fase concluída/);
-  assert.equal(ler('#fragmento'), 'Fragmento no inventário');
+  assert.equal(ler('#fragmento'), 'Pérolas: 1/1');
   pegar('#reiniciar').click();
-  assert.equal(ler('#fragmento'), 'Fragmento ainda na ilha');
+  assert.equal(ler('#fragmento'), 'Pérolas: 0/1');
   assert.equal(ler('#erros'), '0 / 3');
   assert.equal(ler('#mare'), 'Baixa');
   assert.equal(storage.size, 1, 'A bancada não grava progresso da praia.');
@@ -229,10 +229,16 @@ test('HTML offline avisa a onda e salva a conclusão de Vento Sul sem rede', asy
   assert.equal(ler('#ancoradouros'), 'Ancoradouros firmes: 0/3');
   assert.ok(quadros.length && quadros.every(([, ...posicoes]) => posicoes.every(Number.isInteger)));
 
+  assert.ok(quadros.some(([cor]) => cor === '#fff0d6'), 'espuma antes da subida');
+  assert.ok(!quadros.some(([cor]) => cor === '#295365'), 'crista não aparece na baixa');
+  quadros.length = 0;
   jogar('RRR');
   assert.match(ler('#feedback'), /faixa da ressaca te alcançou/);
   assert.equal(ler('#erros'), '1 / 3');
+  assert.ok(quadros.some(([cor]) => cor === '#295365'), 'crista aparece no evento de subida');
+  quadros.length = 0;
   pegar('#reiniciar').click();
+  assert.ok(!quadros.some(([cor]) => cor === '#295365'), 'reinício remove o impacto pendente');
   jogar('DDUURRRLRLRDDRRRR');
   assert.match(ler('#feedback'), /ancoradouro na maré baixa/);
   assert.equal(ler('#ancoradouros'), 'Ancoradouros firmes: 2/3');
@@ -470,4 +476,57 @@ test('escala inteira adia notificações de resize e evita reescrever largura', 
     assert.equal(quadros.length, 0);
     assert.equal(escritas, 1, 'Uma moldura oculta não altera a arte.');
   }
+});
+
+test('HTML offline ensina a fenda na Enseada, avisa a virada e salva os dois desvios', async () => {
+  const html = await readFile(new URL('../dist/mare-miuda-prototipo.html', import.meta.url), 'utf8');
+  const modulo = html.match(/<script type="module" src="(data:[^"]+)"/)?.[1];
+  assert.ok(modulo);
+  const chave = 'mare-miuda-entre-ilhas/praia-v1';
+  const original = ['enseada-sombra-restinga', 'enseada-abrigo-ondas'];
+  const primeira = 'enseada-fenda-entre-rochas';
+  const segunda = 'enseada-fenda-da-vazante';
+  const ui = prepararInterface();
+  const { pegar, botoes, storage, abrirMarco, buscarMarco } = ui;
+  storage.set(chave, JSON.stringify({ versao: 1, progresso: { mundo: 'enseada',
+    posicao: { coluna: 4, linha: 1 }, viuTutorial: true, concluidas: original }, audio: { musica: 0, efeitos: 0 } }));
+  await import(modulo + '#fendas-enseada');
+  const direcoes = { U: 'cima', D: 'baixo', R: 'direita' };
+  const jogar = rota => [...rota].forEach(letra => botoes[direcoes[letra]].click());
+  const ler = id => pegar(id).textContent;
+
+  pegar('#comecar').click();
+  assert.equal(buscarMarco(segunda).atributos['aria-disabled'], 'true');
+  assert.equal(buscarMarco(primeira).dataset.categoria, 'bonus');
+  abrirMarco(primeira);
+  assert.match(ler('#previsao'), /redonda.*direita: entrada em coluna 2, linha 1, saída em coluna 5, linha 1/);
+  jogar('R');
+  assert.equal(ler('#passos'), '1');
+  assert.match(ler('#feedback'), /atravessou a fenda redonda/);
+  jogar('R');
+  assert.match(ler('#feedback'), /Fase concluída!/);
+  pegar('#voltar-fase').click();
+  assert.equal(buscarMarco(segunda).dataset.estado, 'disponivel');
+  assert.equal(ler('#progresso-praia'), 'Travessias concluídas: 2/25.');
+  abrirMarco(segunda);
+  jogar('RR');
+  assert.match(ler('#previsao'), /a saída alaga neste próximo passo/);
+  jogar('R');
+  assert.match(ler('#feedback'), /A maré te levou/);
+  assert.equal(ler('#passos'), '3');
+  pegar('#reiniciar').click();
+  jogar('RRDRU');
+  assert.match(ler('#previsao'), /Fechada.*Boca seca é piso comum/);
+  assert.match(ler('#posicao'), /coluna 4, linha 1/);
+  jogar('DUR');
+  assert.match(ler('#feedback'), /Fase concluída!/);
+  assert.equal(ler('#erros'), '0 / 3');
+  const salvo = storage.get(chave);
+  assert.deepEqual(JSON.parse(salvo).progresso.concluidas, [...original, primeira, segunda]);
+  const recarregada = prepararInterface();
+  recarregada.storage.set(chave, salvo);
+  await import(modulo + '#fendas-recarregadas');
+  recarregada.pegar('#comecar').click();
+  assert.equal(recarregada.buscarMarco(primeira).dataset.estado, 'concluida');
+  assert.equal(recarregada.buscarMarco(segunda).dataset.estado, 'concluida');
 });

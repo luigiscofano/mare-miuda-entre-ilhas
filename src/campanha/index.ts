@@ -1,3 +1,4 @@
+import { FENDAS_DA_ENSEADA } from '../fases/fendas-da-enseada.ts';
 import { IDS_DA_EXPANSAO } from '../fases/expansao/index.ts';
 import type { IdFaseDaExpansao } from '../fases/expansao/tipos.ts';
 import { GUARDIAO_DA_RAIZ, DUPLA_NO_MANGUE } from '../fases/chefes-mangue.ts';
@@ -33,7 +34,7 @@ import type { Direcao, Posicao } from '../motor/index.ts';
 export type IdFaseEnseadinha = 'praia-fio-de-areia' | 'praia-pocas-espelho' | 'praia-mirante'
   | 'praia-bolso-mare' | 'praia-trilha-das-pedras' | 'praia-fragmentos-areal';
 export type IdFasePraia = IdFaseEnseadinha | 'primeira-onda' | 'sombra-da-garca' | 'busca-e-volta' | 'ilhota-perolada' | 'ponta-da-garca';
-export type IdFase = IdFaseDaExpansao | IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | IdFaseDerivaAmpliada | IdFaseGrutasAmpliadas | IdFaseRessacaAmpliada | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
+export type IdFase = typeof FENDAS_DA_ENSEADA[number]['id'] | IdFaseDaExpansao | IdFasePraia | IdFaseRecifesAmpliados | IdFaseMangueAmpliado | IdFaseEnseadaAmpliada | IdFaseDerivaAmpliada | IdFaseGrutasAmpliadas | IdFaseRessacaAmpliada | 'recife-pedra-firme' | 'recife-duas-pocas' | 'recife-retorno'
   | 'mangue-dois-encontros' | 'mangue-placa' | 'mangue-reuniao'
   | 'enseada-dupla-vigia' | 'enseada-dupla-revezamento' | 'deriva-dupla-cais' | 'deriva-dupla-contramao'
   | 'enseada-sombra-restinga' | 'enseada-abrigo-ondas' | 'enseada-farol-baixo'
@@ -460,7 +461,7 @@ const TRILHAS: Readonly<Record<Mundo, readonly Trilha[]>> = {
     trilha(P(2, 1), NOS_RESSACA[0], 'cima', 'baixo', [],
       ['ressaca-dupla-abrigo'], 'Conclua Abrigo dos dois cais para explorar a costa norte.'),
     trilha(NOS_RESSACA[0], NOS_RESSACA[1], 'direita', 'esquerda', [P(4, 0)],
-      ['ressaca-refugio-de-pedra'], 'Conclua Refúgio de pedra para chegar aos bolsos.'),
+      ['ressaca-refugio-de-pedra'], 'Conclua Refúgio da maré para chegar aos bolsos.'),
     trilha(NOS_RESSACA[1], NOS_RESSACA[2], 'direita', 'esquerda', [],
       ['ressaca-bolsos-opostos'], 'Recolha os fragmentos de Bolsos opostos para encontrar a placa.'),
     trilha(NOS_RESSACA[2], NOS_RESSACA[3], 'direita', 'esquerda', [],
@@ -573,14 +574,15 @@ export function criarProgresso(): Progresso {
   return { posicao: CAIS, concluidas: [], viuTutorial: false };
 }
 export function ehIdFase(id: unknown): id is IdFase {
-  return typeof id === 'string' && (IDS_DA_EXPANSAO.has(id) || Object.values(ENTRADAS).some(entradas =>
+  return typeof id === 'string' && (IDS_DA_EXPANSAO.has(id) || FENDAS_DA_ENSEADA.some(fase => fase.id === id) || Object.values(ENTRADAS).some(entradas =>
     entradas.some(entrada => entrada.id === id && !entrada.destino)));
 }
 export function totalDeFasesRegulares(mundo: Mundo): number {
   return ENTRADAS[mundo].filter(entrada => !entrada.destino && !entrada.opcional).length;
 }
 export function faseOpcional(mundo: Mundo, id: IdFase): boolean {
-  return ENTRADAS[mundo].some(entrada => entrada.id === id && entrada.opcional);
+  return (mundo === 'enseada' && FENDAS_DA_ENSEADA.some(fase => fase.id === id))
+    || ENTRADAS[mundo].some(entrada => entrada.id === id && entrada.opcional);
 }
 export function entradaEm(posicao: Posicao, mundo: Mundo = 'praia'): Entrada | undefined {
   return ENTRADAS[mundo].find(entrada => mesmaCasa(entrada.posicao, posicao));

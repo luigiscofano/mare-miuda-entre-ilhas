@@ -7,7 +7,7 @@ const ponto = (coluna: number, linha: number): Posicao => ({ coluna, linha });
 // As duas paradas de cada balsa correspondem à maré baixa e à alta.
 export const FASES_RESSACA_AMPLIADA = [
   {
-    id: 'ressaca-refugio-de-pedra', nome: 'Refúgio de pedra',
+    id: 'ressaca-refugio-de-pedra', nome: 'Refúgio da maré',
     mapa: ['S=H==H#', '##.##HC', '##.####'],
     objetivo: 'Cruze os bancos de areia e alcance a concha.',
     ensino: 'O primeiro refúgio tem um bolso firme ao sul. Use-o para iniciar a travessia dos dois baixios logo que a maré baixar.',
@@ -16,8 +16,8 @@ export const FASES_RESSACA_AMPLIADA = [
   {
     id: 'ressaca-bolsos-opostos', nome: 'Bolsos opostos',
     mapa: ['S..#B', '==H=.', '..#..', 'B.=.G'],
-    objetivo: 'Recolha os dois fragmentos em extremos opostos e saia a sudeste.',
-    ensino: 'O bolso sul deixa você preparar a subida para o segundo fragmento. Ler o relógio na ida evita ficar preso na volta.',
+    objetivo: 'Recolha as duas pérolas em extremos opostos e saia a sudeste.',
+    ensino: 'O bolso sul deixa você preparar a subida para a segunda pérola. Ler o relógio na ida evita ficar preso na volta.',
     solucao: rota('RDDDLRRRRUUUDDD'),
   },
   {
@@ -32,8 +32,8 @@ export const FASES_RESSACA_AMPLIADA = [
     id: 'ressaca-balsas-da-ponta', nome: 'Balsas da ponta',
     mapa: ['S..~~~H==B#', '######....#', 'BG.~~~H.###'],
     balsas: [{ paradas: [ponto(3, 0), ponto(5, 0)] }, { paradas: [ponto(5, 2), ponto(3, 2)] }],
-    objetivo: 'Use as duas balsas, recolha os fragmentos e desembarque na saída da ponta.',
-    ensino: 'Ao passar pela ilha central, recolha o fragmento antes de pegar a balsa de volta a oeste.',
+    objetivo: 'Use as duas balsas, recolha as pérolas e desembarque na saída da ponta.',
+    ensino: 'Ao passar pela ilha central, recolha a pérola antes de pegar a balsa de volta a oeste.',
     solucao: rota('RRRRDRRRUDLLDLLLLLR'),
   },
   {
@@ -41,7 +41,7 @@ export const FASES_RESSACA_AMPLIADA = [
     mapa: ['S..~~H=BDG', '##########', 'A.~~H..PT#'],
     balsas: [{ paradas: [ponto(3, 0), ponto(4, 0)] }, { paradas: [ponto(2, 2), ponto(3, 2)] }],
     dupla: { segundoAlvo: 'T' },
-    objetivo: 'Atravesse com os dois siris, recolha o fragmento e complete o portão e o marco.',
+    objetivo: 'Atravesse com os dois siris, recolha a pérola e complete o portão e o marco.',
     ensino: 'Os cais não se comunicam. Um passo de um siri pode tirar o outro da margem se ele já estiver embarcado.',
     solucao: rota('RXRRRRRRXRRRLRRRRRXR'),
   },
@@ -58,7 +58,7 @@ export const FASES_RESSACA_AMPLIADA = [
     mapa: ['S.=H==B####', '..##..~####', '######~~~##', 'A.~H=.~.DG#', '..####.PT##'],
     balsas: [{ paradas: [ponto(6, 1), ponto(6, 3)] }, { paradas: [ponto(2, 3), ponto(6, 2)] }],
     dupla: { segundoAlvo: 'T' },
-    objetivo: 'Busque o fragmento no norte e reúna a dupla depois das duas balsas.',
+    objetivo: 'Busque a pérola no norte e reúna a dupla depois das duas balsas.',
     ensino: 'As balsas chegam a alturas diferentes do cais central. Planeje a travessia do baixio e escolha quem sustenta a placa.',
     solucao: rota('RRRXRDUXRDXRDRXRRUDXDXRRRXR'),
   },

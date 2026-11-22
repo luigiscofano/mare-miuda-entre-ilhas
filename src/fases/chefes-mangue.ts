@@ -18,7 +18,7 @@ export const GUARDIAO_DA_RAIZ = {
     { portao: p(7, 2), placa: p(9, 0) },
   ],
   objetivo: 'Abra as duas raízes, revezando nas placas correspondentes, e ocupe os dois destinos.',
-  ensino: 'Cada placa só abre a raiz com o mesmo número. Deixe Verde na placa 1; depois, deixe Coral na 2. Use as pedras altas quando a maré virar.',
+  ensino: 'Cada placa só abre a raiz com o mesmo número. Deixe Verde na placa 1; depois, deixe Coral na 2. Use os refúgios de areia elevada quando a maré virar.',
   solucao: rota('XRRRXRLRRRRRRRXRRXRRXRRXRRRXRRLRRRR'),
 } as const satisfies Fase;
 

@@ -127,9 +127,9 @@ export const TEMA_GRUTAS: TemaDeCosta = {
     conchaLuz: '#dbcac9', conchaBrilho: '#f9e9dc',
   },
   enfeites: [
-    { desenho: ESTALACTITES, paleta: GRUTA },
-    { desenho: ROCHA_MINERAL, paleta: GRUTA },
-    { desenho: ROCA_VAZADA, paleta: GRUTA },
+    { desenho: ESTALACTITES, estrutura: true, paleta: GRUTA },
+    { desenho: ROCHA_MINERAL, estrutura: true, paleta: GRUTA },
+    { desenho: ROCA_VAZADA, estrutura: true, paleta: GRUTA },
   ],
   desenhoConcha: CONCHA_GRUTAS,
   tipo: 'grutas',
@@ -151,7 +151,7 @@ export const TEMA_RESSACA: TemaDeCosta = {
     conchaLuz: '#d99166', conchaBrilho: '#f6cf9b',
   },
   enfeites: [
-    { desenho: LAJE_DE_TEMPESTADE, paleta: MAR_AGITADO },
+    { desenho: LAJE_DE_TEMPESTADE, estrutura: true, paleta: MAR_AGITADO },
     { desenho: ESPUMA_DA_BAIA, paleta: MAR_AGITADO },
     { desenho: VAGAS_BAIXAS, paleta: MAR_AGITADO },
   ],
@@ -175,8 +175,8 @@ export const TEMA_FAROL: TemaDeCosta = {
     conchaLuz: '#c7b6d1', conchaBrilho: '#f7d9ae',
   },
   enfeites: [
-    { desenho: PENEDOS_DO_FAROL, paleta: NOITE },
-    { desenho: BANCADA_DE_ARDOZIA, paleta: NOITE },
+    { desenho: PENEDOS_DO_FAROL, estrutura: true, paleta: NOITE },
+    { desenho: BANCADA_DE_ARDOZIA, estrutura: true, paleta: NOITE },
     { desenho: AGUA_DE_ANIL, paleta: NOITE },
   ],
   desenhoConcha: CONCHA_FAROL,

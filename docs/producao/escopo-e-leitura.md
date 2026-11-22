@@ -18,7 +18,7 @@ Na seleção das fases e no arquipélago, o siri se move de **marco a marco**. C
 
 ## Tema da ilha nas duas escalas
 
-Cada região tem linguagem própria **no arquipélago e dentro das fases**: raízes, troncos e sedimento no mangue; recifes, pedras altas e poças nos recifes; cristais e paredes minerais quando couber nas grutas. Preservar areia, mar, maré e a leitura do que fica coberto ou descoberto. As grades de pixel podem diferir entre famílias conforme a direção de arte; cada grade continua uniforme, sólida, sem suavização. A marca Placa de Areia não muda nesta revisão. As ilustrações finais seguem em frente separada.
+Cada região tem linguagem própria **no arquipélago e dentro das fases**: raízes, troncos e sedimento no mangue; recifes, refúgios elevados e poças nos recifes; cristais e paredes minerais quando couber nas grutas. Preservar areia, mar, maré e a leitura do que fica coberto ou descoberto. As grades de pixel podem diferir entre famílias conforme a direção de arte; cada grade continua uniforme, sólida, sem suavização. A marca Placa de Areia não muda nesta revisão. As ilustrações finais seguem em frente separada.
 
 ## Curva de dificuldade da campanha
 

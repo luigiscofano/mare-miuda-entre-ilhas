@@ -75,11 +75,11 @@ A busca ordenada por passos repete o motor sem levadas e preserva o relógio da 
 
 ## Arena Vento Sul
 
-`vento-sul.test.ts` cobre a previsão de faixas, a imunidade da pedra alta, levada única por ameaças simultâneas, proteção da saída até firmar as três âncoras, chegada na alta, reinício, ida e volta e persistência sem bloqueio do Farol. O roteiro Playwright lê o aviso, provoca a primeira onda, reinicia e conclui a arena por teclado e toque emulado. A verificação em aparelho físico permanece pendente.
+`vento-sul.test.ts` cobre a previsão de faixas, a imunidade do refúgio elevado, levada única por ameaças simultâneas, proteção da saída até firmar as três âncoras, chegada na alta, reinício, ida e volta e persistência sem bloqueio do Farol. O roteiro Playwright lê o aviso, provoca a primeira onda, reinicia e conclui a arena por teclado e toque emulado. A verificação em aparelho físico permanece pendente.
 
 ## Arena Ressaca Alta
 
-O motor valida três ondas seguras seguidas, perda causada pelo siri inativo, retorno sem rebobinar a maré, proteção da pedra alta e dois alvos seguros. A rota ótima tem 34 passos; sem proteção das pedras são 36. O roteiro de navegador exercita os avisos, o reinício, a solução completa e a retomada da conclusão no mapa, com teclado e toque emulado. Save e entrada no Farol não exigem os chefes.
+O motor valida três ondas seguras seguidas, perda causada pelo siri inativo, retorno sem rebobinar a maré, proteção do refúgio elevado e dois alvos seguros. A rota ótima tem 34 passos; sem proteção dos refúgios são 36. O roteiro de navegador exercita os avisos, o reinício, a solução completa e a retomada da conclusão no mapa, com teclado e toque emulado. Save e entrada no Farol não exigem os chefes.
 
 ## Trio nas Grutas
 
@@ -103,7 +103,7 @@ Testa a onda atingindo areia firme, o refúgio protegendo, a rota de 16 passos s
 
 ## Ponta da Ressaca
 
-O teste reproduz a alternância das faixas, a proteção na pedra alta e as duas passagens obrigatórias em baixios de janelas diferentes. A busca encontra 22 passos e confere a recuperação de todos os estados sem derrota. O Playwright cobre a transição do Vigia para a segunda arena, os avisos de norte e sul, a vitória e a recarga com teclado e toque emulado.
+O teste reproduz a alternância das faixas, a proteção no refúgio elevado e as duas passagens obrigatórias em baixios de janelas diferentes. A busca encontra 22 passos e confere a recuperação de todos os estados sem derrota. O Playwright cobre a transição do Vigia para a segunda arena, os avisos de norte e sul, a vitória e a recarga com teclado e toque emulado.
 
 ## Chefes dos Recifes
 
@@ -162,3 +162,18 @@ O CI chama os testes nativos de áudio ao final de `tests/browser_qa.py`: Chromi
 ## Ilha de Improviso
 
 O ensaio offline usa a solução produzida pelo próprio gerador para percorrer a fase, reiniciar, gerar a próxima e repetir pelo histórico após a recarga. Confere o save da campanha byte a byte. O roteiro de navegador também verifica formulário, toque, teclado, troca de siri e largura em dispositivos emulados.
+
+
+## Fenda de Recife
+
+`node --test tests/fenda-recife.test.ts` cobre regras de travessia, bloqueio, virada, validação, pixels e desbloqueio. O teste offline também joga os dois desvios, verifica a leitura da previsão e recarrega o save.
+
+- `graos-de-areia.test.ts`: os dois grãos quadrados aparecem em todas as casas de areia seca da campanha, nas duas marés, e nas combinações de mundo, dificuldade e quantidade de Siris da Ilha de Improviso.
+
+## Ostra de chegada
+
+`perolas-coletaveis.test.ts` verifica os pixels nativos da ostra fechada e aberta com a rota real de Busca e volta, duas pérolas, reinício e Ilha de Improviso. Afirma a exclusão de moedas, da pérola do encaixe e da concha comum; não houve alteração nas regras.
+
+## Espuma, virada e crista frontal
+
+`onda-frontal.test.ts` compara os pixels nativos do aviso antes da alta e os eventos de Vigia das ondas com as rotas RLR (segura) e RRD (levada). Valida os mesmos trechos de impacto, refúgios excluídos, formato estático e expiração, sem repetição após bloqueio, redesenho ou reinício. O teste offline de Vento Sul verifica aviso, evento real, textura de crista e limpeza no reinício.

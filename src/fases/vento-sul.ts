@@ -19,6 +19,6 @@ export const VENTO_SUL = {
     { linha: 0, primeiraColuna: 6, ultimaColuna: 8 },
   ] },
   objetivo: 'Firme os três ancoradouros na maré baixa e chegue à concha para vencer Vento Sul.',
-  ensino: 'A cada subida, a onda varre a faixa de espuma indicada. Saia da faixa ou termine o passo na pedra alta. Os ancoradouros ficam firmes depois de uma chegada segura na baixa.',
+  ensino: 'A cada subida, a onda varre a faixa de espuma indicada. Saia da faixa ou termine o passo no refúgio de areia elevada. Os ancoradouros ficam firmes depois de uma chegada segura na baixa.',
   solucao: rota('DDUURRRLRLRDDRRRRLRLUURR'),
 } as const satisfies Fase;

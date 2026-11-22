@@ -1,3 +1,4 @@
+import { FENDAS_DA_ENSEADA } from '../fases/fendas-da-enseada.ts';
 import { travessiasDaExpansao } from '../fases/expansao/index.ts';
 import { ehIdFase, entradasDo, mundoAtual, posicoesVisitaveis, podeSairDaPraia, rotaLivre, trilhasDo } from './index.ts';
 import type { IdFase, Mundo, Progresso } from './index.ts';
@@ -15,6 +16,7 @@ export type OpcaoDoSeletor = Readonly<{
   estado: 'bloqueada' | 'disponivel' | 'concluida';
   motivo?: string;
   depoisDe?: IdFase;
+  soNoSeletor?: true;
 }>;
 
 function bloqueio(p: Progresso, posicao: Posicao, alcancavel: (pos: Posicao) => boolean): string {
@@ -53,7 +55,7 @@ export function opcoesDoSeletor(p: Progresso): readonly OpcaoDoSeletor[] {
       const livre = anterior.estado === 'concluida';
       anterior = {
         id: fase.id, fase: fase.id, nome: fase.nome, posicao: ancora.posicao, categoria: 'regular',
-        depoisDe: ancora.fase,
+        depoisDe: ancora.fase, soNoSeletor: true,
         estado: !livre ? 'bloqueada' : concluidas.has(fase.id) ? 'concluida' : 'disponivel',
         motivo: livre ? undefined : `Conclua ${anterior.nome} para liberar esta travessia.`,
       };
@@ -61,6 +63,23 @@ export function opcoesDoSeletor(p: Progresso): readonly OpcaoDoSeletor[] {
     });
     return [ancora, ...sequencia];
   });
+  if (mundo === 'enseada') {
+    // Desvio de ensino no seletor; a posição do marco antigo continua no save.
+    let anterior = opcoesOriginais.find(opcao => opcao.fase === 'enseada-abrigo-ondas');
+    if (anterior) {
+      const posicao = anterior.posicao;
+      for (const fase of FENDAS_DA_ENSEADA) {
+        const livre = anterior.estado === 'concluida';
+        const nova: OpcaoDoSeletor = {
+          id: fase.id, fase: fase.id, nome: fase.nome, posicao, categoria: 'bonus', soNoSeletor: true,
+          estado: !livre ? 'bloqueada' : concluidas.has(fase.id) ? 'concluida' : 'disponivel',
+          motivo: livre ? undefined : `Conclua ${anterior.nome} para liberar este desvio.`,
+        };
+        opcoes.push(nova);
+        anterior = nova;
+      }
+    }
+  }
   // A saída original do Cabo continua disponível no mesmo marco legado.
   const encontro = opcoes.find(o => o.fase === 'ponta-da-garca');
   if (encontro) {

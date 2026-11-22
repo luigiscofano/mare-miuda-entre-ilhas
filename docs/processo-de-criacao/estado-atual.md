@@ -1,14 +1,6 @@
 # Estado documentado da base jogável
 
-## Expansão em revisão
-
-A proposta atual acrescenta **123 fases regulares**: 18 na Praia e 15 em cada um dos outros sete mundos. Nos PRs encadeados, o catálogo completo tem **200 regulares (25 por mundo), 16 chefes e 13 bônus**, 229 entradas ao todo. Veja as [fichas e a verificação da expansão](../campanha/expansao/README.md). Os números descritos abaixo correspondem à referência histórica indicada, não à expansão. Sem publicação.
-
 [README principal](../../README.md) · [Processo de criação](README.md) · [Acervo visual](acervo-visual/README.md)
-
-## Conferência posterior: prévia privada
-
-A leitura abaixo permanece como registro do PR #72. Mais tarde, o [PR #75](https://github.com/luigiscofano/mare-miuda-entre-ilhas/pull/75) integrou ao rascunho as oito faixas aprovadas de **Siri na Areia — Notas Claras**. O [CI do PR #77](https://github.com/luigiscofano/mare-miuda-entre-ilhas/actions/runs/44938701024) passou e gerou um ZIP privado. A contagem da campanha não mudou. Teste manual de Safari/VoiceOver no iPhone físico e publicação seguem pendentes.
 
 ## Referência desta leitura
 

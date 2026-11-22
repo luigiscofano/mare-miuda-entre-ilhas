@@ -9,6 +9,8 @@
 
 A garça é um padrão de turno anunciado antes da ação. Não há espera por tempo real, efeito aleatório ou plataformas nesta versão. Abrir a placa e alternar a dupla são regras do motor, não da animação. A saída fica em terra firme.
 
+
+Casas `#` e pedras nunca aceitam a entrada do siri. `H` é um refúgio transitável de areia elevada, seco nas duas marés; as ameaças que respeitam esse abrigo continuam usando a mesma regra.
 **Invariantes:** um comando não soma duas levadas; o terceiro erro é terminal; entrar em baixio coberto no turno que faria a água baixar não é um passo válido. Nos mapas de dupla, ambos compartilham contador e limite de erros; trocar de ativo não gasta turno. Os marcos firmes só se atualizam quando ambos estão em casas firmes distintas, fora de portão. Um erro move os dois aos marcos do mesmo turno seguro; nenhuma coleta ou chegada é concedida junto da levada. A entrada no portão exige outra posição pressionando a placa. Um siri que já passou pelo portão pode sair dele mesmo quando a placa é solta. O relógio de plataformas permanece futuro.
 
 Na virada, cada balsa carrega seu ocupante, mesmo se ele não for o siri ativo. O rasante e a vitória usam as posições finais; trocar continua sem contar passo e não transporta ninguém.
@@ -24,3 +26,8 @@ A patrulha alterna alvos seguindo a mesma sequência usada pelo aviso do próxim
 ### Cadeia de mecanismos das Grutas
 
 Após a resolução da maré e dos perigos, um passo seguro sobre a próxima etapa avança o estado. A pérola entra no inventário ao passar sobre ela e é consumida no encaixe. Uma etapa futura pisada cedo só mostra uma pista. O portão permanece fechado até completar a cadeia; bater nele não gasta passo. Reiniciar recria a tentativa e limpa a sequência.
+
+
+## Fenda de Recife
+
+`preverPasso` distingue o piso imediatamente pisado e a posição de chegada de uma [fenda opcional](../../docs/campanha/fenda-de-recife.md). O par usa a maré anterior para entrar; a maré nova e as demais ameaças vêm depois, na saída. Bloquear o destino remoto não consome o passo.

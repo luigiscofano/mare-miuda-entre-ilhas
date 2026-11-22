@@ -77,3 +77,8 @@ Sentinela da Gruta (à direita de Revezamento nas câmaras) e Cofre das Espumas 
 ## Desfecho do Farol
 
 A conclusão de `farol-luz-das-duas-mares` habilita o desfecho no mapa do Farol. O estado é derivado dos IDs já gravados em `concluidas`; não depende do nó atual ou do total de fases, e abrir ou fechar os créditos não altera o progresso.
+
+
+## Fenda de Recife
+
+Dois [desvios de fenda](../../docs/campanha/fenda-de-recife.md) aparecem na Enseada após Abrigo entre ondas. São marcos do seletor, não do mapa físico, e usam a posição já salva daquele marco. O segundo exige o primeiro. Não contam como regulares nem abrem rotas, chefes ou créditos.

@@ -7,13 +7,13 @@ export const FASES_ENSEADINHA: readonly Fase[] = [
   {
     id: 'praia-fio-de-areia', nome: 'Fio de areia',
     objetivo: 'Cruze dois baixios até a concha.',
-    ensino: 'Pare na areia ou na pedra alta quando a maré subir. O bolsão inferior permite caminhar sem entrar na água.',
+    ensino: 'Pare na areia firme ou em um refúgio elevado quando a maré subir. O bolsão inferior permite caminhar sem entrar na água.',
     mapa: ['S==H=C', '##..##'],
     solucao: rota('RRRDUDURR'),
   },
   {
     id: 'praia-pocas-espelho', nome: 'Poças em espelho',
-    objetivo: 'Recolha os dois fragmentos dos bolsões e volte à saída.',
+    objetivo: 'Recolha as duas pérolas dos bolsões e volte à saída.',
     ensino: 'As poças se abrem ao mesmo tempo; escolha por qual lado começar.',
     mapa: ['##G##', 'B=S=B', '.#.#.'],
     solucao: rota('RRDUDULLUDUDLLDUDURRU'),
@@ -28,8 +28,8 @@ export const FASES_ENSEADINHA: readonly Fase[] = [
   },
   {
     id: 'praia-bolso-mare', nome: 'Bolso da maré',
-    objetivo: 'Leve o fragmento da ilhota até a saída.',
-    ensino: 'Há um refúgio perto de cada baixio; planeje o retorno antes de buscar o fragmento.',
+    objetivo: 'Leve a pérola da ilhota até a saída.',
+    ensino: 'Há um refúgio perto de cada baixio; planeje o retorno antes de buscar a pérola.',
     mapa: ['SG###', 'H=..B', '.#..#'],
     solucao: rota('RDRRRLLLU'),
   },
@@ -42,7 +42,7 @@ export const FASES_ENSEADINHA: readonly Fase[] = [
   },
   {
     id: 'praia-fragmentos-areal', nome: 'Fragmentos do areal',
-    objetivo: 'Recolha os fragmentos sem cair na marca da garça.',
+    objetivo: 'Recolha as pérolas sem cair na marca da garça.',
     ensino: 'As duas rotas são diferentes. Planeje o ciclo da garça e a maré, e volte ao porto.',
     mapa: ['B=.G.#', '..#.#.', 'S..H=B'],
     ameaca: { alvo: { coluna: 1, linha: 0 }, primeiroAtaque: 3, periodo: 4 },

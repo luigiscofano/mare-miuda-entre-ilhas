@@ -1,7 +1,5 @@
 # Processo de criação
 
-**Nova etapa em revisão:** [expansão das travessias](../campanha/expansao/README.md). Acrescenta 123 fases regulares ao catálogo sem substituir os arquivos ou capturas das versões anteriores.
-
 **Comece pelo [estado atual da base de teste](estado-atual.md).** Para consultar propostas anteriores sem confundi-las com o jogo, veja o [acervo visual e sua proveniência](acervo-visual/README.md).
 
 Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem substituir o que retrata uma versão anterior. Uma captura nunca é confundida com arte conceitual. Os arquivos históricos não são lidos pelo jogo, não entram no build e não compartilham save com a praia.
@@ -59,8 +57,6 @@ Registro acumulativo: uma etapa nova acrescenta documentos e artefatos, sem subs
 - [36 · Seletores da Enseada e da Deriva](36-seletores-enseada-deriva/README.md): fundos editáveis, acesso bloqueado e liberado, chefes e desvio.
 
 - [37 · Seletores das Grutas, da Baía e do Farol](37-seletores-mundos-finais/README.md): três fundos editáveis e os estados de acesso às arenas opcionais.
-
-[38 · Estudos do seletor direto](38-seletores-diretos-estudos/README.md): três direções de tela e a fonte editável, separadas dos seletores caminháveis anteriores.
 
 ## Cadernos complementares já presentes
 

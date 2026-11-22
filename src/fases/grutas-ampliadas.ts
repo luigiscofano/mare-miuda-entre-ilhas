@@ -16,7 +16,7 @@ export const FASES_GRUTAS_AMPLIADAS = [
   {
     id: 'grutas-dobra-da-camara', nome: 'Dobra da câmara',
     objetivo: 'Leve a pérola de uma câmara até o encaixe pela passagem da maré.',
-    ensino: 'A seca deixa dois caminhos; quem carrega deve alcançar o encaixe. Use a pedra antes de contornar a volta pela alavanca.',
+    ensino: 'A seca deixa dois caminhos; quem carrega deve alcançar o encaixe. Use o refúgio antes de contornar a volta pela alavanca.',
     mapa: ['K.H.##F.', '.#==##..', 'S=H.H.E#', '..###.OC'],
     etapasGruta: ['K', 'E', 'F'], solucao: rota('UUDUDDRRRRRRUUDDDR'),
   },
@@ -38,7 +38,7 @@ export const FASES_GRUTAS_AMPLIADAS = [
   },
   {
     id: 'grutas-boca-labirinto', nome: 'Boca do labirinto',
-    objetivo: 'Abra os dois portões, recolha o fragmento e reúna os siris no final.',
+    objetivo: 'Abra os dois portões, recolha a pérola de coleta e reúna os siris no final.',
     ensino: 'A dupla divide o encaixe e a alavanca em margens diferentes. Antes de liberar a placa, deixe o outro além da porta e proteja a volta pela água.',
     mapa: ['SK=H.E#####', '####.###B##', '####.OD...G', '###########', 'A.=H.FP==T#', '...####.H.#'],
     dupla: { segundoAlvo: 'T' },
