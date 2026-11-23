@@ -13,6 +13,27 @@ const {quadroDoRetornoDaMare,pausaParaRecuperacao}=await importar('quadroDoRetor
 const {quadroDoResultado}=await importar('quadroDoResultado');
 const {DURACAO_DO_BOTE_DA_GARCA}=await importar('DURACAO_DO_BOTE_DA_GARCA');
 
+const {CADENCIA_DA_MARE,AVANCO_DA_MARE,criarViradaDirecional,quadroDaViradaDirecional}=await importar('criarViradaDirecional');
+assert.equal(CADENCIA_DA_MARE,30);
+assert.equal(AVANCO_DA_MARE,3);
+const mapa=['S=.C','.###'];
+const subida=criarViradaDirecional(mapa,0,true);
+const descida=criarViradaDirecional(mapa,0,false);
+assert.equal(subida.duracao,descida.duracao);
+assert.equal(subida.duracao*24,subida.duracaoNoRitmoAnterior*30);
+for(let degrau=1;degrau<subida.total;degrau++){
+ const t=degrau*30;
+ assert.equal(quadroDaViradaDirecional(subida,t-1).limiar,(degrau-1)*3-1);
+ assert.equal(quadroDaViradaDirecional(subida,t).limiar,quadroDaViradaDirecional(descida,subida.duracao-t).limiar);
+}
+const levada=criarViradaDirecional(mapa,0,true,undefined,true);
+assert.equal(levada.duracao,300);
+assert.equal(levada.duracaoNoRitmoAnterior,240);
+assert.equal(quadroDaViradaDirecional(levada,299).limiar,levada.g.maximo);
+assert.equal(quadroDaViradaDirecional(levada,300),undefined);
+assert.equal(pausaParaRecuperacao(true,300,true,240),1100);
+assert.equal(pausaParaRecuperacao(true,368,true),1296);
+
 const inicio=1000;
 function pulso(t,anterior=false){
  const q=quadroDoRetornoDaMare({inicio,indices:[1],pulsoAnterior:anterior},inicio+t);

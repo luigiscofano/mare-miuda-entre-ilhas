@@ -115,21 +115,24 @@ function medidasDaFenda(x,y,w,h,pose) {
   return [px,py,l,al];
 }
 // A posição lógica já foi resolvida. Só o desenho percorre a casa.
-const DURACAO_DA_PASSADA = 165;
-const quadrosDaPassada = [[53, 1], [109, -1], [DURACAO_DA_PASSADA, 1]];
-export function proximaPoseDaPassada(tempo) {
-  const trocaDePatas=quadrosDaPassada.find(([ate])=>tempo<ate)?.[0];
+export const DURACAO_DA_PASSADA = 205;
+const QUADROS_DA_PASSADA = [[66, 1], [136, -1], [DURACAO_DA_PASSADA, 1]];
+const QUADROS_ANTERIORES = [[53, 1], [109, -1], [165, 1]];
+const quadrosDaPassada = campanha => campanha ? QUADROS_DA_PASSADA : QUADROS_ANTERIORES;
+export function proximaPoseDaPassada(tempo, campanha = true) {
+  const trocaDePatas=quadrosDaPassada(campanha).find(([ate])=>tempo<ate)?.[0];
   if(trocaDePatas===undefined)return undefined;
   const taxa=1000/60;
   const pintura=(Math.floor((tempo+1e-6)/taxa)+1)*taxa;
   return Math.min(trocaDePatas,pintura);
 }
-export function posesDaPassada(passadas,tempo) {
+export function posesDaPassada(passadas,tempo,campanha = true) {
   if(!passadas?.some(Boolean)||tempo<0)return [];
-  const quadro=quadrosDaPassada.find(([ate])=>tempo<ate);
+  const quadros=quadrosDaPassada(campanha);
+  const quadro=quadros.find(([ate])=>tempo<ate);
   if(!quadro)return [];
   const [, alternancia] = quadro;
-  const restante = 1 - tempo / DURACAO_DA_PASSADA;
+  const restante = 1 - tempo / quadros.at(-1)[0];
   return passadas.map(p=>p?{
     dx:Math.round(p.dx*restante),dy:Math.round(p.dy*restante),
     eixo:p.dx?'horizontal':'vertical',direcao:Math.sign(-(p.dx||p.dy)),alternancia,

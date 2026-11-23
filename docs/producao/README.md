@@ -22,7 +22,7 @@ A comparação usa o motor e o canvas em ambiente controlado. Não substitui tes
 
 ## Validação da passada
 
-Após gerar o HTML, execute `node edicao-oficial/testes/passada.mjs dist/mare-miuda-prototipo.html`. O teste usa o mesmo módulo empacotado e cobre as quatro direções, a troca de pose e o fim em 165 ms.
+Após gerar o HTML, execute `node edicao-oficial/testes/passada.mjs dist/mare-miuda-prototipo.html`. O teste usa o mesmo módulo empacotado e cobre as quatro direções, a troca de pose e o fim em 205 ms na campanha e a passada anterior de 165 ms fora dela.
 
 ## Validação de resultado e retorno
 
@@ -32,7 +32,7 @@ Após gerar o HTML, execute:
 node edicao-oficial/testes/resultados-e-retorno.mjs dist/mare-miuda-prototipo.html
 ```
 
-O teste lê os módulos empacotados e verifica o tamanho e o centro da placa em nove configurações de tela, o quadro estático de movimento reduzido, os três pulsos e a duração do bloqueio da campanha e a curva anterior preservada no Improviso. O teste de campanha continua cobrindo as 231 soluções.
+O teste lê os módulos empacotados e verifica o tamanho e o centro da placa em nove configurações de tela, o quadro estático de movimento reduzido, os três pulsos e a duração do bloqueio da campanha e a curva anterior preservada no Improviso. Também verifica a velocidade simétrica da subida e da descida, a cobertura do Siri pela água e a pausa após o retorno. O teste de campanha continua cobrindo as 231 soluções.
 
 
 ## Validação da seleção de fases

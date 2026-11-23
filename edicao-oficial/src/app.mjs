@@ -578,7 +578,8 @@ function pintarFase() {
   const agora=agoraDaTravessia();
   const tempoQuePassou=agora-(pisadaDaTravessia?.quando??-Infinity);
   const fendas=posesDeFenda(pisadaDaTravessia?.fendas,tempoQuePassou);
-  const pulos=posesDaPassada(pisadaDaTravessia?.passadas,tempoQuePassou);
+  const campanha=modoCampanha();
+  const pulos=posesDaPassada(pisadaDaTravessia?.passadas,tempoQuePassou,campanha);
   const tempoDoPerigo=agora-(perigosDaTravessia?.quando??-Infinity);
   const perigos=quadroDosPerigos(perigosDaTravessia,tempoDoPerigo);
   if(perigosDaTravessia&&!perigos.some(Boolean))perigosDaTravessia=undefined;
@@ -610,7 +611,7 @@ function pintarFase() {
   if (relogioAmbiente!==undefined) window.clearTimeout(relogioAmbiente);
   // Fora da passada, no máximo quatro pinturas por segundo.
   const proximo=250-agora%250;
-  const fimDoPasso=pulos.some(Boolean) ? proximaPoseDaPassada(tempoQuePassou)-tempoQuePassou : Infinity;
+  const fimDoPasso=pulos.some(Boolean) ? proximaPoseDaPassada(tempoQuePassou,campanha)-tempoQuePassou : Infinity;
   const fimDaFenda=fendas.some(Boolean) ? proximoQuadroDeFenda(tempoQuePassou)-tempoQuePassou : Infinity;
   relogioAmbiente=window.setTimeout(()=>{
     relogioAmbiente=undefined;
@@ -1210,8 +1211,12 @@ function jogarAcao(acao         )       {
       foiGarca?DURACAO_DO_BOTE_DA_GARCA:0
     ):0;
     if(recuperou){
+      const duracaoNoRitmoAnterior=comCenaNormal?Math.max(
+        foiMare?(viradaDaTravessia?.duracaoNoRitmoAnterior??DURACAO_DA_LEVADA_DA_MARE):0,
+        foiGarca?DURACAO_DO_BOTE_DA_GARCA:0
+      ):0;
       inicioDaPausaDeRecuperacao=agora;
-      bloquearDirecaoAte=agora+pausaParaRecuperacao(campanha,duracaoDoPerigo,comCenaNormal);
+      bloquearDirecaoAte=agora+pausaParaRecuperacao(campanha,duracaoDoPerigo,comCenaNormal,duracaoNoRitmoAnterior);
       atualizarTravaDeRecuperacao();
     }
     if(evento&&(comCenaNormal||recuperou)&&(foiMare||foiGarca)){
