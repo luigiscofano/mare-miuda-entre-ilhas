@@ -23,3 +23,13 @@ A comparação usa o motor e o canvas em ambiente controlado. Não substitui tes
 ## Validação da passada
 
 Após gerar o HTML, execute `node edicao-oficial/testes/passada.mjs dist/mare-miuda-prototipo.html`. O teste usa o mesmo módulo empacotado e cobre as quatro direções, a troca de pose e o fim em 165 ms.
+
+## Validação de resultado e retorno
+
+Após gerar o HTML, execute:
+
+```sh
+node edicao-oficial/testes/resultados-e-retorno.mjs dist/mare-miuda-prototipo.html
+```
+
+O teste lê os módulos empacotados e verifica o tamanho e o centro da placa em nove configurações de tela, o quadro estático de movimento reduzido, os dois pulsos da campanha e a curva anterior preservada no Improviso. O teste de campanha continua cobrindo as 231 soluções.

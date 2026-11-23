@@ -49,9 +49,18 @@
 #jogo[data-tela="fase"][data-ferramentas-campanha] .indicadores dt { color:#b4d1d0 }
 #jogo[data-tela="fase"][data-ferramentas-campanha] .feedback { color:#faf1d6 }
 #jogo[data-tela="fase"][data-ferramentas-campanha] .camera-lateral > .botoes:has(> button) { margin:0 }
+/* O tamanho e o centro físicos são calculados junto da câmera. O Laboratório
+   e a Ilha de Improviso conservam a apresentação independente. */
 #jogo[data-tela="fase"][data-ferramentas-campanha] #placa-resultado-v3 {
- position:absolute; width: min(322px, 85%); height:auto; aspect-ratio:248/84;
- inset:auto; left:50%; top:50%; margin:0; transform:translate(-50%,-50%);
+  position:absolute;
+  width:248px;
+  height:84px;
+  inset:auto;
+  left:50%;
+  top:50%;
+  margin:0;
+  transform:none;
+  image-rendering:pixelated;
 }
 #jogo[data-tela="fase"][data-ferramentas-campanha] #acoes-vitoria-fase {
  position:static; transform:none; z-index:auto; width:100%; background:none;
