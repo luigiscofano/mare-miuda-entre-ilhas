@@ -662,20 +662,20 @@ body:has(#jogo[data-tela="praia"][data-hub-cartoes]) { background:#0d303e; }
 .hub-seta[data-pagina-hub="proxima"]{--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/4053cdaaf292f6a301bc.png@@');}
 .hub-seta[data-pagina-hub="proxima"]:disabled{--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/d9196d421e8c34b97570.png@@');}
 @media (width > 760px){
-.hub-palco[data-pagina-hub-visual="1"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/48a4abe7ea50cbc48c17.png@@');}
-.hub-palco[data-pagina-hub-visual="2"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/3d2697f1b3c52f5c17d1.png@@');}
-.hub-palco[data-pagina-hub-visual="3"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/36bcadd26963c21ec697.png@@');}
-.hub-palco[data-pagina-hub-visual="4"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/6d599bc92bd29aff8d65.png@@');}
+.hub-palco[data-pagina-hub-visual="1"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/1123b96074515687ff5b.png@@');}
+.hub-palco[data-pagina-hub-visual="2"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/19b79771ed6dcc5ceb0d.png@@');}
+.hub-palco[data-pagina-hub-visual="3"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/a1b082821c5e188d3fdd.png@@');}
+.hub-palco[data-pagina-hub-visual="4"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/a193da1c6080f1d87e50.png@@');}
 }
 @media (width <= 760px){
-.hub-palco[data-pagina-hub-visual="1"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/2241c4b2623e6be23eb0.png@@');}
-.hub-palco[data-pagina-hub-visual="2"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/2f75ecb4f69c54f55170.png@@');}
-.hub-palco[data-pagina-hub-visual="3"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/5d4ca0e9f51d19cf1b16.png@@');}
-.hub-palco[data-pagina-hub-visual="4"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/70daec78732acc5a9bf1.png@@');}
-.hub-palco[data-pagina-hub-visual="5"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/f675d9c41348f222bcdb.png@@');}
-.hub-palco[data-pagina-hub-visual="6"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/4c701fad85838e8e1b4f.png@@');}
-.hub-palco[data-pagina-hub-visual="7"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/00b224785eb998f53f23.png@@');}
-.hub-palco[data-pagina-hub-visual="8"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/99cbe146be0835ac61ad.png@@');}
+.hub-palco[data-pagina-hub-visual="1"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/976207a4a54e216697c9.png@@');}
+.hub-palco[data-pagina-hub-visual="2"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/7ff63d8441e36adc82d8.png@@');}
+.hub-palco[data-pagina-hub-visual="3"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/37df5106ec23caa2582c.png@@');}
+.hub-palco[data-pagina-hub-visual="4"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/666c0d3f6d0497c9e3fe.png@@');}
+.hub-palco[data-pagina-hub-visual="5"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/e656eededab1233b749d.png@@');}
+.hub-palco[data-pagina-hub-visual="6"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/033c9424da7b303e4793.png@@');}
+.hub-palco[data-pagina-hub-visual="7"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/c68032415600d3ffec41.png@@');}
+.hub-palco[data-pagina-hub-visual="8"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/a1f3d96308e4498ed451.png@@');}
 }
 
 @media (forced-colors: active) {

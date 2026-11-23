@@ -29,6 +29,6 @@ As fontes removem do motor e dos renderizadores as mecânicas históricas descar
 
 A interface também inclui a passada de 165 ms, o painel de estado com avisos separados e as ações de derrota ao fim da animação.
 
-Na campanha, as placas de resultado são maiores e continuam centradas no tabuleiro; a derrota ganha espirais laterais. Após um erro recuperável de maré ou garça, o Siri pisca duas vezes e as direções aguardam brevemente antes de voltar a aceitar comandos. A Ilha de Improviso não mudou.
+Na campanha, as placas de resultado são maiores e continuam centradas no tabuleiro; a derrota ganha espirais laterais. Após um erro recuperável de maré ou garça, o Siri pisca três vezes. A sequência e o bloqueio total das direções duram o dobro da versão anterior. O título fica sozinho no topo; o objetivo e a orientação estão em **Mapa em texto e ajuda**. A Ilha de Improviso não mudou.
 
 Veja [controles e acessibilidade](docs/interface/README.md#resultado-e-retorno-na-campanha) e [a verificação de resultado e retorno](docs/producao/README.md#validação-de-resultado-e-retorno).

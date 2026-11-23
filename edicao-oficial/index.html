@@ -12,6 +12,7 @@
 <style id="mare-camera">@@MARE:texto:estilos/mare-camera.css@@</style>
 <style id="acoes-derrota">@@MARE:texto:estilos/acoes-derrota.css@@</style>
 <style id="recuperacao-do-siri">@@MARE:texto:estilos/recuperacao-do-siri.css@@</style>
+<style id="titulos-luz">@@MARE:texto:estilos/titulos-luz.css@@</style>
 </head>
 <body>
   <a class="pular" href="#jogo">Pular para o jogo</a>
@@ -133,7 +134,7 @@
     <section class="laboratorio" id="fase" aria-labelledby="nome-fase" hidden>
       <div class="camera-topo">
             <div class="descricao">
-        <h2 id="nome-fase" tabindex="-1"></h2>
+        <h2 id="nome-fase" tabindex="-1"><span class="titulo-luz-texto"></span><picture class="titulo-luz" aria-hidden="true" hidden><source media="(max-width: 760px)"><img alt=""></picture></h2>
         <p id="objetivo"></p><p id="lembrete-fase" class="dica" hidden></p>
       </div>
       <div id="ferramentas-fase" role="group" aria-label="Controles da fase" hidden>
@@ -209,6 +210,7 @@
       </div>
       <details id="ajuda">
         <summary>Mapa em texto e ajuda</summary>
+        <p id="objetivo-ajuda" hidden></p>
         <p id="ensino"></p>
         <p>Use setas, WASD ou toque nos botões. R reinicia. Se ninguém puder se mover, o passo não conta.</p>
         <pre id="grade" aria-label="Representação por símbolos do tabuleiro"></pre>

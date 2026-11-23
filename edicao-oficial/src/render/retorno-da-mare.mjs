@@ -1,9 +1,16 @@
 // Pulso apenas no sprite, nunca no tabuleiro. Preserva alfa, silhueta e olhos.
-export const PAUSA_SEM_PISCADA=264;
+const PAUSA_SEM_PISCADA_ANTERIOR=264;
 export const DURACAO_DA_LEVADA_DA_MARE=504;
-export const PAUSA_APOS_RETORNO=280;
-// Dois brilhos com contraste no corpo. O contorno, os olhos e o alpha ficam.
-const PULSOS=[[0,66,0],[66,132,-1],[132,204,1],[204,248,-1]];
+const PAUSA_APOS_RETORNO_ANTERIOR=280;
+// Três brilhos no dobro da janela anterior de 248 ms, sem alterar a paleta ou o sprite.
+const PULSOS=[[0,100,0],[100,166,-1],[166,270,1],
+              [270,336,-1],[336,450,0],[450,496,-1]];
+
+// A pausa da campanha dobra desde o erro, não apenas depois que o Siri volta.
+export function pausaParaRecuperacao(campanha,duracaoDoPerigo,animada){
+ if(!campanha)return PAUSA_SEM_PISCADA_ANTERIOR;
+ return animada?2*(duracaoDoPerigo+PAUSA_APOS_RETORNO_ANTERIOR):2*PAUSA_SEM_PISCADA_ANTERIOR;
+}
 const FRAQUESA=[.49,.56];
 // Valores da edição anterior, preservados na Ilha de Improviso e Bancada.
 const PULSOS_ANTERIORES=[[0,20,0],[20,65,1],[65,96,0],[96,132,-1],
