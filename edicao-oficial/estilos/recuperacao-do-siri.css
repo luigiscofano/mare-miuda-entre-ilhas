@@ -1,0 +1,2 @@
+/* A pausa do retorno não altera a posição nem o foco do controle. */
+#direcoes-da-fase button[aria-disabled="true"] { opacity: .72; cursor: wait }

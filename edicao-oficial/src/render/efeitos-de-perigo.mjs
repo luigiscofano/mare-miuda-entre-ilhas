@@ -1,6 +1,7 @@
 // Sequências decorativas. O relógio real continua no motor, sem espera.
 const MARE=[0,54,108,166,224,278,330,386,444,504];
 const GARCA=[0,39,78,114,142,176,212,247,284,322,368];
+export const DURACAO_DO_BOTE_DA_GARCA=GARCA.at(-1);
 // Ponto do corpo em relação à casa, poses agrupadas de asa/pescoço.
 const VOOS=[
  [46,-43,3],[35,-30,3],[21,-16,3],[4,-1,3],[-1,0,3],

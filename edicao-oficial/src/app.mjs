@@ -241,8 +241,8 @@ export function decorateCamera(ctx,d){
 import { quadroDoResultado, pulosDoResultado, pintarResultado, pintarPlacaNaTela } from '@@MARE:modulo:src/render/resultado-da-travessia.mjs@@';
 let resultadoDaTravessia;
 import { criarViradaDirecional, quadroDaViradaDirecional, comViradaDirecional } from '@@MARE:modulo:src/render/mare-direcional.mjs@@';
-import { PAUSA_DA_MARE, DURACAO_DA_LEVADA_DA_MARE, PAUSA_COM_LEVADA, quadroDoRetornoDaMare, comRetornoDaMare } from '@@MARE:modulo:src/render/retorno-da-mare.mjs@@';
-import { quadroDosPerigos, pintarPerigos } from '@@MARE:modulo:src/render/efeitos-de-perigo.mjs@@';
+import { PAUSA_SEM_PISCADA, DURACAO_DA_LEVADA_DA_MARE, PAUSA_APOS_RETORNO, quadroDoRetornoDaMare, comRetornoDaMare } from '@@MARE:modulo:src/render/retorno-da-mare.mjs@@';
+import { quadroDosPerigos, pintarPerigos, DURACAO_DO_BOTE_DA_GARCA } from '@@MARE:modulo:src/render/efeitos-de-perigo.mjs@@';
 import { comQuadroAnimado, posesDeFenda, proximoQuadroDeFenda, posesDaPassada, proximaPoseDaPassada } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
 import { regioesDoHub, jogarRegiao, regiaoDoMarco, renderizarHub } from '@@MARE:modulo:src/regioes-do-hub-f824aa75.mjs@@';
 import { ehSeletorDaPraia, paginaDaFase, idDaFaseSeguinte, seletorGraficoPara, totalDePaginas, regioesDaPraia, desenharSeletorGrafico } from '@@MARE:modulo:src/interface/seletor-grafico.mjs@@';
@@ -342,6 +342,24 @@ const janelaDaCamera = buscar('#tabuleiro-camera');
 const ctxDaCamera = janelaDaCamera.getContext('2d', {alpha:false});
 let janelaEscala, ultimaMoldura, metadadosDaCamera, dimensoesDaCamera;
 
+// A placa mantém o raster original. Dimensionamos no grid do dispositivo,
+// para que cada pixel da placa ocupe um número inteiro de pixels físicos.
+function geometriaDaPlaca(largura,altura,dpr,larguraNativa=248,alturaNativa=84) {
+  const LARGURA_DO_RETANGULO=172;
+  const w=Math.round(largura*dpr), h=Math.round(altura*dpr);
+  const margemX=Math.min(Math.round(14*dpr),Math.floor(w*.02));
+  const margemY=Math.min(Math.round(16*dpr),Math.floor(h*.05));
+  const proporcao=largura<=480?.65:.55;
+  const alvo=Math.max(1,Math.round(w*proporcao/LARGURA_DO_RETANGULO));
+  const limite=Math.min((w-2*margemX)/larguraNativa,(h-2*margemY)/alturaNativa);
+  // Abaixo de 248 pixels físicos, reduzir é preferível a cortar adornos.
+  const inteiro=Math.min(alvo,Math.floor(limite));
+  const fator=inteiro>=1?inteiro:Math.max(0,limite);
+  const wf=Math.round(larguraNativa*fator), hf=Math.round(alturaNativa*fator);
+  const x=Math.floor((w-wf)/2), y=Math.floor((h-hf)/2);
+  return {fator,w:wf/dpr,h:hf/dpr,x:x/dpr,y:y/dpr};
+}
+
 function apresentarTravessia() {
   if (tela !== 'fase' || !modoCampanha() || !origemDaCamera.dataset.arte) return;
   const dpr = window.devicePixelRatio || 1;
@@ -354,6 +372,13 @@ function apresentarTravessia() {
 
   const chave = [fase.id, width, height, dpr].join(':');
   if (janelaEscala !== chave) {
+    const placaDaCamera=buscar('#placa-resultado-v3');
+    const g=geometriaDaPlaca(width,height,dpr,placaDaCamera.width,placaDaCamera.height);
+    placaDaCamera.dataset.placaDaCampanha='sim';
+    placaDaCamera.style.setProperty('width',g.w+'px');
+    placaDaCamera.style.setProperty('height',g.h+'px');
+    placaDaCamera.style.setProperty('left',g.x+'px');
+    placaDaCamera.style.setProperty('top',g.y+'px');
     const bounds = limitesDaTravessia(fase.mapa, quadroDosPerigosDaTravessia(), 48);
     metadadosDaCamera = escolherResolucaoDaCamera(width,height,bounds,dpr);
     janelaEscala = chave;
@@ -446,8 +471,8 @@ let ultimaDirecaoDoPainel;
 const SETAS_DO_PAINEL = { cima:'↑', esquerda:'←', baixo:'↓', direita:'→' };
 
 const movimentoReduzidoDoJogo=window.matchMedia?.('(prefers-reduced-motion: reduce)');
-let relogioAmbiente, pisadaDaTravessia, perigosDaTravessia, retornoDaMare, inicioDaPausaDaMare;
-let bloquearDirecaoAte=0, viradaDaTravessia;
+let relogioAmbiente, pisadaDaTravessia, perigosDaTravessia, retornoDaMare, inicioDaPausaDeRecuperacao;
+let bloquearDirecaoAte=0, viradaDaTravessia, relogioDaTrava;
 const agoraDaTravessia=()=>globalThis.performance?.now?.() ?? Date.now();
 const podeAnimarTravessia=()=>tela==='fase' && (modoCampanha() || retornoDaMare || resultadoDaTravessia) && !document.hidden
   && !movimentoReduzidoDoJogo?.matches && typeof window.setTimeout==='function'
@@ -592,21 +617,38 @@ function pintarFase() {
   },Math.max(perigos.some(p=>p?.tipo==="garca"&&p.caminho)?1:12,Math.min(proximo,fimDoPasso,fimDaFenda,fimDoPerigo,fimDoRetorno,fimDaVirada,fimDoResultado)));
 }
 movimentoReduzidoDoJogo?.addEventListener?.('change',()=>{
-  if(movimentoReduzidoDoJogo.matches&&inicioDaPausaDaMare!==undefined)
-    bloquearDirecaoAte=Math.min(bloquearDirecaoAte,inicioDaPausaDaMare+PAUSA_DA_MARE);
+  if(movimentoReduzidoDoJogo.matches&&inicioDaPausaDeRecuperacao!==undefined){
+    bloquearDirecaoAte=Math.min(bloquearDirecaoAte,inicioDaPausaDeRecuperacao+PAUSA_SEM_PISCADA);
+    atualizarTravaDeRecuperacao();
+  }
   if(tela==='fase')pintarFase();
 });
 document.addEventListener('visibilitychange',()=>{
   if (document.hidden) { pararAnimacaoDaFase(); if(resultadoDaTravessia)resultadoDaTravessia.estatico=true; }
-  else if(tela==='fase')pintarFase();
+  else if(tela==='fase'){atualizarTravaDeRecuperacao();pintarFase();}
 });
 
 function quadroDosPerigosDaTravessia() {
   return buscar('#tabuleiro').dataset.arte==='farol-oficial' ? quadroDoFarol(fase.mapa) : quadroDaPraia(fase.mapa);
 }
-function zerarPausaDaMare() {
+function atualizarTravaDeRecuperacao(){
+  window.clearTimeout?.(relogioDaTrava);
+  relogioDaTrava=undefined;
+  const resto=bloquearDirecaoAte-agoraDaTravessia();
+  // Só a campanha ganha a indicação nova. A pausa anterior do Improviso
+  // é aplicada pelo comando central, sem mudar a interface avulsa.
+  const travada=resto>0&&tela==='fase'&&modoCampanha()&&estado.situacao==='jogando';
+  for(const botao of controlesDaFase){
+    // aria-disabled comunica a espera sem arrancar o foco do botão de direção.
+    if(travada)botao.setAttribute('aria-disabled','true');
+    else botao.removeAttribute('aria-disabled');
+  }
+  if(travada)relogioDaTrava=window.setTimeout?.(atualizarTravaDeRecuperacao,resto);
+}
+function zerarPausaDeRecuperacao(){
   bloquearDirecaoAte=0;
-  inicioDaPausaDaMare=undefined;
+  inicioDaPausaDeRecuperacao=undefined;
+  atualizarTravaDeRecuperacao();
 }
 function pintarQuadroDaFase() {
   const tema = temaDaFase();
@@ -678,7 +720,7 @@ function trocarTela(destino      , focar = true)       {
 /* Interface antiga removida: c4827d95 */
   if (tela === 'inicio' && destino !== 'inicio') buscar('#configuracao-jogo').open = false;
   if(configuracoesNaFaseAbertas())painelDeConfiguracoesDaFase(false,false);
-  if (destino !== 'fase') { limparAcoesDerrota(); limparAcoesVitoria(); resultadoDaTravessia=undefined; desenharResultadoDaTravessia(); pararAnimacaoDaFase(); zerarPausaDaMare(); }
+  if (destino !== 'fase') { limparAcoesDerrota(); limparAcoesVitoria(); resultadoDaTravessia=undefined; desenharResultadoDaTravessia(); pararAnimacaoDaFase(); zerarPausaDeRecuperacao(); }
   tela = destino;
   buscar('#jogo').setAttribute('data-tela', destino);
   for (const [nome, painel] of Object.entries(paineis)) painel.hidden = nome !== destino;
@@ -977,7 +1019,7 @@ function prepararFase(mensagem         , focar = true)       {
   pararAnimacaoDaFase();
   resultadoDaTravessia=undefined;
   desenharResultadoDaTravessia();
-  zerarPausaDaMare();
+  zerarPausaDeRecuperacao();
   estado = iniciar(fase);
   ultimaDirecaoDoPainel = undefined;
   buscar('#nome-fase').textContent = fase.nome;
@@ -996,7 +1038,13 @@ function prepararFase(mensagem         , focar = true)       {
   else buscar('#direcoes-da-fase').parentElement.append(reiniciar);
   buscar('#voltar-fase').hidden=modoCampanha();
   if(modoCampanha())buscar('#jogo').setAttribute('data-ferramentas-campanha','');
-  else buscar('#jogo').removeAttribute('data-ferramentas-campanha');
+  else {
+    buscar('#jogo').removeAttribute('data-ferramentas-campanha');
+    const placaForaDaCampanha=buscar('#placa-resultado-v3');
+    delete placaForaDaCampanha.dataset.placaDaCampanha;
+    for(const propriedade of ['width','height','left','top'])placaForaDaCampanha.style.removeProperty(propriedade);
+    janelaEscala=undefined;
+  }
   buscar('#voltar-fase').textContent = desafioAvulso ? 'Editar filtros' : bancada ? 'Tela inicial' : mundoAtual(save.progresso) === 'praia' ? 'Voltar à praia' : 'Voltar ao mapa';
   niveis.forEach((botao, i) => botao.setAttribute('aria-pressed', String(indice === i)));
   trocarTela('fase', focar);
@@ -1137,19 +1185,24 @@ function jogarAcao(acao         )       {
     perigosDaTravessia=undefined;
     const evento=transicao.eventos.find(e=>e.tipo==='levada');
     const foiMare=Boolean(evento?.motivos.includes('mare'));
-    const recuperouDaMare=foiMare&&estado.situacao==='jogando';
+    const foiGarca=Boolean(evento?.motivos.includes('garca'));
+    const campanha=modoCampanha();
+    const recuperou=(foiMare||(campanha&&foiGarca))&&estado.situacao==='jogando';
     const agora=agoraDaTravessia();
     const comCenaNormal=modoCampanha()&&podeAnimarTravessia();
     const virada=transicao.eventos.find(e=>e.tipo==='virada');
     if(virada&&comCenaNormal&&buscar('#tabuleiro').dataset.arte)
       viradaDaTravessia=criarViradaDirecional(fase.mapa,agora,virada.alta,viradaDaTravessia,foiMare);
-    if(recuperouDaMare){
-      inicioDaPausaDaMare=agora;
-      const duracao=viradaDaTravessia?.duracao??DURACAO_DA_LEVADA_DA_MARE;
-      const pausaDepois=PAUSA_COM_LEVADA-DURACAO_DA_LEVADA_DA_MARE;
-      bloquearDirecaoAte=agora+(comCenaNormal?duracao+pausaDepois:PAUSA_DA_MARE);
+    const duracaoDoPerigo=comCenaNormal?Math.max(
+      foiMare?(viradaDaTravessia?.duracao??DURACAO_DA_LEVADA_DA_MARE):0,
+      foiGarca?DURACAO_DO_BOTE_DA_GARCA:0
+    ):0;
+    if(recuperou){
+      inicioDaPausaDeRecuperacao=agora;
+      bloquearDirecaoAte=agora+(comCenaNormal?duracaoDoPerigo+PAUSA_APOS_RETORNO:PAUSA_SEM_PISCADA);
+      atualizarTravaDeRecuperacao();
     }
-    if(evento&&(comCenaNormal||recuperouDaMare)&&evento.motivos.some(m=>m==='mare'||m==='garca')){
+    if(evento&&(comCenaNormal||recuperou)&&(foiMare||foiGarca)){
       const lugares=preverPassoEmGrupo(fase,antes,acao).posicoes;
       const alvos=evento.motivos.includes('garca')?casasDoRasante(fase,estado.passos):[];
       const retorno=posicoesDosSiris(estado);
@@ -1157,9 +1210,13 @@ function jogarAcao(acao         )       {
         viradaDaTravessia.afetados=lugares.map((p,i)=>fase.mapa[p.linha]?.[p.coluna]==='='?
           {...p,retorno:retorno[i]}:undefined);
       }
-      if(recuperouDaMare&&!movimentoReduzidoDoJogo?.matches&&!document.hidden){
-        const indices=lugares.flatMap((p,i)=>fase.mapa[p.linha]?.[p.coluna]==='='?[i]:[]);
-        if(indices.length)retornoDaMare={inicio:agora+(comCenaNormal?(viradaDaTravessia?.duracao??DURACAO_DA_LEVADA_DA_MARE):0),indices};
+      if(recuperou&&!movimentoReduzidoDoJogo?.matches&&!document.hidden){
+        const atingidos=lugares.flatMap((p,i)=>{
+          const agua=foiMare&&fase.mapa[p.linha]?.[p.coluna]==='=';
+          const garca=campanha&&alvos.some(q=>q.coluna===p.coluna&&q.linha===p.linha);
+          return agua||garca?[i]:[];
+        });
+        if(atingidos.length)retornoDaMare={inicio:agora+duracaoDoPerigo,indices:atingidos,...(campanha?{}:{pulsoAnterior:true})};
       }
       const casas=lugares.map((p,i)=>{
         const garca=alvos.some(q=>q.coluna===p.coluna&&q.linha===p.linha);

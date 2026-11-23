@@ -2,7 +2,7 @@
 
 [Assistir ou baixar a versão ampliada](Mare-Miuda-Animacoes-Sem-Som-Ampliadas.mp4), **2min15s · 1440 × 810 · 60 fps · sem áudio**. As cenas menores ganharam zoom sem corte. Esta cópia para o GitHub tem compressão maior que o arquivo entregue no chat, mas mantém o enquadramento, a duração e os 8.109 quadros.
 
-O vídeo alterna quadros do motor, demonstrações dos controles e estudos anteriores identificados. Os 81 padrões são configurações do estudo de maré, não 81 fases. As fendas mostradas são as quatro combinações reproduzidas em fases reais.
+O vídeo é um registro anterior às placas maiores e às piscadas reforçadas da campanha. Alterna quadros do motor, demonstrações dos controles e estudos anteriores identificados. Os 81 padrões são configurações do estudo de maré, não 81 fases. As fendas mostradas são as quatro combinações reproduzidas em fases reais.
 
 ## Capítulos
 
@@ -32,3 +32,9 @@ O vídeo alterna quadros do motor, demonstrações dos controles e estudos anter
 A passada dos Siris dura **165 ms**. A posição desenhada avança em pixels inteiros; a lógica do turno não espera a animação. A preferência por movimento reduzido continua disponível.
 
 Na derrota, depois do quadro final, o painel mostra **Tentar novamente** e **Voltar à seleção de fases**. Com movimento reduzido, essas ações aparecem sem esperar a animação. O fluxo de vitória não muda.
+
+## Placas maiores e piscadas do Siri
+
+Na revisão atual da campanha, as placas crescem junto ao enquadramento, mantêm centralização e preservam as conchas da vitória. As espirais laterais aparecem na derrota. O artefato de placar não substitui as ações da interface nem altera o tabuleiro.
+
+Depois da animação de maré ou garça, o Siri que sofreu um erro recuperável faz dois pulsos claros, de 66 e 72 ms. A luz fica somente no sprite, sem clarear o terreno. A pausa de 280 ms após o retorno garante a leitura dos dois pulsos; com movimento reduzido, não há piscada e a pausa começa no erro. Consulte [resultado e retorno](../../interface/README.md#resultado-e-retorno-na-campanha). O vídeo acima não pretende mostrar essa revisão.
