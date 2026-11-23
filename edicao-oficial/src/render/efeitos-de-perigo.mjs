@@ -1,6 +1,7 @@
 // Sequências decorativas. O relógio real continua no motor, sem espera.
 const MARE=[0,54,108,166,224,278,330,386,444,504];
-const GARCA=[0,39,78,114,142,176,212,247,284,322,368];
+export const IMPACTO_DO_BOTE_DA_GARCA_MS = 114;
+const GARCA=[0,39,78,IMPACTO_DO_BOTE_DA_GARCA_MS,142,176,212,247,284,322,368];
 export const DURACAO_DO_BOTE_DA_GARCA=GARCA.at(-1);
 // Ponto do corpo em relação à casa, poses agrupadas de asa/pescoço.
 const VOOS=[
@@ -9,7 +10,7 @@ const VOOS=[
 ];
 const empurraoDaMare=[[0,0,0],[0,0,0],[1,0,0],[3,1,0],[6,2,4],[9,3,10],[12,4,19]];
 // Sete centros equidistantes, do impacto ao marco de retorno do motor.
-const RECUO_GARCA=[114,131.5,149,166.5,184,201.5,219];
+const RECUO_GARCA=[IMPACTO_DO_BOTE_DA_GARCA_MS,131.5,149,166.5,184,201.5,219];
 const FREIO_GARCA=[219,244,270,296];
 const distancia=(a,b)=>Math.abs(a.coluna-b.coluna)+Math.abs(a.linha-b.linha);
 const caminhoDaGarca=casa=>casa.apoioExposto===true&&casa.apoioRetorno===true&&distancia(casa,casa.retorno)===1;

@@ -35,6 +35,8 @@ export function subirVaporSolto(x,y,dy) {
 }
 
 // Os estados lógicos de turno e de saída não aguardam estes quadros.
+export const ENTRADA_DA_FENDA_MS = 96;
+export const SAIDA_DA_FENDA_MS = 335;
 export const FIM_DA_FENDA = 505;
 // Retângulos de pixels escuros contidos inteiramente no fundo de cada boca.
 // Coordenadas relativas ao tile; não incluem a borda clara nem a parede interna.
@@ -45,11 +47,11 @@ const BOCA_ESCURA = {
 };
 const QUADROS_FENDA = [
   {ate:34,restante:3,alternancia:1}, {ate:68,restante:2,alternancia:-1},
-  {ate:96,restante:1,alternancia:1},
+  {ate:ENTRADA_DA_FENDA_MS,restante:1,alternancia:1},
   {ate:130,tamanho:4,entrada:true}, {ate:166,tamanho:3,entrada:true},
   {ate:203,tamanho:2,entrada:true}, {ate:239,tamanho:1,entrada:true},
   {ate:278,tamanho:0,entrada:true}, {ate:310,oculta:true,entrada:true},
-  {ate:335,oculta:true},
+  {ate:SAIDA_DA_FENDA_MS,oculta:true},
   {ate:373,tamanho:0}, {ate:406,tamanho:1}, {ate:439,tamanho:2},
   {ate:472,tamanho:3}, {ate:FIM_DA_FENDA,tamanho:4},
 ];
@@ -74,7 +76,7 @@ export function posesDeFenda(fendas,tempo) {
     return {
       dx:entrada?pos.dx:0,dy:entrada?pos.dy:0,
       fenda:true, boca:BOCA_ESCURA[pos.forma]??BOCA_ESCURA.redonda, tamanho, oculta,
-      areia:entrada?graosDaFenda(tempo-96,direcao):graosDaFenda(tempo-335,-direcao),
+      areia:entrada?graosDaFenda(tempo-ENTRADA_DA_FENDA_MS,direcao):graosDaFenda(tempo-SAIDA_DA_FENDA_MS,-direcao),
     };
   });
 }

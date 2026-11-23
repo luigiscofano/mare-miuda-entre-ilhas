@@ -50,3 +50,14 @@ node edicao-oficial/testes/trilha.mjs dist/mare-miuda-prototipo.html
 ```
 
 A edição offline usa um único loop de [**A Outra Margem**](../arte/trilha-sonora/README.md), para violão de nylon. Na revisão manual, inicie o áudio com um gesto, passe pelo mapa, seletores e fases e confirme que a faixa não volta ao começo. Use **Configurações** para ajustar música e efeitos separadamente; reduzir a música a zero e reativá-la não deve reiniciar a faixa. Alterne de aba e volte para conferir a retomada do ponto anterior. Verifique os efeitos de subida e descida da maré, coleta, erro e vitória sem depender da música.
+
+## Validação dos efeitos sonoros
+
+Após gerar o HTML offline, execute:
+
+```sh
+node edicao-oficial/testes/efeitos.mjs dist/mare-miuda-prototipo.html
+node edicao-oficial/testes/trilha.mjs dist/mare-miuda-prototipo.html
+```
+
+O [catálogo de efeitos](../arte/efeitos-sonoros/README.md) descreve o vínculo entre os sons e os eventos. Na revisão manual, teste uma subida e uma descida da maré, a coleta, uma fenda e os resultados da fase. Provoque uma levada que permita retomar e outra que encerre a tentativa: o som de retorno é reservado para o reaparecimento, e a derrota toca no início do resultado. Teste um botão habilitado por mouse, toque e teclado e confirme um clique por ativação. Navegar com foco, passar o ponteiro ou tentar um botão bloqueado não deve tocar o clique. Ajuste o volume de **Efeitos** sem interromper ou modificar o volume de **A Outra Margem**.

@@ -14,6 +14,8 @@ O som começa após um gesto. A mesma faixa segue durante as trocas de tela e de
 
 Os efeitos de jogo permanecem separados da música. As indicações visuais e textuais continuam permitindo jogar sem som.
 
+[Ouça os 11 efeitos e veja quando são usados](../efeitos-sonoros/README.md). A faixa em violão não foi alterada pelo ajuste dos efeitos.
+
 ## Arquivo usado
 
 | Parâmetro | Valor |

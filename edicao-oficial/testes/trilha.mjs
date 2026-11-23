@@ -6,7 +6,7 @@ const html = readFileSync(process.argv[2] ?? 'dist/mare-miuda-prototipo.html', '
 const uri = /data:text\/javascript;base64,[A-Za-z0-9+/]+=*/;
 const fonte = url => Buffer.from(url.split(',')[1], 'base64').toString('utf8');
 const entrada = fonte(html.match(uri)[0]);
-const controlador = entrada.split('\n').find(linha => linha.startsWith('import { criarAudio ')).match(uri)[0];
+const controlador = entrada.split('\n').find(linha => linha.startsWith('import { criarAudio,')).match(uri)[0];
 const trilha = fonte(controlador).split('\n').find(linha => linha.startsWith('import { criarTrilha ')).match(uri)[0];
 const { criarAudio } = await import(controlador);
 const { criarTrilha } = await import(trilha);
@@ -76,18 +76,11 @@ class Contexto {
   destination = new No();
   fontes = [];
   ganhos = [];
-  osciladores = [];
   leituras = 0;
   ouvintes = new Set();
   constructor() { Contexto.instancias.push(this); }
   createGain() { const no = new No(); this.ganhos.push(no); return no; }
   createBufferSource() { const no = new Fonte(); this.fontes.push(no); return no; }
-  createOscillator() {
-    const no = new Fonte();
-    no.frequency=new Parametro();
-    this.osciladores.push(no);
-    return no;
-  }
   async decodeAudioData(dados) {
     this.leituras++;
     assert.deepEqual(Buffer.from(dados), pcm);
@@ -103,8 +96,7 @@ const antesAudioContext = globalThis.AudioContext;
 const antesDocumento = globalThis.document;
 globalThis.AudioContext = Contexto;
 globalThis.document = { querySelector: id => {
-  assert.equal(id, '#trilha-offline-violao');
-  return { textContent: pista[1] };
+  return id === '#trilha-offline-violao' ? { textContent: pista[1] } : null;
 } };
 
 try {
@@ -132,13 +124,9 @@ try {
   assert.deepEqual(efeitos.gain.eventos.at(-1),['alvo',.72,80,.02]);
   assert.equal(ctx.fontes.length,1,'Nem mute nem trocas de tela recriam a fonte');
   assert.deepEqual(primeira.paradas,[]);
-  audio.eventos([{tipo:'virada',alta:true}]);
-  assert.equal(ctx.osciladores.length,3, 'Efeitos funcionam com a música muda');
-  assert.deepEqual(ctx.osciladores[0].saidas[0].saidas[0].saidas,[efeitos]);
   audio.volumes({musica:.35,efeitos:0});
-  const ativos=ctx.osciladores.length;
-  audio.eventos([{tipo:'fragmento'}]);
-  assert.equal(ctx.osciladores.length,ativos,'Música não obriga efeitos ligados');
+  assert.equal(musica.gain.eventos.at(-1)[1],.35);
+  assert.equal(efeitos.gain.eventos.at(-1)[1],0);
 
   ctx.currentTime=2*primeira.loopEnd+.5;
   audio.ambiente(false);
