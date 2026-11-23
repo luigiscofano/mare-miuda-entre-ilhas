@@ -40,3 +40,13 @@ O teste lê os módulos empacotados e verifica o tamanho e o centro da placa em 
 Em desktop e celular, percorra as quatro páginas de cada um dos oito mundos. A primeira e a última desabilitam a seta sem destino; cartões bloqueados não iniciam fase. No desktop, confira as quatro quinas junto às bordas e a rota entre as duas colunas de cartões. No celular, confira a lista vertical e os dois botões no topo.
 
 No Mangue, abra **Configurações** na página 4. Teste **Esc**, botão de fechar e clique no fundo: o foco deve voltar a **Configurações** e a página não pode mudar. Pressione **Voltar ao início**, continue o jogo e confira a mesma página sem perder progresso. Com movimento reduzido, o fundo deve parar sem sumir com os brilhos ou com a espuma. Esses efeitos não aparecem no Arquipélago nem no tabuleiro.
+
+## Validação da trilha sonora
+
+Após gerar o HTML offline, execute:
+
+```sh
+node edicao-oficial/testes/trilha.mjs dist/mare-miuda-prototipo.html
+```
+
+A edição offline usa um único loop de [**A Outra Margem**](../arte/trilha-sonora/README.md), para violão de nylon. Na revisão manual, inicie o áudio com um gesto, passe pelo mapa, seletores e fases e confirme que a faixa não volta ao começo. Use **Configurações** para ajustar música e efeitos separadamente; reduzir a música a zero e reativá-la não deve reiniciar a faixa. Alterne de aba e volte para conferir a retomada do ponto anterior. Verifique os efeitos de subida e descida da maré, coleta, erro e vitória sem depender da música.

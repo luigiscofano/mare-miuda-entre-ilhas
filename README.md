@@ -9,6 +9,7 @@ Quebra-cabeça de aventura por turnos em pixel art. Um siri, um arquipélago e u
 | [Todas as travessias](docs/arte/catalogo-231-travessias/Mare-Miuda-231-Travessias.pdf) | 231 fases em maré baixa e alta, com índice por mundo. |
 | [Arquipélago](docs/interface/Mare-Miuda-Arquipelago.pdf) | Os cartões dos oito mundos no computador e no celular. |
 | [Progressão e mecânicas](docs/campanha/Mare-Miuda-Progressao-e-Mecanicas.pdf) | Regras da edição oficial e evolução dos desafios. |
+| [Trilha sonora](docs/arte/trilha-sonora/README.md) | **A Outra Margem**, para violão de nylon. |
 
 Veja o [índice da documentação](docs/README.md) e as notas de verificação em cada seção. Os PDFs documentam a edição offline aprovada e não alteram a versão jogável do repositório.
 
@@ -32,6 +33,14 @@ Na campanha, a passada dura 205 ms e a maré visual sobe e desce mais devagar, s
 Na campanha, as placas de resultado são maiores e continuam centradas no tabuleiro; a derrota ganha espirais laterais. Após um erro recuperável de maré ou garça, o Siri pisca três vezes. Com a maré mais lenta, o tempo entre o reaparecimento e a liberação dos controles continua igual. O título fica sozinho no topo; o objetivo e a orientação estão em **Mapa em texto e ajuda**. A Ilha de Improviso não mudou.
 
 Veja [controles e acessibilidade](docs/interface/README.md#resultado-e-retorno-na-campanha) e [a verificação de resultado e retorno](docs/producao/README.md#validação-de-resultado-e-retorno).
+
+## Trilha sonora
+
+[Ouvir A Outra Margem, em violão](docs/arte/trilha-sonora/a-outra-margem-violao.mp3).
+
+**A Outra Margem** é a trilha da edição offline. A versão de violão de nylon segue em um único ciclo durante a navegação pelos oito mundos, sem reiniciar ao trocar de tela. Música e efeitos continuam com volumes independentes em **Configurações**.
+
+[![Capa pixelada de A Outra Margem: violão sobre uma enseada ao anoitecer](docs/arte/trilha-sonora/capa-a-outra-margem.png)](docs/arte/trilha-sonora/README.md)
 
 ## Seleção de fases
 
