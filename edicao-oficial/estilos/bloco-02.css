@@ -1,0 +1,9 @@
+
+#placa-resultado-v3{
+ position:fixed;inset:0;margin:auto;width:248px;height:84px;z-index:1000;
+ pointer-events:none;image-rendering:pixelated;
+}
+#placa-resultado-v3[hidden]{display:none}
+@supports(left:round(down,50%,1px)){
+ #placa-resultado-v3{inset:auto;margin:0;left:round(down,calc(50% - 124px),1px);top:round(down,calc(50% - 42px),1px)}
+}

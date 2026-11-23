@@ -1,0 +1,80 @@
+/* Só a campanha recebe a nova apresentação; os outros modos mantêm o fluxo. */
+.camera-topo, .camera-lateral { display: contents }
+.camera-travessia > #tabuleiro-camera { display: none }
+#jogo[data-tela="fase"][data-ferramentas-campanha] {
+ width:100%; padding:0; background:#142e47; color:#faf1d6;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] > header { display:none }
+#jogo[data-tela="fase"][data-ferramentas-campanha] > footer { padding:.4rem .75rem; color:#b1c8c6 }
+#jogo[data-tela="fase"][data-ferramentas-campanha] #fase {
+ display:grid; grid-template-columns:minmax(0, 1fr) minmax(17rem,25%);
+ gap:0; align-items:start; padding:0; border:0; border-radius:0;
+ background:#142e47; color:#faf1d6;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .camera-topo {
+ display:flex; align-items:center; gap:.75rem 1.25rem; justify-content:space-between;
+ grid-column:1/-1; min-height:92px; flex-wrap:wrap;
+ background:#102b39;
+ padding:.75rem clamp(.7rem,1.3vw,1.5rem);
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .camera-topo h2 {
+ color:#f6d494; text-shadow:2px 2px #60452c; font-size:clamp(1.02rem,2vw,1.65rem);
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] #lembrete-fase { color:#b4d1d0 }
+#jogo[data-tela="fase"][data-ferramentas-campanha] #ferramentas-fase { margin:0 }
+#jogo[data-tela="fase"][data-ferramentas-campanha] .camera-travessia {
+ grid-column:1; grid-row:2; position:relative; margin:0; width:100%;
+ height:max(340px, calc(100svh - 92px)); overflow:hidden;
+ display:block; background:#142e47;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .camera-travessia > #tabuleiro {
+ position:absolute; width:1px !important; height:1px; clip-path:inset(50%); pointer-events:none;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .camera-travessia > #tabuleiro-camera {
+ display:block; width:100%; height:100%; max-width:none;
+ image-rendering:crisp-edges; image-rendering:pixelated;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .camera-lateral {
+ display:flex; flex-direction:column; grid-column:2; grid-row:2; min-width:0;
+ padding:clamp(.65rem,1.25vw,1.5rem); gap:.7rem;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .indicadores {
+ grid-template-columns:minmax(0,1fr); margin:0; padding:.6rem;
+ border:2px solid #9ba58b; background:#102c3b;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .indicadores div {
+ display:flex; align-items:center; justify-content:space-between;
+ gap:.65rem; background:#183746; color:#faf1d6; padding:.5rem .7rem;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .indicadores dt { color:#b4d1d0 }
+#jogo[data-tela="fase"][data-ferramentas-campanha] .feedback { color:#faf1d6 }
+#jogo[data-tela="fase"][data-ferramentas-campanha] .camera-lateral > .botoes:has(> button) { margin:0 }
+#jogo[data-tela="fase"][data-ferramentas-campanha] #placa-resultado-v3 {
+ position:absolute; width: min(322px, 85%); height:auto; aspect-ratio:248/84;
+ inset:auto; left:50%; top:50%; margin:0; transform:translate(-50%,-50%);
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] #acoes-vitoria-fase {
+ position:static; transform:none; z-index:auto; width:100%; background:none;
+ border:0; box-shadow:none; padding:0; flex-direction:column;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] #acoes-vitoria-fase > button {
+ flex:auto; width:100%; min-height:54px;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] #proximo-nivel { order:-1 }
+#jogo[data-tela="fase"][data-ferramentas-campanha] #ajuda { grid-column:1/-1; margin-inline:.75rem }
+@media (max-width:760px) {
+ #jogo[data-tela="fase"][data-ferramentas-campanha] #fase { grid-template-columns:minmax(0,1fr) }
+ #jogo[data-tela="fase"][data-ferramentas-campanha] .camera-topo { min-height:auto; row-gap:.4rem }
+ #jogo[data-tela="fase"][data-ferramentas-campanha] .camera-travessia {
+  grid-row:2; height:clamp(270px, calc(100svh - 15rem), 630px);
+ }
+ #jogo[data-tela="fase"][data-ferramentas-campanha] .camera-lateral { grid-column:1; grid-row:3 }
+ #jogo[data-tela="fase"][data-ferramentas-campanha] .camera-lateral > .acoes { order:-2 }
+ #jogo[data-tela="fase"][data-ferramentas-campanha] #acoes-vitoria-fase { order:-1 }
+ #jogo[data-tela="fase"][data-ferramentas-campanha] .indicadores {
+  grid-template-columns:repeat(3,minmax(0,1fr)); padding:.32rem; gap:.25rem;
+ }
+ #jogo[data-tela="fase"][data-ferramentas-campanha] .indicadores div {
+  flex-direction:column; padding:.3rem .2rem; gap:.16rem;
+ }
+}

@@ -15,3 +15,14 @@ Veja o [índice da documentação](docs/README.md) e as notas de verificação e
 © 2026 Luigi Scofano de Araújo. Todos os direitos reservados.
 
 - [Vídeo sem som das animações](docs/arte/animacoes/README.md): versão ampliada dos trechos de ação.
+
+## Jogar a edição oficial offline
+
+Com Python 3.10+ e Node, gere o HTML em `dist` e abra-o no navegador:
+
+```sh
+python3 edicao-oficial/montar.py dist/mare-miuda-prototipo.html --verificar
+node edicao-oficial/testes/campanha.mjs dist/mare-miuda-prototipo.html
+```
+
+As fontes removem do motor e dos renderizadores as mecânicas históricas descartadas. Os identificadores antigos ficam apenas para carregar saves sem perder progresso. Consulte [produção e verificação](docs/producao/README.md).
