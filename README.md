@@ -13,3 +13,5 @@ Quebra-cabeça de aventura por turnos em pixel art. Um siri, um arquipélago e u
 Veja o [índice da documentação](docs/README.md) e as notas de verificação em cada seção. Os PDFs documentam a edição offline aprovada e não alteram a versão jogável do repositório.
 
 © 2026 Luigi Scofano de Araújo. Todos os direitos reservados.
+
+- [Vídeo sem som das animações](docs/arte/animacoes/README.md): versão ampliada dos trechos de ação.
