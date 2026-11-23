@@ -4,6 +4,7 @@
 - [Interface](interface/README.md): seleção de mundos no Arquipélago, seleção de fases e controles da campanha.
 - [Campanha](campanha/README.md): progressão e mecânicas.
 - [Trilha sonora](arte/trilha-sonora/README.md): capa, créditos e dados de **A Outra Margem**.
+- [Efeitos sonoros](arte/efeitos-sonoros/README.md): amostras e ação correspondente de cada um dos onze sons.
 
 Os guias são registros da edição offline oficial, não novas mecânicas nem uma publicação do jogo.
 

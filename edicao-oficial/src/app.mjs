@@ -243,8 +243,8 @@ import { quadroDoResultado, pulosDoResultado, pintarResultado, pintarPlacaNaTela
 let resultadoDaTravessia;
 import { criarViradaDirecional, quadroDaViradaDirecional, comViradaDirecional } from '@@MARE:modulo:src/render/mare-direcional.mjs@@';
 import { pausaParaRecuperacao, DURACAO_DA_LEVADA_DA_MARE, quadroDoRetornoDaMare, comRetornoDaMare } from '@@MARE:modulo:src/render/retorno-da-mare.mjs@@';
-import { quadroDosPerigos, pintarPerigos, DURACAO_DO_BOTE_DA_GARCA } from '@@MARE:modulo:src/render/efeitos-de-perigo.mjs@@';
-import { comQuadroAnimado, posesDeFenda, proximoQuadroDeFenda, posesDaPassada, proximaPoseDaPassada } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
+import { quadroDosPerigos, pintarPerigos, DURACAO_DO_BOTE_DA_GARCA, IMPACTO_DO_BOTE_DA_GARCA_MS } from '@@MARE:modulo:src/render/efeitos-de-perigo.mjs@@';
+import { comQuadroAnimado, posesDeFenda, proximoQuadroDeFenda, posesDaPassada, proximaPoseDaPassada, ENTRADA_DA_FENDA_MS, SAIDA_DA_FENDA_MS } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
 import { regioesDoHub, jogarRegiao, regiaoDoMarco, renderizarHub } from '@@MARE:modulo:src/regioes-do-hub-f824aa75.mjs@@';
 import { ehSeletorDaPraia, paginaDaFase, idDaFaseSeguinte, seletorGraficoPara, totalDePaginas, regioesDaPraia, desenharSeletorGrafico } from '@@MARE:modulo:src/interface/seletor-grafico.mjs@@';
 import { desenharFarolPrevia, quadroDoFarol } from '@@MARE:modulo:src/render/farol-oficial.mjs@@';
@@ -266,7 +266,7 @@ import { campanhaConcluida, CAPITULO_FINAL, concluirFase, entradaEm, entradasDo,
 
 /* Interface antiga removida: d49eca8b */
 import { carregar, salvar } from '@@MARE:modulo:src/chave-save-195edf7f.mjs@@';
-import { criarAudio } from '@@MARE:modulo:src/criar-audio-a0d48b79.mjs@@';
+import { criarAudio, ativouBotao } from '@@MARE:modulo:src/criar-audio-a0d48b79.mjs@@';
 import { gerarMareAMao, DIFICULDADES_MARE_A_MAO, MUNDOS_MARE_A_MAO,                     } from '@@MARE:modulo:src/mundos-mare-a-mao-c249fd0f.mjs@@';
 import {
   incluirNoHistorico, lerHistoricoMare, salvarHistoricoMare,                      
@@ -556,6 +556,10 @@ function limparAcoesDerrota(){
 }
 
 function desenharResultadoDaTravessia(resultado) {
+  if(resultado?.tipo==='derrota' && !resultado.pendente && resultadoDaTravessia && !resultadoDaTravessia.somTocado){
+    resultadoDaTravessia.somTocado=true;
+    audio.efeito('derrota');
+  }
   if(resultado?.tipo==='derrota'&&resultado.placa&&resultado.ate===Infinity)mostrarAcoesDerrota();
   if(resultado?.tipo==='vitoria'&&resultado.placa&&!mostrouAcoesVitoria)prepararAcoesVitoria(true);
   pintarPlacaNaTela(buscar('#placa-resultado-v3'),resultado);
@@ -719,6 +723,7 @@ function trocarTela(destino      , focar = true)       {
 /* Interface antiga removida: c4827d95 */
   if (tela === 'inicio' && destino !== 'inicio') buscar('#configuracao-jogo').open = false;
   if(configuracoesEm)painelDeConfiguracoes(false,false);
+  if(tela==='fase' && destino!=='fase') audio.limparEfeitosDaCena();
   if (destino !== 'fase') { limparAcoesDerrota(); limparAcoesVitoria(); resultadoDaTravessia=undefined; desenharResultadoDaTravessia(); pararAnimacaoDaFase(); zerarPausaDeRecuperacao(); }
   tela = destino;
   buscar('#jogo').setAttribute('data-tela', destino);
@@ -1016,6 +1021,7 @@ function selecionarFase(novoIndice        , mensagem         , focar = true)    
 }
 
 function prepararFase(mensagem         , focar = true)       {
+  audio.limparEfeitosDaCena();
   pararAnimacaoDaFase();
   resultadoDaTravessia=undefined;
   desenharResultadoDaTravessia();
@@ -1188,6 +1194,11 @@ function jogarAcao(acao         )       {
     });
     pisadaDaTravessia=passadas.some(Boolean)||fendas.some(Boolean)
       ? {quando:agoraDaTravessia(),passadas,fendas} : undefined;
+    if (transicao.eventos.some(e=>e.tipo==='fenda-atravessada')) {
+      const animada=podeAnimarTravessia()&&fendas.some(Boolean);
+      audio.efeito('cavar',animada?ENTRADA_DA_FENDA_MS:0);
+      audio.efeito('sair-fenda',animada?SAIDA_DA_FENDA_MS:90);
+    }
   } else if(estado.passos!==antes.passos) {
     pisadaDaTravessia=undefined;
   }
@@ -1207,6 +1218,10 @@ function jogarAcao(acao         )       {
       foiMare?(viradaDaTravessia?.duracao??DURACAO_DA_LEVADA_DA_MARE):0,
       foiGarca?DURACAO_DO_BOTE_DA_GARCA:0
     ):0;
+    if (foiMare) audio.efeito('levada');
+    // O arquivo abre com o rasante; a batida interna vem 130 ms depois.
+    if (foiGarca) audio.efeito('garca',comCenaNormal?Math.max(0,IMPACTO_DO_BOTE_DA_GARCA_MS-130):0);
+    if (evento && estado.situacao==='jogando') audio.efeito('retorno',duracaoDoPerigo);
     if(recuperou){
       const duracaoNoRitmoAnterior=comCenaNormal?Math.max(
         foiMare?(viradaDaTravessia?.duracaoNoRitmoAnterior??DURACAO_DA_LEVADA_DA_MARE):0,
@@ -1453,7 +1468,9 @@ window.addEventListener('pointerup', evento => {
   if (evento.isTrusted && evento.pointerType !== 'mouse' && evento.isPrimary && evento.button === 0) void audio.habilitar();
 });
 window.addEventListener('click', evento => {
-  if (evento.isTrusted) void audio.habilitar();
+  if (!evento.isTrusted) return;
+  void audio.habilitar();
+  if (ativouBotao(evento)) audio.clique();
 }, true);
 window.addEventListener('keydown', evento => {
   if (evento.isTrusted && !evento.repeat
