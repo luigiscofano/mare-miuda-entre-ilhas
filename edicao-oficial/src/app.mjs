@@ -711,10 +711,7 @@ function gravar() {
 }
 
 function atualizarAmbiente() {
-  const avulso = (tela === 'fase' || tela === 'mare-a-mao') ? desafioAvulso?.opcoes.mundo : undefined;
-  const comTemaPadrao = (tela === 'fase' && bancada) || tela === 'mare-a-mao';
-  const mundo = avulso ?? (comTemaPadrao ? 'praia' : mundoAtual(save.progresso));
-  audio.ambiente(mundo, !document.hidden);
+  audio.ambiente(!document.hidden);
 }
 
 function trocarTela(destino      , focar = true)       {

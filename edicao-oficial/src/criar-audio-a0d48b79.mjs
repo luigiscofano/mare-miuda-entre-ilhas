@@ -1,6 +1,6 @@
                                                 
                                                   
-import { criarTrilha, faixaDoMundo } from '@@MARE:modulo:src/trilhas-1cd0b6cc.mjs@@';
+import { criarTrilha } from '@@MARE:modulo:src/trilhas-1cd0b6cc.mjs@@';
                                          
 
                                   
@@ -66,7 +66,6 @@ export function criarAudio() {
   let ctx                          ;
   let canais                                     ;
   let retomando                           ;
-  let faixa        = 'praia';
   let trilha                                            ;
   let desejos          = { musica: 0.35, efeitos: 0.55 };
   let ambienteAtivo = false;
@@ -98,7 +97,7 @@ export function criarAudio() {
 
   function sincronizar(tentarDeNovo = false) {
     const tocando = ctx?.state === 'running' && ambienteAtivo;
-    trilha?.sincronizar(faixa, tocando && desejos.musica > 0, tentarDeNovo);
+    trilha?.sincronizar(tocando, tentarDeNovo);
     if (!tocando || desejos.efeitos === 0) cancelarNotas();
   }
 
@@ -112,7 +111,7 @@ export function criarAudio() {
         if (!ctx || ctx.state === 'closed') {
           if (typeof AudioContext === 'undefined') return;
           ctx?.removeEventListener('statechange', estadoMudou);
-          trilha?.sincronizar(faixa, false);
+          trilha?.sincronizar(false);
           ctx = new AudioContext();
           canais = { musica: ctx.createGain(), efeitos: ctx.createGain() };
           for (const canal of ['musica', 'efeitos']         ) {
@@ -145,8 +144,7 @@ export function criarAudio() {
       }
       sincronizar();
     },
-    ambiente(mundo       , ativo         ) {
-      faixa = faixaDoMundo(mundo) ?? faixa;
+    ambiente(ativo) {
       ambienteAtivo = ativo;
       sincronizar();
     },
