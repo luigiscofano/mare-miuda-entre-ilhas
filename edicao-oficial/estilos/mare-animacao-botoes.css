@@ -1,0 +1,43 @@
+
+/* A placa reage ao comando, mas a área clicável e a indicação de foco ficam no lugar. */
+@media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  @keyframes mare-placa-pressionada {
+    0% { filter: brightness(.94); }
+    52% { filter: brightness(.91); }
+    100% { filter: brightness(.83); }
+  }
+  @keyframes mare-placa-chegou {
+    0% { filter: brightness(.93); }
+    60% { filter: brightness(.98); }
+    100% { filter: brightness(1); }
+  }
+
+  #jogo[data-tela="inicio"] .porto-card::before,
+  .hub-palco .hub-botao:not(:disabled):not([aria-disabled="true"])::before,
+  .praia-direta-palco :is(.praia-direta-card,.praia-direta-seta):not(:disabled):not([aria-disabled="true"]) {
+    animation: mare-placa-chegou 170ms steps(1, end);
+  }
+
+  #jogo[data-tela="inicio"] .porto-card:not(:disabled):active::before,
+  .hub-palco .hub-botao:not(:disabled):not([aria-disabled="true"]):active::before,
+  .praia-direta-palco :is(.praia-direta-card,.praia-direta-seta):not(:disabled):not([aria-disabled="true"]):active,
+  #jogo[data-tela="fase"] :is(.direcional button, #reiniciar, #voltar-fase, #seguir-fase, #nova-mare-a-mao):not(:disabled):active,
+  :is(#mare-a-mao, .configuracao:not([hidden]), #creditos) button:not(:disabled):active {
+    animation: mare-placa-pressionada 90ms steps(1, end) both;
+  }
+}
+
+/* A placa cresce só com ponteiro preciso. Não mexe no fluxo nem no foco. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  #jogo[data-tela="inicio"] .porto-card:not(:disabled)::before,
+  .hub-palco .hub-botao:not(:disabled):not([aria-disabled="true"])::before,
+  #jogo button:not(.porto-card, .hub-botao, :disabled, [aria-disabled="true"], [data-estado="bloqueada"]) {
+    transition: scale 125ms ease-out;
+  }
+
+  #jogo[data-tela="inicio"] .porto-card:not(:disabled):hover::before,
+  .hub-palco .hub-botao:not(:disabled):not([aria-disabled="true"]):hover::before,
+  #jogo button:not(.porto-card, .hub-botao, :disabled, [aria-disabled="true"], [data-estado="bloqueada"]):hover {
+    scale: 1.035;
+  }
+}

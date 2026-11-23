@@ -7,3 +7,5 @@
 Os guias são registros da edição offline oficial, não novas mecânicas nem uma publicação do jogo.
 
 - [Vídeo de animações](arte/animacoes/README.md): exemplos, variações de maré e movimentos do jogo.
+
+- [Produção e verificação](producao/README.md): build e testes da edição jogável.

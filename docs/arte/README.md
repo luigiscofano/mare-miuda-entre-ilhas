@@ -8,3 +8,5 @@
 ## Animações
 
 - [Vídeo sem som, com a ação ampliada](animacoes/README.md).
+
+- [Câmera, moldura e oceano](camera/README.md): padrões de enquadramento e cenários das fases.

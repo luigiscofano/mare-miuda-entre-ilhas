@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maré Miúda: Entre Ilhas | Praia das Conchas</title>
+  <style>@@MARE:texto:estilos/bloco-00.css@@</style>
+  <script type="module" src="@@MARE:modulo:src/app.mjs@@"></script>
+<style id="mare-animacao-botoes">@@MARE:texto:estilos/mare-animacao-botoes.css@@</style>
+<style>@@MARE:texto:estilos/bloco-02.css@@</style>
+<style id="controles-de-fase-v3">@@MARE:texto:estilos/controles-de-fase-v3.css@@</style>
+<style id="mare-camera">@@MARE:texto:estilos/mare-camera.css@@</style>
+</head>
+<body>
+  <a class="pular" href="#jogo">Pular para o jogo</a>
+  <main id="jogo" class="pagina" data-tela="inicio">
+    <header>
+      <p class="etiqueta">Caderno de travessias · Primeiro lote</p>
+      <h1>Maré Miúda: Entre Ilhas</h1>
+      <p class="secundario" lang="en">Tiny Tide: Between Islands</p>
+    </header>
+
+    <section id="inicio" class="painel" aria-labelledby="titulo-inicio">
+      <div id="moldura-logo" class="moldura-logo" hidden>
+        <img id="marca-praia" src="data:image/png;base64,@@MARE:b64:assets/image/3d96700e26c84adb3d22.png@@" width="180" height="94"
+          alt="Maré Miúda: Entre Ilhas, logo Placa de Areia">
+      </div>
+      <div class="porto-palco">
+        <h2 id="titulo-inicio" class="porto-so-leitor" tabindex="-1">Porto de partida</h2>
+        <p class="porto-so-leitor">Um passo de cada vez. Uma maré de cada vez.</p>
+        <button type="button" class="porto-card" id="comecar">
+          <span class="porto-rotulo" id="porto-viagem-rotulo">Começar viagem</span>
+          <span class="porto-apoio" id="porto-viagem-apoio">A campanha de Entre Ilhas</span>
+        </button>
+        <button type="button" class="porto-card" id="abrir-mare-a-mao">
+          <span class="porto-rotulo">Ilha de Improviso</span>
+          <span class="porto-apoio">Gere uma travessia do seu jeito</span>
+        </button>
+        <button type="button" class="porto-card" id="abrir-som-inicio" aria-expanded="false" aria-controls="configuracao-jogo">
+          <span class="porto-rotulo">Som e música</span>
+        </button>
+        <button type="button" class="porto-card" id="creditos-inicio">
+          <span class="porto-rotulo">Créditos</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="mare-a-mao" class="painel" aria-labelledby="titulo-mare-a-mao" hidden>
+      <h2 id="titulo-mare-a-mao" tabindex="-1">Ilha de Improviso</h2>
+      <p>Monte a próxima travessia. As partidas deste modo não alteram a campanha.</p>
+      <form id="configurar-mare-a-mao">
+        <div class="filtros-mare">
+          <label for="mare-tema">Tema
+            <select id="mare-tema">
+              <option value="praia">Praia das Conchas</option>
+              <option value="recifes">Recifes Expostos</option>
+              <option value="mangue">Mangue dos Siris Duplos</option>
+              <option value="enseada">Enseada da Garça</option>
+              <option value="deriva">Ilhas à Deriva</option>
+              <option value="grutas">Grutas da Espuma</option>
+              <option value="ressaca">Baía das Brasas</option>
+              <option value="farol">Arquipélago do Farol</option>
+            </select>
+          </label>
+          <label for="mare-dificuldade">Dificuldade
+            <select id="mare-dificuldade">
+              <option value="Sossegado">1 · Sossegado</option>
+              <option value="Animado">2 · Animado</option>
+              <option value="Puxado">3 · Puxado</option>
+              <option value="Mar Bravo">4 · Mar Bravo</option>
+              <option value="Maré Feroz">5 · Maré Feroz</option>
+            </select>
+          </label>
+          <label for="mare-siris">Siris
+            <select id="mare-siris">
+              <option value="1">1 siri</option>
+              <option value="2">2 siris</option>
+              <option value="3">3 siris</option>
+            </select>
+          </label>
+          <label class="marcacao-mare"><input type="checkbox" id="mare-garca"> Incluir garça</label>
+          <label class="marcacao-mare"><input type="checkbox" id="mare-item"> Incluir pérola obrigatória</label>
+        </div>
+        <div class="botoes">
+          <button type="submit" id="gerar-mare-a-mao" class="principal">Gerar travessia</button>
+          <button type="button" id="voltar-mare-a-mao">Tela inicial</button>
+        </div>
+      </form>
+      <p id="aviso-mare-a-mao" role="status" aria-live="polite"></p>
+      <details id="historico-mare-a-mao">
+        <summary>Histórico de travessias</summary>
+        <p id="mare-historico-vazio">Nenhuma travessia gerada.</p>
+        <ol id="mare-historico-itens"></ol>
+      </details>
+    </section>
+
+    <section id="praia" class="painel" aria-labelledby="titulo-praia" hidden>
+      <h2 id="titulo-praia" tabindex="-1">Praia das Conchas</h2>
+      <p id="orientacao-praia"></p>
+      <p id="viagem-praia" class="dica"></p>
+      <p id="progresso-praia"></p>
+      <img id="folha-fauna" src="data:image/png;base64,@@MARE:b64:assets/image/e34f1ae6360e1d83f977.png@@" width="155" height="23" alt="" hidden>
+      <img id="enseadinha" src="data:image/png;base64,@@MARE:b64:assets/image/3bd56dcf5cdac1c0dfba.png@@" width="512" height="384" alt="" hidden>
+      <img id="mapa-recifes" src="data:image/png;base64,@@MARE:b64:assets/image/1d54f5658b07e9e2d97b.png@@" width="512" height="384" alt="" hidden>
+      <img id="mapa-mangue" src="data:image/png;base64,@@MARE:b64:assets/image/b2d398ae207326484d35.png@@" width="512" height="384" alt="" hidden>
+      <img id="mapa-enseada" src="data:image/png;base64,@@MARE:b64:assets/image/2b260ed9ea782543d695.png@@" width="512" height="384" alt="" hidden>
+      <img id="mapa-deriva" src="data:image/png;base64,@@MARE:b64:assets/image/1eed00c2a551a8fa3f01.png@@" width="512" height="384" alt="" hidden>
+      <img id="mapa-grutas" src="data:image/png;base64,@@MARE:b64:assets/image/662183e8698aae8c522a.png@@" width="512" height="384" alt="" hidden>
+      <img id="mapa-ressaca" src="data:image/png;base64,@@MARE:b64:assets/image/33e1b2c9d230ae9770b4.png@@" width="512" height="384" alt="" hidden>
+      <img id="mapa-farol" src="data:image/png;base64,@@MARE:b64:assets/image/f51975ee73e35b3d0414.png@@" width="512" height="384" alt="" hidden>
+      <img id="cabo-baixo" src="data:image/png;base64,@@MARE:b64:assets/image/821679d43cea6e201dd1.png@@" width="192" height="144" alt="" hidden>
+      <img id="arte-arquipelago" src="data:image/png;base64,@@MARE:b64:assets/image/ccacb68fc1ab16378652.png@@" width="512" height="384" alt="" hidden>
+      <nav id="seletor-fases" aria-label="Seleção de fases" hidden></nav>
+      <nav id="cartoes-arquipelago" aria-label="Seletor de mundos" hidden></nav>
+      <p id="mensagem-praia" class="feedback" role="status" aria-live="polite"></p>
+      <button type="button" id="rever-desfecho" hidden>Rever desfecho</button>
+      <!-- rota legada preservada no motor 5768b99b -->
+      <p id="enseada-aberta" class="dica" hidden>A passagem da Enseada se abriu. Visite a Enseada da Garça para descobrir o próximo caminho.</p>
+      <!-- rota legada preservada no motor a8a392a7 -->
+      <p id="aviso-save" class="dica" hidden>O navegador não permitiu salvar. Você pode jogar, mas o progresso pode se perder ao fechar.</p>
+      <button type="button" id="menu-praia">Tela inicial</button>
+    </section>
+
+    <nav aria-label="Fases de teste" id="fases-teste" class="fases" hidden>
+      <button type="button" data-fase="1" aria-pressed="true">01 · Onda</button>
+      <button type="button" data-fase="2" aria-pressed="false">02 · Garça</button>
+      <button type="button" data-fase="3" aria-pressed="false">03 · Busca</button>
+      <button type="button" data-fase="4" aria-pressed="false">04 · Três pérolas</button>
+    </nav>
+
+    <section class="laboratorio" id="fase" aria-labelledby="nome-fase" hidden>
+      <div class="camera-topo">
+            <div class="descricao">
+        <h2 id="nome-fase" tabindex="-1"></h2>
+        <p id="objetivo"></p><p id="lembrete-fase" class="dica" hidden></p>
+      </div>
+      <div id="ferramentas-fase" role="group" aria-label="Controles da fase" hidden>
+        <button id="voltar-seletor-fase" type="button">Voltar à seleção de fases</button>
+        <button id="abrir-configuracoes-fase" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="configuracao-jogo">Configurações</button>
+      </div>
+      </div>
+      <aside class="camera-lateral" aria-label="Estado e ações da fase">
+      <dl class="indicadores">
+        <div><dt>Maré</dt><dd id="mare"></dd></div>
+        <div><dt>Passos</dt><dd id="passos"></dd></div>
+        <div><dt>Erros</dt><dd id="erros"></dd></div>
+      </dl>
+      <div class="previsao-fauna">
+        <img id="garca-patrulha" src="data:image/png;base64,@@MARE:b64:assets/image/9d10296360b1c0dbc541.png@@" width="31" height="23" alt="" hidden>
+        <img id="garca-rasante" src="data:image/png;base64,@@MARE:b64:assets/image/b161e1213aa4dc3ad110.png@@" width="31" height="23" alt="" hidden>
+        <p id="previsao" class="previsao"></p>
+      </div>
+      <p id="posicao" class="visualmente-oculto"></p>
+      <p id="sinal-concha" class="inventario" hidden>Objetivo no tabuleiro: concha brilhante.</p>
+      <p id="fragmento" class="inventario" hidden></p>
+      <p id="grupo-siris" class="inventario" hidden></p>
+      <p id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
+
+      <div class="acoes">
+        <div id="direcoes-da-fase" class="direcional" role="group" aria-label="Mover o siri" aria-describedby="grupo-siris">
+          <button type="button" data-direcao="cima" aria-label="Mover para cima">↑</button>
+          <button type="button" data-direcao="esquerda" aria-label="Mover para a esquerda">←</button>
+          <button type="button" data-direcao="baixo" aria-label="Mover para baixo">↓</button>
+          <button type="button" data-direcao="direita" aria-label="Mover para a direita">→</button>
+        </div>
+        <button id="reiniciar" type="button">Reiniciar</button>
+      </div>
+
+      <div class="botoes">
+        <button type="button" id="voltar-fase">Voltar</button>
+        <button type="button" id="nova-mare-a-mao" class="principal" hidden>Próxima travessia</button>
+      </div>
+      <div id="acoes-vitoria-fase" role="group" aria-label="Ações após a vitória" hidden>
+        <button type="button" id="voltar-vitoria-fase">Voltar à seleção de fases</button>
+        <button type="button" id="proximo-nivel" class="principal" hidden>Próximo nível</button>
+        <button type="button" id="seguir-fase" class="principal" hidden>Concluir viagem</button>
+      </div>
+      </aside>
+      <div id="moldura" class="moldura camera-travessia">
+        <canvas id="tabuleiro" width="256" height="192" role="img" aria-label="Mapa da fase" aria-describedby="posicao previsao">
+          Texto alternativo do mapa disponível em “Mapa em texto e ajuda”.
+        </canvas>
+        <canvas id="tabuleiro-camera" aria-hidden="true" width="1" height="1"></canvas>
+        <canvas id="placa-resultado-v3" width="248" height="84" hidden aria-hidden="true"></canvas>
+      </div>
+      <details id="ajuda">
+        <summary>Mapa em texto e ajuda</summary>
+        <p id="ensino"></p>
+        <p>Use setas, WASD ou toque nos botões. R reinicia. Se ninguém puder se mover, o passo não conta.</p>
+        <pre id="grade" aria-label="Representação por símbolos do tabuleiro"></pre>
+        <p>S: início · .: chão firme · =: baixio · #: bloqueio · C: concha · B: pérola · G: chegada que exige pérolas · H: areia firme elevada · A: segundo siri · T: concha de apoio · M: começo do Amarelo · Y: terceira concha.</p>
+      </details>
+    </section>
+
+    <section id="creditos" class="painel" aria-labelledby="titulo-creditos" hidden>
+      <h2 id="titulo-creditos" tabindex="-1">Créditos</h2>
+      <p id="desfecho">O caminho continua a partir da Praia das Conchas.</p>
+      <p><strong>Jogo e direção:</strong> Luigi Scofano de Araujo.</p>
+      <p>Inspirado na mecânica do Maré Miúda de Miudezas, com código, arte provisória e áudio próprios.</p>
+      <button type="button" class="principal" id="voltar-creditos">Voltar à tela inicial</button>
+    </section>
+
+    <div id="fundo-configuracoes-fase" aria-hidden="true" hidden></div>
+    <details id="configuracao-jogo" class="painel configuracao">
+      <summary>Som e música</summary>
+      <label for="volume-musica">Música</label>
+      <input id="volume-musica" type="range" min="0" max="100" step="1" value="35">
+      <label for="volume-efeitos">Efeitos</label>
+      <input id="volume-efeitos" type="range" min="0" max="100" step="1" value="55">
+      <p class="dica">O jogo inicia o áudio depois da primeira interação.</p>
+      <button type="button" id="fechar-som-inicio">Fechar som e música</button>
+      <button type="button" id="bancada">Bancada de testes</button>
+    </details>
+
+    <footer>© 2026 Luigi Scofano de Araujo. Todos os direitos reservados.</footer>
+  </main>
+<script type="application/octet-stream" id="trilha-offline-praia">@@MARE:b64:assets/audio/praia.mp3@@</script>
+<script type="application/octet-stream" id="trilha-offline-recifes">@@MARE:b64:assets/audio/recifes.mp3@@</script>
+<script type="application/octet-stream" id="trilha-offline-mangue">@@MARE:b64:assets/audio/mangue.mp3@@</script>
+<script type="application/octet-stream" id="trilha-offline-enseada">@@MARE:b64:assets/audio/enseada.mp3@@</script>
+<script type="application/octet-stream" id="trilha-offline-deriva">@@MARE:b64:assets/audio/deriva.mp3@@</script>
+<script type="application/octet-stream" id="trilha-offline-grutas">@@MARE:b64:assets/audio/grutas.mp3@@</script>
+<script type="application/octet-stream" id="trilha-offline-ressaca">@@MARE:b64:assets/audio/ressaca.mp3@@</script>
+<script type="application/octet-stream" id="trilha-offline-farol">@@MARE:b64:assets/audio/farol.mp3@@</script>
+
+</body>
+</html>

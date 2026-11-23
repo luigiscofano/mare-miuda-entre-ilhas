@@ -1,0 +1,688 @@
+
+:root {
+  color-scheme: light;
+  color: #202125;
+  background: #ebeced;
+  font: 100%/1.45 system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+h1, h2, p, dd { margin: 0; }
+h1 { font-size: clamp(1.4rem, 5vw, 2.25rem); line-height: 1.12; }
+h2 { font-size: 1.15rem; }
+button, summary { font: inherit; }
+button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: .4rem .65rem;
+  color: #202125;
+  background: #f6f6f7;
+  border: 1px solid #777980;
+  border-radius: .27rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+button[aria-pressed="true"] { background: #292a2f; color: #fff; border-color: #292a2f; }
+:focus-visible { outline: 3px solid #393a40; outline-offset: 3px; }
+[hidden] { display: none !important; }
+.pagina { width: min(100%, 46rem); margin-inline: auto; padding: .8rem clamp(.35rem, 2.4vw, 1.2rem); }
+.pular { position: absolute; left: .6rem; transform: translateY(-150%); }
+.pular:focus { transform: translateY(0); padding: .4rem; background: #fff; color: #222; z-index: 10; }
+.etiqueta { color: #484a50; font: 700 .74rem/1.2 system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .35rem; }
+.secundario { margin-top: .2rem; color: #55575e; }
+.fases { display: flex; flex-wrap: wrap; gap: .4rem; margin: .8rem 0 .6rem; }
+.fases button { flex: 1 1 auto; white-space: nowrap; }
+.laboratorio { background: #fff; padding: clamp(.45rem, 2vw, .9rem); border: 1px solid #999ba2; border-radius: .4rem; }
+.descricao p { margin-top: .1rem; }
+.indicadores { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .35rem; margin: .6rem 0 0; }
+.indicadores div { background: #edeef0; padding: .32rem .48rem; }
+.indicadores dt { font-size: .79rem; color: #4c4d54; }
+.indicadores dd { font-weight: 750; }
+.previsao-fauna { display: flex; align-items: center; gap: .4rem; }
+.previsao-fauna img { flex: none; image-rendering: pixelated; }
+.previsao { font-size: .9rem; margin: .38rem 0; min-height: 1.31rem; font-weight: 620; }
+.moldura { display: flex; justify-content: safe center; overflow-x: auto; background: #32343a; }
+canvas { display: block; height: auto; flex: 0 0 auto; image-rendering: pixelated; }
+/* As artes oficiais da Praia e dos Recifes usam 48 pixels por casa. Em telas menores, mantenha
+   o enquadramento inteiro e os controles HTML separados do tabuleiro. */
+#moldura:has([data-arte="praia-oficial"]) { background: #1b4b59; }
+#moldura:has([data-arte="recifes-oficiais"]) { background: #163d4c; }
+#moldura:has([data-arte="mangue-oficial"]) { background: #274d43; }
+#moldura:has([data-arte="enseada-oficial"]) { background: #244a68; }
+#moldura:has([data-arte="deriva-oficial"]) { background: #183f3b; }
+#moldura:has([data-arte="grutas-oficiais"]) { background: #1e2e46; }
+#moldura:has([data-arte="brasas-oficiais"]) { background: #182f3e; }
+#moldura:has([data-arte="farol-oficial"]) { background: #21354b; }
+#tabuleiro:is([data-arte="praia-oficial"], [data-arte="recifes-oficiais"], [data-arte="mangue-oficial"], [data-arte="enseada-oficial"], [data-arte="deriva-oficial"], [data-arte="grutas-oficiais"], [data-arte="brasas-oficiais"], [data-arte="farol-oficial"]) { min-width: 0; max-width: 100%; }
+.inventario { font-size: .83rem; margin-top: .3rem; }
+.feedback { margin: .43rem 0 .15rem; min-height: 2.45rem; color: #34353b; }
+.acoes { display: flex; justify-content: space-between; align-items: end; gap: .55rem; }
+.direcional { display: grid; grid-template-columns: repeat(3, minmax(44px, 1fr)); gap: .24rem; }
+.direcional button { padding-inline: 0; font-size: 1.27rem; }
+.direcional [data-direcao="cima"] { grid-column: 2; }
+.direcional [data-direcao="esquerda"] { grid-row: 2; grid-column: 1; }
+.direcional [data-direcao="baixo"] { grid-row: 2; grid-column: 2; }
+.direcional [data-direcao="direita"] { grid-row: 2; grid-column: 3; }
+details { margin-top: .65rem; font-size: .87rem; }
+details p { margin-block: .35rem; }
+summary { min-height: 44px; padding-block: .45rem; cursor: pointer; }
+footer { font-size: .77rem; margin: .64rem 0 .1rem; color: #4b4c52; }
+.visualmente-oculto {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+body { background: #eae8df; }
+.painel {
+  background: #fffaf0;
+  color: #253f41;
+  padding: clamp(.6rem, 2.4vw, 1.2rem);
+  border: 1px solid #9caa9c;
+  border-radius: .35rem;
+  margin-block: .65rem;
+}
+.painel p + p, .painel > p + button { margin-top: .45rem; }
+.painel h2 { margin-bottom: .35rem; }
+.painel .moldura { background: #24585e; margin-top: .6rem; }
+.painel .feedback { min-height: 2.1rem; margin-top: .25rem; }
+.moldura-logo {
+  display: flex;
+  justify-content: safe center;
+  overflow-x: auto;
+  padding-block: .35rem;
+  margin-bottom: .55rem;
+  background: #dce7dc;
+}
+.moldura-logo img { display: block; flex: 0 0 auto; height: auto; image-rendering: pixelated; }
+.pagina[data-tela="inicio"] header h1,
+.pagina[data-tela="inicio"] .secundario {
+  position: absolute; width: 1px; height: 1px;
+  clip-path: inset(50%); overflow: hidden; white-space: nowrap;
+}
+.principal { color: #fff; border-color: #204c4f; background: #24585e; }
+button:disabled { cursor: default; opacity: .64; }
+.botoes { display: flex; flex-wrap: wrap; gap: .46rem; margin-top: .52rem; }
+.configuracao label { font-weight: 650; margin-top: .3rem; display: block; }
+.configuracao input { width: min(100%, 220px); min-height: 30px; accent-color: #24585e; }
+.dica { color: #465b5a; font-size: .83rem; margin-top: .4rem; }
+#posicao-praia { font-weight: 620; margin-top: .45rem; }
+.direcional [data-mapa-direcao="cima"] { grid-column: 2; }
+.direcional [data-mapa-direcao="esquerda"] { grid-row: 2; grid-column: 1; }
+.direcional [data-mapa-direcao="baixo"] { grid-row: 2; grid-column: 2; }
+.direcional [data-mapa-direcao="direita"] { grid-row: 2; grid-column: 3; }
+
+/* A configuração independente mantém os alvos de toque sem apertar o tabuleiro. */
+.filtros-mare { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: .5rem 1rem; margin-block: .65rem; }
+.filtros-mare label { display: flex; flex-direction: column; gap: .18rem; }
+.filtros-mare .marcacao-mare { flex-direction: row; align-items: center; min-height: 44px; }
+.filtros-mare select { width: 100%; min-height: 44px; font: inherit; }
+#mare-historico-itens { padding-inline-start: 1.25rem; }
+#mare-historico-itens li + li { margin-top: .35rem; }
+#mare-historico-itens button { max-width: 100%; overflow-wrap: anywhere; text-align: start; }
+/* Prévia estrutural: as oito composições não dependem dos PNGs de fase. */
+#seletor-fases { display: grid; gap: 1rem; margin: .75rem 0; }
+#seletor-fases section { display: grid; gap: .4rem; }
+#seletor-fases h3, #seletor-fases h4 { margin: 0; }
+.seletor-sequencia { border-block-start: 1px solid var(--seletor-cor); padding-block: .45rem; }
+.seletor-sequencia h4 { font-size: .9rem; }
+.seletor-fileira { display: flex; flex-wrap: wrap; justify-content: center; gap: .45rem; }
+.seletor-marco {
+  flex: 1 1 0;
+  min-width: 7.8rem;
+  min-height: 3rem;
+  max-width: min(11rem, 100%);
+  padding: .5rem;
+  border: 2px solid var(--seletor-cor, #3c776a);
+  border-radius: 2px;
+  overflow-wrap: anywhere;
+  display: grid;
+  align-content: center;
+  gap: .2rem;
+}
+.seletor-marco[aria-disabled="true"] { opacity: .8; border-style: dashed; cursor: not-allowed; }
+.seletor-marco[data-estado="concluida"] { border-style: double; border-width: 4px; }
+.seletor-marco:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }
+.seletor-marco small { font-size: .76rem; }
+#seletor-fases[data-tema="praia"] { --seletor-cor: #8f6533; }
+#seletor-fases[data-tema="recifes"] { --seletor-cor: #a35b48; }
+#seletor-fases[data-tema="mangue"] { --seletor-cor: #587444; }
+#seletor-fases[data-tema="enseada"] { --seletor-cor: #6a679b; }
+#seletor-fases[data-tema="deriva"] { --seletor-cor: #2d7771; }
+#seletor-fases[data-tema="grutas"] { --seletor-cor: #64637e; }
+#seletor-fases[data-tema="ressaca"] { --seletor-cor: #386b84; }
+#seletor-fases[data-tema="farol"] { --seletor-cor: #655683; }
+@font-face { font-family:SeletorPraia; font-style:normal; font-weight:700; font-display:swap; src:url("data:font/woff;base64,@@MARE:b64:assets/font/103c99f9ed82898d3a90.woff@@") format("woff"); }
+/* As placas e as costas são as camadas aprovadas. O texto permanece selecionável e acessível. */
+#jogo[data-praia-direta][data-tela="praia"] { width: min(100%, 65rem); }
+#jogo[data-praia-direta][data-tela="praia"] :is(#praia > h2,#orientacao-praia,#viagem-praia) {
+  position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%);
+}
+#jogo[data-praia-direta][data-tela="praia"] #praia {
+  display:flex; flex-direction:column; border:0; padding:0; background:transparent;
+}
+#jogo[data-praia-direta][data-tela="praia"] #progresso-praia { order:2; margin:.25rem .35rem; }
+#jogo[data-praia-direta][data-tela="praia"] #mensagem-praia { order:2; min-height:0; margin:.25rem .35rem; }
+#jogo[data-praia-direta][data-tela="praia"] #menu-praia { order:3; align-self:start; }
+#seletor-fases[data-seletor-praia] { width:min(100%,960px); margin:.4rem auto; gap:.55rem; }
+.praia-direta-palco {
+  position:relative; container-type:inline-size; width:100%; aspect-ratio:960/540;
+  background:#134653 var(--cenario) center / 100% 100% no-repeat; image-rendering:pixelated;
+  --x:100; --y:157; --card-w:344; --card-h:56; --d-linha:73; --d-coluna:416;
+  --n-x:28; --nome-x:55; --nome-extra:73; --nome-size:16; --num-size:16;
+  font-family:SeletorPraia,"DejaVu Sans",sans-serif;
+  --mundo-y:126; --mundo-size:10; --nav-y:459; --nav-l:328; --nav-r:584;
+  --nav-w:48; --nav-h:39; --pag-y:462; --pag-size:15; --ponto-y:483;
+  --escala: calc(100cqw / 960);
+}
+.praia-direta-palco p { margin:0; }
+.praia-direta-palco :is(button,.praia-direta-mundo,.praia-direta-pagina,.praia-direta-pontos) {
+  position:absolute;
+}
+.praia-direta-card,.praia-direta-seta {
+  min-width:0; min-height:0; border:0; border-radius:0; margin:0; padding:0;
+  background:transparent var(--placa) center / 100% 100% no-repeat; image-rendering:pixelated;
+}
+.praia-direta-card {
+  --linha:var(--linha-desktop);
+  display:flex; align-items:center; text-align:left; font-family:inherit; font-weight:700;
+  left:calc((var(--x) + var(--coluna) * var(--d-coluna)) * var(--escala));
+  top:calc((var(--y) + var(--linha) * var(--d-linha)) * var(--escala));
+  width:calc(var(--card-w) * var(--escala));
+  height:calc(var(--card-h) * var(--escala));
+  color:#263f48;
+}
+.praia-direta-card[data-estado="concluida"] { color:#244c42; }
+.praia-direta-card[data-estado="bloqueada"] { color:#294b52; cursor:not-allowed; }
+.praia-direta-card[data-categoria="regular"] { --nome-efetivo:var(--nome-x); }
+.praia-direta-card:not([data-categoria="regular"]) { --nome-efetivo:var(--nome-extra); }
+.praia-direta-numero {
+  position:absolute; left:calc(var(--n-x) * var(--escala)); transform:translateX(-50%);
+  font-size:calc(var(--num-size) * var(--escala)); line-height:1; font-variant-numeric:tabular-nums;
+}
+.praia-direta-nome {
+  margin-inline:calc(var(--nome-efetivo) * var(--escala)) calc(31 * var(--escala));
+  font-size:calc(var(--nome-size) * var(--escala)); line-height:1.13; overflow-wrap:anywhere;
+}
+.praia-direta-mundo,.praia-direta-pagina {
+  left:50%; transform:translateX(-50%); text-transform:uppercase;
+  font-weight:700; white-space:nowrap; line-height:1.12;
+}
+.praia-direta-mundo {
+  top:calc(var(--mundo-y) * var(--escala)); font-size:calc(var(--mundo-size) * var(--escala)); color:#a9c7c0;
+}
+.praia-direta-pagina {
+  top:calc(var(--pag-y) * var(--escala)); font-size:calc(var(--pag-size) * var(--escala)); color:#e7efcf;
+}
+.praia-direta-seta {
+  top:calc(var(--nav-y) * var(--escala)); width:calc(var(--nav-w) * var(--escala));
+  height:calc(var(--nav-h) * var(--escala)); opacity:1!important;
+}
+.praia-direta-seta[data-pagina-praia="anterior"] { left:calc(var(--nav-l) * var(--escala)); }
+.praia-direta-seta[data-pagina-praia="proxima"] { left:calc(var(--nav-r) * var(--escala)); }
+.praia-direta-seta::after { content:""; position:absolute; inset:-5px; }
+.praia-direta-pontos { display:flex; gap:calc(5 * var(--escala)); top:calc(var(--ponto-y) * var(--escala)); left:50%; transform:translateX(-50%); }
+.praia-direta-pontos i { width:calc(6 * var(--escala)); height:calc(6 * var(--escala)); background:#67969a; }
+.praia-direta-pontos i.atual { background:#e7d5a0; }
+.praia-direta-palco :focus-visible { outline:3px solid #fff3bf; outline-offset:2px; }
+.praia-direta-viagens { display:flex; flex-wrap:wrap; gap:.4rem; justify-content:center; }
+.praia-direta-viagens button[aria-disabled="true"] { opacity:.72; cursor:not-allowed; }
+@media(max-width:760px) {
+  #jogo[data-praia-direta][data-tela="praia"] { padding-inline:.35rem; }
+  #seletor-fases[data-seletor-praia] { width:min(100%,384px); }
+  .praia-direta-palco {
+    aspect-ratio:384/712; --x:61; --y:171; --card-w:262; --card-h:48; --d-linha:57; --d-coluna:0;
+    --n-x:25; --nome-x:49; --nome-extra:59; --nome-size:14; --num-size:14;
+    --mundo-y:140; --mundo-size:11; --nav-y:634; --nav-l:83; --nav-r:257;
+    --nav-w:44; --nav-h:39; --pag-y:636; --pag-size:13; --ponto-y:658;
+    --escala:calc(100cqw / 384);
+  }
+  .praia-direta-card { --linha:var(--linha-mobile); height:max(44px,calc(var(--card-h)*var(--escala))); }
+  .praia-direta-seta::after { inset:-7px; }
+  .praia-direta-card .praia-direta-nome { margin-inline-end:calc(22 * var(--escala)); }
+}
+@media (width > 760px) {
+.praia-direta-card[data-categoria="bonus"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/88bef92f761f3ce60d32.png@@')}
+.praia-direta-card[data-categoria="bonus"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/02aa9087cb629484896f.png@@')}
+.praia-direta-card[data-categoria="bonus"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/4263dd4484c99aa9f8b5.png@@')}
+.praia-direta-card[data-categoria="chefe"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/ce2cbe887a48b8a094a7.png@@')}
+.praia-direta-card[data-categoria="chefe"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/795b572bd46f0505cd69.png@@')}
+.praia-direta-card[data-categoria="chefe"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/6e6ad0d32ec39fe82489.png@@')}
+.praia-direta-card[data-categoria="regular"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/bae7766509a40fa7852d.png@@')}
+.praia-direta-card[data-categoria="regular"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/75decc60ce75ce91d670.png@@')}
+.praia-direta-card[data-categoria="regular"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/3ef27c2503b765663086.png@@')}
+.praia-direta-palco[data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/1efe76f486f3527123a5.png@@')}
+.praia-direta-palco[data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/bd394ff2129b3c040b9e.png@@')}
+.praia-direta-palco[data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/c807e333a9559de4a6f4.png@@')}
+.praia-direta-palco[data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/b287485c5450b7f4dd4c.png@@')}
+.praia-direta-seta[data-pagina-praia="anterior"]:disabled{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/0b9bb47b577c3053db6e.png@@')}
+.praia-direta-seta[data-pagina-praia="anterior"]:not(:disabled){--placa:url('data:image/png;base64,@@MARE:b64:assets/image/b7162a2a504931312fe9.png@@')}
+.praia-direta-seta[data-pagina-praia="proxima"]:disabled{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/079ded7577bafb4e2efc.png@@')}
+.praia-direta-seta[data-pagina-praia="proxima"]:not(:disabled){--placa:url('data:image/png;base64,@@MARE:b64:assets/image/46c2f2f44e600f1c72ea.png@@')}
+}
+@media (max-width:760px) {
+.praia-direta-card[data-categoria="bonus"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/6c79b0fa78ff1e6c644d.png@@')}
+.praia-direta-card[data-categoria="bonus"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/00d1e3b9bd1ec7b88cd1.png@@')}
+.praia-direta-card[data-categoria="bonus"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/c743a63ff695f5fc18a8.png@@')}
+.praia-direta-card[data-categoria="chefe"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/81a6b99846bca88c838d.png@@')}
+.praia-direta-card[data-categoria="chefe"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/5e3ee4ad48fc35335e69.png@@')}
+.praia-direta-card[data-categoria="chefe"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/f097dc525bcd8f8a9781.png@@')}
+.praia-direta-card[data-categoria="regular"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/aef3aca52bbea6707a1d.png@@')}
+.praia-direta-card[data-categoria="regular"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/747d42a224fa825b23a4.png@@')}
+.praia-direta-card[data-categoria="regular"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/f31a17ad3d6fdf4830a9.png@@')}
+.praia-direta-palco[data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/f54d71f5574fe653a7ba.png@@')}
+.praia-direta-palco[data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/139fa4d6f1bba3dd684a.png@@')}
+.praia-direta-palco[data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/7165febb6869f54ed99a.png@@')}
+.praia-direta-palco[data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/bb4353cc082c5c0680d5.png@@')}
+.praia-direta-seta[data-pagina-praia="anterior"]:disabled{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/33ffef8ded673963f10c.png@@')}
+.praia-direta-seta[data-pagina-praia="anterior"]:not(:disabled){--placa:url('data:image/png;base64,@@MARE:b64:assets/image/ad3a11eefbc552b3f70c.png@@')}
+.praia-direta-seta[data-pagina-praia="proxima"]:disabled{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/f98af7bb117d2059b578.png@@')}
+.praia-direta-seta[data-pagina-praia="proxima"]:not(:disabled){--placa:url('data:image/png;base64,@@MARE:b64:assets/image/a45cc449d6e263e2d788.png@@')}
+}
+
+/* A Praia das Conchas mantém as regras e a arte da edição anterior. */
+.praia-direta-palco:not([data-mundo="praia"]) {
+  --mundo-size:11; --pag-y:462; --ponto-y:483;
+}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-mundo { color:#bad0c2; }
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-nome {
+  text-wrap:balance; margin-inline-end:calc(28 * var(--escala));
+  font-size:calc(var(--fonte-aprovada,var(--nome-size)) * var(--escala));
+}
+@media(width <= 760px) {
+  .praia-direta-palco:not([data-mundo="praia"]) .praia-direta-nome { margin-inline-end:calc(24 * var(--escala)); }
+  .praia-direta-palco:not([data-mundo="praia"]) { --pag-y:636; --ponto-y:658; }
+}
+@media(width <= 360px) {
+  #seletor-fases[data-seletor-praia]:not([data-tema="praia"]) { width:min(100%,320px); }
+  .praia-direta-palco:not([data-mundo="praia"]) {
+    aspect-ratio:320/712; --x:45; --card-w:230; --nav-l:62; --nav-r:214;
+    --escala:calc(100cqw / 320);
+  }
+}
+@media (width > 760px) {
+.praia-direta-palco[data-mundo="recifes"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/66519c3c50a30428f169.png@@')}
+.praia-direta-palco[data-mundo="recifes"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/1ce50a7a16529b66dced.png@@')}
+.praia-direta-palco[data-mundo="recifes"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/282743063ec10839f95a.png@@')}
+.praia-direta-palco[data-mundo="recifes"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/0f01205a99fdbda9e853.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/f628aa280b2a6b9d789f.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/b543144b4647daa4e3a4.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/0b04aeab5e4c9737abfc.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/90c2ecdcae927e8406ac.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/f5ebc7dee27b7c4de984.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/23d49b45aeb391567b35.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/336d5625d5956f95525e.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/27f3eb5d76682949f914.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/288cccaf482974150131.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/41e38f9f6bbbcb09d667.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/d1cd8e4d3338cb3ba312.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/2049cbba6f5204aee006.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/fbb8a5b8280f627c624c.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/31d2a268311691f8e4dd.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/6e8af92b677350a16755.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/c997d46494037b7ad981.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/437f2aec8dceffbd15ad.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/949c1d5ef672d174b188.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/9c199a0b87b1bf9be92f.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/b8179350769c4b21671d.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/50a9a0bb828c4ba7a3dd.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/62d2a63e56b3a015fa4f.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/5d9606709ddf8850305e.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/74ca6923a05953d8ec1f.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="bonus"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/88bef92f761f3ce60d32.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="bonus"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/02aa9087cb629484896f.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="bonus"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/4263dd4484c99aa9f8b5.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="chefe"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/ce2cbe887a48b8a094a7.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="chefe"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/795b572bd46f0505cd69.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="chefe"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/6e6ad0d32ec39fe82489.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="regular"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/bae7766509a40fa7852d.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="regular"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/75decc60ce75ce91d670.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="regular"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/3ef27c2503b765663086.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="anterior"]:disabled{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/0b9bb47b577c3053db6e.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="anterior"]:not(:disabled){--placa:url('data:image/png;base64,@@MARE:b64:assets/image/b7162a2a504931312fe9.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="proxima"]:disabled{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/079ded7577bafb4e2efc.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="proxima"]:not(:disabled){--placa:url('data:image/png;base64,@@MARE:b64:assets/image/46c2f2f44e600f1c72ea.png@@')}
+.praia-direta-card[data-marco="mangue-reuniao"]{--fonte-aprovada:14}
+.praia-direta-card[data-marco="enseada-fragmento-do-bico"]{--fonte-aprovada:15}
+.praia-direta-card[data-marco="farol-fragmento-margens"]{--fonte-aprovada:14}
+.praia-direta-card[data-marco="farol-trio-tres-luzes"]{--fonte-aprovada:15}
+}
+@media (360px < width <= 760px) {
+.praia-direta-palco[data-mundo="recifes"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/5f4c2cae3ec1b08db475.png@@')}
+.praia-direta-palco[data-mundo="recifes"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/1ed9a7f47aead5eaeb6d.png@@')}
+.praia-direta-palco[data-mundo="recifes"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/d62a06b23718c11f2b51.png@@')}
+.praia-direta-palco[data-mundo="recifes"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/9ca04444450050e3407f.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/fc84e449db40aa05e4e3.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/93c1cdf728e7c08b6220.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/5048dd8ba4a3aa43928f.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/3e2fc526d8a44d074a78.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/111e8cf4874d6c30ecc4.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/20910a122200531809fe.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/1a183326ea2e28d4a54d.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/a2dff92923920e8a2c8e.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/c3c2a2680f4f60cde588.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/e0f1900956e893d74a08.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/a47750a4fec5ce421a54.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/908a0a3ea40c1f429dc2.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/fcb11cf2643437fd61b3.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/f3fce875e40433f0907a.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/806362704dab65b7d317.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/8dad9da86866ddc4a2ac.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/62ea9ad54fc94d1bcd6c.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/57f0aed56bfe1ed33585.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/7ed341da058ffb396282.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/9af705db0e7a7ea98640.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/4d9b7efe3ba4bf9b0689.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/e0507558fc87faa626eb.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/fc96eb4e03d2028e37ad.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/0de2071523d4b65804a4.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="bonus"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/6c79b0fa78ff1e6c644d.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="bonus"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/00d1e3b9bd1ec7b88cd1.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="bonus"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/c743a63ff695f5fc18a8.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="chefe"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/81a6b99846bca88c838d.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="chefe"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/5e3ee4ad48fc35335e69.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="chefe"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/f097dc525bcd8f8a9781.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="regular"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/aef3aca52bbea6707a1d.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="regular"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/747d42a224fa825b23a4.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="regular"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/f31a17ad3d6fdf4830a9.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="anterior"]:disabled{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/33ffef8ded673963f10c.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="anterior"]:not(:disabled){--placa:url('data:image/png;base64,@@MARE:b64:assets/image/ad3a11eefbc552b3f70c.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="proxima"]:disabled{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/f98af7bb117d2059b578.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="proxima"]:not(:disabled){--placa:url('data:image/png;base64,@@MARE:b64:assets/image/a45cc449d6e263e2d788.png@@')}
+.praia-direta-card[data-marco="recifes-exp-saida-apos-espuma"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="mangue-reuniao"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-dupla-revezamento"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-passo-sombra"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-fragmento-do-bico"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-exp-ponta-da-restinga-oeste"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-exp-retorno-em-revezamento"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-dupla-contramao"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-ida-e-retorno"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="grutas-ordem"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="grutas-dupla-camaras"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="ressaca-exp-dobras"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="ressaca-dupla-ancoradouros"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="ressaca-exp-laminas"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="ressaca-chefe-ressaca-alta"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="farol-fragmento-margens"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="farol-exp-cadeado"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="farol-lentes-em-contramare"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="farol-trio-tres-luzes"]{--fonte-aprovada:12}
+}
+@media (width <= 360px) {
+.praia-direta-palco[data-mundo="recifes"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/9b5fbb6f677dbc86932e.png@@')}
+.praia-direta-palco[data-mundo="recifes"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/eb0f80c2a714eccf2b4e.png@@')}
+.praia-direta-palco[data-mundo="recifes"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/4381bbbb65fcd2519511.png@@')}
+.praia-direta-palco[data-mundo="recifes"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/438543c452e5fa47ac8f.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/0ffc54896d3887d29aa2.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/c18c3a0d1ea583fdcdbe.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/713397f8056717c2dfa3.png@@')}
+.praia-direta-palco[data-mundo="mangue"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/66c65871dc47d335e592.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/8b8112398cb8e3676616.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/cb53590584d385096677.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/520238984f1517801648.png@@')}
+.praia-direta-palco[data-mundo="enseada"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/6d96cf4fdd49ee038650.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/734eb936a2ef222d84a4.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/460b8ff2116ac6b91465.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/dc4df000be1fe5059510.png@@')}
+.praia-direta-palco[data-mundo="deriva"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/5e505081dedb3f633c05.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/10ba76cdee27d9c7fba6.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/027427e78c90abb0e07f.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/a8e21249006d31a649d8.png@@')}
+.praia-direta-palco[data-mundo="grutas"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/50e94deaaf5e74fd9abe.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/b917bfe7c9276e9f337c.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/a923b0193935cfeeddfb.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/b6e15f5122f2d5a0b915.png@@')}
+.praia-direta-palco[data-mundo="ressaca"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/207c3c1b009c711472b9.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="1"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/1be178340be63b2fe93d.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="2"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/f4546da9efe8edc1d453.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="3"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/1cf6a5f8b00bc35ab2ed.png@@')}
+.praia-direta-palco[data-mundo="farol"][data-pagina="4"]{--cenario:url('data:image/png;base64,@@MARE:b64:assets/image/c284ed33da71588af58a.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="bonus"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/03e087058e96eee51204.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="bonus"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/a4c1fafc15696e5a697d.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="bonus"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/164aef7a4362e4a78c77.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="chefe"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/2d490d11b228ddc3a0e3.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="chefe"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/0208afc8f2a798071c6b.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="chefe"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/7a968c30fee185e99846.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="regular"][data-estado="bloqueada"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/612f8eda9691de9f6d93.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="regular"][data-estado="concluida"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/0b9f2068abaf1605a83a.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-card[data-categoria="regular"][data-estado="disponivel"]{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/d026c93106ed5d2936e1.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="anterior"]:disabled{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/33ffef8ded673963f10c.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="anterior"]:not(:disabled){--placa:url('data:image/png;base64,@@MARE:b64:assets/image/ad3a11eefbc552b3f70c.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="proxima"]:disabled{--placa:url('data:image/png;base64,@@MARE:b64:assets/image/f98af7bb117d2059b578.png@@')}
+.praia-direta-palco:not([data-mundo="praia"]) .praia-direta-seta[data-pagina-praia="proxima"]:not(:disabled){--placa:url('data:image/png;base64,@@MARE:b64:assets/image/a45cc449d6e263e2d788.png@@')}
+.praia-direta-card[data-marco="recifes-exp-ponte-em-zigue"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="recife-duas-pocas"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="recife-degraus"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="recifes-exp-saida-apos-espuma"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="recife-tres-aneis"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="recife-mosaico"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="recife-chefe-guardiao-das-pocas"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="mangue-placa"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="mangue-reuniao"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="mangue-exp-ilhas-de-dois-passos"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="mangue-fragmentos-cruzados"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="mangue-exp-siri-nas-bifurcacoes"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="mangue-exp-nicho-de-cruzamento"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="mangue-exp-meia-volta-na-placa"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="mangue-exp-manguezal-em-espiral"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-exp-escadinha-da-restinga"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-farol-baixo"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-dupla-revezamento"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-passo-sombra"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-exp-ilha-da-sombra-curta"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="enseada-fragmento-do-bico"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-exp-ponta-da-restinga-oeste"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-exp-cais-fora-da-sombra"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="enseada-exp-triangulo-da-vazante"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="enseada-exp-dois-olhares"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-exp-entrelace-da-restinga"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="enseada-fenda-da-vazante"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-primeira-balsa"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="deriva-exp-calheta"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-exp-vazante"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-exp-dois-bracos-de-pedra"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-exp-bifurcacao-safira"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-exp-escada-das-tres-ilhas"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-exp-retorno-em-revezamento"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="deriva-dupla-cais"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="deriva-dupla-contramao"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="deriva-ida-e-retorno"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="deriva-dois-ancoradouros"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-tripulacao-partilhada"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="deriva-chefe-mestre-das-correntes"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="deriva-chefe-passagem-das-balsas"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="grutas-encaixe"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="grutas-exp-biblioteca-submersa"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="grutas-ordem"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="grutas-retorno"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="grutas-exp-perola-em-ziguezague"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="grutas-exp-varanda-das-conchas"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="grutas-dupla-portao"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="grutas-dupla-camaras"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="grutas-exp-claraboia-partilhada"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="grutas-exp-galerias-em-espelho"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="grutas-chefe-sentinela-da-gruta"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="grutas-chefe-cofre-das-espumas"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="ressaca-dupla-abrigo"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="ressaca-exp-dobras"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="ressaca-dupla-ancoradouros"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="ressaca-exp-corredores"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="ressaca-exp-revezamento"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="ressaca-exp-pontal"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="ressaca-exp-argolas"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="ressaca-exp-boias"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="ressaca-exp-laminas"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="ressaca-chefe-ressaca-alta"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="farol-fragmento-margens"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="farol-duas-luzes"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="farol-exp-sentinelas"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="farol-turno-dos-guardioes"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="farol-costa-das-tres-luzes"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="farol-exp-bolsao"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="farol-exp-janelas"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="farol-exp-cadeado"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="farol-exp-charneira"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="farol-lentes-em-contramare"]{--fonte-aprovada:12}
+.praia-direta-card[data-marco="farol-exp-poente"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="farol-luz-das-duas-mares"]{--fonte-aprovada:13}
+.praia-direta-card[data-marco="farol-trio-tres-luzes"]{--fonte-aprovada:12}
+}
+
+/* Porto de Partida: só a tela inicial usa a composição aprovada. */
+body:has(#jogo[data-tela="inicio"]) { background:#0f3946; }
+#jogo[data-tela="inicio"] { width:min(100%,960px); padding:0; }
+#jogo[data-tela="inicio"] > :is(header,footer),
+.porto-so-leitor {
+  position:absolute; width:1px; height:1px; padding:0; margin:0;
+  overflow:hidden; clip-path:inset(50%); white-space:nowrap;
+}
+#inicio { margin:0; padding:0; border:0; background:none; border-radius:0; }
+#inicio .porto-palco {
+  position:relative; container-type:inline-size; width:100%; aspect-ratio:960/540;
+  background:#134653 var(--cena-porto) center / 100% 100% no-repeat;
+  image-rendering:pixelated;
+  --passo-porto:calc(100cqw / 960);
+}
+.porto-card {
+  position:absolute;
+  min-width:0; min-height:0; box-sizing:border-box; border:0; border-radius:0;
+  padding:0; margin:0; background:transparent; image-rendering:pixelated;
+  text-align:left;
+  left:calc(var(--x) * var(--passo-porto)); top:calc(var(--y) * var(--passo-porto));
+  width:calc(var(--w) * var(--passo-porto)); height:calc(var(--h) * var(--passo-porto));
+}
+.porto-card::before {
+  content:""; position:absolute; inset:0 0 calc(-3 * var(--passo-porto)) 0;
+  background:var(--placa-porto) center / 100% 100% no-repeat;
+}
+.porto-card::after {
+  content:""; position:absolute; inset:min(0px,calc((var(--h)*var(--passo-porto) - 44px)/2)) 0;
+}
+.porto-card:focus-visible { outline:3px solid #fff0ad; outline-offset:4px; }
+#jogo[data-tela="inicio"] .configuracao:not([open]) { display:none; }
+#jogo[data-tela="inicio"] .configuracao { width:min(96%,34rem); margin:.7rem auto; }
+#jogo:not([data-tela="inicio"]) :is(#fechar-som-inicio,#bancada) { display:none; }
+#fechar-som-inicio { margin-top:.5rem; }
+#bancada { margin-top:.5rem; }
+@media(width <= 760px) {
+  #jogo[data-tela="inicio"] { width:min(100%,384px); }
+  #inicio .porto-palco { aspect-ratio:384/712; --passo-porto:calc(100cqw / 384); }
+}
+@media (width > 760px) {
+.porto-palco{--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/7e73031e3dd3255eb2d6.png@@')}
+#comecar{--x:653;--y:172;--w:250;--h:60;--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/e50cff31491924f8e19f.png@@');}
+#comecar[data-retomar="true"]{--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/150a9cb56034aad8cf52.png@@')}
+#abrir-mare-a-mao{--x:653;--y:244;--w:250;--h:60;--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/6e7f2c42218fe73fae6b.png@@');}
+#abrir-som-inicio{--x:653;--y:321;--w:121;--h:44;--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/f278576da8b289edd043.png@@');}
+#creditos-inicio{--x:782;--y:321;--w:121;--h:44;--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/f72dea30a3b4be2bf808.png@@');}
+}
+@media (width <= 760px) {
+.porto-palco{--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/027fb53cb8c2a9508856.png@@')}
+#comecar{--x:56;--y:339;--w:272;--h:54;--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/eb34a8f6d8205969a1de.png@@');}
+#comecar[data-retomar="true"]{--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/16b5090fb103c9a717f3.png@@')}
+#abrir-mare-a-mao{--x:56;--y:404;--w:272;--h:54;--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/7b8022f1b98f1fd387f9.png@@');}
+#abrir-som-inicio{--x:56;--y:474;--w:132;--h:44;--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/66ba305f6c453324528b.png@@');}
+#creditos-inicio{--x:196;--y:474;--w:132;--h:44;--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/d39da7aee00dab85a1de.png@@');}
+}
+.porto-card :is(.porto-rotulo,.porto-apoio) {
+  position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%);
+}
+@media (forced-colors: active) {
+  .porto-card { border:1px solid ButtonText; text-align:center; background:ButtonFace; color:ButtonText; }
+  .porto-card::before { display:none; }
+  .porto-card .porto-rotulo {
+    position:static; width:auto; height:auto; overflow:visible; clip-path:none; font:bold 14px/1.1 system-ui;
+  }
+}
+
+/* A tela do hub não altera o visual dos seletores de fases nem do Porto. */
+body:has(#jogo[data-tela="praia"][data-hub-cartoes]) { background:#0d303e; }
+#jogo[data-tela="praia"][data-hub-cartoes] { width:min(100%,1024px); padding:0; }
+#jogo[data-tela="praia"][data-hub-cartoes] #praia { padding:0; margin:0; background:transparent; border:none; }
+#jogo[data-tela="praia"][data-hub-cartoes] > :is(header,footer),
+#jogo[data-tela="praia"][data-hub-cartoes] #praia > :is(#titulo-praia,#orientacao-praia,#viagem-praia,#progresso-praia,#mensagem-praia,#menu-praia),
+.hub-leitor {
+  position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap;
+  margin:0; padding:0;
+}
+#jogo[data-tela="praia"][data-hub-cartoes] .configuracao { display:none; }
+.hub-palco {
+  position:relative; width:100%; aspect-ratio:1024/576; container-type:inline-size;
+  background:#0d303e var(--hub-cena) center / 100% 100% no-repeat; image-rendering:pixelated;
+  --hub-p:calc(100cqw / 1024); --hub-x:117; --hub-y:87;
+  --hub-nav-y:501; --hub-nav-ant:412; --hub-nav-prox:566;
+  touch-action:pan-y pinch-zoom;
+}
+.hub-cartao,.hub-botao { position:absolute; }
+.hub-cartao {
+  margin:0; inset:auto; left:calc(var(--hub-x) * var(--hub-p)); top:calc(var(--hub-y) * var(--hub-p));
+  width:calc(380 * var(--hub-p)); height:calc(406 * var(--hub-p));
+  background:transparent var(--hub-cartao) center / 100% 100% no-repeat;
+}
+.hub-cartao[data-slot="1"] { --hub-x:527; }
+.hub-botao {
+  padding:0; min-width:0; min-height:0; width:calc(var(--hub-w) * var(--hub-p));
+  height:calc(44 * var(--hub-p)); border:0; border-radius:0; margin:0; background:transparent;
+}
+.hub-botao::before {
+  content:""; position:absolute; inset:0 0 calc(var(--hub-sombra,0) * -1 * var(--hub-p)) 0;
+  background:var(--hub-botao) center / 100% 100% no-repeat;
+}
+.hub-botao::after {
+  content:""; position:absolute; inset:min(0px,calc((44 * var(--hub-p) - 44px)/2));
+}
+.hub-botao:disabled { opacity:1; }
+.hub-botao[aria-disabled="true"] { cursor:not-allowed; }
+.hub-botao:focus-visible {outline:3px solid #fff0ad; outline-offset:3px;}
+.hub-inicio { left:calc(19 * var(--hub-p)); top:calc(15 * var(--hub-p)); --hub-w:84; --hub-sombra:2; }
+.hub-regiao { left:calc(194 * var(--hub-p)); top:calc(337 * var(--hub-p)); --hub-w:170; --hub-sombra:3; }
+.hub-seta { top:calc(var(--hub-nav-y) * var(--hub-p)); --hub-w:46; }
+.hub-seta[data-pagina-hub="anterior"] { left:calc(var(--hub-nav-ant) * var(--hub-p)); }
+.hub-seta[data-pagina-hub="proxima"] { left:calc(var(--hub-nav-prox) * var(--hub-p)); }
+@media(max-width:760px) {
+  #jogo[data-tela="praia"][data-hub-cartoes] { width:min(100%,400px); }
+  .hub-palco {
+    aspect-ratio:400/594; --hub-p:calc(100cqw / 400); --hub-x:10; --hub-y:98;
+    --hub-nav-y:519; --hub-nav-ant:107; --hub-nav-prox:247;
+  }
+}
+.hub-cartao[data-arte-regiao="praia"]{--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/60151e566e6b4d95688c.png@@');}
+.hub-cartao[data-arte-regiao="recifes"]{--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/6843124d265c4e8f3fa2.png@@');}
+.hub-cartao[data-arte-regiao="mangue"]{--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/8a70a10ba3276afadef1.png@@');}
+.hub-cartao[data-arte-regiao="enseada"]{--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/544a5f49fd96d416c6b4.png@@');}
+.hub-cartao[data-arte-regiao="deriva"]{--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/7ec81dccd3331416f30f.png@@');}
+.hub-cartao[data-arte-regiao="grutas"]{--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/5554b2b6d540cafb4d52.png@@');}
+.hub-cartao[data-arte-regiao="ressaca"]{--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/8b0f65cf0168a601fb27.png@@');}
+.hub-cartao[data-arte-regiao="farol"]{--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/d165a7ca7846e8326168.png@@');}
+.hub-inicio{--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/fce2c4f1ca22cc276ec3.png@@');}
+.hub-regiao{--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/a3b745f66fdf9c3f6dc1.png@@');}
+.hub-regiao[aria-disabled="true"]{--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/4772e146733b8e0a1531.png@@');}
+.hub-seta[data-pagina-hub="anterior"]{--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/6e6f07cf973f430a565b.png@@');}
+.hub-seta[data-pagina-hub="anterior"]:disabled{--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/bb7c9296a983330cb890.png@@');}
+.hub-seta[data-pagina-hub="proxima"]{--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/4053cdaaf292f6a301bc.png@@');}
+.hub-seta[data-pagina-hub="proxima"]:disabled{--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/d9196d421e8c34b97570.png@@');}
+@media (width > 760px){
+.hub-palco[data-pagina-hub-visual="1"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/48a4abe7ea50cbc48c17.png@@');}
+.hub-palco[data-pagina-hub-visual="2"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/3d2697f1b3c52f5c17d1.png@@');}
+.hub-palco[data-pagina-hub-visual="3"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/36bcadd26963c21ec697.png@@');}
+.hub-palco[data-pagina-hub-visual="4"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/6d599bc92bd29aff8d65.png@@');}
+}
+@media (width <= 760px){
+.hub-palco[data-pagina-hub-visual="1"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/2241c4b2623e6be23eb0.png@@');}
+.hub-palco[data-pagina-hub-visual="2"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/2f75ecb4f69c54f55170.png@@');}
+.hub-palco[data-pagina-hub-visual="3"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/5d4ca0e9f51d19cf1b16.png@@');}
+.hub-palco[data-pagina-hub-visual="4"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/70daec78732acc5a9bf1.png@@');}
+.hub-palco[data-pagina-hub-visual="5"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/f675d9c41348f222bcdb.png@@');}
+.hub-palco[data-pagina-hub-visual="6"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/4c701fad85838e8e1b4f.png@@');}
+.hub-palco[data-pagina-hub-visual="7"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/00b224785eb998f53f23.png@@');}
+.hub-palco[data-pagina-hub-visual="8"]{--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/99cbe146be0835ac61ad.png@@');}
+}
+
+@media (forced-colors: active) {
+  .hub-botao { border:1px solid ButtonText; background:ButtonFace; color:ButtonText; }
+  .hub-botao::before {
+    content:attr(data-rotulo-contraste); background:none;
+    display:grid; place-items:center; inset:0; font:bold 12px system-ui;
+  }
+}
+

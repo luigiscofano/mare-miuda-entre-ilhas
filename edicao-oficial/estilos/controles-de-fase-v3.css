@@ -1,0 +1,36 @@
+
+/* Controles de campanha: área mínima de toque, sem alterar a área do tabuleiro. */
+#ferramentas-fase{display:flex;align-items:stretch;flex-wrap:wrap;gap:.42rem;margin:0 0 .7rem;max-width:100%;min-width:0}
+#ferramentas-fase[hidden],#acoes-vitoria-fase[hidden],
+#ferramentas-fase button[hidden],#acoes-vitoria-fase button[hidden]{display:none}
+#ferramentas-fase button,#acoes-vitoria-fase button{
+ min-height:44px;min-width:0;box-sizing:border-box;margin:0;padding:.37rem .53rem;
+ white-space:normal;overflow-wrap:normal;line-height:1.18;font-size:clamp(.8rem,1.7vw,.94rem);
+}
+#ferramentas-fase button{flex:0 1 auto}
+@media(max-width:400px){#ferramentas-fase button{flex:1 1 7.5rem}}
+#acoes-vitoria-fase{
+ position:fixed;z-index:1001;left:50%;top:calc(50% + 55px);transform:translateX(-50%);
+ display:flex;align-content:start;justify-content:center;flex-wrap:wrap;gap:.42rem;
+ box-sizing:border-box;width:min(24rem,calc(100% - 20px));padding:.42rem;
+ background:#eef0e4;border:1px solid #335c5b;border-radius:5px;
+ box-shadow:0 4px 0 #17374454;color:#18393a;
+}
+#acoes-vitoria-fase button{flex:1 1 6.5rem}
+#acoes-vitoria-fase #voltar-vitoria-fase{flex-basis:8rem}
+@media(max-height:340px){
+ #acoes-vitoria-fase{top:auto;bottom:max(6px,env(safe-area-inset-bottom));}
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] #configuracao-jogo:not([open]){display:none}
+#jogo[data-tela="fase"][data-configuracoes-fase] #configuracao-jogo{
+ position:fixed;z-index:1102;top:50%;left:50%;transform:translate(-50%,-50%);
+ width:min(29rem,calc(100% - 24px));max-height:calc(100dvh - 24px);overflow:auto;
+ box-sizing:border-box;margin:0;padding:1rem;
+}
+#jogo[data-tela="fase"][data-configuracoes-fase] #fechar-som-inicio{display:inline-block;min-height:44px;margin-top:.55rem}
+#fundo-configuracoes-fase{position:fixed;inset:0;z-index:1101;background:#173744a8}
+#fundo-configuracoes-fase[hidden]{display:none}
+body[data-configuracoes-fase] #placa-resultado-v3,body[data-configuracoes-fase] #acoes-vitoria-fase{visibility:hidden}
+#acoes-vitoria-fase button[aria-disabled="true"]{
+ color:#536968;background:#dbdfd3;border-color:#7a8e88;box-shadow:none;cursor:not-allowed
+}
