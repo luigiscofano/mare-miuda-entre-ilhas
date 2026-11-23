@@ -1,0 +1,13 @@
+/* Imagem sem semântica própria; o H2 original continua sendo a âncora de foco. */
+#nome-fase .titulo-luz {display:block; margin:0; line-height:0}
+#nome-fase .titulo-luz[hidden] {display:none!important}
+#nome-fase .titulo-luz img {display:block; max-width:100%; height:auto; image-rendering:pixelated}
+#nome-fase[data-titulo-luz] .titulo-luz-texto {
+ position:absolute; width:1px; height:1px; clip-path:inset(50%); overflow:hidden; white-space:nowrap
+}
+@media (forced-colors: active) {
+ #nome-fase[data-titulo-luz] .titulo-luz {display:none}
+ #nome-fase[data-titulo-luz] .titulo-luz-texto {
+  position:static; width:auto; height:auto; clip-path:none; overflow:visible; white-space:normal
+ }
+}

@@ -20,7 +20,6 @@
 #jogo[data-tela="fase"][data-ferramentas-campanha] .camera-topo h2 {
  color:#f6d494; text-shadow:2px 2px #60452c; font-size:clamp(1.02rem,2vw,1.65rem);
 }
-#jogo[data-tela="fase"][data-ferramentas-campanha] #lembrete-fase { color:#b4d1d0 }
 #jogo[data-tela="fase"][data-ferramentas-campanha] #ferramentas-fase { margin:0 }
 #jogo[data-tela="fase"][data-ferramentas-campanha] .camera-travessia {
  grid-column:1; grid-row:2; position:relative; margin:0; width:100%;

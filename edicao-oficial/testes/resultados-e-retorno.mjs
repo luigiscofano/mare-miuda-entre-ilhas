@@ -9,7 +9,7 @@ const importar=(nome)=>{
  assert(linha,nome);
  return import(linha.match(url)[0]);
 };
-const {quadroDoRetornoDaMare,PAUSA_APOS_RETORNO,PAUSA_SEM_PISCADA}=await importar('quadroDoRetornoDaMare');
+const {quadroDoRetornoDaMare,pausaParaRecuperacao}=await importar('quadroDoRetornoDaMare');
 const {quadroDoResultado}=await importar('quadroDoResultado');
 const {DURACAO_DO_BOTE_DA_GARCA}=await importar('DURACAO_DO_BOTE_DA_GARCA');
 
@@ -18,11 +18,16 @@ function pulso(t,anterior=false){
  const q=quadroDoRetornoDaMare({inicio,indices:[1],pulsoAnterior:anterior},inicio+t);
  return q?.indices.includes(1)?q.tom:undefined;
 }
-assert.deepEqual([0,65,66,131,132,203,204,248].map(t=>pulso(t)),[0,0,undefined,undefined,1,1,undefined,undefined]);
+assert.deepEqual([0,99,100,165,166,269,270,335,336,449,450,495,496].map(t=>pulso(t)),
+ [0,0,undefined,undefined,1,1,undefined,undefined,0,0,undefined,undefined,undefined]);
 assert.deepEqual([0,19,20,64,65,95,96,131,132,151,152,196,197,227,228].map(t=>pulso(t,true)),
  [0,0,1,1,0,0,undefined,undefined,0,0,1,1,0,0,undefined]);
-assert.equal(PAUSA_APOS_RETORNO,280);
-assert.equal(PAUSA_SEM_PISCADA,264);
+for(const duracao of [0,240,368,504,1608]){
+ assert.equal(pausaParaRecuperacao(true,duracao,true),2*(duracao+280));
+ assert.equal(pausaParaRecuperacao(true,duracao,false),528);
+ assert.equal(pausaParaRecuperacao(false,duracao,true),264);
+ assert.equal(pausaParaRecuperacao(false,duracao,false),264);
+}
 assert.equal(DURACAO_DO_BOTE_DA_GARCA,368);
 const d={tipo:'derrota',siris:[],alvos:[],causa:['mare']};
 assert.equal(quadroDoResultado(d,100,false).placa,undefined);
@@ -42,4 +47,4 @@ for(const [w,h,dpr] of perfis){
  assert(Math.abs((w-g.w)/2-g.x)<=1/dpr&&Math.abs((h-g.h)/2-g.y)<=1/dpr);
  if(w*dpr>=248)assert(Number.isInteger(g.fator)&&g.fator>=1);
 }
-console.log('9 geometrias, placa normal/reduzida, curva de dois pulsos e curva anterior do Improviso: OK.');
+console.log('9 geometrias, placa normal/reduzida, curva de três pulsos e curva anterior do Improviso: OK.');

@@ -1,3 +1,4 @@
+import { atualizarTituloIluminado } from '@@MARE:modulo:src/interface/titulos-luz.mjs@@';
 // A abertura se baseia nas casas do mapa, inclusive os baixios da maré alta.
 export function limitesDaTravessia(mapa, {origemX, origemY}, lado) {
   let esquerda = Infinity, cima = Infinity, direita = 0, baixo = 0;
@@ -241,7 +242,7 @@ export function decorateCamera(ctx,d){
 import { quadroDoResultado, pulosDoResultado, pintarResultado, pintarPlacaNaTela } from '@@MARE:modulo:src/render/resultado-da-travessia.mjs@@';
 let resultadoDaTravessia;
 import { criarViradaDirecional, quadroDaViradaDirecional, comViradaDirecional } from '@@MARE:modulo:src/render/mare-direcional.mjs@@';
-import { PAUSA_SEM_PISCADA, DURACAO_DA_LEVADA_DA_MARE, PAUSA_APOS_RETORNO, quadroDoRetornoDaMare, comRetornoDaMare } from '@@MARE:modulo:src/render/retorno-da-mare.mjs@@';
+import { pausaParaRecuperacao, DURACAO_DA_LEVADA_DA_MARE, quadroDoRetornoDaMare, comRetornoDaMare } from '@@MARE:modulo:src/render/retorno-da-mare.mjs@@';
 import { quadroDosPerigos, pintarPerigos, DURACAO_DO_BOTE_DA_GARCA } from '@@MARE:modulo:src/render/efeitos-de-perigo.mjs@@';
 import { comQuadroAnimado, posesDeFenda, proximoQuadroDeFenda, posesDaPassada, proximaPoseDaPassada } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
 import { regioesDoHub, jogarRegiao, regiaoDoMarco, renderizarHub } from '@@MARE:modulo:src/regioes-do-hub-f824aa75.mjs@@';
@@ -618,7 +619,7 @@ function pintarFase() {
 }
 movimentoReduzidoDoJogo?.addEventListener?.('change',()=>{
   if(movimentoReduzidoDoJogo.matches&&inicioDaPausaDeRecuperacao!==undefined){
-    bloquearDirecaoAte=Math.min(bloquearDirecaoAte,inicioDaPausaDeRecuperacao+PAUSA_SEM_PISCADA);
+    bloquearDirecaoAte=Math.min(bloquearDirecaoAte,inicioDaPausaDeRecuperacao+pausaParaRecuperacao(modoCampanha(),0,false));
     atualizarTravaDeRecuperacao();
   }
   if(tela==='fase')pintarFase();
@@ -1022,22 +1023,32 @@ function prepararFase(mensagem         , focar = true)       {
   zerarPausaDeRecuperacao();
   estado = iniciar(fase);
   ultimaDirecaoDoPainel = undefined;
-  buscar('#nome-fase').textContent = fase.nome;
-  buscar('#objetivo').textContent = textoDaColeta(fase, fase.objetivo);
-  buscar('#ensino').textContent = textoDaColeta(fase, fase.ensino);
-  buscar('#lembrete-fase').textContent = textoDaColeta(fase, fase.ensino);
-  buscar('#lembrete-fase').hidden = bancada;
+  const campanha = modoCampanha();
+  atualizarTituloIluminado(buscar('#nome-fase'), fase.nome, campanha);
+  const objetivo = textoDaColeta(fase, fase.objetivo);
+  const ensino = textoDaColeta(fase, fase.ensino);
+  const objetivoNoTopo = buscar('#objetivo');
+  const objetivoNaAjuda = buscar('#objetivo-ajuda');
+  const lembrete = buscar('#lembrete-fase');
+  // Na campanha, só o título fica no topo. A orientação permanece na ajuda.
+  objetivoNoTopo.textContent = campanha ? '' : objetivo;
+  objetivoNoTopo.hidden = campanha;
+  objetivoNaAjuda.textContent = campanha ? objetivo : '';
+  objetivoNaAjuda.hidden = !campanha;
+  buscar('#ensino').textContent = ensino;
+  lembrete.textContent = campanha ? '' : ensino;
+  lembrete.hidden = campanha || bancada;
   buscar('#grade').textContent = fase.mapa.join('\n');
   buscar                    ('#ajuda').open = false;
   limparAcoesDerrota();
   limparAcoesVitoria();
   const ferramentas=buscar('#ferramentas-fase');
-  ferramentas.hidden=!modoCampanha();
+  ferramentas.hidden=!campanha;
   const reiniciar=buscar('#reiniciar');
-  if(modoCampanha())ferramentas.insertBefore(reiniciar,buscar('#abrir-configuracoes-fase'));
+  if(campanha)ferramentas.insertBefore(reiniciar,buscar('#abrir-configuracoes-fase'));
   else buscar('#direcoes-da-fase').parentElement.append(reiniciar);
-  buscar('#voltar-fase').hidden=modoCampanha();
-  if(modoCampanha())buscar('#jogo').setAttribute('data-ferramentas-campanha','');
+  buscar('#voltar-fase').hidden=campanha;
+  if(campanha)buscar('#jogo').setAttribute('data-ferramentas-campanha','');
   else {
     buscar('#jogo').removeAttribute('data-ferramentas-campanha');
     const placaForaDaCampanha=buscar('#placa-resultado-v3');
@@ -1199,7 +1210,7 @@ function jogarAcao(acao         )       {
     ):0;
     if(recuperou){
       inicioDaPausaDeRecuperacao=agora;
-      bloquearDirecaoAte=agora+(comCenaNormal?duracaoDoPerigo+PAUSA_APOS_RETORNO:PAUSA_SEM_PISCADA);
+      bloquearDirecaoAte=agora+pausaParaRecuperacao(campanha,duracaoDoPerigo,comCenaNormal);
       atualizarTravaDeRecuperacao();
     }
     if(evento&&(comCenaNormal||recuperou)&&(foiMare||foiGarca)){
