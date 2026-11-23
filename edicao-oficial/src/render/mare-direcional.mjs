@@ -75,7 +75,8 @@ export function limiarDaMare(progresso,maximo,subindo=true){
 // Acabamento audiovisual da virada. A geometria usa coordenadas nativas;
 // o relógio e a posição dos siris já foram decididos pelo motor.
 const cacheDaMare = new Map();
-export const CADENCIA_DA_MARE=24;
+const CADENCIA_ANTERIOR=24;
+export const CADENCIA_DA_MARE=30;
 export const AVANCO_DA_MARE=3;
 let quadroAtualDaMare;
 
@@ -105,11 +106,12 @@ export function criarViradaDirecional(mapa, agora, alta, anterior, atingiu=false
   // comando comum que inverte cedo a maré parte da frente já desenhada.
   const total=Math.ceil((g.maximo+1)/AVANCO_DA_MARE);
   const inicio=anterior?.g===g&&!atingiu ? degrauNoTempo(anterior,agora) : alta?0:total;
-  const totalMovimento=(alta?total-inicio:inicio)*CADENCIA_DA_MARE;
   // Um último quadro cobre completamente o Siri antes de recuperar.
-  const duracao=totalMovimento+(atingiu?CADENCIA_DA_MARE:0);
-  if(!duracao)return;
-  return {quando:agora,alta,g,inicio,total,duracao,afetados:[]};
+  const quadros=(alta?total-inicio:inicio)+(atingiu?1:0);
+  if(!quadros)return;
+  return {quando:agora,alta,g,inicio,total,afetados:[],
+    duracao:quadros*CADENCIA_DA_MARE,
+    duracaoNoRitmoAnterior:quadros*CADENCIA_ANTERIOR};
 }
 export function quadroDaViradaDirecional(virada,agora){
   if(!virada)return;

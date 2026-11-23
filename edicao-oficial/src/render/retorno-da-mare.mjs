@@ -6,10 +6,12 @@ const PAUSA_APOS_RETORNO_ANTERIOR=280;
 const PULSOS=[[0,100,0],[100,166,-1],[166,270,1],
               [270,336,-1],[336,450,0],[450,496,-1]];
 
-// A pausa da campanha dobra desde o erro, não apenas depois que o Siri volta.
-export function pausaParaRecuperacao(campanha,duracaoDoPerigo,animada){
+// Mudar a velocidade da água altera o instante do retorno, mas não a
+// espera que o jogador já tinha depois de ver o Siri de volta.
+export function pausaParaRecuperacao(campanha,duracaoDoPerigo,animada,duracaoNoRitmoAnterior=duracaoDoPerigo){
  if(!campanha)return PAUSA_SEM_PISCADA_ANTERIOR;
- return animada?2*(duracaoDoPerigo+PAUSA_APOS_RETORNO_ANTERIOR):2*PAUSA_SEM_PISCADA_ANTERIOR;
+ return animada?duracaoDoPerigo+duracaoNoRitmoAnterior+2*PAUSA_APOS_RETORNO_ANTERIOR
+               :2*PAUSA_SEM_PISCADA_ANTERIOR;
 }
 const FRAQUESA=[.49,.56];
 // Valores da edição anterior, preservados na Ilha de Improviso e Bancada.

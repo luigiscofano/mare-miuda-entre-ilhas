@@ -29,7 +29,7 @@ O vídeo é um registro anterior às placas maiores e às piscadas reforçadas d
 
 ## Passada e fim da fase
 
-A passada dos Siris dura **165 ms**. A posição desenhada avança em pixels inteiros; a lógica do turno não espera a animação. A preferência por movimento reduzido continua disponível.
+A passada dos Siris dura **205 ms** na campanha e mantém 165 ms fora dela. A posição desenhada avança em pixels inteiros; a lógica do turno não espera a animação. A preferência por movimento reduzido continua disponível.
 
 Na derrota, depois do quadro final, o painel mostra **Tentar novamente** e **Voltar à seleção de fases**. Com movimento reduzido, essas ações aparecem sem esperar a animação. O fluxo de vitória não muda.
 
@@ -37,4 +37,4 @@ Na derrota, depois do quadro final, o painel mostra **Tentar novamente** e **Vol
 
 Na revisão atual da campanha, as placas crescem junto ao enquadramento, mantêm centralização e preservam as conchas da vitória. As espirais laterais aparecem na derrota. O artefato de placar não substitui as ações da interface nem altera o tabuleiro.
 
-Depois da animação de maré ou garça, o Siri que sofreu um erro recuperável faz três pulsos claros ao longo de uma janela de 496 ms, sem alterar a luz fora do sprite. O bloqueio das direções dura o dobro da edição anterior desde o erro, incluindo o perigo e a recuperação. Com movimento reduzido, a pausa desde o erro é de 528 ms, sem piscadas. Consulte [resultado e retorno](../../interface/README.md#resultado-e-retorno-na-campanha). O vídeo acima não pretende mostrar essa revisão.
+Depois da animação de maré ou garça, o Siri que sofreu um erro recuperável faz três pulsos claros ao longo de uma janela de 496 ms, sem alterar a luz fora do sprite. A frente de maré avança ou recua de forma simétrica, três pixels por 30 ms. A maré lógica continua virando a cada três passos válidos. Em caso de erro, o bloqueio acompanha o tempo visual da água, preservando a pausa após o retorno e o ritmo das três piscadas. Com movimento reduzido, a pausa desde o erro é de 528 ms, sem piscadas. Consulte [resultado e retorno](../../interface/README.md#resultado-e-retorno-na-campanha). O vídeo acima não pretende mostrar essa revisão.

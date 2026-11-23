@@ -27,9 +27,9 @@ node edicao-oficial/testes/campanha.mjs dist/mare-miuda-prototipo.html
 
 As fontes removem do motor e dos renderizadores as mecânicas históricas descartadas. Os identificadores antigos ficam apenas para carregar saves sem perder progresso. Consulte [produção e verificação](docs/producao/README.md).
 
-A interface também inclui a passada de 165 ms, o painel de estado com avisos separados e as ações de derrota ao fim da animação.
+Na campanha, a passada dura 205 ms e a maré visual sobe e desce mais devagar, sem mudar o ritmo das jogadas. A interface também inclui o painel de estado com avisos separados e as ações de derrota ao fim da animação.
 
-Na campanha, as placas de resultado são maiores e continuam centradas no tabuleiro; a derrota ganha espirais laterais. Após um erro recuperável de maré ou garça, o Siri pisca três vezes. A sequência e o bloqueio total das direções duram o dobro da versão anterior. O título fica sozinho no topo; o objetivo e a orientação estão em **Mapa em texto e ajuda**. A Ilha de Improviso não mudou.
+Na campanha, as placas de resultado são maiores e continuam centradas no tabuleiro; a derrota ganha espirais laterais. Após um erro recuperável de maré ou garça, o Siri pisca três vezes. Com a maré mais lenta, o tempo entre o reaparecimento e a liberação dos controles continua igual. O título fica sozinho no topo; o objetivo e a orientação estão em **Mapa em texto e ajuda**. A Ilha de Improviso não mudou.
 
 Veja [controles e acessibilidade](docs/interface/README.md#resultado-e-retorno-na-campanha) e [a verificação de resultado e retorno](docs/producao/README.md#validação-de-resultado-e-retorno).
 
