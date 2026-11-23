@@ -26,3 +26,9 @@ O vídeo alterna quadros do motor, demonstrações dos controles e estudos anter
 - **1:25** · Estudo integral: 81 configurações
 
 © 2026 Luigi Scofano de Araújo. Todos os direitos reservados.
+
+## Passada e fim da fase
+
+A passada dos Siris dura **165 ms**. A posição desenhada avança em pixels inteiros; a lógica do turno não espera a animação. A preferência por movimento reduzido continua disponível.
+
+Na derrota, depois do quadro final, o painel mostra **Tentar novamente** e **Voltar à seleção de fases**. Com movimento reduzido, essas ações aparecem sem esperar a animação. O fluxo de vitória não muda.

@@ -78,3 +78,85 @@
   flex-direction:column; padding:.3rem .2rem; gap:.16rem;
  }
 }
+
+/* O painel é DOM e não altera as dimensões ou os alvos do tabuleiro. */
+.painel-estado-fase {display:contents}
+.painel-hud-titulo,.painel-hud-avisos,.painel-hud-ultima,.indicadores .painel-hud-perolas {display:none}
+#fase .painel-estado-fase [hidden] {display:none!important}
+#jogo[data-ferramentas-campanha] .painel-estado-fase {
+ --canto-hud:polygon(8px 0,calc(100% - 8px) 0,calc(100% - 8px) 2px,calc(100% - 4px) 2px,calc(100% - 4px) 4px,calc(100% - 2px) 4px,calc(100% - 2px) 8px,100% 8px,100% calc(100% - 8px),calc(100% - 2px) calc(100% - 8px),calc(100% - 2px) calc(100% - 4px),calc(100% - 4px) calc(100% - 4px),calc(100% - 4px) calc(100% - 2px),calc(100% - 8px) calc(100% - 2px),calc(100% - 8px) 100%,8px 100%,8px calc(100% - 2px),4px calc(100% - 2px),4px calc(100% - 4px),2px calc(100% - 4px),2px calc(100% - 8px),0 calc(100% - 8px),0 8px,2px 8px,2px 4px,4px 4px,4px 2px,8px 2px);
+ display:block; position:relative; isolation:isolate; min-width:0; padding:2px;
+ color:#faf1d6; filter:drop-shadow(0 4px #0c2631);
+}
+#jogo[data-ferramentas-campanha] .painel-estado-fase::before {
+ content:""; position:absolute; inset:0; background:#9ba58b; clip-path:var(--canto-hud); z-index:-2;
+}
+#jogo[data-ferramentas-campanha] .painel-estado-fase::after {
+ content:""; position:absolute; inset:2px; background:#102c3b; clip-path:var(--canto-hud); z-index:-1;
+}
+#jogo[data-ferramentas-campanha] .painel-hud-titulo {
+ display:block; margin:0; padding:.85rem .85rem .73rem;
+ color:#f6d494; background:#1c3b48; clip-path:var(--canto-hud);
+ font:bold 1rem/1.25 ui-monospace,Menlo,monospace; letter-spacing:.025em; text-transform:uppercase;
+ border-bottom:2px solid #667c76;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .painel-estado-fase .indicadores {
+ display:grid; grid-template-columns:minmax(0,1fr); gap:0; margin:0;
+ padding:.2rem .8rem; border:0; background:none;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .painel-estado-fase .indicadores > div {
+ position:relative; display:flex; flex-direction:row; align-items:center; justify-content:space-between;
+ column-gap:.45rem; min-width:0; min-height:2.65rem; padding:.35rem 0 .35rem .8rem;
+ color:#faf1d6; background:none; border-bottom:1px solid #254655;
+}
+#jogo[data-ferramentas-campanha] .painel-estado-fase .indicadores > div::before {
+ content:""; position:absolute; left:0; top:calc(50% - 2px); width:4px; height:4px; background:#faf1d6;
+}
+#jogo[data-ferramentas-campanha] .painel-estado-fase .indicadores > div:first-child::before {background:#b1e9f4}
+#jogo[data-ferramentas-campanha] .painel-estado-fase .indicadores > .painel-hud-perolas::before {background:#f6d494}
+#jogo[data-ferramentas-campanha] .painel-estado-fase .indicadores dt,
+#jogo[data-ferramentas-campanha] .painel-hud-ultima > span:first-child {
+ color:#b4d1d0; font:700 .78rem/1.25 ui-monospace,Menlo,monospace; text-transform:uppercase;
+}
+#jogo[data-ferramentas-campanha] .painel-estado-fase .indicadores dd {
+ margin:0; color:#faf1d6; font-weight:800; font-size:clamp(1rem,1.35vw,1.45rem); font-variant-numeric:tabular-nums;
+}
+#jogo[data-ferramentas-campanha] #mare {color:#b1e9f4}
+#jogo[data-ferramentas-campanha] .painel-estado-fase #perolas-hud {color:#f6d494}
+#jogo[data-ferramentas-campanha] .painel-hud-avisos {display:grid; row-gap:.36rem; padding:.6rem .8rem}
+#jogo[data-ferramentas-campanha] .painel-hud-aviso {
+ --canto-faixa:polygon(4px 0,calc(100% - 4px) 0,calc(100% - 4px) 2px,calc(100% - 2px) 2px,calc(100% - 2px) 4px,100% 4px,100% calc(100% - 4px),calc(100% - 2px) calc(100% - 4px),calc(100% - 2px) calc(100% - 2px),calc(100% - 4px) calc(100% - 2px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 2px),2px calc(100% - 2px),2px calc(100% - 4px),0 calc(100% - 4px),0 4px,2px 4px,2px 2px,4px 2px);
+ display:grid; grid-template-columns:1.1rem minmax(0,1fr); align-items:center; gap:.6rem;
+ position:relative; min-height:2rem; padding:.34rem .56rem; overflow-wrap:anywhere;
+ color:#faf1d6; font-size:.84rem; line-height:1.35; font-weight:700;
+ background:#1b3c4a; clip-path:var(--canto-faixa);
+}
+#jogo[data-ferramentas-campanha] .painel-hud-aviso::before {
+ content:""; position:absolute; height:1px; left:6px; right:6px; top:1px; background:#557f86;
+}
+#jogo[data-ferramentas-campanha] .painel-hud-aviso svg {display:block; width:1.1rem; height:1.1rem; shape-rendering:crispEdges; background:#102c3b}
+#jogo[data-ferramentas-campanha] #hud-faixa-garca {color:#c1d4d0; background:#173643}
+#jogo[data-ferramentas-campanha] #hud-faixa-garca::before {background:#435c63}
+#jogo[data-ferramentas-campanha] #hud-faixa-garca[data-rasante] {color:#f6d494}
+#jogo[data-ferramentas-campanha] #hud-fendas {
+ margin:0; padding:.32rem .55rem; color:#c1d4d0; border-left:2px solid #81988b;
+ font-size:.82rem; line-height:1.42; overflow-wrap:anywhere;
+}
+#jogo[data-ferramentas-campanha] .painel-hud-ultima {
+ display:flex; justify-content:space-between; align-items:center; gap:.8rem;
+ margin:.24rem .83rem .6rem; padding-top:.44rem; border-top:1px solid #395e65; min-height:2.3rem;
+}
+#jogo[data-ferramentas-campanha] #hud-ultima-direcao {font-weight:800;font-size:1.22rem}
+#jogo[data-ferramentas-campanha] .painel-estado-fase .previsao-fauna,
+#jogo[data-ferramentas-campanha] .camera-lateral > #fragmento {
+ position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); margin:0; padding:0; white-space:nowrap;
+}
+@media (max-width:760px){
+ #jogo[data-tela="fase"][data-ferramentas-campanha] .painel-estado-fase .indicadores {
+  grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 .9rem;
+ }
+ #jogo[data-tela="fase"][data-ferramentas-campanha] .painel-estado-fase .indicadores > div {min-height:2.3rem}
+}
+
+/* O ícone aponta no sentido da próxima mudança de maré. */
+#jogo[data-ferramentas-campanha] .painel-hud-aviso[data-sobe] svg {transform:rotate(180deg)}

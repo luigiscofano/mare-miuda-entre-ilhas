@@ -10,6 +10,7 @@
 <style>@@MARE:texto:estilos/bloco-02.css@@</style>
 <style id="controles-de-fase-v3">@@MARE:texto:estilos/controles-de-fase-v3.css@@</style>
 <style id="mare-camera">@@MARE:texto:estilos/mare-camera.css@@</style>
+<style id="acoes-derrota">@@MARE:texto:estilos/acoes-derrota.css@@</style>
 </head>
 <body>
   <a class="pular" href="#jogo">Pular para o jogo</a>
@@ -140,16 +141,34 @@
       </div>
       </div>
       <aside class="camera-lateral" aria-label="Estado e ações da fase">
+      <section class="painel-estado-fase" aria-label="Estado da fase">
+      <h3 class="painel-hud-titulo" aria-hidden="true">Estado da fase</h3>
       <dl class="indicadores">
         <div><dt>Maré</dt><dd id="mare"></dd></div>
         <div><dt>Passos</dt><dd id="passos"></dd></div>
         <div><dt>Erros</dt><dd id="erros"></dd></div>
+        <div id="hud-perolas" class="painel-hud-perolas" hidden><dt>Pérolas</dt><dd id="perolas-hud"></dd></div>
       </dl>
       <div class="previsao-fauna">
         <img id="garca-patrulha" src="data:image/png;base64,@@MARE:b64:assets/image/9d10296360b1c0dbc541.png@@" width="31" height="23" alt="" hidden>
         <img id="garca-rasante" src="data:image/png;base64,@@MARE:b64:assets/image/b161e1213aa4dc3ad110.png@@" width="31" height="23" alt="" hidden>
         <p id="previsao" class="previsao"></p>
       </div>
+      <div class="painel-hud-avisos" aria-hidden="true">
+        <div class="painel-hud-aviso">
+          <svg viewBox="0 0 16 16" focusable="false" aria-hidden="true"><path fill="#b1e9f4" d="M6 3h4v6h2v2H4V9h2zm-1 8h6v2H5zm2 2h2v1H7z"/></svg>
+          <span id="hud-aviso-mare"></span>
+        </div>
+        <div id="hud-faixa-garca" class="painel-hud-aviso" hidden>
+          <svg viewBox="0 0 16 16" focusable="false" aria-hidden="true"><path fill="#f5f0d4" d="M3 8h5v5H3zm5-3h2v5H8zm1-2h4v3H9z"/><path fill="#f2cc89" d="M13 4h2v2h-2z"/><path fill="#98a597" d="M4 13h2v2H4z"/></svg>
+          <span id="hud-aviso-garca"></span>
+        </div>
+        <p id="hud-fendas" hidden></p>
+      </div>
+      <div class="painel-hud-ultima">
+        <span>Última tecla</span><span id="hud-ultima-direcao" aria-label="Nenhum movimento registrado">—</span>
+      </div>
+      </section>
       <p id="posicao" class="visualmente-oculto"></p>
       <p id="sinal-concha" class="inventario" hidden>Objetivo no tabuleiro: concha brilhante.</p>
       <p id="fragmento" class="inventario" hidden></p>
@@ -174,6 +193,10 @@
         <button type="button" id="voltar-vitoria-fase">Voltar à seleção de fases</button>
         <button type="button" id="proximo-nivel" class="principal" hidden>Próximo nível</button>
         <button type="button" id="seguir-fase" class="principal" hidden>Concluir viagem</button>
+      </div>
+      <div id="acoes-derrota-fase" role="group" aria-label="Ações após a derrota" hidden>
+        <button type="button" id="tentar-novamente-fase" class="principal">Tentar novamente</button>
+        <button type="button" id="voltar-derrota-fase">Voltar à seleção de fases</button>
       </div>
       </aside>
       <div id="moldura" class="moldura camera-travessia">
