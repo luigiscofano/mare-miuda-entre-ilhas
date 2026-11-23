@@ -1,0 +1,16 @@
+/* A placa permanece sobre o tabuleiro; as ações ficam no fim da barra lateral. */
+#acoes-derrota-fase {
+  display: grid;
+  gap: .42rem;
+  min-width: 0;
+}
+#acoes-derrota-fase[hidden] { display: none }
+#acoes-derrota-fase > button {
+  width: 100%;
+  min-height: 54px;
+  margin: 0;
+  box-sizing: border-box;
+  white-space: normal;
+  line-height: 1.18;
+}
+body[data-configuracoes-fase] #acoes-derrota-fase { visibility: hidden }

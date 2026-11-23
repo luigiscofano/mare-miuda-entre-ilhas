@@ -26,3 +26,5 @@ node edicao-oficial/testes/campanha.mjs dist/mare-miuda-prototipo.html
 ```
 
 As fontes removem do motor e dos renderizadores as mecânicas históricas descartadas. Os identificadores antigos ficam apenas para carregar saves sem perder progresso. Consulte [produção e verificação](docs/producao/README.md).
+
+A interface também inclui a passada de 165 ms, o painel de estado com avisos separados e as ações de derrota ao fim da animação.

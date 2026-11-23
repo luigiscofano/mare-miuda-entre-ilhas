@@ -19,3 +19,7 @@ A [campanha](../campanha/README.md) preserva os identificadores usados nos saves
 - Nenhum mapa, sprite em uso, áudio, câmera, regra em uso ou saída da interface mudou com a retirada de regras antigas. Os identificadores legados ficam para compatibilidade e não habilitam mecânicas.
 
 A comparação usa o motor e o canvas em ambiente controlado. Não substitui testes em celular físico.
+
+## Validação da passada
+
+Após gerar o HTML, execute `node edicao-oficial/testes/passada.mjs dist/mare-miuda-prototipo.html`. O teste usa o mesmo módulo empacotado e cobre as quatro direções, a troca de pose e o fim em 165 ms.

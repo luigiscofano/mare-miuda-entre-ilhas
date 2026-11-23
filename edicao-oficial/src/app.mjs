@@ -442,6 +442,8 @@ const temaDaFase = () => bancada ? false : desafioAvulso?.opcoes.mundo ?? mundoA
 let indice = 0;
 let fase = FASES_BANCADA[0];
 let estado = iniciar(fase);
+let ultimaDirecaoDoPainel;
+const SETAS_DO_PAINEL = { cima:'↑', esquerda:'←', baixo:'↓', direita:'→' };
 
 const movimentoReduzidoDoJogo=window.matchMedia?.('(prefers-reduced-motion: reduce)');
 let relogioAmbiente, pisadaDaTravessia, perigosDaTravessia, retornoDaMare, inicioDaPausaDaMare;
@@ -504,7 +506,31 @@ function limparAcoesVitoria(){
   prepararAcoesVitoria(false);
 }
 
+function mostrarAcoesDerrota(){
+  const grupo=buscar('#acoes-derrota-fase');
+  if(!grupo.hidden||tela!=='fase'||!modoCampanha()||estado.situacao!=='derrota')return;
+  const focado=document.activeElement;
+  const reiniciar=buscar('#reiniciar'), voltar=buscar('#voltar-seletor-fase');
+  const estavaNoJogo=focado===reiniciar||focado===buscar('#tabuleiro')
+    ||buscar('#direcoes-da-fase').contains(focado)||focado===document.body;
+  grupo.hidden=false;
+  reiniciar.hidden=true;
+  voltar.hidden=true;
+  if(configuracoesNaFaseAbertas())return;
+  // Ao desativar a jogada, preserve a intenção: sair ou tentar de novo.
+  if(focado===voltar)buscar('#voltar-derrota-fase').focus({preventScroll:true});
+  else if(estavaNoJogo)buscar('#tentar-novamente-fase').focus({preventScroll:true});
+}
+function limparAcoesDerrota(){
+  const grupo=buscar('#acoes-derrota-fase');
+  if(grupo.hidden)return;
+  grupo.hidden=true;
+  buscar('#reiniciar').hidden=false;
+  buscar('#voltar-seletor-fase').hidden=false;
+}
+
 function desenharResultadoDaTravessia(resultado) {
+  if(resultado?.tipo==='derrota'&&resultado.placa&&resultado.ate===Infinity)mostrarAcoesDerrota();
   if(resultado?.tipo==='vitoria'&&resultado.placa&&!mostrouAcoesVitoria)prepararAcoesVitoria(true);
   pintarPlacaNaTela(buscar('#placa-resultado-v3'),resultado);
   if(!resultado||resultado.pendente||resultado.placa)return;
@@ -652,7 +678,7 @@ function trocarTela(destino      , focar = true)       {
 /* Interface antiga removida: c4827d95 */
   if (tela === 'inicio' && destino !== 'inicio') buscar('#configuracao-jogo').open = false;
   if(configuracoesNaFaseAbertas())painelDeConfiguracoesDaFase(false,false);
-  if (destino !== 'fase') { limparAcoesVitoria(); resultadoDaTravessia=undefined; desenharResultadoDaTravessia(); pararAnimacaoDaFase(); zerarPausaDaMare(); }
+  if (destino !== 'fase') { limparAcoesDerrota(); limparAcoesVitoria(); resultadoDaTravessia=undefined; desenharResultadoDaTravessia(); pararAnimacaoDaFase(); zerarPausaDaMare(); }
   tela = destino;
   buscar('#jogo').setAttribute('data-tela', destino);
   for (const [nome, painel] of Object.entries(paineis)) painel.hidden = nome !== destino;
@@ -833,6 +859,12 @@ function atualizarFase(eventos                    = [], mensagem = '')       {
   const total = totalFragmentos(fase);
   fragmento.hidden = total === 0;
   fragmento.textContent = total ? `Pérolas: ${estado.fragmentos.length}/${total}` : '';
+  const exibirPainel = modoCampanha();
+  buscar('#hud-perolas').hidden = !exibirPainel || total === 0;
+  buscar('#perolas-hud').textContent = total ? `${estado.fragmentos.length}/${total}` : '';
+  const tecla = buscar('#hud-ultima-direcao');
+  tecla.textContent = SETAS_DO_PAINEL[ultimaDirecaoDoPainel] ?? '—';
+  tecla.setAttribute('aria-label', ROTULOS_DIRECAO[ultimaDirecaoDoPainel] ?? 'Nenhum movimento registrado');
   const siris = posicoesDosSiris(estado);
   const emEquipe = siris.length > 1;
   const conchas = alvosDasConchasDaEquipe(fase);
@@ -883,8 +915,21 @@ function atualizarFase(eventos                    = [], mensagem = '')       {
       return [`${comando}: entrada em ${coordenadas(passo.entrada)}, saída em ${coordenadas(passo.destino)}.${risco}`];
     })) : [];
   const sinalFenda = pares ? ` ${[...pares, ...indicacoes].join(' ')}` : '';
-  buscar('#previsao').textContent = finalizada ? 'Tentativa encerrada.'
-    : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.${sinalGarca}${sinalFenda}`;
+  const avisoMare = finalizada ? 'Tentativa encerrada.' : `Em ${movimentos} a maré ${alta ? 'desce' : 'sobe'}.`;
+  buscar('#previsao').textContent = finalizada ? avisoMare : avisoMare + sinalGarca + sinalFenda;
+  const avisoMareDoPainel = buscar('#hud-aviso-mare');
+  avisoMareDoPainel.textContent = estado.situacao === 'vitoria' ? 'Fase concluída!' : avisoMare;
+  const faixaMare = avisoMareDoPainel.parentElement;
+  if (!finalizada && !alta) faixaMare.setAttribute('data-sobe', '');
+  else faixaMare.removeAttribute('data-sobe');
+  const faixaGarca = buscar('#hud-faixa-garca');
+  faixaGarca.hidden = !mostrarGarca;
+  if (mostrarGarca && alvo) faixaGarca.setAttribute('data-rasante', '');
+  else faixaGarca.removeAttribute('data-rasante');
+  buscar('#hud-aviso-garca').textContent = sinalGarca.trim();
+  const hudFendas = buscar('#hud-fendas');
+  hudFendas.hidden = finalizada || !sinalFenda.trim();
+  hudFendas.textContent = sinalFenda.trim();
   buscar('#posicao').textContent = emEquipe
     ? [
       ...siris.map((pos, i) => `${NOMES_DOS_SIRIS[i]} (${FORMAS_DOS_SIRIS[i]}): ${coordenadas(pos)}.`),
@@ -934,6 +979,7 @@ function prepararFase(mensagem         , focar = true)       {
   desenharResultadoDaTravessia();
   zerarPausaDaMare();
   estado = iniciar(fase);
+  ultimaDirecaoDoPainel = undefined;
   buscar('#nome-fase').textContent = fase.nome;
   buscar('#objetivo').textContent = textoDaColeta(fase, fase.objetivo);
   buscar('#ensino').textContent = textoDaColeta(fase, fase.ensino);
@@ -941,6 +987,7 @@ function prepararFase(mensagem         , focar = true)       {
   buscar('#lembrete-fase').hidden = bancada;
   buscar('#grade').textContent = fase.mapa.join('\n');
   buscar                    ('#ajuda').open = false;
+  limparAcoesDerrota();
   limparAcoesVitoria();
   const ferramentas=buscar('#ferramentas-fase');
   ferramentas.hidden=!modoCampanha();
@@ -1050,6 +1097,8 @@ function jogarAcao(acao         )       {
   const antes = estado;
   const transicao = executarPasso(fase, estado, acao);
   estado = transicao.estado;
+  // Só uma direção consumida pelo motor conta no histórico visual.
+  if (estado.passos !== antes.passos && Object.hasOwn(SETAS_DO_PAINEL, acao)) ultimaDirecaoDoPainel = acao;
   if (modoCampanha() && estado.situacao === 'vitoria' && ehIdFase(fase.id)) {
     save = { ...save, progresso: concluirFase(save.progresso, fase.id) };
     gravar();
@@ -1286,6 +1335,13 @@ buscar('#voltar-fase').addEventListener('click', voltar);
 buscar('#voltar-creditos').addEventListener('click', voltar);
 
 /* Interface antiga removida: ec19b3de */
+// Reutilize os fluxos que já restauram o foco e preservam o progresso.
+for(const [id,acionar] of [['#tentar-novamente-fase',reiniciar],['#voltar-derrota-fase',voltar]]){
+  buscar(id).addEventListener('click',()=>{
+    if(tela==='fase'&&modoCampanha()&&estado.situacao==='derrota'
+      &&!buscar('#acoes-derrota-fase').hidden&&!configuracoesNaFaseAbertas())acionar();
+  });
+}
 buscar('#reiniciar').addEventListener('click', reiniciar);
 niveis.forEach((botao, i) => botao.addEventListener('click', () => selecionarFase(i)));
 controlesDaFase.forEach(botao => botao.addEventListener('click', () => mover(botao.dataset.direcao           )));

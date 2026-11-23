@@ -114,18 +114,24 @@ function medidasDaFenda(x,y,w,h,pose) {
   const py=origemY+Math.round(b+(altura-al)/2 + (23.5-(b+altura/2))*proporcao);
   return [px,py,l,al];
 }
-// Passadas discretas: a posição lógica já foi resolvida, só o desenho viaja.
-const quadrosDaPassada=[[36,3,1],[74,2,-1],[112,1,1]];
+// A posição lógica já foi resolvida. Só o desenho percorre a casa.
+const DURACAO_DA_PASSADA = 165;
+const quadrosDaPassada = [[53, 1], [109, -1], [DURACAO_DA_PASSADA, 1]];
 export function proximaPoseDaPassada(tempo) {
-  return quadrosDaPassada.find(([ate])=>tempo<ate)?.[0];
+  const trocaDePatas=quadrosDaPassada.find(([ate])=>tempo<ate)?.[0];
+  if(trocaDePatas===undefined)return undefined;
+  const taxa=1000/60;
+  const pintura=(Math.floor((tempo+1e-6)/taxa)+1)*taxa;
+  return Math.min(trocaDePatas,pintura);
 }
 export function posesDaPassada(passadas,tempo) {
   if(!passadas?.some(Boolean)||tempo<0)return [];
   const quadro=quadrosDaPassada.find(([ate])=>tempo<ate);
   if(!quadro)return [];
-  const [,restante,alternancia]=quadro;
+  const [, alternancia] = quadro;
+  const restante = 1 - tempo / DURACAO_DA_PASSADA;
   return passadas.map(p=>p?{
-    dx:Math.round(p.dx*restante/4),dy:Math.round(p.dy*restante/4),
+    dx:Math.round(p.dx*restante),dy:Math.round(p.dy*restante),
     eixo:p.dx?'horizontal':'vertical',direcao:Math.sign(-(p.dx||p.dy)),alternancia,
   }:undefined);
 }
