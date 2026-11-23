@@ -1,2 +1,15 @@
 # mare-miuda-entre-ilhas
 Quebra-cabeça de aventura por turnos em pixel art. Um siri, um arquipélago e uma maré que vira a cada três passos.
+
+## Documentação visual
+
+| Guia | Conteúdo |
+| --- | --- |
+| [Atlas de arte](docs/arte/Mare-Miuda-Atlas-de-Arte.pdf) | Areias, células, estruturas, vegetação e animais dos oito mundos. |
+| [Todas as travessias](docs/arte/catalogo-231-travessias/Mare-Miuda-231-Travessias.pdf) | 231 fases em maré baixa e alta, com índice por mundo. |
+| [Arquipélago](docs/interface/Mare-Miuda-Arquipelago.pdf) | Os cartões dos oito mundos no computador e no celular. |
+| [Progressão e mecânicas](docs/campanha/Mare-Miuda-Progressao-e-Mecanicas.pdf) | Regras da edição oficial e evolução dos desafios. |
+
+Veja o [índice da documentação](docs/README.md) e as notas de verificação em cada seção. Os PDFs documentam a edição offline aprovada e não alteram a versão jogável do repositório.
+
+© 2026 Luigi Scofano de Araújo. Todos os direitos reservados.
