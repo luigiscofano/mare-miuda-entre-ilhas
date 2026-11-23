@@ -33,3 +33,10 @@ node edicao-oficial/testes/resultados-e-retorno.mjs dist/mare-miuda-prototipo.ht
 ```
 
 O teste lê os módulos empacotados e verifica o tamanho e o centro da placa em nove configurações de tela, o quadro estático de movimento reduzido, os três pulsos e a duração do bloqueio da campanha e a curva anterior preservada no Improviso. O teste de campanha continua cobrindo as 231 soluções.
+
+
+## Validação da seleção de fases
+
+Em desktop e celular, percorra as quatro páginas de cada um dos oito mundos. A primeira e a última desabilitam a seta sem destino; cartões bloqueados não iniciam fase. No desktop, confira as quatro quinas junto às bordas e a rota entre as duas colunas de cartões. No celular, confira a lista vertical e os dois botões no topo.
+
+No Mangue, abra **Configurações** na página 4. Teste **Esc**, botão de fechar e clique no fundo: o foco deve voltar a **Configurações** e a página não pode mudar. Pressione **Voltar ao início**, continue o jogo e confira a mesma página sem perder progresso. Com movimento reduzido, o fundo deve parar sem sumir com os brilhos ou com a espuma. Esses efeitos não aparecem no Arquipélago nem no tabuleiro.

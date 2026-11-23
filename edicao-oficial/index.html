@@ -13,6 +13,10 @@
 <style id="acoes-derrota">@@MARE:texto:estilos/acoes-derrota.css@@</style>
 <style id="recuperacao-do-siri">@@MARE:texto:estilos/recuperacao-do-siri.css@@</style>
 <style id="titulos-luz">@@MARE:texto:estilos/titulos-luz.css@@</style>
+<style id="seletor-tela-cheia">@@MARE:texto:estilos/seletor-tela-cheia.css@@</style>
+<style id="particulas-do-seletor">@@MARE:texto:estilos/particulas-do-seletor.css@@</style>
+<style id="espumas-do-seletor">@@MARE:texto:estilos/espumas-do-seletor.css@@</style>
+<style id="claroes-do-seletor">@@MARE:texto:estilos/claroes-do-seletor.css@@</style>
 </head>
 <body>
   <a class="pular" href="#jogo">Pular para o jogo</a>
@@ -113,6 +117,10 @@
       <img id="mapa-farol" src="data:image/png;base64,@@MARE:b64:assets/image/f51975ee73e35b3d0414.png@@" width="512" height="384" alt="" hidden>
       <img id="cabo-baixo" src="data:image/png;base64,@@MARE:b64:assets/image/821679d43cea6e201dd1.png@@" width="192" height="144" alt="" hidden>
       <img id="arte-arquipelago" src="data:image/png;base64,@@MARE:b64:assets/image/ccacb68fc1ab16378652.png@@" width="512" height="384" alt="" hidden>
+      <div id="ferramentas-seletor" role="group" aria-label="Controles da seleção de fases" hidden>
+        <button type="button" id="menu-praia">Voltar ao início</button>
+        <button type="button" id="abrir-configuracoes-seletor" aria-haspopup="dialog" aria-expanded="false" aria-controls="configuracao-jogo">Configurações</button>
+      </div>
       <nav id="seletor-fases" aria-label="Seleção de fases" hidden></nav>
       <nav id="cartoes-arquipelago" aria-label="Seletor de mundos" hidden></nav>
       <p id="mensagem-praia" class="feedback" role="status" aria-live="polite"></p>
@@ -121,7 +129,6 @@
       <p id="enseada-aberta" class="dica" hidden>A passagem da Enseada se abriu. Visite a Enseada da Garça para descobrir o próximo caminho.</p>
       <!-- rota legada preservada no motor a8a392a7 -->
       <p id="aviso-save" class="dica" hidden>O navegador não permitiu salvar. Você pode jogar, mas o progresso pode se perder ao fechar.</p>
-      <button type="button" id="menu-praia">Tela inicial</button>
     </section>
 
     <nav aria-label="Fases de teste" id="fases-teste" class="fases" hidden>

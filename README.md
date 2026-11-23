@@ -32,3 +32,9 @@ A interface também inclui a passada de 165 ms, o painel de estado com avisos se
 Na campanha, as placas de resultado são maiores e continuam centradas no tabuleiro; a derrota ganha espirais laterais. Após um erro recuperável de maré ou garça, o Siri pisca três vezes. A sequência e o bloqueio total das direções duram o dobro da versão anterior. O título fica sozinho no topo; o objetivo e a orientação estão em **Mapa em texto e ajuda**. A Ilha de Improviso não mudou.
 
 Veja [controles e acessibilidade](docs/interface/README.md#resultado-e-retorno-na-campanha) e [a verificação de resultado e retorno](docs/producao/README.md#validação-de-resultado-e-retorno).
+
+## Seleção de fases
+
+Nos oito mundos, a seleção de fases preenche a janela no computador, com as quatro quinas de areia encostadas às bordas. No celular, a lista mantém o formato vertical. As duas versões oferecem **Configurações** e **Voltar ao início**, sem apagar o progresso nem a página da seleção durante a sessão. O fundo tem brilhos em três tamanhos e espumas decorativas; a preferência de movimento reduzido deixa o fundo estático.
+
+Veja [seleção de fases e acessibilidade](docs/interface/README.md#seleção-de-fases).

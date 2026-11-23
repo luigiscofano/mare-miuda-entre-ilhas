@@ -1,0 +1,133 @@
+/* O seletor reutiliza a mesma caixa de som da fase; fora dele nada muda. */
+#ferramentas-seletor {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:.4rem;
+  width:min(100%,384px);
+  margin:.25rem auto 0;
+}
+#ferramentas-seletor button {
+  min-height:44px;
+  border:2px solid #719894;
+  border-radius:2px;
+  background:#24545d;
+  color:#fff3d3;
+  font:700 clamp(.75rem,2.3vw,.9rem)/1.15 SeletorPraia, sans-serif;
+  padding:.42rem .63rem;
+  box-shadow:0 3px #102f36;
+}
+#ferramentas-seletor button:focus-visible { outline:3px solid #fff3bf; outline-offset:2px; }
+#jogo[data-tela="praia"][data-configuracoes-seletor] #configuracao-jogo {
+  position:fixed;
+  z-index:1102;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:min(29rem,calc(100% - 24px));
+  max-height:calc(100dvh - 24px);
+  overflow:auto;
+  margin:0;
+  box-sizing:border-box;
+  padding:1rem;
+}
+#jogo[data-tela="praia"][data-configuracoes-seletor] #fechar-som-inicio {
+  display:inline-block;
+  min-height:44px;
+  margin-top:.55rem;
+}
+#jogo[data-tela="praia"][data-praia-direta] #configuracao-jogo:not([open]) { display:none; }
+.praia-direta-quina { display:none; }
+
+@media (width > 760px) {
+  /* Cada cenário desktop tem 960×540. Recortamos as quatro casas nas
+     coordenadas nativas, em vez de esticar a arte para preencher a janela. */
+  #jogo[data-tela="praia"][data-praia-direta] {
+    --altura-recorte:104;
+    --largura-recorte:148;
+    --quina:clamp(74px,min(11vw,16svh),132px);
+    --largura-quina:calc(var(--quina) * var(--largura-recorte) / var(--altura-recorte));
+    --mar-seletor:#134653;
+    --miolo:min(100%,clamp(650px,calc((100svh - 118px) * 16 / 9),1280px));
+    width:100%;
+    min-height:100svh;
+    padding:0;
+    background:var(--mar-seletor);
+    color:#e7efcf;
+  }
+  #jogo[data-tela="praia"][data-praia-direta]:has(#seletor-fases[data-tema="recifes"]) { --mar-seletor:#163d4c; }
+  #jogo[data-tela="praia"][data-praia-direta]:has(#seletor-fases[data-tema="mangue"]) { --mar-seletor:#274d43; }
+  #jogo[data-tela="praia"][data-praia-direta]:has(#seletor-fases[data-tema="enseada"]) { --mar-seletor:#244a68; }
+  #jogo[data-tela="praia"][data-praia-direta]:has(#seletor-fases[data-tema="deriva"]) { --mar-seletor:#183f3b; }
+  #jogo[data-tela="praia"][data-praia-direta]:has(#seletor-fases[data-tema="grutas"]) { --mar-seletor:#1e2e46; }
+  #jogo[data-tela="praia"][data-praia-direta]:has(#seletor-fases[data-tema="ressaca"]) { --mar-seletor:#182f3e; }
+  #jogo[data-tela="praia"][data-praia-direta]:has(#seletor-fases[data-tema="farol"]) { --mar-seletor:#172e45; }
+  #jogo[data-tela="praia"][data-praia-direta] :is(header,footer) { display:none; }
+  #jogo[data-tela="praia"][data-praia-direta] #praia {
+    position:relative;
+    isolation:isolate;
+    margin:0;
+    min-height:100svh;
+    padding:0 0 .6rem;
+  }
+  #jogo[data-tela="praia"][data-praia-direta] #ferramentas-seletor {
+    width:100%;
+    padding:.63rem calc(var(--largura-quina) + 15px) 0;
+    margin:0;
+  }
+  #jogo[data-tela="praia"][data-praia-direta] #seletor-fases[data-seletor-praia] {
+    display:flex;
+    flex:1 0 auto;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    margin:0;
+  }
+  #jogo[data-tela="praia"][data-praia-direta] .praia-direta-palco {
+    width:var(--miolo);
+    background:none;
+  }
+  #jogo[data-tela="praia"][data-praia-direta] .praia-direta-palco::before {
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:var(--cenario) center / 100% 100% no-repeat;
+    /* Cada canto pode ter até três casas na horizontal e duas na vertical. */
+    --corte-x:calc(100% * var(--largura-recorte) / 960);
+    --corte-y:calc(100% * var(--altura-recorte) / 540);
+    --outro-x:calc(100% - var(--corte-x));
+    --outro-y:calc(100% - var(--corte-y));
+    clip-path:polygon(
+      var(--corte-x) 0,var(--outro-x) 0,var(--outro-x) var(--corte-y),100% var(--corte-y),
+      100% var(--outro-y),var(--outro-x) var(--outro-y),var(--outro-x) 100%,var(--corte-x) 100%,
+      var(--corte-x) var(--outro-y),0 var(--outro-y),0 var(--corte-y),var(--corte-x) var(--corte-y)
+    );
+    image-rendering:pixelated;
+  }
+  #jogo[data-tela="praia"][data-praia-direta] .praia-direta-quina {
+    display:block;
+    position:fixed;
+    width:var(--largura-quina);
+    height:var(--quina);
+    pointer-events:none;
+    background-image:var(--cenario);
+    background-size:calc(96000% / var(--largura-recorte)) calc(54000% / var(--altura-recorte));
+    background-repeat:no-repeat;
+    image-rendering:pixelated;
+  }
+  .praia-direta-quina[data-quina="superior-esquerda"] { top:0; left:0; background-position:left top; }
+  .praia-direta-quina[data-quina="superior-direita"] { top:0; right:0; background-position:right top; }
+  .praia-direta-quina[data-quina="inferior-esquerda"] { bottom:0; left:0; background-position:left bottom; }
+  .praia-direta-quina[data-quina="inferior-direita"] { bottom:0; right:0; background-position:right bottom; }
+  #jogo[data-tela="praia"][data-praia-direta] #progresso-praia {
+    position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;
+  }
+  #jogo[data-tela="praia"][data-praia-direta] #mensagem-praia {
+    margin:0 auto;
+    text-align:center;
+    color:inherit;
+  }
+  #jogo[data-tela="praia"][data-praia-direta] #rever-desfecho { order:2;align-self:center; }
+}

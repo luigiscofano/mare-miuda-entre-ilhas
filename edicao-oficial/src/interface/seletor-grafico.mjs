@@ -110,6 +110,7 @@ export function desenharSeletorGrafico(doc, painel, { opcoes, pagina, mundo, ati
   const totalPaginas=paginas.length;
   painel.setAttribute('data-seletor-praia','');
   painel.setAttribute('data-tema',mundo);
+  painel.setAttribute('data-pagina',String(pagina+1));
   const mapa = new Map(opcoes.map(o=>[o.id,o]));
   const palco = elemento(doc,'div','praia-direta-palco');
   palco.setAttribute('data-pagina',String(pagina+1));
@@ -152,5 +153,14 @@ export function desenharSeletorGrafico(doc, painel, { opcoes, pagina, mundo, ati
     }else b.addEventListener('click',()=>ativar(o.id,o.origem));
     viagens.append(b);
   }
-  painel.replaceChildren(palco,viagens);
+  // As quinas herdam o cenário do seletor, mas ficam fora do contêiner
+  // dimensionável do miolo, para aderir à janela e não ao palco de cartas.
+  const quinas = ['superior-esquerda', 'superior-direita', 'inferior-esquerda', 'inferior-direita']
+    .map(lugar => {
+      const quina = elemento(doc,'span','praia-direta-quina');
+      quina.setAttribute('data-quina',lugar);
+      quina.setAttribute('aria-hidden','true');
+      return quina;
+    });
+  painel.replaceChildren(...quinas,palco,viagens);
 }

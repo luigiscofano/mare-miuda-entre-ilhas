@@ -10,3 +10,10 @@
 - [Vídeo sem som, com a ação ampliada](animacoes/README.md).
 
 - [Câmera, moldura e oceano](camera/README.md): padrões de enquadramento e cenários das fases.
+
+
+## Oceano nos seletores de fase
+
+As quinas usam a areia original de cada página. Pontos e cruzetas de três tamanhos seguem a paleta de cada mundo. As cristas de espuma solta alternam cinco poses de pixel art: braços curtos e chapados mudam poucos pixels, sem interpolação. Os elementos ocupam somente água livre nas quatro páginas de cada mundo; não cobrem títulos, rotas, cartões, areia nem pedras.
+
+O [seletor de fases](../interface/README.md#seleção-de-fases) mantém o movimento opcional e oferece um quadro estático com preferência por movimento reduzido.
