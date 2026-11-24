@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="654" viewBox="0 0 1200 654" role="img" aria-labelledby="title description">
+<title id="title">A Outra Margem: mapa das notas do violão</title>
+<desc id="description">Rolagem de piano dos 76 eventos do arranjo de violão de náilon, distribuídos em 16 compassos a 90 batidas por minuto. O baixo permanece na região grave; a melodia sobe até Fá sustenido 5 na chegada e retorna a Ré 4 no último compasso.</desc>
+<style>
+text{font-family:system-ui,"DejaVu Sans",sans-serif;fill:#eaf0ed;font-variant-numeric:tabular-nums}
+.k{font-size:12px;letter-spacing:2px;fill:#8fcabf;font-weight:700}.t{font-size:39px;font-weight:740}.sub{font-size:16px;fill:#bbd1cd}.sm{font-size:13px;fill:#b7cfca}.legend{font-size:15px;font-weight:650}.lab{font-size:12px;fill:#bdd4cf}.sec{font-size:13px;font-weight:700;letter-spacing:1px;fill:#c5ddd8}.b{font-size:14px;font-weight:650;fill:#d2e4e1}
+</style>
+<rect width="1200" height="654" rx="14" fill="#102b32"/>
+<text x="52" y="45" class="k">MARÉ MIÚDA: ENTRE ILHAS / TRILHA SONORA</text>
+<text x="52" y="92" class="t">A Outra Margem</text>
+<text x="53" y="122" class="sub">Mapa das notas · Violão de náilon · 16 compassos em 4/4 · 90 BPM</text>
+<line x1="52" x2="1149" y1="146" y2="146" stroke="#36585d"/>
+<rect x="147" y="165" width="24" height="6" rx="1" fill="#69c9bc"/><text x="180" y="171" class="legend">Baixo</text>
+<rect x="320" y="165" width="24" height="6" rx="1" fill="#e6b65f"/><text x="353" y="171" class="legend">Notas internas</text>
+<rect x="493" y="165" width="24" height="6" rx="1" fill="#f2ece1"/><text x="526" y="171" class="legend">Melodia</text>
+<text x="52" y="186" class="lab">ALTURA</text>
+<rect x="125" y="189" width="1024" height="344" fill="#0b2229"/>
+<rect x="381" y="189" width="256" height="344" fill="#112c34"/>
+<rect x="893" y="189" width="256" height="344" fill="#112c34"/>
+<path d="M125 196h1024" stroke="#2d4b51"/><text x="112" y="200" text-anchor="end" class="lab">Fá♯5</text>
+<path d="M125 251h1024" stroke="#2d4b51"/><text x="112" y="255" text-anchor="end" class="lab">Dó5</text>
+<path d="M125 296.83h1024" stroke="#2d4b51"/><text x="112" y="300.83" text-anchor="end" class="lab">Sol4</text>
+<path d="M125 361h1024" stroke="#2d4b51"/><text x="112" y="365" text-anchor="end" class="lab">Dó4</text>
+<path d="M125 406.83h1024" stroke="#2d4b51"/><text x="112" y="410.83" text-anchor="end" class="lab">Sol3</text>
+<path d="M125 471h1024" stroke="#2d4b51"/><text x="112" y="475" text-anchor="end" class="lab">Dó3</text>
+<path d="M125 526h1024" stroke="#2d4b51"/><text x="112" y="530" text-anchor="end" class="lab">Fá♯2</text>
+<path d="M125 189v344" stroke="#5a7c7c"/>
+<text x="157" y="555" text-anchor="middle" class="lab">1</text>
+<path d="M189 189v344" stroke="#35545a"/>
+<text x="221" y="555" text-anchor="middle" class="lab">2</text>
+<path d="M253 189v344" stroke="#35545a"/>
+<text x="285" y="555" text-anchor="middle" class="lab">3</text>
+<path d="M317 189v344" stroke="#35545a"/>
+<text x="349" y="555" text-anchor="middle" class="lab">4</text>
+<path d="M381 189v344" stroke="#5a7c7c"/>
+<text x="413" y="555" text-anchor="middle" class="lab">5</text>
+<path d="M445 189v344" stroke="#35545a"/>
+<text x="477" y="555" text-anchor="middle" class="lab">6</text>
+<path d="M509 189v344" stroke="#35545a"/>
+<text x="541" y="555" text-anchor="middle" class="lab">7</text>
+<path d="M573 189v344" stroke="#35545a"/>
+<text x="605" y="555" text-anchor="middle" class="lab">8</text>
+<path d="M637 189v344" stroke="#5a7c7c"/>
+<text x="669" y="555" text-anchor="middle" class="lab">9</text>
+<path d="M701 189v344" stroke="#35545a"/>
+<text x="733" y="555" text-anchor="middle" class="lab">10</text>
+<path d="M765 189v344" stroke="#35545a"/>
+<text x="797" y="555" text-anchor="middle" class="lab">11</text>
+<path d="M829 189v344" stroke="#35545a"/>
+<text x="861" y="555" text-anchor="middle" class="lab">12</text>
+<path d="M893 189v344" stroke="#5a7c7c"/>
+<text x="925" y="555" text-anchor="middle" class="lab">13</text>
+<path d="M957 189v344" stroke="#35545a"/>
+<text x="989" y="555" text-anchor="middle" class="lab">14</text>
+<path d="M1021 189v344" stroke="#35545a"/>
+<text x="1053" y="555" text-anchor="middle" class="lab">15</text>
+<path d="M1085 189v344" stroke="#35545a"/>
+<text x="1117" y="555" text-anchor="middle" class="lab">16</text>
+<path d="M1149 189v344" stroke="#5a7c7c"/>
+<rect x="125.44" y="513.5300000000001" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="128.53" y="449.37" width="23.68" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="135.82" y="275.2" width="15.44" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="152.32" y="302.7" width="14.16" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="167.75" y="321.03" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="189.51" y="513.5300000000001" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="192.56" y="366.87" width="23.69" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="198.33" y="339.37" width="13.68" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="213.27" y="321.03" width="14.8" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="229.07" y="302.7" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="253.31" y="495.2" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="256.43" y="431.03" width="23.68" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="261.51" y="321.03" width="16.08" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="278.61" y="302.7" width="16.08" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="289.69" y="366.87" width="11.52" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="296.06" y="275.2" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="317.58" y="476.87" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="325" y="256.87" width="17.04" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="343.35" y="275.2" width="15.6" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="360.31" y="302.7" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="381.6" y="431.03" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="384.44" y="366.87" width="23.68" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="389.09" y="321.03" width="17.52" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="407.54" y="293.53" width="15.44" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="424.15" y="256.87" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="445.51" y="513.5300000000001" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="448.6" y="449.37" width="23.68" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="454.39" y="238.53" width="24.88" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="480.46" y="256.87" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="509.54" y="495.2" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="512.31" y="431.03" width="23.68" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="518.19" y="275.2" width="16.24" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="535.51" y="256.87" width="15.12" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="545.67" y="366.87" width="11.52" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="551.99" y="238.53" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="573.5" y="495.2" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="581.23" y="211.03" width="29.04" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="611.21" y="238.53" width="17.37" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="629.97" y="211.03" width="8.8" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="637.35" y="449.37" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="641.15" y="192.7" width="26.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="668.68" y="211.03" width="14.64" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="684.42" y="229.36999999999998" width="18.24" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="701.57" y="522.7" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="704.49" y="385.2" width="23.68" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="709.11" y="275.2" width="15.92" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="726.39" y="229.36999999999998" width="15.76" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="743.09" y="211.03" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="765.39" y="513.5300000000001" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="768.45" y="449.37" width="23.68" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="773.17" y="229.36999999999998" width="15.93" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="790.27" y="256.87" width="15.92" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="801.62" y="366.87" width="11.52" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="807.49" y="275.2" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="829.32" y="495.2" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="837.08" y="256.87" width="15.28" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="853.57" y="238.53" width="27.68" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="893.44" y="449.37" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="896.42" y="385.2" width="23.68" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="900.42" y="275.2" width="18.48" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="919.83" y="302.7" width="14.64" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="935.86" y="321.03" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="957.43" y="476.87" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="960.44" y="412.7" width="23.68" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="965.59" y="339.37" width="15.76" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="982.39" y="302.7" width="16.4" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="993.75" y="339.37" width="11.52" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="1000.01" y="256.87" width="20.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="1021.32" y="513.5300000000001" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="1024.32" y="449.37" width="23.68" height="6.6" rx="1" fill="#e6b65f"/>
+<rect x="1029.1" y="238.53" width="17.04" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="1047.21" y="275.2" width="14.96" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="1063.53" y="302.7" width="13.68" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="1078.42" y="321.03" width="8.32" height="6.6" rx="1" fill="#f2ece1"/>
+<rect x="1085.53" y="449.37" width="39.2" height="6.6" rx="1" fill="#69c9bc"/>
+<rect x="1093.55" y="339.37" width="39.52" height="6.6" rx="1" fill="#f2ece1"/>
+<text x="112" y="555" text-anchor="end" class="lab">COMPASSO</text>
+<text x="125" y="588" class="sm">Cada barra é uma nota. A posição mostra a altura e o momento de entrada; o comprimento mostra a duração.</text>
+<line x1="52" x2="1149" y1="608" y2="608" stroke="#36585d"/>
+<text x="52" y="634" class="sm">76 notas programadas no arranjo oficial · Duração do ciclo: 42,6667 s</text>
+</svg>
