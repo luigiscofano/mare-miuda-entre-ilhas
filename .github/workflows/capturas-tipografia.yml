@@ -1,0 +1,49 @@
+name: Capturas reais da atualização de tipografia
+
+on:
+  push:
+    branches:
+      - qa/capturas-tipografia
+
+permissions:
+  contents: read
+
+jobs:
+  capturar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      MARE_BUILD_SHA: d281245c7a1d847a81b62736f85ca9a1f9ca5d853d7db9b385e2a8fcb90e0729
+    steps:
+      - name: Preparar o código já versionado
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Montar o HTML aprovado sem rede
+        run: python3 edicao-oficial/montar.py "$RUNNER_TEMP/mare-miuda-prototipo.html" --verificar
+      - name: Instalar a versão fixa do navegador de testes
+        run: |
+          npm install --prefix "$RUNNER_TEMP/mare-render" --save-exact --ignore-scripts playwright@1.55.0
+          node "$RUNNER_TEMP/mare-render/node_modules/playwright/cli.js" install --with-deps --only-shell chromium
+      - name: Capturar o Porto primeiro
+        run: |
+          export MARE_PLAYWRIGHT="$RUNNER_TEMP/mare-render/node_modules/playwright"
+          MARE_CAPTURAR=porto node edicao-oficial/testes/capturar-galeria-temporario.mjs "$RUNNER_TEMP/mare-miuda-prototipo.html" "$RUNNER_TEMP/porto"
+      - name: Guardar a captura do Porto
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: porto-real-pt-br
+          path: ${{ runner.temp }}/porto/
+          if-no-files-found: error
+          retention-days: 1
+      - name: Capturar todas as telas da galeria
+        run: |
+          export MARE_PLAYWRIGHT="$RUNNER_TEMP/mare-render/node_modules/playwright"
+          node edicao-oficial/testes/capturar-galeria-temporario.mjs "$RUNNER_TEMP/mare-miuda-prototipo.html" "$RUNNER_TEMP/galeria"
+      - name: Guardar as capturas e o manifesto
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: galeria-tipografia-real
+          path: ${{ runner.temp }}/galeria/
+          if-no-files-found: error
+          retention-days: 1
