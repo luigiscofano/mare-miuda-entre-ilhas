@@ -31,6 +31,12 @@ export function criarPaineisDeApoio({ jogo, fundo, corpo, documento }) {
     foco.focus({ preventScroll: true });
   }
   fundo.addEventListener('click', () => fechar());
+  function aceitaFoco(elemento) {
+    if (elemento.disabled || elemento.closest('[hidden]')) return false;
+    const detalhes = elemento.closest('details');
+    // O resumo de um histórico recolhido continua navegável, os itens não.
+    return !detalhes || detalhes.open || elemento === detalhes.querySelector('summary');
+  }
   jogo.addEventListener('keydown', evento => {
     if (!atual) return;
     if (evento.key === 'Escape') {
@@ -41,7 +47,7 @@ export function criarPaineisDeApoio({ jogo, fundo, corpo, documento }) {
     }
     if (evento.key !== 'Tab') return;
     const alvos = Array.from(atual.painel.querySelectorAll('[data-foco-painel]'))
-      .filter(no => !no.disabled && !no.closest('[hidden]'));
+      .filter(aceitaFoco);
     const posicao = alvos.indexOf(documento.activeElement);
     if (posicao < 0 || (evento.shiftKey ? posicao===0 : posicao===alvos.length-1)) {
       evento.preventDefault();

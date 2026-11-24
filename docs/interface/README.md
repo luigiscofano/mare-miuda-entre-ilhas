@@ -12,7 +12,7 @@ Na campanha, o cabeçalho exibe apenas o nome da fase. O objetivo, a orientaçã
 
 Depois de um erro recuperável de maré ou garça, apenas o Siri afetado pisca três vezes. As direções ficam bloqueadas desde o erro até o fim da pausa de recuperação. Uma tecla, clique ou toque dado durante a pausa é descartado, não executado depois. Configurações, reinício e volta continuam disponíveis.
 
-A preferência de movimento reduzido mostra a placa e seus botões sem esperar a animação e mantém uma pausa curta após o erro, sem piscadas. O terceiro erro termina a tentativa, sem animar um renascimento. A Ilha de Improviso mantém a apresentação e os controles anteriores.
+A preferência de movimento reduzido mostra a placa e seus botões sem esperar a animação e mantém uma pausa curta após o erro, sem piscadas. O terceiro erro termina a tentativa, sem animar um renascimento. A travessia da [Ilha de Improviso](#ilha-de-improviso) conserva seus próprios controles e comportamento de resultado.
 
 
 ## Seleção de fases
@@ -32,9 +32,16 @@ No computador, a seleção ocupa a janela; as quatro quinas de areia são recort
 | **Configurações** | Na seleção de fases ou dentro da fase. | Ajustes separados de **Música** e **Efeitos**, com percentuais que acompanham os controles. |
 | **Som e música** | No Porto. | As duas regulagens de volume e a identificação da faixa **A Outra Margem**, para **violão de nylon**, sem ilustração de instrumento. |
 | **Créditos** | No Porto, pelo botão **Créditos**. | Créditos do jogo, sem revelar o desfecho da campanha. A apresentação de conclusão é separada e mantém **Voltar ao mapa**. |
+| **Ilha de Improviso** | No Porto. | Filtros da travessia avulsa, histórico e **Gerar travessia**. |
 
-Cada painel aparece centralizado, sem ocupar toda a tela, e escurece em 55% a tela atrás. Se a janela for curta, a rolagem fica dentro do painel. A tela de fundo permanece visível, mas não recebe comandos enquanto o painel está aberto.
+Cada painel aparece centralizado, sem ocupar toda a tela, e escurece em 64% a tela atrás. Se a janela for curta, a rolagem fica dentro do painel. A tela de fundo permanece visível, mas não recebe comandos enquanto o painel está aberto.
 
-**Tab** e **Shift+Tab** percorrem os controles do painel. **Esc**, o **X**, o botão **Fechar** (ou **Voltar** nos créditos do Porto) e o clique ou toque na área escurecida fecham o painel de apoio e devolvem o foco ao botão que o abriu. Na seleção, a página não muda; dentro da fase, nenhum movimento é executado por trás do painel.
+**Tab** e **Shift+Tab** percorrem os controles do painel. **Esc**, o **X**, o botão **Fechar** (ou **Voltar** em Créditos e Ilha de Improviso) e o clique ou toque na área escurecida fecham o painel de apoio e devolvem o foco ao botão que o abriu. Na seleção, a página não muda; dentro da fase, nenhum movimento é executado por trás do painel.
 
 Ajustar volume mantém as preferências salvas já existentes, sem alterar o andamento da fase. Abrir ou fechar o painel não muda regras, estados de fase, seleção ou andamento do jogo. Não há atalho de depuração visível no menu.
+
+## Ilha de Improviso
+
+No Porto, abra **Ilha de Improviso** para escolher o tema, a dificuldade e o número de Siris (de um a três), ativar ou desativar garça e pérola e acessar o histórico. Os botões usam fonte comum. Em telas estreitas, os textos abaixo dos títulos são ligeiramente menores; se faltar altura, apenas o conteúdo do painel rola.
+
+**Gerar travessia** abre uma fase avulsa, sem alterar o andamento da campanha. Na fase, **Editar filtros** volta ao Porto e reabre a janela com os valores que geraram a travessia. Se fechar a janela sem gerar, o foco volta ao botão **Ilha de Improviso**. Ao reabrir durante a mesma sessão, as escolhas também são mantidas. A janela muda apenas a apresentação: geração, regras e histórico continuam os mesmos.

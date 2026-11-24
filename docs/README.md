@@ -1,7 +1,7 @@
 # Documentação de Maré Miúda
 
 - [Arte](arte/README.md): atlas e travessias.
-- [Interface](interface/README.md): seleção de mundos e fases, controles da campanha e [painéis de apoio](interface/README.md#painéis-de-apoio).
+- [Interface](interface/README.md): seleção de mundos e fases, controles da campanha [painéis de apoio](interface/README.md#painéis-de-apoio) e [Ilha de Improviso](interface/README.md#ilha-de-improviso).
 - [Campanha](campanha/README.md): progressão e mecânicas.
 - [Trilha sonora](arte/trilha-sonora/README.md): capa, créditos e dados de **A Outra Margem**.
 - [Efeitos sonoros](arte/efeitos-sonoros/README.md): amostras e ação correspondente de cada um dos onze sons.

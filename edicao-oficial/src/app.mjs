@@ -431,7 +431,6 @@ const escalaDaLogo = observarEscalaInteira(logo, buscar('#moldura-logo'), 180);
                                                                     
 const paineis                            = {
   inicio: buscar('#inicio'), praia: buscar('#praia'), fase: buscar('#fase'),
-  'mare-a-mao': buscar('#mare-a-mao'),
 };
 const listaTestes = buscar('#fases-teste');
 const niveis = Array.from(document.querySelectorAll                   ('[data-fase]'));
@@ -1095,7 +1094,9 @@ function jogarMareAMao(opcoes                , semente         )       {
   prepararFase(persistiu ? 'Travessia pronta. Maré baixa.' : 'Travessia pronta. O histórico não será salvo ao fechar.');
 }
 
-function abrirMareAMao(aviso = '')       {
+function abrirMareAMao(aviso = '') {
+  // Editar filtros volta ao Porto sem recomeçar a campanha nem limpar os filtros.
+  if (tela !== 'inicio') trocarTela('inicio', false);
   const lista = buscar('#mare-historico-itens');
   lista.replaceChildren();
   buscar('#mare-historico-vazio').hidden = historicoMare.length > 0;
@@ -1103,8 +1104,9 @@ function abrirMareAMao(aviso = '')       {
     const item = document.createElement('li');
     const repetir = document.createElement('button');
     repetir.type = 'button';
+    repetir.setAttribute('data-foco-painel', '');
     const quantidade = opcoes.siris === 1 ? '1 siri' : `${opcoes.siris} siris`;
-    const pistas = [opcoes.garca ? 'garça' : '', opcoes.fragmento ? 'fragmento' : ''].filter(Boolean);
+    const pistas = [opcoes.garca ? 'garça' : '', opcoes.fragmento ? 'pérola' : ''].filter(Boolean);
     repetir.textContent = [nomeDo(opcoes.mundo), opcoes.dificuldade, quantidade, ...pistas, semente].join(' · ');
     repetir.addEventListener('click', () => {
       mostrarOpcoesMare(opcoes);
@@ -1114,7 +1116,10 @@ function abrirMareAMao(aviso = '')       {
     lista.append(item);
   }
   buscar('#aviso-mare-a-mao').textContent = aviso;
-  trocarTela('mare-a-mao');
+  paineisDeApoio.abrir({
+    painel: buscar('#mare-a-mao'), abertura: buscar('#abrir-mare-a-mao'),
+    foco: buscar('#titulo-mare-a-mao'),
+  });
 }
 
 function ativarMarco(id, origem) {
@@ -1279,8 +1284,7 @@ const voltar = () => {
   if (tela === 'fase' && !bancada) {
     abrirPraia('', fase.id);
   } else if (tela !== 'inicio') {
-    const retorno = tela === 'mare-a-mao' ? '#abrir-mare-a-mao'
-        : tela === 'fase' && bancada ? '#abrir-som-inicio' : '#comecar';
+    const retorno = tela === 'fase' && bancada ? '#abrir-som-inicio' : '#comecar';
     trocarTela('inicio', false);
     buscar(retorno).focus();
   }
@@ -1309,9 +1313,9 @@ buscar('#comecar').addEventListener('click', () => {
 });
 buscar('#bancada').addEventListener('click', () => { desafioAvulso = undefined; bancada = true; selecionarFase(0); });
 buscar('#abrir-mare-a-mao').addEventListener('click', () => abrirMareAMao());
-buscar('#voltar-mare-a-mao').addEventListener('click', voltar);
 buscar('#configurar-mare-a-mao').addEventListener('submit', evento => {
   evento.preventDefault();
+  if (buscar('#mare-a-mao').hidden) return;
   const opcoes = lerOpcoesMare();
   if (opcoes) jogarMareAMao(opcoes);
 });
@@ -1353,7 +1357,7 @@ for (const [id, tipo] of [
   const botao = buscar(id);
   botao.addEventListener('click', () => abrirPainelDeSom(tipo, botao));
 }
-for (const id of ['#x-configuracao-jogo', '#fechar-som-inicio', '#x-creditos', '#voltar-creditos'])
+for (const id of ['#x-mare-a-mao', '#voltar-mare-a-mao', '#x-configuracao-jogo', '#fechar-som-inicio', '#x-creditos', '#voltar-creditos'])
   buscar(id).addEventListener('click', () => paineisDeApoio.fechar());
 buscar('#voltar-vitoria-fase').addEventListener('click',()=>{
   if(mostrouAcoesVitoria&&!configuracoesNaFaseAbertas())voltar();

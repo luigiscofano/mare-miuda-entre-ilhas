@@ -19,6 +19,7 @@
 <style id="claroes-do-seletor">@@MARE:texto:estilos/claroes-do-seletor.css@@</style>
 <style id="paineis-apoio">@@MARE:texto:estilos/paineis-apoio.css@@</style>
 <style id="paineis-letras">@@MARE:texto:estilos/paineis-letras.css@@</style>
+<style id="painel-improviso">@@MARE:texto:estilos/painel-improviso.css@@</style>
 </head>
 <body>
   <a class="pular" href="#jogo">Pular para o jogo</a>
@@ -41,7 +42,7 @@
           <span class="porto-rotulo" id="porto-viagem-rotulo">Começar viagem</span>
           <span class="porto-apoio" id="porto-viagem-apoio">A campanha de Entre Ilhas</span>
         </button>
-        <button type="button" class="porto-card" id="abrir-mare-a-mao">
+        <button type="button" class="porto-card" id="abrir-mare-a-mao" aria-haspopup="dialog" aria-expanded="false" aria-controls="mare-a-mao">
           <span class="porto-rotulo">Ilha de Improviso</span>
           <span class="porto-apoio">Gere uma travessia do seu jeito</span>
         </button>
@@ -52,55 +53,6 @@
           <span class="porto-rotulo">Créditos</span>
         </button>
       </div>
-    </section>
-
-    <section id="mare-a-mao" class="painel" aria-labelledby="titulo-mare-a-mao" hidden>
-      <h2 id="titulo-mare-a-mao" tabindex="-1">Ilha de Improviso</h2>
-      <p>Monte a próxima travessia. As partidas deste modo não alteram a campanha.</p>
-      <form id="configurar-mare-a-mao">
-        <div class="filtros-mare">
-          <label for="mare-tema">Tema
-            <select id="mare-tema">
-              <option value="praia">Praia das Conchas</option>
-              <option value="recifes">Recifes Expostos</option>
-              <option value="mangue">Mangue dos Siris Duplos</option>
-              <option value="enseada">Enseada da Garça</option>
-              <option value="deriva">Ilhas à Deriva</option>
-              <option value="grutas">Grutas da Espuma</option>
-              <option value="ressaca">Baía das Brasas</option>
-              <option value="farol">Arquipélago do Farol</option>
-            </select>
-          </label>
-          <label for="mare-dificuldade">Dificuldade
-            <select id="mare-dificuldade">
-              <option value="Sossegado">1 · Sossegado</option>
-              <option value="Animado">2 · Animado</option>
-              <option value="Puxado">3 · Puxado</option>
-              <option value="Mar Bravo">4 · Mar Bravo</option>
-              <option value="Maré Feroz">5 · Maré Feroz</option>
-            </select>
-          </label>
-          <label for="mare-siris">Siris
-            <select id="mare-siris">
-              <option value="1">1 siri</option>
-              <option value="2">2 siris</option>
-              <option value="3">3 siris</option>
-            </select>
-          </label>
-          <label class="marcacao-mare"><input type="checkbox" id="mare-garca"> Incluir garça</label>
-          <label class="marcacao-mare"><input type="checkbox" id="mare-item"> Incluir pérola obrigatória</label>
-        </div>
-        <div class="botoes">
-          <button type="submit" id="gerar-mare-a-mao" class="principal">Gerar travessia</button>
-          <button type="button" id="voltar-mare-a-mao">Tela inicial</button>
-        </div>
-      </form>
-      <p id="aviso-mare-a-mao" role="status" aria-live="polite"></p>
-      <details id="historico-mare-a-mao">
-        <summary>Histórico de travessias</summary>
-        <p id="mare-historico-vazio">Nenhuma travessia gerada.</p>
-        <ol id="mare-historico-itens"></ol>
-      </details>
     </section>
 
     <section id="praia" class="painel" aria-labelledby="titulo-praia" hidden>
@@ -228,6 +180,72 @@
     </section>
 
     <div id="fundo-paineis-apoio" aria-hidden="true" hidden></div>
+    <section id="mare-a-mao" class="painel-apoio" role="dialog" aria-modal="true" aria-labelledby="titulo-mare-a-mao" hidden>
+      <div class="painel-apoio-cabecalho">
+        <h2 id="titulo-mare-a-mao" tabindex="-1">
+          <svg class="improviso-icone-ilha" width="20" height="18" viewBox="0 0 10 9" shape-rendering="crispEdges" aria-hidden="true" focusable="false">
+            <path fill="#ffe2a3" d="M3 0h1v1h2v1H4v2H3z"/>
+            <path fill="#dfac6f" d="M2 4h4v1h1v1h1v1H0V6h1V5h1z"/>
+            <path fill="#b87c54" d="M6 5h1v1h2v1H8v1H1V7h5z"/>
+            <path fill="#7fb7aa" d="M2 8h3v1H2zm5 0h1v1H7z"/>
+          </svg>
+          <span>Ilha de Improviso</span>
+        </h2>
+        <button type="button" id="x-mare-a-mao" class="painel-fechar-x" aria-label="Fechar Ilha de Improviso" data-foco-painel><span aria-hidden="true"></span></button>
+      </div>
+      <div class="painel-apoio-conteudo improviso-conteudo">
+        <div class="improviso-intro">
+          <p><strong>Monte a próxima travessia.</strong></p>
+          <p>Não altera a campanha.</p>
+        </div>
+        <form id="configurar-mare-a-mao">
+          <div class="improviso-filtros">
+            <label class="improviso-tema" for="mare-tema">Tema
+              <select id="mare-tema" data-foco-painel>
+                <option value="praia">Praia das Conchas</option>
+                <option value="recifes">Recifes Expostos</option>
+                <option value="mangue">Mangue dos Siris Duplos</option>
+                <option value="enseada">Enseada da Garça</option>
+                <option value="deriva">Ilhas à Deriva</option>
+                <option value="grutas">Grutas da Espuma</option>
+                <option value="ressaca">Baía das Brasas</option>
+                <option value="farol">Arquipélago do Farol</option>
+              </select>
+            </label>
+            <label class="improviso-dificuldade" for="mare-dificuldade">Dificuldade
+              <select id="mare-dificuldade" data-foco-painel>
+                <option value="Sossegado">1 · Sossegado</option>
+                <option value="Animado">2 · Animado</option>
+                <option value="Puxado">3 · Puxado</option>
+                <option value="Mar Bravo">4 · Mar Bravo</option>
+                <option value="Maré Feroz">5 · Maré Feroz</option>
+              </select>
+            </label>
+            <label class="improviso-siris" for="mare-siris">Siris
+              <select id="mare-siris" data-foco-painel>
+                <option value="1">1 siri</option>
+                <option value="2">2 siris</option>
+                <option value="3">3 siris</option>
+              </select>
+            </label>
+            <label class="improviso-marca improviso-garca"><input type="checkbox" id="mare-garca" data-foco-painel> Incluir garça</label>
+            <label class="improviso-marca improviso-item"><input type="checkbox" id="mare-item" data-foco-painel> Incluir pérola obrigatória</label>
+          </div>
+        </form>
+        <p id="aviso-mare-a-mao" role="status" aria-live="polite"></p>
+        <details id="historico-mare-a-mao">
+          <summary data-foco-painel>Histórico de travessias</summary>
+          <p id="mare-historico-vazio">Nenhuma travessia gerada.</p>
+          <ol id="mare-historico-itens"></ol>
+        </details>
+        <div class="improviso-acoes">
+          <button type="button" id="voltar-mare-a-mao" data-foco-painel>Voltar</button>
+          <button type="submit" id="gerar-mare-a-mao" form="configurar-mare-a-mao" data-foco-painel>
+            <span class="improviso-icone-gerar" aria-hidden="true"></span>Gerar travessia
+          </button>
+        </div>
+      </div>
+    </section>
     <section id="configuracao-jogo" class="painel-apoio" data-modo="configuracao" role="dialog" aria-modal="true" aria-labelledby="titulo-configuracao-jogo" hidden>
       <div class="painel-apoio-cabecalho">
         <h2 id="titulo-configuracao-jogo"><span id="icone-configuracao-jogo" class="painel-icone" aria-hidden="true"></span><span id="rotulo-configuracao-jogo">Configurações</span></h2>
