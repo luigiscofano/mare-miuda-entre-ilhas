@@ -43,7 +43,7 @@ Com o jogo aberto, clique ou toque em **EN** no canto inferior direito para joga
 
 ## Galeria do jogo
 
-Os quadros de travessia vêm do motor e da câmera oficiais. As telas de navegação incluem quadros do filme recompostos com a arte e os estados reais da interface e duas prévias aprovadas para celular. [Origem e resolução das imagens](docs/arte/galeria/README.md).
+Os quadros de travessia vêm do motor e da câmera oficiais. As telas de navegação foram capturadas no HTML offline com a tipografia atual, sem cursor, em navegador de computador e em janela móvel emulada. [Origem e resolução das imagens](docs/arte/galeria/README.md).
 
 <details open>
 <summary><strong>Porto de Partida, Arquipélago e janelas de apoio</strong></summary>
@@ -66,7 +66,7 @@ Os quadros de travessia vêm do motor e da câmera oficiais. As telas de navega�
 
 | Porto no celular | Arquipélago no celular |
 | --- | --- |
-| <a href="docs/arte/galeria/telas/porto-celular.png"><img src="docs/arte/galeria/telas/porto-celular.png" alt="Prévia aprovada do Porto para celular" width="240"></a> | <a href="docs/arte/galeria/telas/arquipelago-celular.png"><img src="docs/arte/galeria/telas/arquipelago-celular.png" alt="Prévia aprovada do Arquipélago para celular" width="240"></a> |
+| <a href="docs/arte/galeria/telas/porto-celular.png"><img src="docs/arte/galeria/telas/porto-celular.png" alt="Porto com a tipografia atual em tela móvel emulada" width="240"></a> | <a href="docs/arte/galeria/telas/arquipelago-celular.png"><img src="docs/arte/galeria/telas/arquipelago-celular.png" alt="Arquipélago em tela móvel emulada" width="240"></a> |
 
 </details>
 

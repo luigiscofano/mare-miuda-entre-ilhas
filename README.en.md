@@ -43,7 +43,7 @@ With the game open, select **EN** in the lower-right corner to play in English. 
 
 ## Game gallery
 
-Crossing frames come from the official engine and camera. The interface views include film frames recomposed from the game’s art and actual interface states, along with two approved mobile previews. [Image sources and resolutions](docs/arte/galeria/README.en.md).
+Crossing frames come from the official engine and camera. The interface images are browser screenshots of the offline HTML with the current typography, without the cursor, on desktop and at an emulated mobile viewport. [Image sources and resolutions](docs/arte/galeria/README.en.md).
 
 <details open>
 <summary><strong>Starting Harbor, Archipelago, and support panels</strong></summary>
@@ -66,7 +66,7 @@ Crossing frames come from the official engine and camera. The interface views in
 
 | Harbor on mobile | Archipelago on mobile |
 | --- | --- |
-| <a href="docs/arte/galeria/telas/porto-celular.png"><img src="docs/arte/galeria/telas/porto-celular.png" alt="Approved mobile preview of the harbor" width="240"></a> | <a href="docs/arte/galeria/telas/arquipelago-celular.png"><img src="docs/arte/galeria/telas/arquipelago-celular.png" alt="Approved mobile preview of the archipelago" width="240"></a> |
+| <a href="docs/arte/galeria/telas/porto-celular.png"><img src="docs/arte/galeria/telas/porto-celular.png" alt="Harbor with the current type in an emulated mobile viewport" width="240"></a> | <a href="docs/arte/galeria/telas/arquipelago-celular.png"><img src="docs/arte/galeria/telas/arquipelago-celular.png" alt="Archipelago in an emulated mobile viewport" width="240"></a> |
 
 </details>
 
