@@ -7,8 +7,10 @@ const entrada = Buffer.from(html.match(uri)[0].split(',')[1], 'base64').toString
 const modulo = entrada.split('\n').find(linha => linha.startsWith('import { criarPaineisDeApoio }')).match(uri)[0];
 const { criarPaineisDeApoio } = await import(modulo);
 
-assert.match(html, /background:rgb\(9 30 39 \/ 55%\)/);
+assert.match(html, /background:rgb\(9 30 39 \/ 64%\)/);
 assert.match(html, /id="bancada" hidden tabindex="-1"/);
+assert.match(html, /id="mare-a-mao"[^>]+role="dialog"[^>]+aria-modal="true"/);
+assert.match(html, /type="submit" id="gerar-mare-a-mao" form="configurar-mare-a-mao"/);
 assert.match(html, /id="creditos"[^>]+role="dialog"[^>]+aria-modal="true"/);
 assert.match(html, /id="configuracao-jogo"[^>]+role="dialog"[^>]+aria-modal="true"/);
 assert.match(html, /id="trilha-no-painel"[^>]+hidden/);
@@ -29,7 +31,7 @@ function elemento() {
     disparar: (nome, detalhe) => ouvintes.get(nome)?.(detalhe),
     querySelector() { return this.conteudo; },
     querySelectorAll() { return this.ordem; },
-    closest() { return this.hidden ? this : null; },
+    closest(seletor) { return seletor === 'details' ? this.detalhes : this.hidden ? this : null; },
     focus() { documento.activeElement = this; },
   };
 }
@@ -79,4 +81,21 @@ assert.equal(destino,'mapa');
 assert.equal(abrirCreditos.getAttribute('aria-expanded'),'false');
 assert(fundo.hidden && creditos.hidden);
 assert(!corpo.hasAttribute('data-painel-apoio-aberto'));
-console.log('Sobreposição 55%, dois diálogos sem depuração visível, foco/modalidade, isolamento e retorno do desfecho: OK.');
+const [ilha, abrirIlha, detalhes, resumo, repetir] = Array.from({length:5}, elemento);
+jogo.children.push(ilha);
+ilha.hidden = true;
+ilha.ordem = [resumo, repetir];
+detalhes.open = false;
+detalhes.conteudo = resumo;
+resumo.detalhes = repetir.detalhes = detalhes;
+paineis.abrir({ painel:ilha, abertura:abrirIlha, foco:x });
+assert.equal(abrirIlha.getAttribute('aria-expanded'),'true');
+assert(tecla('Tab',true).cancelou);
+assert.equal(documento.activeElement,resumo,'Histórico recolhido deixa apenas o resumo no ciclo');
+detalhes.open = true;
+assert(tecla('Tab',true).cancelou);
+assert.equal(documento.activeElement,repetir,'Histórico aberto permite navegar para repetir uma travessia');
+fundo.disparar('click');
+assert.equal(documento.activeElement,abrirIlha);
+assert(ilha.hidden && fundo.hidden);
+console.log('Fundo comum 64%, modalidade, foco, histórico da Ilha e retorno do desfecho: OK.');

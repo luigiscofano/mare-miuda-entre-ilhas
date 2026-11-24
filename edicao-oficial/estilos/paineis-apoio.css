@@ -1,7 +1,7 @@
 /* Janela em pixel art sem reaproveitar nem modificar a arte do cenário. */
 html:has(body[data-painel-apoio-aberto]) {overflow:hidden}
 #fundo-paineis-apoio {
-  position:fixed; inset:0; z-index:1101; background:rgb(9 30 39 / 55%);
+  position:fixed; inset:0; z-index:1101; background:rgb(9 30 39 / 64%);
   touch-action:none;
 }
 #fundo-paineis-apoio[hidden], .painel-apoio [hidden], .painel-apoio[hidden], #bancada[hidden] {

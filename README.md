@@ -31,15 +31,17 @@ As fontes removem do motor e dos renderizadores as mecânicas históricas descar
 
 Na campanha, a passada dura 205 ms e a maré visual sobe e desce mais devagar, sem mudar o ritmo das jogadas. A interface também inclui o painel de estado com avisos separados e as ações de derrota ao fim da animação.
 
-Na campanha, as placas de resultado são maiores e continuam centradas no tabuleiro; a derrota ganha espirais laterais. Após um erro recuperável de maré ou garça, o Siri pisca três vezes. Com a maré mais lenta, o tempo entre o reaparecimento e a liberação dos controles continua igual. O título fica sozinho no topo; o objetivo e a orientação estão em **Mapa em texto e ajuda**. A Ilha de Improviso não mudou.
+Na campanha, as placas de resultado são maiores e continuam centradas no tabuleiro; a derrota ganha espirais laterais. Após um erro recuperável de maré ou garça, o Siri pisca três vezes. Com a maré mais lenta, o tempo entre o reaparecimento e a liberação dos controles continua igual. O título fica sozinho no topo; o objetivo e a orientação estão em **Mapa em texto e ajuda**. Esses ajustes de resultado e retorno são exclusivos da campanha.
 
 Veja [controles e acessibilidade](docs/interface/README.md#resultado-e-retorno-na-campanha) e [a verificação de resultado e retorno](docs/producao/README.md#validação-de-resultado-e-retorno).
 
 ## Painéis de apoio
 
-Os painéis **Configurações**, **Som e música** e **Créditos** abrem no centro, com a tela anterior ainda visível sob um escurecimento de 55%. Eles não ocupam a tela inteira. No Porto, **Som e música** identifica a trilha e mostra os volumes; na seleção de fases e na partida, abra **Configurações** para ajustá-los. Fechar um painel de apoio devolve o foco ao botão de origem sem mudar a fase ou a página de seleção.
+Os painéis **Configurações**, **Som e música**, **Créditos** e **Ilha de Improviso** abrem no centro, com a tela anterior ainda visível sob um escurecimento de 64%. Eles não ocupam a tela inteira. No Porto, **Som e música** identifica a trilha e mostra os volumes; na seleção de fases e na partida, abra **Configurações** para ajustá-los. Fechar um painel de apoio devolve o foco ao botão de origem sem mudar a fase ou a página de seleção.
 
 [Ver controles e acessibilidade dos painéis](docs/interface/README.md#painéis-de-apoio).
+
+No Porto, abra **Ilha de Improviso** para montar uma travessia avulsa: escolha tema, dificuldade e de um a três Siris, ajuste as opções de garça e pérola ou consulte o histórico. **Gerar travessia** abre a fase fora da campanha; **Editar filtros** retorna ao painel com as escolhas mantidas. Consulte o [guia da Ilha de Improviso](docs/interface/README.md#ilha-de-improviso).
 
 ## Trilha sonora
 
