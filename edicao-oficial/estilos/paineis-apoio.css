@@ -1,7 +1,7 @@
 /* Janela em pixel art sem reaproveitar nem modificar a arte do cenário. */
 html:has(body[data-painel-apoio-aberto]) {overflow:hidden}
 #fundo-paineis-apoio {
-  position:fixed; inset:0; z-index:1101; background:rgb(9 30 39 / 64%);
+  position:fixed; inset:0; z-index:1101; background:rgb(9 30 39 / 79%);
   touch-action:none;
 }
 #fundo-paineis-apoio[hidden], .painel-apoio [hidden], .painel-apoio[hidden], #bancada[hidden] {
@@ -50,6 +50,22 @@ html:has(body[data-painel-apoio-aberto]) {overflow:hidden}
 }
 .painel-apoio::before {inset:var(--px); background:var(--dourado); --recorte:var(--px)}
 .painel-apoio::after {inset:calc(3 * var(--px)); background:var(--fundo); --recorte:var(--px)}
+/* Dois tamanhos inteiros de brilho; a decoração não captura cliques nem foco. */
+.painel-brilhos {
+  --brilho-grande:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 7' shape-rendering='crispEdges'%3E%3Cpath fill='%23c8e5e7' d='M3 0h1v1H3zM0 3h1v1H0zM6 3h1v1H6zM3 6h1v1H3z'/%3E%3Cpath fill='%23f6fbfa' d='M3 1h1v2H3zM1 3h2v1H1zM4 3h2v1H4zM3 4h1v2H3z'/%3E%3Cpath fill='%23ffffff' d='M3 3h1v1H3z'/%3E%3C/svg%3E");
+  --brilho-pequeno:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 5' shape-rendering='crispEdges'%3E%3Cpath fill='%23c8e5e7' d='M2 0h1v1H2zM0 2h1v1H0zM4 2h1v1H4zM2 4h1v1H2z'/%3E%3Cpath fill='%23f6fbfa' d='M2 1h1v1H2zM1 2h1v1H1zM3 2h1v1H3zM2 3h1v1H2z'/%3E%3Cpath fill='%23ffffff' d='M2 2h1v1H2z'/%3E%3C/svg%3E");
+  --tamanho-grande:calc(7 * var(--px));
+  --tamanho-pequeno:calc(5 * var(--px));
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background-repeat:no-repeat;
+  background-image:var(--brilho-grande),var(--brilho-pequeno),var(--brilho-pequeno),var(--brilho-grande);
+  background-size:var(--tamanho-grande) var(--tamanho-grande),var(--tamanho-pequeno) var(--tamanho-pequeno),
+    var(--tamanho-pequeno) var(--tamanho-pequeno),var(--tamanho-grande) var(--tamanho-grande);
+  background-position:left calc(4 * var(--px)) top var(--px),
+    right calc(5 * var(--px)) top calc(2 * var(--px)),
+    left calc(6 * var(--px)) bottom calc(3 * var(--px)),
+    right calc(3 * var(--px)) bottom calc(2 * var(--px));
+}
 .painel-apoio-cabecalho {
   position:relative; flex:none; min-height:calc(32 * var(--px));
   display:grid; place-items:center; padding:0 calc(5 * var(--px)) 0;
@@ -155,6 +171,7 @@ html:has(body[data-painel-apoio-aberto]) {overflow:hidden}
   .painel-apoio-conteudo {padding-inline:10px}
 }
 @media (forced-colors:active) {
+  .painel-brilhos {display:none}
   .painel-apoio {border:2px solid CanvasText; clip-path:none; color:CanvasText; background:Canvas}
   .painel-apoio::before,.painel-apoio::after,.painel-icone {display:none}
   .painel-apoio h2 {color:CanvasText; text-shadow:none}
