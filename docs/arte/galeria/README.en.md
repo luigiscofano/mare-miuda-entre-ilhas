@@ -19,7 +19,7 @@ The sprites were cropped from the same sheets and coordinates used by the render
 
 The image highlighting the language button is an editorial composition using the localized artwork, not a browser screenshot.
 
-The desktop PNGs are frames from the visual edit of [The eight worlds](../animacoes/README.en.md#the-eight-worlds), prepared using the real interface artwork and states for the montage. They are not a continuous session recording. The two mobile screens are approved previews, not captures from a physical device.
+All **19 interface screenshots** were taken in Chromium directly from the offline edition with current typography and without the cursor. Desktop views are **1600 × 900**; the two mobile views use an emulated **390 × 844** viewport, not a physical phone. Available cards were demonstrated with test progress in a disposable profile. [The Eight Worlds film](../animacoes/README.en.md#the-eight-worlds) is a separate record and retains its original presentation.
 
 - Porto de Partida: [desktop](telas/porto.png) · [mobile](telas/porto-celular.png).
 - Arquipélago: [page 1](telas/arquipelago-1.png) · [page 2](telas/arquipelago-2.png) · [page 3](telas/arquipelago-3.png) · [page 4](telas/arquipelago-4.png) · [mobile](telas/arquipelago-celular.png).
