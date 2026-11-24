@@ -8,8 +8,14 @@ import argparse,json,re
 
 MARCADOR=re.compile(rb'@@MARE:(texto|b64|modulo):([a-z0-9_./-]+)@@')
 def montar(raiz):
-    with ZipFile(raiz / "assets.zip") as z:
-        midia = {nome:z.read(nome) for nome in z.namelist()}
+    midia = {}
+    # As bases tipográficas não substituem nenhuma arte do jogo original.
+    for pacote in ("assets.zip", "assets-tipografia.zip"):
+        with ZipFile(raiz / pacote) as z:
+            for nome in z.namelist():
+                if nome in midia:
+                    raise ValueError(f"Recurso repetido nos pacotes: {nome}")
+                midia[nome] = z.read(nome)
     @lru_cache(None)
     def dados(arquivo):
         if arquivo.startswith("assets/"):

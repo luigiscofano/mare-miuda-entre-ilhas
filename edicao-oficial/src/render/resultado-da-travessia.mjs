@@ -382,7 +382,7 @@ function pintarEspiraisDaDerrota(ctx,cx,cy) {
  }
 }
 
-export function desenharPlacaResultado(ctx,tipo,causa,cx,cy,espirais=false){
+export function desenharPlacaResultado(ctx,tipo,causa,cx,cy,espirais=false,legendaExterna=false){
  const victoria=POSITIVOS.has(String(tipo).toLowerCase());
  const p=PALETAS[victoria?'vitoria':'derrota'];
  const x=Math.round(cx)-LARGURA_PLACA/2,y=Math.round(cy)-ALTURA_PLACA/2;
@@ -404,9 +404,7 @@ export function desenharPlacaResultado(ctx,tipo,causa,cx,cy,espirais=false){
  pintarConchaDoMundo(concha,'praia',cx+81,ch);
  ornamento(ctx,p,centro,y+49);return;
  }
- const codigo=Array.isArray(causa)?
-   causa.includes('mare')&&causa.includes('garca')?'ambas':causa[0]:causa;
- texto(ctx,FONTE,traduzir(REF_CAUSAS[codigo]??'Tente outra vez'),centro,y+45,1,p.legenda,1);
+ if(!legendaExterna)texto(ctx,FONTE,traduzir(legendaDaCausa(causa)),centro,y+45,1,p.legenda,1);
  if(espirais)pintarEspiraisDaDerrota(ctx,cx,cy);
 }
 
@@ -504,16 +502,41 @@ function pintarZigues(ctx,q,grade,caixas) {
 }
 // Canvas fixo independente da camera e das dimensoes do mapa.
 let ultimoQuadroPlaca;
-export function pintarPlacaNaTela(canvas,q) {
+function legendaDaCausa(causa) {
+ const codigo=Array.isArray(causa)?
+   causa.includes('mare')&&causa.includes('garca')?'ambas':causa[0]:causa;
+ return REF_CAUSAS[codigo]??'Tente outra vez';
+}
+function pintarLegendaNormal(canvas, q, legenda) {
+ if(!legenda) return;
+ const oculta = !q?.placa || q.tipo !== 'derrota';
+ if (legenda.hidden !== oculta) legenda.hidden = oculta;
+ if (oculta) return;
+ const campanha=canvas.dataset.placaDaCampanha==='sim';
+ const rect=canvas.getBoundingClientRect();
+ const s=rect.height/canvas.height||1;
+ const subida=(18-q.deslocamento)*s;
+ const centroX=campanha?Number.parseFloat(canvas.style.left)+rect.width/2:undefined;
+ const centroY=campanha?Number.parseFloat(canvas.style.top)+rect.height/2:undefined;
+ legenda.style.position=campanha?'absolute':'fixed';
+ legenda.style.left=Number.isFinite(centroX)?centroX+'px':'50%';
+ legenda.style.top=Number.isFinite(centroY)?centroY+subida+'px':'calc(50% + '+subida+'px)';
+ legenda.style.fontSize=Math.round(Math.max(11,Math.min(26,s*8)))+'px';
+ legenda.style.width=Math.round(153*s)+'px';
+ const idiomaTexto=traduzir(legendaDaCausa(q.causa));
+ if(legenda.textContent!==idiomaTexto)legenda.textContent=idiomaTexto;
+}
+export function pintarPlacaNaTela(canvas,q,legenda) {
+ pintarLegendaNormal(canvas,q,legenda);
  if(!q?.placa){
   if(!canvas.hidden){canvas.hidden=true;ultimoQuadroPlaca=undefined;}
   return;
  }
- const quadro=JSON.stringify([q.tipo,q.causa,q.deslocamento,canvas.dataset.placaDaCampanha]);
+ const quadro=JSON.stringify([q.tipo,q.causa,q.deslocamento,canvas.dataset.placaDaCampanha,traduzir('VITÓRIA'),Boolean(legenda)]);
  if(!canvas.hidden&&ultimoQuadroPlaca===quadro)return;
  const ctx=canvas.getContext('2d');
  ctx.clearRect(0,0,canvas.width,canvas.height);
- desenharPlacaResultado(ctx,q.tipo,q.causa,canvas.width/2,canvas.height/2-q.deslocamento,canvas.dataset.placaDaCampanha==='sim');
+ desenharPlacaResultado(ctx,q.tipo,q.causa,canvas.width/2,canvas.height/2-q.deslocamento,canvas.dataset.placaDaCampanha==='sim',Boolean(legenda));
  ultimoQuadroPlaca=quadro;
  canvas.hidden=false;
 }

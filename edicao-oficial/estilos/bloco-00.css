@@ -59,10 +59,6 @@ canvas { display: block; height: auto; flex: 0 0 auto; image-rendering: pixelate
 .acoes { display: flex; justify-content: space-between; align-items: end; gap: .55rem; }
 .direcional { display: grid; grid-template-columns: repeat(3, minmax(44px, 1fr)); gap: .24rem; }
 .direcional button { padding-inline: 0; font-size: 1.27rem; }
-.direcional [data-direcao="cima"] { grid-column: 2; }
-.direcional [data-direcao="esquerda"] { grid-row: 2; grid-column: 1; }
-.direcional [data-direcao="baixo"] { grid-row: 2; grid-column: 2; }
-.direcional [data-direcao="direita"] { grid-row: 2; grid-column: 3; }
 details { margin-top: .65rem; font-size: .87rem; }
 details p { margin-block: .35rem; }
 summary { min-height: 44px; padding-block: .45rem; cursor: pointer; }

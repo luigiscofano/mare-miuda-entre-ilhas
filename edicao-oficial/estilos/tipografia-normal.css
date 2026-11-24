@@ -1,0 +1,123 @@
+/* Preserva o lettering principal e todos os pixels de molduras, ícones e personagens. */
+:root {--fonte-leitura: system-ui,-apple-system,"Segoe UI",sans-serif}
+#jogo .praia-direta-palco,#jogo .praia-direta-card,#jogo #ferramentas-seletor button,
+#jogo .painel-hud-titulo,#jogo[data-ferramentas-campanha] .indicadores dt,
+#jogo .painel-hud-ultima,#jogo #ferramentas-fase button,.alternar-idioma {
+  font-family:var(--fonte-leitura);
+}
+#jogo[data-ferramentas-campanha] .indicadores dt,#jogo .painel-hud-ultima {
+  letter-spacing:.015em;
+}
+#jogo .praia-direta-card .praia-direta-nome {
+  font-family:var(--fonte-leitura);font-weight:650;overflow-wrap:normal;hyphens:auto;
+}
+#jogo .praia-direta-palco :is(.praia-direta-mundo,.praia-direta-pagina) {
+  font-family:var(--fonte-leitura);text-transform:none;letter-spacing:.012em;
+}
+#jogo :is(#configuracao-jogo,#creditos) :is(.painel-acao,.painel-volume,.painel-letra,.painel-digito) {
+  font:650 clamp(.9rem,1.45vw,1.18rem)/1.25 var(--fonte-leitura);text-shadow:none;
+}
+#jogo :is(#configuracao-jogo,#creditos) :is(.painel-acao,.painel-letra,.painel-digito)::before {
+  content:none;
+}
+#jogo .painel-digito {display:inline;margin:0;font-variant-numeric:tabular-nums}
+#jogo .painel-volume output {white-space:nowrap}
+
+#inicio .porto-palco > :is(h2,p),#inicio .porto-card :is(.porto-rotulo,.porto-apoio) {
+  position:absolute;width:auto;height:auto;overflow:visible;clip-path:none;
+  white-space:normal;font-family:var(--fonte-leitura);z-index:1;margin:0;
+  pointer-events:none;
+}
+#inicio .porto-palco > :is(h2,p) {text-align:center;color:#c5e0d9;transform:translateX(-50%)}
+#inicio .porto-palco h2 {left:calc(778 * var(--passo-porto));top:calc(144 * var(--passo-porto));font-size:clamp(11px,1.25cqw,13px);font-weight:700}
+#inicio .porto-palco p {left:calc(331 * var(--passo-porto));top:calc(413 * var(--passo-porto));width:calc(320 * var(--passo-porto));font-size:clamp(11px,1.35cqw,14px)}
+#inicio .porto-card .porto-rotulo {font-weight:650;line-height:1.15;left:18%;right:11%;top:16%;font-size:clamp(13px,1.85cqw,19px);color:#f4f1d6}
+#inicio .porto-card .porto-apoio {font-size:clamp(10px,1.2cqw,12px);line-height:1.2;left:18%;right:11%;top:54%;color:#d1e6d5}
+#inicio #comecar .porto-rotulo {color:#173742}
+#inicio #comecar .porto-apoio {color:#294957}
+#inicio :is(#abrir-som-inicio,#creditos-inicio) .porto-rotulo {left:29%;right:3%;top:50%;transform:translateY(-50%);font-size:clamp(10px,1.25cqw,13px);text-align:left}
+.hub-botao .hub-rotulo-normal,.hub-quantidade,.hub-deslize-normal {position:absolute;z-index:1;font-family:var(--fonte-leitura);pointer-events:none}
+.hub-botao .hub-rotulo-normal {inset:50% 6% auto;transform:translateY(-50%);text-align:center;font-size:clamp(11px,calc(15 * var(--hub-p)),15px);font-weight:650;line-height:1.15;color:#163946}
+.hub-inicio .hub-rotulo-normal {left:27%;font-size:clamp(11px,calc(13 * var(--hub-p)),13px);color:#e9f5d9}
+.hub-regiao[aria-disabled="true"] .hub-rotulo-normal {left:22%;color:#b7d7cc}
+.hub-quantidade {left:calc(18 * var(--hub-p));top:calc(352 * var(--hub-p));color:#f0f5db;font-size:clamp(11px,calc(14 * var(--hub-p)),14px);font-weight:650}
+.hub-deslize-normal {top:calc(569 * var(--hub-p));left:50%;transform:translateX(-50%);white-space:nowrap;color:#c0ddd6;font-size:12px}
+#legenda-resultado {position:absolute;z-index:2;left:50%;top:50%;width:80%;margin:0;transform:translate(-50%,-50%);text-align:center;pointer-events:none;color:#f6e9fa;font:650 14px/1.15 var(--fonte-leitura)}
+#legenda-resultado[hidden] {display:none}
+@media(max-width:760px) {
+  #inicio .porto-palco h2 {left:50%;top:calc(308 * var(--passo-porto));font-size:clamp(12px,3.3cqw,14px)}
+  #inicio .porto-palco p {left:50%;top:calc(281 * var(--passo-porto));width:84%;font-size:clamp(10px,3.2cqw,13px)}
+  #inicio .porto-card .porto-rotulo {font-size:clamp(14px,4.5cqw,18px)}
+  #inicio .porto-card .porto-apoio {font-size:clamp(10px,3.15cqw,12px)}
+  #inicio :is(#abrir-som-inicio,#creditos-inicio) .porto-rotulo {font-size:clamp(10px,3.35cqw,13px)}
+  #jogo .praia-direta-card .praia-direta-nome {font-size:clamp(11px,calc(var(--nome-size) * var(--escala)),16px)}
+}
+@media(forced-colors:active) {
+  .hub-botao .hub-rotulo-normal {display:none}
+  #inicio .porto-card .porto-rotulo {position:static;color:ButtonText;transform:none}
+  #inicio .porto-card .porto-apoio {display:none}
+}
+
+/* Bases de pixel art sem os rótulos em bitmap; os títulos continuam na própria arte. */
+@media (min-width:761px) { html:not([lang="en"]) .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-7e73031e3dd3255eb2d6.png@@');} }
+@media (min-width:761px) { html[lang="en"] .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-7e73031e3dd3255eb2d6.png@@');} }
+@media (min-width:761px) { html:not([lang="en"]) #comecar {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-e50cff31491924f8e19f.png@@');} }
+@media (min-width:761px) { html[lang="en"] #comecar {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-e50cff31491924f8e19f.png@@');} }
+@media (min-width:761px) { html:not([lang="en"]) #comecar[data-retomar="true"] {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-150a9cb56034aad8cf52.png@@');} }
+@media (min-width:761px) { html[lang="en"] #comecar[data-retomar="true"] {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-150a9cb56034aad8cf52.png@@');} }
+@media (min-width:761px) { html:not([lang="en"]) #abrir-mare-a-mao {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-6e7f2c42218fe73fae6b.png@@');} }
+@media (min-width:761px) { html[lang="en"] #abrir-mare-a-mao {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-6e7f2c42218fe73fae6b.png@@');} }
+@media (min-width:761px) { html:not([lang="en"]) #abrir-som-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-f278576da8b289edd043.png@@');} }
+@media (min-width:761px) { html[lang="en"] #abrir-som-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-f278576da8b289edd043.png@@');} }
+@media (min-width:761px) { html:not([lang="en"]) #creditos-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-f72dea30a3b4be2bf808.png@@');} }
+@media (min-width:761px) { html[lang="en"] #creditos-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-f72dea30a3b4be2bf808.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-027fb53cb8c2a9508856.png@@');} }
+@media (max-width:760px) { html[lang="en"] .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-027fb53cb8c2a9508856.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) #comecar {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-eb34a8f6d8205969a1de.png@@');} }
+@media (max-width:760px) { html[lang="en"] #comecar {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-eb34a8f6d8205969a1de.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) #comecar[data-retomar="true"] {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-16b5090fb103c9a717f3.png@@');} }
+@media (max-width:760px) { html[lang="en"] #comecar[data-retomar="true"] {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-16b5090fb103c9a717f3.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) #abrir-mare-a-mao {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-7b8022f1b98f1fd387f9.png@@');} }
+@media (max-width:760px) { html[lang="en"] #abrir-mare-a-mao {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-7b8022f1b98f1fd387f9.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) #abrir-som-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-66ba305f6c453324528b.png@@');} }
+@media (max-width:760px) { html[lang="en"] #abrir-som-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-66ba305f6c453324528b.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) #creditos-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-d39da7aee00dab85a1de.png@@');} }
+@media (max-width:760px) { html[lang="en"] #creditos-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-d39da7aee00dab85a1de.png@@');} }
+html:not([lang="en"]) .hub-cartao[data-arte-regiao="praia"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-60151e566e6b4d95688c.png@@');}
+html[lang="en"] .hub-cartao[data-arte-regiao="praia"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-60151e566e6b4d95688c.png@@');}
+html:not([lang="en"]) .hub-cartao[data-arte-regiao="recifes"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-6843124d265c4e8f3fa2.png@@');}
+html[lang="en"] .hub-cartao[data-arte-regiao="recifes"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-6843124d265c4e8f3fa2.png@@');}
+html:not([lang="en"]) .hub-cartao[data-arte-regiao="mangue"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-8a70a10ba3276afadef1.png@@');}
+html[lang="en"] .hub-cartao[data-arte-regiao="mangue"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-8a70a10ba3276afadef1.png@@');}
+html:not([lang="en"]) .hub-cartao[data-arte-regiao="enseada"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-544a5f49fd96d416c6b4.png@@');}
+html[lang="en"] .hub-cartao[data-arte-regiao="enseada"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-544a5f49fd96d416c6b4.png@@');}
+html:not([lang="en"]) .hub-cartao[data-arte-regiao="deriva"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-7ec81dccd3331416f30f.png@@');}
+html[lang="en"] .hub-cartao[data-arte-regiao="deriva"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-7ec81dccd3331416f30f.png@@');}
+html:not([lang="en"]) .hub-cartao[data-arte-regiao="grutas"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-5554b2b6d540cafb4d52.png@@');}
+html[lang="en"] .hub-cartao[data-arte-regiao="grutas"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-5554b2b6d540cafb4d52.png@@');}
+html:not([lang="en"]) .hub-cartao[data-arte-regiao="ressaca"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-8b0f65cf0168a601fb27.png@@');}
+html[lang="en"] .hub-cartao[data-arte-regiao="ressaca"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-8b0f65cf0168a601fb27.png@@');}
+html:not([lang="en"]) .hub-cartao[data-arte-regiao="farol"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-d165a7ca7846e8326168.png@@');}
+html[lang="en"] .hub-cartao[data-arte-regiao="farol"] {--hub-cartao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-d165a7ca7846e8326168.png@@');}
+html:not([lang="en"]) .hub-inicio {--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-fce2c4f1ca22cc276ec3.png@@');}
+html[lang="en"] .hub-inicio {--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-fce2c4f1ca22cc276ec3.png@@');}
+html:not([lang="en"]) .hub-regiao {--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-a3b745f66fdf9c3f6dc1.png@@');}
+html[lang="en"] .hub-regiao {--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-a3b745f66fdf9c3f6dc1.png@@');}
+html:not([lang="en"]) .hub-regiao[aria-disabled="true"] {--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-4772e146733b8e0a1531.png@@');}
+html[lang="en"] .hub-regiao[aria-disabled="true"] {--hub-botao:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-4772e146733b8e0a1531.png@@');}
+@media (max-width:760px) { html:not([lang="en"]) .hub-palco[data-pagina-hub-visual="1"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-976207a4a54e216697c9.png@@');} }
+@media (max-width:760px) { html[lang="en"] .hub-palco[data-pagina-hub-visual="1"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-976207a4a54e216697c9.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) .hub-palco[data-pagina-hub-visual="2"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-7ff63d8441e36adc82d8.png@@');} }
+@media (max-width:760px) { html[lang="en"] .hub-palco[data-pagina-hub-visual="2"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-7ff63d8441e36adc82d8.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) .hub-palco[data-pagina-hub-visual="3"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-37df5106ec23caa2582c.png@@');} }
+@media (max-width:760px) { html[lang="en"] .hub-palco[data-pagina-hub-visual="3"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-37df5106ec23caa2582c.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) .hub-palco[data-pagina-hub-visual="4"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-666c0d3f6d0497c9e3fe.png@@');} }
+@media (max-width:760px) { html[lang="en"] .hub-palco[data-pagina-hub-visual="4"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-666c0d3f6d0497c9e3fe.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) .hub-palco[data-pagina-hub-visual="5"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-e656eededab1233b749d.png@@');} }
+@media (max-width:760px) { html[lang="en"] .hub-palco[data-pagina-hub-visual="5"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-e656eededab1233b749d.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) .hub-palco[data-pagina-hub-visual="6"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-033c9424da7b303e4793.png@@');} }
+@media (max-width:760px) { html[lang="en"] .hub-palco[data-pagina-hub-visual="6"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-033c9424da7b303e4793.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) .hub-palco[data-pagina-hub-visual="7"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-c68032415600d3ffec41.png@@');} }
+@media (max-width:760px) { html[lang="en"] .hub-palco[data-pagina-hub-visual="7"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-c68032415600d3ffec41.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) .hub-palco[data-pagina-hub-visual="8"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-a1f3d96308e4498ed451.png@@');} }
+@media (max-width:760px) { html[lang="en"] .hub-palco[data-pagina-hub-visual="8"] {--hub-cena:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-a1f3d96308e4498ed451.png@@');} }

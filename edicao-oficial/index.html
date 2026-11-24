@@ -23,9 +23,9 @@
 <style id="idioma-do-jogo">@@MARE:texto:estilos/idioma-do-jogo.css@@</style>
 <style id="letras-en">@@MARE:texto:estilos/letras-en.css@@</style>
 <style id="arte-en">@@MARE:texto:estilos/arte-en.css@@</style>
+<style id="tipografia-normal">@@MARE:texto:estilos/tipografia-normal.css@@</style>
 </head>
 <body>
-  <button id="idioma-jogo" class="alternar-idioma" type="button" data-idioma-jogo aria-label="Mudar para inglês">EN</button>
   <a class="pular" href="#jogo">Pular para o jogo</a>
   <main id="jogo" class="pagina" data-tela="inicio">
     <header>
@@ -142,13 +142,7 @@
       <p id="grupo-siris" class="inventario" hidden></p>
       <p id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"></p>
 
-      <div class="acoes">
-        <div id="direcoes-da-fase" class="direcional" role="group" aria-label="Mover o siri" aria-describedby="grupo-siris">
-          <button type="button" data-direcao="cima" aria-label="Mover para cima">↑</button>
-          <button type="button" data-direcao="esquerda" aria-label="Mover para a esquerda">←</button>
-          <button type="button" data-direcao="baixo" aria-label="Mover para baixo">↓</button>
-          <button type="button" data-direcao="direita" aria-label="Mover para a direita">→</button>
-        </div>
+      <div class="acoes" id="acoes-da-partida">
         <button id="reiniciar" type="button">Reiniciar</button>
       </div>
 
@@ -172,12 +166,13 @@
         </canvas>
         <canvas id="tabuleiro-camera" aria-hidden="true" width="1" height="1"></canvas>
         <canvas id="placa-resultado-v3" width="248" height="84" hidden aria-hidden="true"></canvas>
+        <p id="legenda-resultado" hidden aria-hidden="true"></p>
       </div>
       <details id="ajuda">
         <summary>Mapa em texto e ajuda</summary>
         <p id="objetivo-ajuda" hidden></p>
         <p id="ensino"></p>
-        <p>Use setas, WASD ou toque nos botões. R reinicia. Se ninguém puder se mover, o passo não conta.</p>
+        <p>Use as setas ou WASD, ou deslize no tabuleiro. R reinicia. Se ninguém puder se mover, o passo não conta.</p>
         <pre id="grade" aria-label="Representação por símbolos do tabuleiro"></pre>
         <p>S: início · .: chão firme · =: baixio · #: bloqueio · C: concha · B: pérola · G: chegada que exige pérolas · H: areia firme elevada · A: segundo siri · T: concha de apoio · M: começo do Amarelo · Y: terceira concha.</p>
       </details>
@@ -186,7 +181,6 @@
     <div id="fundo-paineis-apoio" aria-hidden="true" hidden></div>
     <section id="mare-a-mao" class="painel-apoio" role="dialog" aria-modal="true" aria-labelledby="titulo-mare-a-mao" hidden>
       <span class="painel-brilhos" aria-hidden="true"></span>
-      <button class="alternar-idioma idioma-no-painel" type="button" data-idioma-jogo data-foco-painel aria-label="Mudar para inglês">EN</button>
       <div class="painel-apoio-cabecalho">
         <h2 id="titulo-mare-a-mao" tabindex="-1">
           <svg class="improviso-icone-ilha" width="20" height="18" viewBox="0 0 10 9" shape-rendering="crispEdges" aria-hidden="true" focusable="false">
@@ -251,10 +245,10 @@
           </button>
         </div>
       </div>
+      <div class="painel-rodape-idioma"><button class="alternar-idioma idioma-no-painel" type="button" data-idioma-jogo data-foco-painel aria-label="Mudar para inglês">EN</button></div>
     </section>
     <section id="configuracao-jogo" class="painel-apoio" data-modo="configuracao" role="dialog" aria-modal="true" aria-labelledby="titulo-configuracao-jogo" hidden>
       <span class="painel-brilhos" aria-hidden="true"></span>
-      <button class="alternar-idioma idioma-no-painel" type="button" data-idioma-jogo data-foco-painel aria-label="Mudar para inglês">EN</button>
       <div class="painel-apoio-cabecalho">
         <h2 id="titulo-configuracao-jogo"><span id="icone-configuracao-jogo" class="painel-icone" aria-hidden="true"></span><span id="rotulo-configuracao-jogo">Configurações</span></h2>
         <button type="button" id="x-configuracao-jogo" class="painel-fechar-x" aria-label="Fechar painel" data-foco-painel><span aria-hidden="true"></span></button>
@@ -281,11 +275,11 @@
         <p id="aviso-configuracao-jogo" class="painel-nota">Alterações salvas no jogo</p>
         <button type="button" id="fechar-som-inicio" class="painel-acao" data-foco-painel>Fechar</button>
       </div>
+      <div class="painel-rodape-idioma"><button class="alternar-idioma idioma-no-painel" type="button" data-idioma-jogo data-foco-painel aria-label="Mudar para inglês">EN</button></div>
     </section>
 
     <section id="creditos" class="painel-apoio" data-modo="porto" role="dialog" aria-modal="true" aria-labelledby="titulo-creditos" hidden>
       <span class="painel-brilhos" aria-hidden="true"></span>
-      <button class="alternar-idioma idioma-no-painel" type="button" data-idioma-jogo data-foco-painel aria-label="Mudar para inglês">EN</button>
       <div class="painel-apoio-cabecalho">
         <h2 id="titulo-creditos" tabindex="-1"><span class="painel-icone" data-icone="concha" aria-hidden="true"></span><span id="rotulo-creditos">Créditos</span></h2>
         <button type="button" id="x-creditos" class="painel-fechar-x" aria-label="Fechar créditos" data-foco-painel><span aria-hidden="true"></span></button>
@@ -304,11 +298,13 @@
         <p class="painel-nota">© 2026 Luigi Scofano de Araujo</p>
         <button type="button" id="voltar-creditos" class="painel-acao" data-foco-painel>Voltar</button>
       </div>
+      <div class="painel-rodape-idioma"><button class="alternar-idioma idioma-no-painel" type="button" data-idioma-jogo data-foco-painel aria-label="Mudar para inglês">EN</button></div>
     </section>
     <button type="button" id="bancada" hidden tabindex="-1">Bancada de testes</button>
 
     <footer>© 2026 Luigi Scofano de Araujo. Todos os direitos reservados.</footer>
   </main>
+  <div class="barra-idioma"><button id="idioma-jogo" class="alternar-idioma" type="button" data-idioma-jogo aria-label="Mudar para inglês">EN</button></div>
 <script type="application/octet-stream" id="trilha-offline-violao">@@MARE:b64:assets/audio/a-outra-margem-violao.wav@@</script>
 
 <script type="application/octet-stream" id="efeito-offline-cavar">@@MARE:b64:assets/audio/efeitos/cavar.wav@@</script>

@@ -1,5 +1,5 @@
 import { crescimentoDeFiletesNaBase } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
-import { desenharSiriAnimado, sombraDoSiriAnimada, fendaEscondeSombra, pincelDeCantosSemSiris } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
+import { desenharSiriAnimado, sombraDoSiriAnimada, fendaEscondeSombra, pincelDeCantosSemSiris, mostrarCantosDeDestino } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
 import { pintarVegetacao } from '@@MARE:modulo:src/posicionar-vegetacao-33409cef.mjs@@';
 import { pintarVisitaDaPraia, comporVisitasDaPraia } from '@@MARE:modulo:src/nomes-das-rochas-6e85a20e.mjs@@';
 import { conchasDaEquipe, pintarConchaDaEquipe } from '@@MARE:modulo:src/conchas-da-equipe-910d11c3.mjs@@';
@@ -46,6 +46,7 @@ export function desenharEnseadaOficial(ctx                          , fase      
   const { pintar } = tela;
   const alta = mareAlta(estado.passos);
   const siris = posicoesDosSiris(estado);
+  const mostrarCantos = mostrarCantosDeDestino();
   const pintarCanto = pincelDeCantosSemSiris(pintar, siris, origemX, origemY, ORIGEM_SIRI_PRAIA);
   const ocupadas = new Set(siris.map(chaveDaCasa));
   const conchas = conchasDaEquipe(fase, estado);
@@ -149,7 +150,7 @@ export function desenharEnseadaOficial(ctx                          , fase      
     }
     if (rasante.has(chave) || aviso === chave)
       pintarPecaEnseada(pintar, rasante.has(chave) ? 'rasante' : 'aviso', x, y);
-    const elegiveis = entradas.get(chave);
+    const elegiveis = mostrarCantos ? entradas.get(chave) : undefined;
     if (elegiveis) {
       const bits = siris.length > 1 ? Array.from(elegiveis).reduce((m, i) => m | 1 << i, 0) : 0;
       pintarPecaEnseada(pintarCanto, `cantos-${bits                                 }`, x, y);

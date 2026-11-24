@@ -22,20 +22,20 @@ From the repository root, with Python 3.10 or later:
 python3 edicao-oficial/montar.py dist/mare-miuda-prototipo.html --verificar
 ```
 
-Open `dist/mare-miuda-prototipo.html` in a browser. This edition bundles the art and audio and runs offline. At **Starting Harbor** (Porto de Partida), begin the journey, open a card in **Archipelago** (Arquipélago), and choose a level.
+Open `dist/mare-miuda-prototipo.html` in a browser. This edition bundles the art and audio and runs offline. At **Starting Harbor** (Porto de Partida), **Start journey** or **Continue journey** opens **Archipelago** (Arquipélago) directly. Choose a world and a level; your progress is preserved.
 
 | Action | Control |
 | --- | --- |
-| Move | Arrow keys or WASD; on-screen touch controls on mobile. |
+| Move | Arrow keys or WASD; on mobile, swipe on the board in the direction you want to move. |
 | Restart | **R** or **Restart** (Reiniciar). |
 | Check the objective and terrain | **Text map and help** (Mapa em texto e ajuda). |
 | Adjust sound or go back | **Settings** (Configurações) and the relevant back buttons. |
 
-A blocked move does not spend a step. Before replacing an offline copy, keep the previous HTML: some browsers associate saved progress with the file path. See the [build instructions](docs/producao/README.en.md#run-the-game).
+A blocked move does not spend a step. Corner marks show valid destinations and appear once all crabs have landed. Before replacing an offline copy, keep the previous HTML: some browsers associate saved progress with the file path. See the [build instructions](docs/producao/README.en.md#run-the-game).
 
 ## In-game language
 
-With the game open, select **EN** in the lower-right corner to play in English. The button changes to **PT** to switch back to Portuguese. In support dialogs, the switch is inside the dialog. The change is immediate and does not restart the level or change saved progress. When you open or reload the HTML normally, the game starts in Portuguese.
+With the game open, select **EN** in the lower-right corner to play in English. The button changes to **PT** to switch back to Portuguese. The switch sits in its own footer, clear of the board. A support dialog has its own switch at the bottom. The change is immediate and does not restart the level or change saved progress. When you open or reload the HTML normally, the game starts in Portuguese.
 
 [![Game screen showing the language switch in the lower-right corner](docs/arte/galeria/telas/troca-de-idioma.png)](docs/arte/galeria/telas/troca-de-idioma.png)
 

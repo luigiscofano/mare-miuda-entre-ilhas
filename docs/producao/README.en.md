@@ -19,6 +19,16 @@ Open the generated HTML in a browser. Modules, styles, and resources remain sepa
 
 The [campaign](../campanha/README.en.md) preserves the identifiers used in saves. When replacing the offline HTML, keep the original: some browsers associate progress with the file's full path. Do not clear browser storage.
 
+The offline build reads the original `edicao-oficial/assets.zip` and the separate `edicao-oficial/assets-tipografia.zip` with localized background layers for normal type. Both packages are required; duplicate resource paths are rejected. The detailed pixel-art titles remain in the game.
+
+## Movement controls
+
+```sh
+node edicao-oficial/testes/gestos.mjs dist/mare-miuda-prototipo.html
+```
+
+On a physical phone, swipe in each direction on the board and confirm that every completed gesture sends one move. Also test reversing, taps, a second finger, and gestures during a recovery or while Settings is open. Confirm that the page can still scroll outside the board.
+
 ## Language switch checks
 
 ```sh

@@ -54,17 +54,26 @@ const casaEm = (mapa                   , coluna        , linha        ) => mapa[
 const temTerra = (mapa                   , coluna        , linha        ) => casaEm(mapa, coluna, linha) !== '#';
 const temPiso = (casa        , alta         ) => casa !== '#' && (casa !== '=' || !alta);
 
-export function montarSuperficie({ largura, altura }        ) {
+const buffersDaSuperficie = new WeakMap();
+const littleEndian = new Uint8Array(Uint32Array.of(1).buffer)[0] === 1;
+
+function rgbaOpaco(rgb) {
+  const r = rgb >>> 16, g = rgb >>> 8 & 255, b = rgb & 255;
+  return (littleEndian ? r | g << 8 | b << 16 | 255 << 24 : rgb << 8 | 255) >>> 0;
+}
+
+export function montarSuperficie({ largura, altura }) {
   const pixels = new Uint32Array(largura * altura);
+  pixels.fill(rgbaOpaco(0));
   const numeros = new Map                ();
   const cores = new Map                ();
   const numero = (cor        ) => {
     const salvo = numeros.get(cor);
     if (salvo !== undefined) return salvo;
-    const rgb = Number.parseInt(cor.slice(1), 16);
-    numeros.set(cor, rgb);
-    cores.set(rgb, cor);
-    return rgb;
+    const rgba = rgbaOpaco(Number.parseInt(cor.slice(1), 16));
+    numeros.set(cor, rgba);
+    cores.set(rgba, cor);
+    return rgba;
   };
   const pintar         = (cor, x, y, l, a) => {
     if (l <= 0 || a <= 0) return;
@@ -80,15 +89,17 @@ export function montarSuperficie({ largura, altura }        ) {
     ? undefined : cores.get(pixels[y * largura + x]);
   const desenhar = (ctx                          ) => {
     if ('createImageData' in ctx && 'putImageData' in ctx) {
-      const quadro = ctx.createImageData(largura, altura);
-      for (let i = 0; i < pixels.length; i++) {
-        const valor = pixels[i];
-        quadro.data[i * 4] = valor >>> 16;
-        quadro.data[i * 4 + 1] = valor >>> 8 & 255;
-        quadro.data[i * 4 + 2] = valor & 255;
-        quadro.data[i * 4 + 3] = 255;
+      let buffer = buffersDaSuperficie.get(ctx);
+      // Um buffer por contexto/tamanho evita alocar e converter toda a costa
+      // a cada pose. O canvas copia os bytes durante putImageData.
+      if (buffer?.quadro.width !== largura || buffer.quadro.height !== altura) {
+        const quadro = ctx.createImageData(largura, altura);
+        const destino = new Uint32Array(quadro.data.buffer, quadro.data.byteOffset, pixels.length);
+        buffer = { quadro, destino };
+        buffersDaSuperficie.set(ctx, buffer);
       }
-      ctx.putImageData(quadro, 0, 0);
+      buffer.destino.set(pixels);
+      ctx.putImageData(buffer.quadro, 0, 0);
       return;
     }
     // Gravadores de teste e superfícies sem ImageData usam os mesmos pixels.

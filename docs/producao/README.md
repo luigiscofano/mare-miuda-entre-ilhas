@@ -17,6 +17,16 @@ Abra o HTML gerado em um navegador. Os módulos, estilos e recursos ficam separa
 
 A [campanha](../campanha/README.md) preserva os identificadores usados nos saves. Ao trocar o HTML offline, guarde o original: alguns navegadores associam o progresso ao caminho completo do arquivo. Não limpe o armazenamento do navegador.
 
+O montador lê o `edicao-oficial/assets.zip` original e o `edicao-oficial/assets-tipografia.zip`, que reúne as bases localizadas para o texto normal. Ambos são necessários; caminhos de recursos repetidos são rejeitados. Os letreiros detalhados em pixel art continuam no jogo.
+
+## Validação dos controles
+
+```sh
+node edicao-oficial/testes/gestos.mjs dist/mare-miuda-prototipo.html
+```
+
+Em um celular físico, deslize nas quatro direções no tabuleiro e confirme que cada gesto completo produz um só comando. Inverta a direção e verifique toques, segundo dedo e gestos durante a pausa de recuperação ou com Configurações abertas. Confira se a página continua rolável fora do tabuleiro.
+
 ## Validação de idiomas
 
 ```sh
