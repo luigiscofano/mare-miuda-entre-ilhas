@@ -22,20 +22,20 @@ Na raiz do repositório, com Python 3.10 ou posterior:
 python3 edicao-oficial/montar.py dist/mare-miuda-prototipo.html --verificar
 ```
 
-Abra `dist/mare-miuda-prototipo.html` no navegador. A edição inclui arte e áudio e roda sem internet. No **Porto de Partida**, comece a viagem, abra um cartão do Arquipélago e escolha uma fase.
+Abra `dist/mare-miuda-prototipo.html` no navegador. A edição inclui arte e áudio e roda sem internet. No **Porto de Partida**, **Começar viagem** ou **Continuar viagem** abre diretamente o **Arquipélago**. Escolha um mundo e uma fase. Seu progresso é preservado.
 
 | Ação | Controle |
 | --- | --- |
-| Mover | Setas ou WASD no teclado; controles de toque no celular. |
+| Mover | Setas ou WASD no teclado; no celular, deslize no próprio tabuleiro na direção desejada. |
 | Recomeçar | **R** ou **Reiniciar**. |
 | Consultar objetivo e terreno | **Mapa em texto e ajuda**. |
 | Regular som ou retornar | **Configurações** e botões de retorno. |
 
-Um movimento bloqueado não gasta passo. Ao trocar de cópia offline, guarde o HTML anterior: alguns navegadores associam o progresso ao caminho do arquivo. [Instruções de produção](docs/producao/README.md#executar).
+Um movimento bloqueado não gasta passo. Os tracinhos indicam destinos possíveis e só aparecem depois que todos os siris pousam. Ao trocar de cópia offline, guarde o HTML anterior: alguns navegadores associam o progresso ao caminho do arquivo. [Instruções de produção](docs/producao/README.md#executar).
 
 ## Idioma do jogo
 
-Com o jogo aberto, clique ou toque em **EN** no canto inferior direito para jogar em inglês. O botão passa a mostrar **PT** para voltar ao português. Nas janelas de apoio, o controle fica dentro da própria janela. A mudança é imediata e não reinicia a partida nem muda o progresso salvo. Ao abrir ou recarregar o HTML normalmente, o jogo começa em português.
+Com o jogo aberto, clique ou toque em **EN** no canto inferior direito para jogar em inglês. O botão passa a mostrar **PT** para voltar ao português. O controle ocupa uma faixa própria no rodapé e não cobre o tabuleiro. Nas janelas de apoio, fica no rodapé da própria janela. A mudança é imediata e não reinicia a partida nem muda o progresso salvo. Ao abrir ou recarregar o HTML normalmente, o jogo começa em português.
 
 [![Tela do jogo mostrando o botão de idioma no canto inferior direito](docs/arte/galeria/telas/troca-de-idioma.png)](docs/arte/galeria/telas/troca-de-idioma.png)
 

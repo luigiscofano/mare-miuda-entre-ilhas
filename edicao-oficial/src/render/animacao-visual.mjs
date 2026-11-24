@@ -10,6 +10,13 @@ export function comQuadroAnimado(quadro, desenhar) {
   finally { atual=anterior; }
 }
 export function puloDoSiri(indice) { return atual?.pulos?.[indice] ?? 0; }
+// A previsão continua sendo calculada pelo motor. Só os cantos e suas
+// insígnias esperam a equipe pousar, inclusive nas travessias por fenda.
+export function mostrarCantosDeDestino() {
+  return !atual?.pulos?.some(pose => pose && typeof pose === 'object')
+    && !atual?.fendas?.some(Boolean);
+}
+
 export function brilhoDaEspuma(x,y) {
   const f=atual?.ambiente??0;
   if(!f)return 0;

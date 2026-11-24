@@ -71,7 +71,7 @@ Mapa da fase<Tab>Level map
 Texto alternativo do mapa disponível em “Mapa em texto e ajuda”.<Tab>A text version of this map is available under “Text map and help”.
 Mapa em texto e ajuda<Tab>Text map and help
 Representação por símbolos do tabuleiro<Tab>Symbol map of the board
-Use setas, WASD ou toque nos botões. R reinicia. Se ninguém puder se mover, o passo não conta.<Tab>Use the arrow keys, WASD, or the on-screen controls. Press R to restart. If no crab can move, the step does not count.
+Use as setas ou WASD, ou deslize no tabuleiro. R reinicia. Se ninguém puder se mover, o passo não conta.<Tab>Use the arrow keys or WASD, or swipe on the board. Press R to restart. If no crab can move, the step does not count.
 S: início · .: chão firme · =: baixio · #: bloqueio · C: concha · B: pérola · G: chegada que exige pérolas · H: areia firme elevada · A: segundo siri · T: concha de apoio · M: começo do Amarelo · Y: terceira concha.<Tab>S: start · .: firm ground · =: tidal flat · #: barrier · C: shell · B: pearl · G: pearl-gated finish · H: raised firm sand · A: second crab · T: partner shell · M: Yellow’s starting square · Y: third shell.
 Fechar Ilha de Improviso<Tab>Close Improvisation Island
 Monte a próxima travessia.<Tab>Set up your next crossing.
@@ -211,3 +211,5 @@ Object.assign(TEXTO_EN, {
 Object.assign(TEXTO_EN, {
   'Conclua as travessias anteriores para liberar este caminho.':'Complete the earlier crossings to unlock this route.',
 });
+
+TEXTO_EN['Deslize para trocar de mundo']='Swipe to switch worlds';

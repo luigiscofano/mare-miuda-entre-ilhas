@@ -1,4 +1,4 @@
-import { desenharSiriAnimado, sombraDoSiriAnimada, fendaEscondeSombra, pincelDeCantosSemSiris } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
+import { desenharSiriAnimado, sombraDoSiriAnimada, fendaEscondeSombra, pincelDeCantosSemSiris, mostrarCantosDeDestino } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
 import { pintarVegetacao } from '@@MARE:modulo:src/posicionar-vegetacao-33409cef.mjs@@';
 import { conchasDaEquipe, pintarConchaDaEquipe } from '@@MARE:modulo:src/conchas-da-equipe-910d11c3.mjs@@';
 import { entradasDosSiris, preverDirecoesDaEquipe } from '@@MARE:modulo:src/nomes-dos-siris-e97b332f.mjs@@';
@@ -74,6 +74,7 @@ export function desenharLitoralOficial           (ctx                          ,
     fechados.has(chaveDaCasa({ coluna, linha })) ? '#' : c).join(''));
   const tela = montarSuperficie(quadro);
   const { pintar } = tela;
+  const mostrarCantos = mostrarCantosDeDestino();
   const pintarCanto = pincelDeCantosSemSiris(pintar, siris, origemX, origemY, ORIGEM_SIRI_PRAIA);
   const estruturas = arte.compor(fase, quadro);
   arte.pintarMar(pintar, fase, quadro, estruturas);
@@ -89,7 +90,7 @@ export function desenharLitoralOficial           (ctx                          ,
     if (fechada || (alta && casa === '=')) return;
     if (casa === 'H') arte.pintarPeca(pintar, 'banco', x, y);
     if (casa === 'C' && !conchas.has(chave)) arte.pintarPeca(pintar, 'concha', x, y);
-    if (destinos.has(chave)) pintarDestinoPraia(pintarCanto, x, y, arte.paleta);
+    if (mostrarCantos && destinos.has(chave)) pintarDestinoPraia(pintarCanto, x, y, arte.paleta);
   });
   pintarJuntasPraia(tela, mapa, quadro, alta, arte.paleta, mapaDaTextura);
   pintarVegetacao(pintar, fase, quadro.origemX, quadro.origemY, 48, (coluna, linha) => {
@@ -111,7 +112,7 @@ export function desenharLitoralOficial           (ctx                          ,
     }
     mecanismos?.pintar(pintar, pos, x, y);
     if (rasante.has(chave) || chave === alvo) arte.pintarPeca(pintar, rasante.has(chave) ? 'garca-imediata' : 'garca-aviso', x, y);
-    if (siris.length > 1) {
+    if (mostrarCantos && siris.length > 1) {
       for (const i of destinos.get(chave) ?? []) pintarInsignia(pintar, i, x + 10 + 13 * i, y + 39, arte.paleta);
     }
   });

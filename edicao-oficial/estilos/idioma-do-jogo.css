@@ -4,15 +4,48 @@
   border:2px solid #b78055; border-radius:0; background:#163641; color:#ffe2a3;
   font:700 14px/1 SeletorPraia, system-ui, sans-serif; image-rendering:pixelated;
 }
-#idioma-jogo {position:fixed;z-index:1100;inset:auto max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) auto;}
-body[data-painel-apoio-aberto] > #idioma-jogo {display:none}
-.idioma-no-painel {
-  position:absolute; left:9px; top:9px; z-index:2;
-  min-width:44px; min-height:44px; background:#183843; border-color:#52776e;
+/* Uma faixa de verdade, fora do jogo rolável, nunca cobre direção ou ação da fase. */
+html {block-size:100%}
+body {
+  --reserva-idioma:calc(52px + env(safe-area-inset-bottom,0px));
+  display:flex;flex-direction:column;block-size:100svh;block-size:100dvh;
+  overflow:hidden;
 }
-:is(.painel-apoio,#mare-a-mao):has(.idioma-no-painel) .painel-apoio-cabecalho {padding-inline-start:46px}
-@media(max-width:760px) {
-  .idioma-no-painel {position:static;justify-self:end;align-self:end;margin:0 8px 5px;order:3;min-height:34px}
-  :is(.painel-apoio,#mare-a-mao):has(.idioma-no-painel) .painel-apoio-cabecalho {padding-inline-start:8px}
+body > #jogo {flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain}
+.barra-idioma {
+  display:flex;flex:0 0 var(--reserva-idioma);justify-content:flex-end;align-items:flex-start;
+  padding:4px max(10px,env(safe-area-inset-right)) 0;
+  background:#102b39;border-top:1px solid #31515c;z-index:1100;
 }
+body[data-painel-apoio-aberto] .barra-idioma #idioma-jogo {visibility:hidden}
+body[data-painel-apoio-aberto] > #jogo {overflow:hidden}
+
+/* O seletor e a câmera terminam na borda acima da faixa, não atrás dela. */
+body > #jogo[data-tela="praia"][data-praia-direta] {min-height:0}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .camera-travessia {
+  height:max(340px,calc(100svh - 92px - var(--reserva-idioma)));
+}
+@media (width > 760px) {
+  #jogo[data-tela="praia"][data-praia-direta] #praia {
+    min-height:calc(100svh - var(--reserva-idioma));
+  }
+  #jogo[data-tela="praia"][data-praia-direta] {
+    --miolo:min(100%,clamp(650px,calc((100svh - 118px - var(--reserva-idioma)) * 16 / 9),1280px));
+  }
+  #jogo[data-tela="praia"][data-praia-direta] .praia-direta-quina[data-quina^="inferior"] {
+    bottom:var(--reserva-idioma);
+  }
+}
+@media (max-width:760px) {
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .camera-travessia {
+    height:clamp(270px,calc(100svh - 15rem - var(--reserva-idioma)),630px);
+  }
+}
+
+/* O controle dos diálogos é o último no foco, separado do conteúdo rolável. */
+.painel-rodape-idioma {
+  flex:none;display:flex;justify-content:flex-end;
+  padding:0 8px 3px;
+}
+.idioma-no-painel {background:#183843;border-color:#52776e}
 html[lang="en"] .secundario[lang="en"] {display:none}

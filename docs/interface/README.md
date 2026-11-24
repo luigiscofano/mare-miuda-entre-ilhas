@@ -10,9 +10,15 @@ A montagem [Os oito mundos](../arte/animacoes/README.md#os-oito-mundos) apresent
 
 ## Idioma do jogo
 
-Fora das janelas de apoio, o botão **EN** fica no canto inferior direito. Em **Configurações**, **Som e música**, **Créditos** e **Ilha de Improviso**, a troca aparece dentro da janela e faz parte da navegação por teclado. Depois de mudar para inglês, o rótulo passa a **PT**. A tradução acompanha títulos, objetivos, avisos e ações sem recriar a travessia ou regravar o save. O português é o padrão ao abrir ou recarregar o HTML normalmente.
+Fora das janelas de apoio, o botão **EN** fica no canto inferior direito, na faixa de rodapé fora da área jogável. Em **Configurações**, **Som e música**, **Créditos** e **Ilha de Improviso**, a troca aparece no rodapé da própria janela e faz parte da navegação por teclado. Depois de mudar para inglês, o rótulo passa a **PT**. A tradução acompanha títulos, objetivos, avisos e ações sem recriar a travessia ou regravar o save. O português é o padrão ao abrir ou recarregar o HTML normalmente.
 
 [Veja o botão de idioma na galeria](../arte/galeria/README.md#telas).
+
+## Movimento
+
+Mova com as **setas** ou **WASD** no teclado, ou deslize sobre o tabuleiro no celular. Um gesto completo em direção clara aciona um passo; toques curtos, diagonais sem direção dominante e gestos cancelados não acionam jogadas. A rolagem permanece disponível fora do tabuleiro.
+
+Os cantos de destino indicam jogadas possíveis somente após o pouso de todos os siris, inclusive ao sair de uma fenda. As regras de movimento e a duração das animações não mudam.
 
 ## Resultado e retorno na campanha
 
@@ -20,19 +26,19 @@ A placa de vitória ou derrota fica no centro do tabuleiro e se ajusta ao espaç
 
 Na campanha, o cabeçalho exibe apenas o nome da fase. O objetivo, a orientação e o mapa em símbolos estão em **Mapa em texto e ajuda**; o foco continua no título ao entrar na fase. O letreiro ilustrado não duplica o nome para leitores de tela e usa texto simples quando o dispositivo força uma paleta de alto contraste.
 
-Depois de um erro recuperável de maré ou garça, apenas o Siri afetado pisca três vezes. As direções ficam bloqueadas desde o erro até o fim da pausa de recuperação. Uma tecla, clique ou toque dado durante a pausa é descartado, não executado depois. Configurações, reinício e volta continuam disponíveis.
+Depois de um erro recuperável de maré ou garça, apenas o Siri afetado pisca três vezes. As direções ficam bloqueadas desde o erro até o fim da pausa de recuperação. Uma tecla ou um deslize feito durante a pausa é descartado, não executado depois. Configurações, reinício e volta continuam disponíveis.
 
-A preferência de movimento reduzido mostra a placa e seus botões sem esperar a animação e mantém uma pausa curta após o erro, sem piscadas. O terceiro erro termina a tentativa, sem animar um renascimento. A travessia da [Ilha de Improviso](#ilha-de-improviso) conserva seus próprios controles e comportamento de resultado.
+A preferência de movimento reduzido mostra a placa e seus botões sem esperar a animação e mantém uma pausa curta após o erro, sem piscadas. O terceiro erro termina a tentativa, sem animar um renascimento. A travessia da [Ilha de Improviso](#ilha-de-improviso) usa os mesmos atalhos e gestos de direção, e conserva seu comportamento de resultado.
 
 
 ## Seleção de fases
 
-O Arquipélago seleciona o **mundo**. Dentro dele, a seleção de **fases** continua com quatro páginas por mundo. Os 231 cartões preservam ordem, condições de acesso, rótulos de bloqueio e tipos de fase. Fases bônus e chefes opcionais continuam identificados.
+**Começar viagem** e **Continuar viagem** abrem o Arquipélago sem trocar o mundo gravado no save. No Arquipélago, você escolhe o **mundo**. Dentro dele, a seleção de **fases** continua com quatro páginas por mundo. Os 231 cartões preservam ordem, condições de acesso, rótulos de bloqueio e tipos de fase. Fases bônus e chefes opcionais continuam identificados.
 
 No computador, a seleção ocupa a janela; as quatro quinas de areia são recortes da arte de cada página e encostam nas bordas. O título, as pedras, a rota e os cartões mantêm a composição. O celular mantém a lista vertical.
 
 - **Configurações** abre o [painel de apoio](#painéis-de-apoio) dentro da seleção. Feche para continuar na mesma página, com foco no botão de origem.
-- **Voltar ao início** sai para o Porto. Ao continuar na mesma sessão, a seleção volta à página em que estava. Isso não regrava o progresso da campanha.
+- **Voltar ao início** sai para o Porto. Ao continuar na mesma sessão, escolha novamente o mundo para recuperar a página em que estava. Isso não regrava o progresso da campanha.
 - Brilhos em três tamanhos e espumas soltas são decorativos, sem área clicável nem anúncio ao leitor de tela. Com movimento reduzido, o fundo exibe um único quadro de espuma.
 
 ## Painéis de apoio

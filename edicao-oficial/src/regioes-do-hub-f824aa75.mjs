@@ -45,6 +45,7 @@ export function renderizarHub(doc,painel,{regioes,primeiro,movel,jogar,voltar,pa
   const inicio=botao(doc,'hub-inicio','Início');
   inicio.setAttribute('data-rotulo-contraste','Início');
   inicio.setAttribute('id','inicio-arquipelago');
+  inicio.append(criar(doc,'span','hub-rotulo-normal','Início'));
   inicio.addEventListener('click',voltar);
   palco.append(heading,inicio);
   for (const [slot,p] of regioes.slice(indice*porPagina,(indice+1)*porPagina).entries()){
@@ -60,7 +61,8 @@ export function renderizarHub(doc,painel,{regioes,primeiro,movel,jogar,voltar,pa
       cta.setAttribute('aria-disabled','true');
       if (p.motivo)cta.setAttribute('title',p.motivo);
     } else cta.addEventListener('click',()=>jogar(p.id));
-    card.append(h,cta);palco.append(card);
+    cta.append(criar(doc,'span','hub-rotulo-normal',status));
+    card.append(h,criar(doc,'span','hub-quantidade',p.fases+' fases'),cta);palco.append(card);
   }
   const pag=criar(doc,'div','hub-paginacao');
   const apontador=criar(doc,'p','hub-leitor hub-indicador',`Página ${indice+1} de ${total}`);
@@ -76,6 +78,7 @@ export function renderizarHub(doc,painel,{regioes,primeiro,movel,jogar,voltar,pa
   }
   palco.append(pag);
   if(movel) {
+    palco.append(criar(doc,'p','hub-deslize-normal','Deslize para trocar de mundo'));
     if (!bloqueioDeClique.has(painel)) {
       bloqueioDeClique.set(painel,-Infinity);
       // O painel é estável entre páginas: captura também um clique no cartão recém-renderizado.

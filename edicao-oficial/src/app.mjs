@@ -261,6 +261,7 @@ import { desenharDerivaOficial } from '@@MARE:modulo:src/render/deriva-oficial.m
 import { desenharEnseadaOficial } from '@@MARE:modulo:src/render/enseada-oficial.mjs@@';
 import { desenharMangueOficial } from '@@MARE:modulo:src/render/mangue-oficial.mjs@@';
 import { desenharRecifesOficiais } from '@@MARE:modulo:src/paleta-recifes-0525778e.mjs@@';
+import { conectarDeslizeNoTabuleiro } from '@@MARE:modulo:src/interface/deslize-no-tabuleiro.mjs@@';
 import { conectarTeclado } from '@@MARE:modulo:src/conectar-teclado-eb01b5a6.mjs@@';
 import { campanhaConcluida, CAPITULO_FINAL, concluirFase, entradaEm, entradasDo, ehIdFase, motivoDaRota, mundoAtual, nomeDo, posicoesVisitaveis, trilhasDo, viajar } from '@@MARE:modulo:src/mundo-valido-900be48c.mjs@@';
 
@@ -435,7 +436,6 @@ const paineis                            = {
 };
 const listaTestes = buscar('#fases-teste');
 const niveis = Array.from(document.querySelectorAll                   ('[data-fase]'));
-const controlesDaFase = Array.from(document.querySelectorAll                   ('[data-direcao]'));
 
 /* Interface antiga removida: 517e8c80 */
 const volumes = {
@@ -448,6 +448,7 @@ const TEXTOS_CREDITOS                                   = {
   final: 'A luz voltou. Quando a maré subiu, o farol mostrou o caminho de casa. As ilhas continuam esperando por você.',
 };
 let tela       = 'inicio';
+let arquipelagoDoPorto = false;
 
 /* Interface antiga removida: fb93dbd7 */
 let bancada = false;
@@ -537,7 +538,7 @@ function mostrarAcoesDerrota(){
   const focado=document.activeElement;
   const reiniciar=buscar('#reiniciar'), voltar=buscar('#voltar-seletor-fase');
   const estavaNoJogo=focado===reiniciar||focado===buscar('#tabuleiro')
-    ||buscar('#direcoes-da-fase').contains(focado)||focado===document.body;
+     ||focado===document.body;
   grupo.hidden=false;
   reiniciar.hidden=true;
   voltar.hidden=true;
@@ -561,7 +562,7 @@ function desenharResultadoDaTravessia(resultado) {
   }
   if(resultado?.tipo==='derrota'&&resultado.placa&&resultado.ate===Infinity)mostrarAcoesDerrota();
   if(resultado?.tipo==='vitoria'&&resultado.placa&&!mostrouAcoesVitoria)prepararAcoesVitoria(true);
-  pintarPlacaNaTela(buscar('#placa-resultado-v3'),resultado);
+  pintarPlacaNaTela(buscar('#placa-resultado-v3'),resultado,buscar('#legenda-resultado'));
   if(!resultado||resultado.pendente||resultado.placa)return;
   const canvas=buscar('#tabuleiro');
   const largura=canvas.width,altura=canvas.height;
@@ -640,14 +641,9 @@ function atualizarTravaDeRecuperacao(){
   window.clearTimeout?.(relogioDaTrava);
   relogioDaTrava=undefined;
   const resto=bloquearDirecaoAte-agoraDaTravessia();
-  // Só a campanha ganha a indicação nova. A pausa anterior do Improviso
-  // é aplicada pelo comando central, sem mudar a interface avulsa.
+  // Clicar e deslizar nunca enfileiram movimentos durante a recuperação.
   const travada=resto>0&&tela==='fase'&&modoCampanha()&&estado.situacao==='jogando';
-  for(const botao of controlesDaFase){
-    // aria-disabled comunica a espera sem arrancar o foco do botão de direção.
-    if(travada)botao.setAttribute('aria-disabled','true');
-    else botao.removeAttribute('aria-disabled');
-  }
+  buscar('#moldura').classList.toggle('recuperando-siri', travada);
   if(travada)relogioDaTrava=window.setTimeout?.(atualizarTravaDeRecuperacao,resto);
 }
 function zerarPausaDeRecuperacao(){
@@ -718,13 +714,17 @@ function atualizarAmbiente() {
 }
 
 function trocarTela(destino      , focar = true)       {
+  cancelarDeslizeNaFase();
 
 /* Interface antiga removida: c4827d95 */
   paineisDeApoio.fechar({ restaurarFoco: false, notificar: false });
   if(tela==='fase' && destino!=='fase') audio.limparEfeitosDaCena();
   if (destino !== 'fase') { limparAcoesDerrota(); limparAcoesVitoria(); resultadoDaTravessia=undefined; desenharResultadoDaTravessia(); pararAnimacaoDaFase(); zerarPausaDeRecuperacao(); }
+  if (destino !== 'praia') arquipelagoDoPorto = false;
   tela = destino;
-  buscar('#jogo').setAttribute('data-tela', destino);
+  const jogo = buscar('#jogo');
+  jogo.setAttribute('data-tela', destino);
+  jogo.scrollTop = 0;
   for (const [nome, painel] of Object.entries(paineis)) painel.hidden = nome !== destino;
   listaTestes.hidden = destino !== 'fase' || !bancada;
   atualizarAmbiente();
@@ -743,6 +743,9 @@ const paginasDosMundos = Object.create(null);
 const regrasDoHub = { entradasDo, posicoesVisitaveis, trilhasDo, motivoDaRota, viajar };
 const tamanhoDoHub = window.matchMedia?.('(max-width: 760px)');
 let indiceDoHub = 0;
+// O Porto abre a seleção sem mover o siri ou reescrever seu último mundo no save.
+const mundoDaNavegacao = () => arquipelagoDoPorto ? 'arquipelago' : mundoAtual(save.progresso);
+const regiaoDoMundo = mundo => mundo === 'praia-enseadinha' ? 'praia' : mundo;
 
 function pintarHub() {
   const painel = buscar('#cartoes-arquipelago');
@@ -752,10 +755,16 @@ function pintarHub() {
   renderizarHub(document,painel,{
     regioes, primeiro:indiceDoHub, movel,
     jogar(id) {
-      if(tela !== 'praia' || mundoAtual(save.progresso) !== 'arquipelago') return;
-      const progresso = jogarRegiao(save.progresso,id,regrasDoHub);
-      if(progresso === save.progresso) return;
-      save = {...save,progresso}; gravar(); abrirPraia();
+      if (tela !== 'praia' || mundoDaNavegacao() !== 'arquipelago') return;
+      const anterior = save.progresso;
+      const origem = arquipelagoDoPorto ? { ...anterior, mundo: 'arquipelago' } : anterior;
+      const progresso = jogarRegiao(origem, id, regrasDoHub);
+      if (progresso === origem) return;
+      // Reabrir o mundo do save mantém a casa anterior, inclusive na Enseadinha.
+      const retomar = arquipelagoDoPorto && id === regiaoDoMundo(mundoAtual(anterior));
+      arquipelagoDoPorto = false;
+      if (!retomar) { save = { ...save, progresso }; gravar(); }
+      abrirPraia();
     },
     voltar() { trocarTela('inicio',false); buscar('#comecar').focus(); },
     paginar(delta,foco) {
@@ -769,7 +778,7 @@ function pintarHub() {
   });
 }
 tamanhoDoHub?.addEventListener?.('change',()=>{
-  if(tela==='praia' && mundoAtual(save.progresso)==='arquipelago'){
+  if(tela==='praia' && mundoDaNavegacao()==='arquipelago'){
     const foco = document.activeElement?.getAttribute('data-regiao');
     if(foco) indiceDoHub=regioesDoHub(save.progresso,regrasDoHub).findIndex(r=>r.id===foco);
     pintarHub();
@@ -780,7 +789,7 @@ const regrasDaPraia = { opcoesDoSeletor, selecionarMarco, viajar, mundoAtual };
 
 function atualizarPraia(mensagem = '')       {
   const p = save.progresso;
-  const mundo = mundoAtual(p);
+  const mundo = mundoDaNavegacao();
   buscar('#rever-desfecho').hidden = mundo !== 'farol' || !campanhaConcluida(p);
   const direto = mundo !== 'arquipelago';
   const seletor = buscar('#seletor-fases');
@@ -838,14 +847,18 @@ fauna.addEventListener('load', () => {
 
 function abrirPraia(mensagem = '', focarMarco         )       {
   trocarTela('praia', false);
-  const mundoSeletor = seletorGraficoPara(mundoAtual(save.progresso));
+  const mundoSeletor = seletorGraficoPara(mundoDaNavegacao());
   if (mundoSeletor) {
     const pagina = paginaDaFase(mundoSeletor, focarMarco);
     if (pagina !== undefined) paginasDosMundos[mundoSeletor] = pagina;
   }
-  if (!mundoSeletor && mundoAtual(save.progresso) === 'arquipelago') {
-    const regiao = regiaoDoMarco(save.progresso,regrasDoHub);
-    if(regiao) indiceDoHub = regioesDoHub(save.progresso,regrasDoHub).findIndex(r=>r.id===regiao);
+  if (mundoDaNavegacao() === 'arquipelago') {
+    const anterior = mundoAtual(save.progresso);
+    const preferida = anterior === 'arquipelago'
+      ? regiaoDoMarco(save.progresso, regrasDoHub) : regiaoDoMundo(anterior);
+    const regioes = regioesDoHub(save.progresso, regrasDoHub);
+    const regiao = regioes.find(r => r.id === preferida && r.livre)?.id;
+    indiceDoHub = regiao ? regioes.findIndex(r => r.id === regiao) : 0;
     atualizarPraia(mensagem);
     const alvo = regiao && document.querySelector(`[data-regiao="${regiao}"]`);
     (alvo || buscar('#titulo-cartoes-arquipelago')).focus();
@@ -921,15 +934,7 @@ function atualizarFase(eventos                    = [], mensagem = '')       {
   const equipe = buscar('#grupo-siris');
   equipe.hidden = !emEquipe;
   equipe.textContent = emEquipe ? 'Uma direção para todos. Cada siri bloqueia a casa onde começou o passo.' : '';
-  buscar('#direcoes-da-fase').setAttribute('aria-label', emEquipe ? 'Mover a equipe de siris' : 'Mover o siri');
   const previsoesDaEquipe = !finalizada && (emEquipe || fase.fendas) ? preverDirecoesDaEquipe(fase, estado) : [];
-  controlesDaFase.forEach(botao => {
-    const direcao = botao.dataset.direcao           ;
-    const grupo = emEquipe ? previsoesDaEquipe.find(p => p.direcao === direcao) : undefined;
-    const detalhe = grupo ? grupo.movimentos.map((movimento, i) =>
-      `${NOMES_DOS_SIRIS[i]} ${'destino' in movimento ? `vai para ${coordenadas(movimento.destino)}` : 'fica no lugar'}`).join('; ') : '';
-    botao.setAttribute('aria-label', detalhe ? `${ROTULOS_DIRECAO[direcao]}. ${detalhe}.` : ROTULOS_DIRECAO[direcao]);
-  });
   const rasante = casasDoRasante(fase, estado.passos + 1);
   const alvo = rasante[0];
   const mostrarGarca = Boolean(fase.ameaca && !finalizada);
@@ -1046,8 +1051,10 @@ function prepararFase(mensagem         , focar = true)       {
   const ferramentas=buscar('#ferramentas-fase');
   ferramentas.hidden=!campanha;
   const reiniciar=buscar('#reiniciar');
+  const acoesDaPartida=buscar('#acoes-da-partida');
+  acoesDaPartida.hidden=campanha;
   if(campanha)ferramentas.insertBefore(reiniciar,buscar('#abrir-configuracoes-fase'));
-  else buscar('#direcoes-da-fase').parentElement.append(reiniciar);
+  else acoesDaPartida.append(reiniciar);
   buscar('#voltar-fase').hidden=campanha;
   if(campanha)buscar('#jogo').setAttribute('data-ferramentas-campanha','');
   else {
@@ -1308,8 +1315,11 @@ function abrirCreditos(contexto, abertura) {
 
 buscar('#comecar').addEventListener('click', () => {
   desafioAvulso = undefined;
-  save = { ...save, progresso: { ...save.progresso, viuTutorial: true } };
-  gravar();
+  if (!save.progresso.viuTutorial) {
+    save = { ...save, progresso: { ...save.progresso, viuTutorial: true } };
+    gravar();
+  }
+  arquipelagoDoPorto = true;
   abrirPraia();
 });
 buscar('#bancada').addEventListener('click', () => { desafioAvulso = undefined; bancada = true; selecionarFase(0); });
@@ -1332,6 +1342,7 @@ function configuracoesNaFaseAbertas() {
 }
 
 function abrirPainelDeSom(tipo, abertura) {
+  cancelarDeslizeNaFase();
   if ((tela === 'fase' && !modoCampanha()) ||
       (tela === 'praia' && !seletorGraficoPara(mundoAtual(save.progresso)))) return;
   const noPorto = tipo === 'som';
@@ -1389,7 +1400,6 @@ for(const [id,acionar] of [['#tentar-novamente-fase',reiniciar],['#voltar-derrot
 }
 buscar('#reiniciar').addEventListener('click', reiniciar);
 niveis.forEach((botao, i) => botao.addEventListener('click', () => selecionarFase(i)));
-controlesDaFase.forEach(botao => botao.addEventListener('click', () => mover(botao.dataset.direcao           )));
 
 /* Interface antiga removida: e862ce40 */
 for (const canal of ['musica', 'efeitos']         ) {
@@ -1417,6 +1427,9 @@ for (const canal of ['musica', 'efeitos']         ) {
 }
 
 conectarTeclado(window, mover, reiniciar, () => {}, voltar, () => tela === 'fase' && !configuracoesNaFaseAbertas());
+const cancelarDeslizeNaFase = conectarDeslizeNoTabuleiro(buscar('#moldura'), window, mover,
+  () => tela === 'fase' && estado.situacao === 'jogando' && !configuracoesNaFaseAbertas()
+    && agoraDaTravessia() >= bloquearDirecaoAte);
 // No toque a ativação acontece no fim do gesto. Clique também cobre o
 // acionamento por tecnologia assistiva, sem depender de mouse ou gesto anterior.
 window.addEventListener('pointerdown', evento => {

@@ -1,5 +1,5 @@
 import { crescimentoDeFiletesNaBase } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
-import { desenharSiriAnimado, sombraDoSiriAnimada, fendaEscondeSombra, pincelDeCantosSemSiris } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
+import { desenharSiriAnimado, sombraDoSiriAnimada, fendaEscondeSombra, pincelDeCantosSemSiris, mostrarCantosDeDestino } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
 import { pintarVegetacao } from '@@MARE:modulo:src/posicionar-vegetacao-33409cef.mjs@@';
 import { pintarVisitaDaPraia, comporVisitasDaPraia } from '@@MARE:modulo:src/nomes-das-rochas-6e85a20e.mjs@@';
 import { conchasDaEquipe, pintarConchaDaEquipe } from '@@MARE:modulo:src/conchas-da-equipe-910d11c3.mjs@@';
@@ -52,6 +52,7 @@ export function desenharMangueOficial(ctx                          , fase      ,
   const { pintar } = tela;
   const alta = mareAlta(estado.passos);
   const siris = posicoesDosSiris(estado);
+  const mostrarCantos = mostrarCantosDeDestino();
   const pintarCanto = pincelDeCantosSemSiris(pintar, siris, origemX, origemY, ORIGEM_SIRI_PRAIA);
   const ocupadas = new Set(siris.map(chaveDaCasa));
   const conchas = conchasDaEquipe(fase, estado);
@@ -92,7 +93,7 @@ export function desenharMangueOficial(ctx                          , fase      ,
     if (c === '=' && alta) return;
     if (c === 'H') pintarPecaMangue(pintar, 'refugio-elevado', x, y);
     if (c === 'C' && !conchas.has(chave)) conchaDoTile(pintar, x, y);
-    if (entradas.has(chave)) pintarPecaMangue(pintarCanto, 'cantos-passo-possivel', x, y);
+    if (mostrarCantos && entradas.has(chave)) pintarPecaMangue(pintarCanto, 'cantos-passo-possivel', x, y);
   });
   pintarJuntasPraia(tela, mapa, quadro, alta, PALETA_MANGUE);
   pintarVegetacao(pintar, fase, quadro.origemX, quadro.origemY, 48, (coluna, linha) => {

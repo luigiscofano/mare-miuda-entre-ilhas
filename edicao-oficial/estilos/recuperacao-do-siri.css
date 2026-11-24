@@ -1,2 +1,3 @@
-/* A pausa do retorno não altera a posição nem o foco do controle. */
-#direcoes-da-fase button[aria-disabled="true"] { opacity: .72; cursor: wait }
+/* Vertical e horizontal movem no tabuleiro, mas o zoom por pinça permanece. */
+#fase #moldura { touch-action: pinch-zoom; }
+#fase #moldura.recuperando-siri { cursor: wait; }
