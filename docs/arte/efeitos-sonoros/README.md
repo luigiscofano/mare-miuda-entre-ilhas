@@ -1,5 +1,7 @@
 # Efeitos sonoros de Entre Ilhas
 
+**Português** · [English](README.en.md)
+
 [Voltar ao guia de arte](../README.md) · [Trilha de violão](../trilha-sonora/README.md) · [Validação técnica](../../producao/README.md#validação-dos-efeitos-sonoros)
 
 [**Ouvir os 11 efeitos sonoros (MP3)**](Mare-Miuda-Efeitos-Mais-Sutis.mp3)

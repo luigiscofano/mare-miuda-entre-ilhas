@@ -1,5 +1,7 @@
 # Campanha
 
+**Português** · [English](README.en.md)
+
 O [guia de progressão e mecânicas](Mare-Miuda-Progressao-e-Mecanicas.pdf) acompanha a campanha oficial nos oito mundos. Mostra exemplos da maré, das pérolas, da garça, dos Siris sincronizados e das fendas. O comprimento das rotas não equivale à dificuldade percebida pelo jogador.
 
 Veja [24 vitórias no filme Os oito mundos](../arte/animacoes/README.md#os-oito-mundos) ou consulte [todas as 231 travessias nas duas marés](../arte/catalogo-231-travessias/README.md).

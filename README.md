@@ -1,5 +1,7 @@
 # Maré Miúda: Entre Ilhas
 
+**Português** · [English](README.en.md)
+
 <a href="docs/arte/galeria/identidade/logo-oficial.png"><img src="docs/arte/galeria/identidade/logo-oficial.png" alt="Logo oficial: Siri Coral sobre uma placa de areia" width="360"></a>
 
 **Um quebra-cabeça por turnos em pixel art. A cada três passos válidos, a maré vira.** Planeje onde o Siri vai estar quando a água subir e use os baixios que reaparecem quando ela desce.

@@ -1,5 +1,7 @@
 # Catálogo visual das 231 travessias
 
+**Português** · [English](README.en.md)
+
 Para ver uma seleção em movimento, o [filme Os oito mundos](../animacoes/README.md#os-oito-mundos) acompanha 24 vitórias da campanha, três por mundo.
 
 A campanha de **Maré Miúda: Entre Ilhas** em 462 imagens: uma de maré baixa e outra de maré alta para cada fase, na ordem do seletor do jogo.

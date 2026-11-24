@@ -1,5 +1,7 @@
 # Animações de Entre Ilhas
 
+**Português** · [English](README.en.md)
+
 ## Os oito mundos
 
 [**Abrir ou baixar o filme em MP4**](Mare-Miuda-Os-Oito-Mundos.mp4) · **4min22,5s · 1600 × 900 · 60 fps · com áudio**
