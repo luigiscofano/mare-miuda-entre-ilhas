@@ -8,6 +8,10 @@ A montagem [Os oito mundos](../arte/animacoes/README.md#os-oito-mundos) apresent
 
 © Luigi Scofano de Araújo. Todos os direitos reservados.
 
+## Porto de Partida
+
+No Porto, o mar da própria cena preenche a tela até o rodapé de idioma. A composição e o tamanho dos controles são preservados, e as quatro quinas de areia acompanham as bordas reais. Em telas curtas, a área central rola para não cortar controles.
+
 ## Idioma do jogo
 
 Fora das janelas de apoio, o botão **EN** fica no canto inferior direito, na faixa de rodapé fora da área jogável. Em **Configurações**, **Som e música**, **Créditos** e **Ilha de Improviso**, a troca aparece no rodapé da própria janela e faz parte da navegação por teclado. Depois de mudar para inglês, o rótulo passa a **PT**. A tradução acompanha títulos, objetivos, avisos e ações sem recriar a travessia ou regravar o save. O português é o padrão ao abrir ou recarregar o HTML normalmente.
