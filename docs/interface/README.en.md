@@ -8,6 +8,10 @@
 
 © Luigi Scofano de Araújo. All rights reserved.
 
+## Starting Harbor
+
+At Starting Harbor, the scene’s ocean fills the screen down to the language footer. The composition and control sizes stay intact, while the four sand corners meet the outer edges. On short screens, the central area scrolls so no controls are cut off.
+
 ## In-game language
 
 Outside support dialogs, the **EN** button is in the lower-right corner of a footer outside the play area. In **Settings**, **Sound and Music**, **Credits**, and **Improvisation Island**, the switch is at the bottom of the dialog and stays in its keyboard navigation order. Once you switch to English, its label becomes **PT**. Titles, objectives, alerts, and actions are translated without recreating the crossing or rewriting the save. Portuguese is the default when you open or reload the HTML normally.

@@ -519,8 +519,8 @@ button:disabled { cursor: default; opacity: .64; }
 }
 
 /* Porto de Partida: só a tela inicial usa a composição aprovada. */
-body:has(#jogo[data-tela="inicio"]) { background:#0f3946; }
-#jogo[data-tela="inicio"] { width:min(100%,960px); padding:0; }
+body:has(#jogo[data-tela="inicio"]) { background:#134653; }
+#jogo[data-tela="inicio"] { width:100%; padding:0; }
 #jogo[data-tela="inicio"] > :is(header,footer),
 .porto-so-leitor {
   position:absolute; width:1px; height:1px; padding:0; margin:0;
@@ -553,7 +553,6 @@ body:has(#jogo[data-tela="inicio"]) { background:#0f3946; }
 #fechar-som-inicio { margin-top:.5rem; }
 #bancada { margin-top:.5rem; }
 @media(width <= 760px) {
-  #jogo[data-tela="inicio"] { width:min(100%,384px); }
   #inicio .porto-palco { aspect-ratio:384/712; --passo-porto:calc(100cqw / 384); }
 }
 @media (width > 760px) {
