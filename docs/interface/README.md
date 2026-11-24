@@ -1,6 +1,6 @@
 # Arquipélago
 
-[Guia visual do Arquipélago (PDF)](Mare-Miuda-Arquipelago.pdf). As páginas recompõem estados reais e camadas aprovadas dos oito mundos para computador e celular.
+[Galeria de telas do jogo](../arte/galeria/README.md) · [Guia visual do Arquipélago (PDF)](Mare-Miuda-Arquipelago.pdf). As páginas recompõem estados reais e camadas aprovadas dos oito mundos para computador e celular.
 
 A montagem [Os oito mundos](../arte/animacoes/README.md#os-oito-mundos) apresenta o Porto, o Arquipélago, os oito seletores e, no final, Ilha de Improviso, Som e música e Créditos.
 
