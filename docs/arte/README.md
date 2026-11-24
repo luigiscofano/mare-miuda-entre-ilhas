@@ -9,6 +9,7 @@
 
 ## Animações
 
+- [Filme Os oito mundos](animacoes/README.md#os-oito-mundos): arte, navegação e ação dos oito mundos, com trilha e efeitos do jogo.
 - [Vídeo sem som, com a ação ampliada](animacoes/README.md).
 
 - [Câmera, moldura e oceano](camera/README.md): padrões de enquadramento e cenários das fases.

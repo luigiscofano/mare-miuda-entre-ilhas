@@ -1,5 +1,36 @@
 # Animações de Entre Ilhas
 
+## Os oito mundos
+
+[**Abrir ou baixar o filme em MP4**](Mare-Miuda-Os-Oito-Mundos.mp4) · **4min22,5s · 1600 × 900 · 60 fps · com áudio**
+
+Três vitórias em cada um dos oito mundos, em 24 partidas da campanha. O filme também mostra o Porto de Partida, o Arquipélago, os seletores, uma travessia na Ilha de Improviso com seu histórico, Som e música, Créditos e o retorno ao Porto. O vídeo mostra uma seleção de fases, não as 231 travessias do jogo.
+
+Os tabuleiros e as vitórias vêm de partidas reproduzidas com os módulos da edição oficial. As telas de navegação e os painéis foram recompostos para a montagem com a arte e os estados da interface. A edição combina [**A Outra Margem**](../trilha-sonora/README.md), para violão de nylon, e [os efeitos sonoros do jogo](../efeitos-sonoros/README.md). Não é uma gravação contínua da interface nem uma atualização da versão jogável.
+
+### Capítulos do filme
+
+| Início | Trecho |
+| --- | --- |
+| 00:00.000 | Porto de Partida |
+| 00:03.000 | Arquipélago |
+| 00:10.050 | Praia das Conchas |
+| 00:29.600 | Recifes Expostos |
+| 00:59.783 | Mangue dos Siris Duplos |
+| 01:18.083 | Enseada da Garça |
+| 01:41.367 | Ilhas à Deriva |
+| 02:13.000 | Grutas da Espuma |
+| 02:46.167 | Baía das Brasas |
+| 03:18.167 | Arquipélago do Farol |
+| 03:58.300 | Ilha de Improviso |
+| 04:12.500 | Som e música |
+| 04:16.050 | Créditos |
+| 04:20.050 | Volta ao Porto de Partida |
+
+Se a página do GitHub não reproduzir o arquivo, baixe o MP4 e abra-o em um reprodutor local. Para conferir a cópia, o arquivo tem **16.383.000 bytes** e SHA-256 `12e36e09a50f4c8b42eb15a161dfe12cfb2d959dae6af386b7cfb4689887f88f`.
+
+## Registro de animações sem som
+
 [Assistir ou baixar a versão ampliada](Mare-Miuda-Animacoes-Sem-Som-Ampliadas.mp4), **2min15s · 1440 × 810 · 60 fps · sem áudio**. As cenas menores ganharam zoom sem corte. Esta cópia para o GitHub tem compressão maior que o arquivo entregue no chat, mas mantém o enquadramento, a duração e os 8.109 quadros.
 
 O vídeo é um registro anterior às placas maiores e às piscadas reforçadas da campanha. Alterna quadros do motor, demonstrações dos controles e estudos anteriores identificados. Os 81 padrões são configurações do estudo de maré, não 81 fases. As fendas mostradas são as quatro combinações reproduzidas em fases reais.
@@ -37,4 +68,4 @@ Na derrota, depois do quadro final, o painel mostra **Tentar novamente** e **Vol
 
 Na revisão atual da campanha, as placas crescem junto ao enquadramento, mantêm centralização e preservam as conchas da vitória. As espirais laterais aparecem na derrota. O artefato de placar não substitui as ações da interface nem altera o tabuleiro.
 
-Depois da animação de maré ou garça, o Siri que sofreu um erro recuperável faz três pulsos claros ao longo de uma janela de 496 ms, sem alterar a luz fora do sprite. A frente de maré avança ou recua de forma simétrica, três pixels por 30 ms. A maré lógica continua virando a cada três passos válidos. Em caso de erro, o bloqueio acompanha o tempo visual da água, preservando a pausa após o retorno e o ritmo das três piscadas. Com movimento reduzido, a pausa desde o erro é de 528 ms, sem piscadas. Consulte [resultado e retorno](../../interface/README.md#resultado-e-retorno-na-campanha). O vídeo acima não pretende mostrar essa revisão.
+Depois da animação de maré ou garça, o Siri que sofreu um erro recuperável faz três pulsos claros ao longo de uma janela de 496 ms, sem alterar a luz fora do sprite. A frente de maré avança ou recua de forma simétrica, três pixels por 30 ms. A maré lógica continua virando a cada três passos válidos. Em caso de erro, o bloqueio acompanha o tempo visual da água, preservando a pausa após o retorno e o ritmo das três piscadas. Com movimento reduzido, a pausa desde o erro é de 528 ms, sem piscadas. Consulte [resultado e retorno](../../interface/README.md#resultado-e-retorno-na-campanha). O registro sem som não pretende mostrar essa revisão.

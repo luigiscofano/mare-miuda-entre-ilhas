@@ -22,4 +22,6 @@ O catálogo apresenta separadamente os sons usados na edição offline. Os efeit
 
 O MP3 é para escuta e documentação. No jogo, os efeitos são arquivos individuais, tocados conforme os eventos correspondentes. Avisos, mudanças no tabuleiro e texto apresentam as mesmas informações a quem prefere jogar sem som.
 
+O [filme Os oito mundos](../animacoes/README.md#os-oito-mundos) também usa os efeitos do jogo na montagem dos replays.
+
 © 2026 Luigi Scofano de Araújo. Todos os direitos reservados.

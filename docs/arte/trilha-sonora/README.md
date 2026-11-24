@@ -18,6 +18,8 @@ Os efeitos de jogo permanecem separados da música. As indicações visuais e te
 
 [Regule os volumes em **Som e música** ou **Configurações**](../../interface/README.md#painéis-de-apoio). A imagem de capa desta documentação não aparece nesses painéis do jogo.
 
+Ouça a trilha em contexto no [filme Os oito mundos](../animacoes/README.md#os-oito-mundos), com os efeitos do jogo na montagem.
+
 ## Arquivo usado
 
 | Parâmetro | Valor |
