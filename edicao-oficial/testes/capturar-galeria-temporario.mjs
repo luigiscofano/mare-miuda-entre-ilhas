@@ -50,6 +50,7 @@ async function tela(viewport, fn, save = undefined) {
     await ctx.route('**/*', r => r.request().url().startsWith(origem + '/') || r.request().url().startsWith('data:') ? r.continue() : r.abort());
     const p = await ctx.newPage();
     const erros = [];
+    p.setDefaultTimeout(8_000);
     p.on('pageerror', e => erros.push(e.message));
     if (save) await p.addInitScript(({ chave, save }) => localStorage.setItem(chave, JSON.stringify(save)), { chave, save });
     await p.goto(mestra, { waitUntil: 'load', timeout: 90_000 });
@@ -93,14 +94,14 @@ try {
   if (modo !== 'porto') {
     await tela(celular, p => arte(p, 'porto-celular', refPorto));
     await tela(desktop, async p => {
-      for (const [nome, seletor, checar] of [
-        ['ilha-de-improviso', '#abrir-mare-a-mao', '#gerar-mare-a-mao'],
-        ['som-e-musica', '#abrir-som-inicio', '#configuracao-jogo .painel-acao'],
-        ['creditos', '#creditos-inicio', '#creditos .painel-acao'],
+      for (const [nome, seletor, checar, fechar] of [
+        ['ilha-de-improviso', '#abrir-mare-a-mao', '#gerar-mare-a-mao', '#voltar-mare-a-mao'],
+        ['som-e-musica', '#abrir-som-inicio', '#configuracao-jogo .painel-acao', '#fechar-som-inicio'],
+        ['creditos', '#creditos-inicio', '#creditos .painel-acao', '#voltar-creditos'],
       ]) {
         await botao(p, seletor);
         await arte(p, nome, checar);
-        await p.keyboard.press('Escape');
+        await botao(p, fechar);
         await p.locator('[aria-modal=true]:visible').waitFor({ state: 'hidden' });
       }
       await botao(p, '#idioma-jogo');
