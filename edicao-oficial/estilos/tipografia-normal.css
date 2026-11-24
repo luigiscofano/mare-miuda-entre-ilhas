@@ -59,8 +59,8 @@
 }
 
 /* Bases de pixel art sem os rótulos em bitmap; os títulos continuam na própria arte. */
-@media (min-width:761px) { html:not([lang="en"]) .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-7e73031e3dd3255eb2d6.png@@');} }
-@media (min-width:761px) { html[lang="en"] .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-7e73031e3dd3255eb2d6.png@@');} }
+@media (min-width:761px) { html:not([lang="en"]) .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-pt.png@@');} }
+@media (min-width:761px) { html[lang="en"] .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-en.png@@');} }
 @media (min-width:761px) { html:not([lang="en"]) #comecar {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-e50cff31491924f8e19f.png@@');} }
 @media (min-width:761px) { html[lang="en"] #comecar {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-e50cff31491924f8e19f.png@@');} }
 @media (min-width:761px) { html:not([lang="en"]) #comecar[data-retomar="true"] {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-150a9cb56034aad8cf52.png@@');} }
@@ -71,8 +71,8 @@
 @media (min-width:761px) { html[lang="en"] #abrir-som-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-f278576da8b289edd043.png@@');} }
 @media (min-width:761px) { html:not([lang="en"]) #creditos-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-f72dea30a3b4be2bf808.png@@');} }
 @media (min-width:761px) { html[lang="en"] #creditos-inicio {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-f72dea30a3b4be2bf808.png@@');} }
-@media (max-width:760px) { html:not([lang="en"]) .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-027fb53cb8c2a9508856.png@@');} }
-@media (max-width:760px) { html[lang="en"] .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-027fb53cb8c2a9508856.png@@');} }
+@media (max-width:760px) { html:not([lang="en"]) .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/celular-pt.png@@');} }
+@media (max-width:760px) { html[lang="en"] .porto-palco {--cena-porto:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/celular-en.png@@');} }
 @media (max-width:760px) { html:not([lang="en"]) #comecar {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-eb34a8f6d8205969a1de.png@@');} }
 @media (max-width:760px) { html[lang="en"] #comecar {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/en-eb34a8f6d8205969a1de.png@@');} }
 @media (max-width:760px) { html:not([lang="en"]) #comecar[data-retomar="true"] {--placa-porto:url('data:image/png;base64,@@MARE:b64:assets/image/fonte/pt-16b5090fb103c9a717f3.png@@');} }

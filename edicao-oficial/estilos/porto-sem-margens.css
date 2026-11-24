@@ -1,0 +1,63 @@
+/* O mar ocupa a área do Porto toda. O palco central mantém escala e
+   proporções; as quinas da própria arte acompanham as bordas reais. */
+#inicio {
+  --largura-porto:960px;
+  --largura-quina:96px;
+  position:relative;
+  isolation:isolate;
+  container-type:inline-size;
+  display:grid;
+  place-items:center;
+  min-block-size:calc(100svh - var(--reserva-idioma));
+  min-block-size:calc(100dvh - var(--reserva-idioma));
+}
+#inicio .porto-palco { width:min(100%, var(--largura-porto)); }
+.porto-quinas {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+}
+.porto-quinas > [data-quina] {
+  position:absolute;
+  width:min(var(--largura-quina),10cqw);
+  height:auto;
+  aspect-ratio:1;
+  background:var(--arte-quina) center / 100% 100% no-repeat;
+  image-rendering:pixelated;
+}
+.porto-quinas > [data-quina^="superior"] { top:0; }
+.porto-quinas > [data-quina^="inferior"] { bottom:0; }
+.porto-quinas > [data-quina$="esquerda"] { left:0; }
+.porto-quinas > [data-quina$="direita"] { right:0; }
+.porto-quinas > [data-quina="superior-esquerda"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-superior-esquerda.png@@'); }
+.porto-quinas > [data-quina="superior-direita"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-superior-direita.png@@'); }
+.porto-quinas > [data-quina="inferior-esquerda"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-inferior-esquerda.png@@'); }
+.porto-quinas > [data-quina="inferior-direita"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-inferior-direita.png@@'); }
+@media (width <= 760px) {
+  #inicio { --largura-porto:384px; --largura-quina:64px; }
+  .porto-quinas > [data-quina] { width:min(var(--largura-quina),16.66667cqw); aspect-ratio:64/56; }
+  .porto-quinas > [data-quina="superior-esquerda"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/celular-superior-esquerda.png@@'); }
+  .porto-quinas > [data-quina="superior-direita"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/celular-superior-direita.png@@'); }
+  .porto-quinas > [data-quina="inferior-esquerda"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/celular-inferior-esquerda.png@@'); }
+  .porto-quinas > [data-quina="inferior-direita"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/celular-inferior-direita.png@@'); }
+}
+
+.porto-quinas > [data-rocha] { display:none; }
+@media (width > 760px) {
+  .porto-quinas > [data-rocha] {
+    display:block; position:absolute; top:0;
+    background:var(--arte-rocha) center / 100% 100% no-repeat;
+    image-rendering:pixelated;
+  }
+  .porto-quinas > [data-rocha="esquerda"] {
+    width:min(45px,4.6875cqw); aspect-ratio:45/12;
+    left:calc(50% - min(204px,21.25cqw));
+    --arte-rocha:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-rocha-esquerda.png@@');
+  }
+  .porto-quinas > [data-rocha="direita"] {
+    width:min(44px,4.583333cqw); aspect-ratio:44/14;
+    left:calc(50% + min(203px,21.145833cqw));
+    --arte-rocha:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-rocha-direita.png@@');
+  }
+}
