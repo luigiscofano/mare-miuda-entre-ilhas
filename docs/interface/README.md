@@ -34,7 +34,7 @@ No computador, a seleção ocupa a janela; as quatro quinas de areia são recort
 | **Créditos** | No Porto, pelo botão **Créditos**. | Créditos do jogo, sem revelar o desfecho da campanha. A apresentação de conclusão é separada e mantém **Voltar ao mapa**. |
 | **Ilha de Improviso** | No Porto. | Filtros da travessia avulsa, histórico e **Gerar travessia**. |
 
-Cada painel aparece centralizado, sem ocupar toda a tela, e escurece em 64% a tela atrás. Se a janela for curta, a rolagem fica dentro do painel. A tela de fundo permanece visível, mas não recebe comandos enquanto o painel está aberto.
+Cada painel aparece centralizado, sem ocupar toda a tela, e escurece em 79% a tela atrás. As quatro quinas da moldura têm brilhos brancos decorativos que não recebem foco nem interceptam toques. Se a janela for curta, a rolagem fica dentro do painel. A tela de fundo permanece visível, mas não recebe comandos enquanto o painel está aberto.
 
 **Tab** e **Shift+Tab** percorrem os controles do painel. **Esc**, o **X**, o botão **Fechar** (ou **Voltar** em Créditos e Ilha de Improviso) e o clique ou toque na área escurecida fecham o painel de apoio e devolvem o foco ao botão que o abriu. Na seleção, a página não muda; dentro da fase, nenhum movimento é executado por trás do painel.
 

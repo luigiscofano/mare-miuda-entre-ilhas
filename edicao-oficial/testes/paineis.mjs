@@ -7,7 +7,11 @@ const entrada = Buffer.from(html.match(uri)[0].split(',')[1], 'base64').toString
 const modulo = entrada.split('\n').find(linha => linha.startsWith('import { criarPaineisDeApoio }')).match(uri)[0];
 const { criarPaineisDeApoio } = await import(modulo);
 
-assert.match(html, /background:rgb\(9 30 39 \/ 64%\)/);
+assert.match(html, /background:rgb\(9 30 39 \/ 79%\)/);
+assert.equal((html.match(/class="painel-brilhos" aria-hidden="true"/g) ?? []).length, 3);
+assert.match(html, /\.painel-brilhos\s*\{[^}]*pointer-events:none/);
+assert.match(html, /@media \(forced-colors:active\) \{\s*\.painel-brilhos \{display:none\}/);
+
 assert.match(html, /id="bancada" hidden tabindex="-1"/);
 assert.match(html, /id="mare-a-mao"[^>]+role="dialog"[^>]+aria-modal="true"/);
 assert.match(html, /type="submit" id="gerar-mare-a-mao" form="configurar-mare-a-mao"/);
@@ -98,4 +102,4 @@ assert.equal(documento.activeElement,repetir,'Histórico aberto permite navegar 
 fundo.disparar('click');
 assert.equal(documento.activeElement,abrirIlha);
 assert(ilha.hidden && fundo.hidden);
-console.log('Fundo comum 64%, modalidade, foco, histórico da Ilha e retorno do desfecho: OK.');
+console.log('Fundo comum 79%, brilhos decorativos, modalidade, foco, histórico da Ilha e retorno do desfecho: OK.');

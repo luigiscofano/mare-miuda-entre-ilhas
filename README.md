@@ -37,7 +37,7 @@ Veja [controles e acessibilidade](docs/interface/README.md#resultado-e-retorno-n
 
 ## Painéis de apoio
 
-Os painéis **Configurações**, **Som e música**, **Créditos** e **Ilha de Improviso** abrem no centro, com a tela anterior ainda visível sob um escurecimento de 64%. Eles não ocupam a tela inteira. No Porto, **Som e música** identifica a trilha e mostra os volumes; na seleção de fases e na partida, abra **Configurações** para ajustá-los. Fechar um painel de apoio devolve o foco ao botão de origem sem mudar a fase ou a página de seleção.
+Os painéis **Configurações**, **Som e música**, **Créditos** e **Ilha de Improviso** abrem no centro, com a tela anterior ainda visível sob um escurecimento de 79%. Eles não ocupam a tela inteira e têm brilhos brancos nas quatro quinas da moldura. No Porto, **Som e música** identifica a trilha e mostra os volumes; na seleção de fases e na partida, abra **Configurações** para ajustá-los. Fechar um painel de apoio devolve o foco ao botão de origem sem mudar a fase ou a página de seleção.
 
 [Ver controles e acessibilidade dos painéis](docs/interface/README.md#painéis-de-apoio).
 
