@@ -6,6 +6,12 @@ A montagem [Os oito mundos](../arte/animacoes/README.md#os-oito-mundos) apresent
 
 © Luigi Scofano de Araújo. Todos os direitos reservados.
 
+## Idioma do jogo
+
+Fora das janelas de apoio, o botão **EN** fica no canto inferior direito. Em **Configurações**, **Som e música**, **Créditos** e **Ilha de Improviso**, a troca aparece dentro da janela e faz parte da navegação por teclado. Depois de mudar para inglês, o rótulo passa a **PT**. A tradução acompanha títulos, objetivos, avisos e ações sem recriar a travessia ou regravar o save. O português é o padrão ao abrir ou recarregar o HTML normalmente.
+
+[Veja o botão de idioma na galeria](../arte/galeria/README.md#telas).
+
 ## Resultado e retorno na campanha
 
 A placa de vitória ou derrota fica no centro do tabuleiro e se ajusta ao espaço disponível. Na derrota, **Tentar novamente** e **Voltar à seleção de fases** aparecem ao fim da entrada da placa. Tentar de novo volta ao início da mesma fase; voltar abre a página e foca o cartão dessa fase. Os botões de vitória não mudaram; **Configurações** abre o [painel de apoio](#painéis-de-apoio).

@@ -6,7 +6,7 @@
 
 **8 mundos · 231 fases de campanha · Edição offline para computador e celular**
 
-[Como jogar](#como-jogar) · [Galeria](#galeria-do-jogo) · [Filme dos oito mundos](docs/arte/animacoes/Mare-Miuda-Os-Oito-Mundos.mp4) · [Todos os PDFs e vídeos](#pdfs-e-vídeos)
+[Como jogar](#como-jogar) · [Idioma do jogo](#idioma-do-jogo) · [Galeria](#galeria-do-jogo) · [Filme dos oito mundos](docs/arte/animacoes/Mare-Miuda-Os-Oito-Mundos.mp4) · [Todos os PDFs e vídeos](#pdfs-e-vídeos)
 
 **Sumário:** [Campanha e design](#campanha-e-design) · [Arte e interface](#arte-e-interface) · [Áudio](#áudio) · [Arquitetura e código](#arquitetura-e-código) · [Documentação completa](docs/README.md)
 
@@ -30,6 +30,14 @@ Abra `dist/mare-miuda-prototipo.html` no navegador. A edição inclui arte e áu
 | Regular som ou retornar | **Configurações** e botões de retorno. |
 
 Um movimento bloqueado não gasta passo. Ao trocar de cópia offline, guarde o HTML anterior: alguns navegadores associam o progresso ao caminho do arquivo. [Instruções de produção](docs/producao/README.md#executar).
+
+## Idioma do jogo
+
+Com o jogo aberto, clique ou toque em **EN** no canto inferior direito para jogar em inglês. O botão passa a mostrar **PT** para voltar ao português. Nas janelas de apoio, o controle fica dentro da própria janela. A mudança é imediata e não reinicia a partida nem muda o progresso salvo. Ao abrir ou recarregar o HTML normalmente, o jogo começa em português.
+
+[![Tela do jogo mostrando o botão de idioma no canto inferior direito](docs/arte/galeria/telas/troca-de-idioma.png)](docs/arte/galeria/telas/troca-de-idioma.png)
+
+[Mais sobre a troca de idioma](docs/interface/README.md#idioma-do-jogo).
 
 ## Galeria do jogo
 
@@ -283,7 +291,7 @@ Os efeitos sinalizam eventos como maré, fendas, coleta, erro, retorno, vitória
 <details open>
 <summary><strong>Linguagens, estrutura e fluxo da edição jogável</strong></summary>
 
-**JavaScript (módulos ES)** implementa o jogo; **HTML e CSS** compõem telas e painéis; **Canvas 2D** desenha o tabuleiro. O montador é **Python** e os testes rodam em **Node.js**. A interface e a documentação principal são em português do Brasil. *Tiny Tide: Between Islands* é o subtítulo em inglês.
+**JavaScript (módulos ES)** implementa o jogo; **HTML e CSS** compõem telas e painéis; **Canvas 2D** desenha o tabuleiro. O montador é **Python** e os testes rodam em **Node.js**. A interface e a documentação estão disponíveis em português do Brasil e em inglês. *Tiny Tide: Between Islands* é o título da edição em inglês.
 
 | Local | Responsabilidade |
 | --- | --- |
@@ -305,7 +313,7 @@ Os efeitos sinalizam eventos como maré, fendas, coleta, erro, retorno, vitória
 Depois de gerar o HTML:
 
 ```sh
-for teste in campanha passada resultados-e-retorno trilha efeitos paineis; do
+for teste in campanha passada resultados-e-retorno trilha efeitos paineis idiomas; do
   node "edicao-oficial/testes/${teste}.mjs" dist/mare-miuda-prototipo.html || exit 1
 done
 ```

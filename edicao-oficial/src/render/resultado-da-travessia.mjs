@@ -1,8 +1,12 @@
+import { traduzir } from '@@MARE:modulo:src/idiomas/idioma.mjs@@';
 import { pintarConchaDoMundo } from '@@MARE:modulo:src/conchas-dos-mundos-192a41fd.mjs@@';
 export const LARGURA_PLACA=172, ALTURA_PLACA=60;
 
 // Letras em grade nativa: cada número representa uma linha de cinco pixels.
 const FONTE={
+ F:[31,16,16,30,16,16,16], H:[17,17,17,31,17,17,17],
+ K:[17,18,20,24,20,18,17], S:[15,16,16,14,1,1,30],
+ W:[17,17,17,21,21,21,10], Y:[17,17,10,4,4,4,4],
  A:[14,17,17,31,17,17,17], B:[30,17,17,30,17,17,30],
  C:[15,16,16,16,16,16,15], D:[30,17,17,17,17,17,30],
  E:[31,16,16,30,16,16,31], G:[15,16,16,23,17,17,15],
@@ -13,6 +17,8 @@ const FONTE={
  Ç:[15,16,16,16,16,16,15],
 };
 const TITULO={
+ C:[15,24,24,24,24,24,15], F:[31,24,24,30,24,24,24],
+ Y:[27,27,27,14,4,4,4],
  A:[14,27,27,31,27,27,27], D:[30,27,27,27,27,27,30],
  E:[31,24,24,30,24,24,31], I:[31,14,14,14,14,14,31],
  O:[14,27,27,27,27,27,14], R:[30,27,27,30,28,26,27],
@@ -388,7 +394,7 @@ export function desenharPlacaResultado(ctx,tipo,causa,cx,cy,espirais=false){
  formaDaPlaca(ctx,p.fundo,x+3,y+4,LARGURA_PLACA-6,ALTURA_PLACA-10);
  diamante(ctx,p,x+16,y+22);diamante(ctx,p,x+LARGURA_PLACA-17,y+22);
  px(ctx,p.friso,x+19,y+40,LARGURA_PLACA-38);
- texto(ctx,TITULO,victoria?'VITÓRIA':'DERROTA',centro,y+14,3,p.texto,p.borda);
+ texto(ctx,TITULO,traduzir(victoria?'VITÓRIA':'DERROTA'),centro,y+14,3,p.texto,p.borda);
  if(victoria){
 // A concha vem do mesmo modulo que desenha a concha jogavel, sem escala
 // nem espelhamento; os dois exemplares acompanham a entrada da placa.
@@ -400,7 +406,7 @@ export function desenharPlacaResultado(ctx,tipo,causa,cx,cy,espirais=false){
  }
  const codigo=Array.isArray(causa)?
    causa.includes('mare')&&causa.includes('garca')?'ambas':causa[0]:causa;
- texto(ctx,FONTE,REF_CAUSAS[codigo]??'Tente outra vez',centro,y+45,1,p.legenda,1);
+ texto(ctx,FONTE,traduzir(REF_CAUSAS[codigo]??'Tente outra vez'),centro,y+45,1,p.legenda,1);
  if(espirais)pintarEspiraisDaDerrota(ctx,cx,cy);
 }
 

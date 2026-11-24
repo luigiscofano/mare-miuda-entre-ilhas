@@ -266,6 +266,7 @@ import { campanhaConcluida, CAPITULO_FINAL, concluirFase, entradaEm, entradasDo,
 
 /* Interface antiga removida: d49eca8b */
 import { carregar, salvar } from '@@MARE:modulo:src/chave-save-195edf7f.mjs@@';
+import { ligarIdioma, registrarTextosDaCampanha } from '@@MARE:modulo:src/idiomas/idioma.mjs@@';
 import { criarPaineisDeApoio } from '@@MARE:modulo:src/interface/paineis-de-apoio.mjs@@';
 import { criarAudio, ativouBotao } from '@@MARE:modulo:src/criar-audio-a0d48b79.mjs@@';
 import { gerarMareAMao, DIFICULDADES_MARE_A_MAO, MUNDOS_MARE_A_MAO,                     } from '@@MARE:modulo:src/mundos-mare-a-mao-c249fd0f.mjs@@';
@@ -1435,6 +1436,14 @@ window.addEventListener('keydown', evento => {
 }, true);
 document.addEventListener('visibilitychange', atualizarAmbiente);
 trocarTela('inicio', false);
+registrarTextosDaCampanha([...TODAS_AS_FASES, ...FASES_BANCADA], textoDaColeta);
+ligarIdioma(document, () => {
+  if (tela !== 'fase') return;
+  // Reaplica só os letreiros; fase, comandos, progresso, som e foco continuam.
+  atualizarTituloIluminado(buscar('#nome-fase'), fase.nome, modoCampanha());
+  pintarFase();
+}, new URLSearchParams(globalThis.location?.search ?? '').get('lang'));
+
 
 // Borda e arte usam pixels físicos. O frame é desenhado depois da torre,
 // por isso a última linha de pedra entra um pixel sob a moldura inferior.

@@ -15,6 +15,16 @@ Abra o HTML gerado em um navegador. Os módulos, estilos e recursos ficam separa
 
 A [campanha](../campanha/README.md) preserva os identificadores usados nos saves. Ao trocar o HTML offline, guarde o original: alguns navegadores associam o progresso ao caminho completo do arquivo. Não limpe o armazenamento do navegador.
 
+## Validação de idiomas
+
+```sh
+node edicao-oficial/testes/idiomas.mjs dist/mare-miuda-prototipo.html
+```
+
+O teste automatizado confere a presença dos três textos de cada uma das 231 fases e o retorno de textos e atributos acessíveis ao idioma original.
+
+Abra o HTML offline sem parâmetro de idioma e confirme o português como padrão. Selecione **EN** no canto inferior direito e confira menus, seletores, títulos, objetivos e painel da fase. Em cada janela de apoio, percorra os controles com **Tab** e use o botão de idioma da própria janela. Volte com **PT** e verifique que os filtros, a posição, o progresso e a música não foram reiniciados. Selecione **EN** novamente e recarregue o arquivo normalmente: a interface deve voltar ao português, com progresso preservado. Consulte o [guia do controle](../interface/README.md#idioma-do-jogo).
+
 ## Paridade da revisão
 
 - 231 fichas e 4.007 passos de solução sem levadas.

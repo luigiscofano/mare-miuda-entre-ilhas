@@ -20,14 +20,18 @@
 <style id="paineis-apoio">@@MARE:texto:estilos/paineis-apoio.css@@</style>
 <style id="paineis-letras">@@MARE:texto:estilos/paineis-letras.css@@</style>
 <style id="painel-improviso">@@MARE:texto:estilos/painel-improviso.css@@</style>
+<style id="idioma-do-jogo">@@MARE:texto:estilos/idioma-do-jogo.css@@</style>
+<style id="letras-en">@@MARE:texto:estilos/letras-en.css@@</style>
+<style id="arte-en">@@MARE:texto:estilos/arte-en.css@@</style>
 </head>
 <body>
+  <button id="idioma-jogo" class="alternar-idioma" type="button" data-idioma-jogo aria-label="Mudar para inglês">EN</button>
   <a class="pular" href="#jogo">Pular para o jogo</a>
   <main id="jogo" class="pagina" data-tela="inicio">
     <header>
       <p class="etiqueta">Caderno de travessias · Primeiro lote</p>
       <h1>Maré Miúda: Entre Ilhas</h1>
-      <p class="secundario" lang="en">Tiny Tide: Between Islands</p>
+      <p class="secundario" lang="en" data-manter-idioma>Tiny Tide: Between Islands</p>
     </header>
 
     <section id="inicio" class="painel" aria-labelledby="titulo-inicio">
@@ -182,6 +186,7 @@
     <div id="fundo-paineis-apoio" aria-hidden="true" hidden></div>
     <section id="mare-a-mao" class="painel-apoio" role="dialog" aria-modal="true" aria-labelledby="titulo-mare-a-mao" hidden>
       <span class="painel-brilhos" aria-hidden="true"></span>
+      <button class="alternar-idioma idioma-no-painel" type="button" data-idioma-jogo data-foco-painel aria-label="Mudar para inglês">EN</button>
       <div class="painel-apoio-cabecalho">
         <h2 id="titulo-mare-a-mao" tabindex="-1">
           <svg class="improviso-icone-ilha" width="20" height="18" viewBox="0 0 10 9" shape-rendering="crispEdges" aria-hidden="true" focusable="false">
@@ -249,6 +254,7 @@
     </section>
     <section id="configuracao-jogo" class="painel-apoio" data-modo="configuracao" role="dialog" aria-modal="true" aria-labelledby="titulo-configuracao-jogo" hidden>
       <span class="painel-brilhos" aria-hidden="true"></span>
+      <button class="alternar-idioma idioma-no-painel" type="button" data-idioma-jogo data-foco-painel aria-label="Mudar para inglês">EN</button>
       <div class="painel-apoio-cabecalho">
         <h2 id="titulo-configuracao-jogo"><span id="icone-configuracao-jogo" class="painel-icone" aria-hidden="true"></span><span id="rotulo-configuracao-jogo">Configurações</span></h2>
         <button type="button" id="x-configuracao-jogo" class="painel-fechar-x" aria-label="Fechar painel" data-foco-painel><span aria-hidden="true"></span></button>
@@ -279,6 +285,7 @@
 
     <section id="creditos" class="painel-apoio" data-modo="porto" role="dialog" aria-modal="true" aria-labelledby="titulo-creditos" hidden>
       <span class="painel-brilhos" aria-hidden="true"></span>
+      <button class="alternar-idioma idioma-no-painel" type="button" data-idioma-jogo data-foco-painel aria-label="Mudar para inglês">EN</button>
       <div class="painel-apoio-cabecalho">
         <h2 id="titulo-creditos" tabindex="-1"><span class="painel-icone" data-icone="concha" aria-hidden="true"></span><span id="rotulo-creditos">Créditos</span></h2>
         <button type="button" id="x-creditos" class="painel-fechar-x" aria-label="Fechar créditos" data-foco-painel><span aria-hidden="true"></span></button>
