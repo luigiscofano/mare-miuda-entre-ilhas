@@ -1,5 +1,7 @@
 # Recriar Siri na Areia — Notas Claras
 
+**Português** · [English](README.en.md)
+
 > **Registro histórico.** Este documento descreve a trilha *Siri na Areia — Notas Claras*, usada antes da edição offline com *A Outra Margem*. As instruções abaixo são da revisão anterior e não constroem a trilha atual. Veja [a trilha sonora da edição offline](../../docs/arte/trilha-sonora/README.md).
 
 Composição, timbres sintéticos e oito arranjos originais, sem amostras externas. O master da Praia usa a partitura da prévia aprovada. Todos os arranjos compartilham a mesma melodia, andamento (97 BPM) e duração; muda o apoio harmônico e o brilho em cada ilha.

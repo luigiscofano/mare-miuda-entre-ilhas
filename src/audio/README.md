@@ -1,5 +1,7 @@
 # Áudio
 
+**Português** · [English](README.en.md)
+
 > **Registro histórico.** Este documento descreve a trilha *Siri na Areia — Notas Claras*, usada antes da edição offline com *A Outra Margem*. As instruções abaixo são da revisão anterior e não constroem a trilha atual. Veja [a trilha sonora da edição offline](../../docs/arte/trilha-sonora/README.md).
 
 **Siri na Areia — Notas Claras** tem oito arranjos (um por mundo), a 97 BPM. Praia e Enseadinha usam o mesmo arranjo. O Arquipélago conserva a última faixa, sem criar uma nona. A Praia vem do ciclo PCM da versão aprovada. A pauta e o renderizador estão em [scripts/trilha](../../scripts/trilha/README.md).

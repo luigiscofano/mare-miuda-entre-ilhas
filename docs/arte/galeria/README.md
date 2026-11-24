@@ -1,5 +1,7 @@
 # Galeria de Maré Miúda: Entre Ilhas
 
+**Português** · [English](README.en.md)
+
 [Voltar ao README principal](../../../README.md#galeria-do-jogo) · [Guia de arte](../README.md)
 
 ## Identidade

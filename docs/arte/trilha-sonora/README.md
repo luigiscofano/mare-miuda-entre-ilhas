@@ -1,5 +1,7 @@
 # A Outra Margem
 
+**Português** · [English](README.en.md)
+
 [Voltar ao guia de arte](../README.md) · [Produção e verificação](../../producao/README.md#validação-da-trilha-sonora)
 
 **A Outra Margem** acompanha a edição offline de *Maré Miúda: Entre Ilhas*. A versão escolhida é para **violão de nylon**: baixo discreto, poucas notas de acompanhamento e espaço entre as frases da melodia. O tema atravessa os oito mundos como uma faixa única. Não há uma faixa separada por mundo, nem versão de piano no jogo.

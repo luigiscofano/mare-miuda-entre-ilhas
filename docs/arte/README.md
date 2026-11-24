@@ -1,5 +1,7 @@
 # Arte de Entre Ilhas
 
+**Português** · [English](README.en.md)
+
 - [Galeria do jogo](galeria/README.md): logo, Siris em PNG, telas e oito exemplos em maré baixa e alta.
 - [Atlas de arte](Mare-Miuda-Atlas-de-Arte.pdf): areia e baixios nas duas marés, tipos de célula, estruturas por mundo, animais e vegetação.
 - [Todas as travessias](catalogo-231-travessias/README.md): índice, exemplo e o PDF das 231 fases em maré baixa e alta.
