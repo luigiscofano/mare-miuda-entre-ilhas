@@ -90,10 +90,11 @@ const refPorto = '#comecar .porto-rotulo';
 const refHub = '#cartoes-arquipelago .hub-inicio .hub-rotulo-normal';
 const refSeletor = '#seletor-fases .praia-direta-card .praia-direta-nome';
 try {
-  await tela(desktop, p => arte(p, 'porto', refPorto));
-  if (modo !== 'porto') {
-    await tela(celular, p => arte(p, 'porto-celular', refPorto));
+  if (modo === 'porto') {
+    await tela(desktop, p => arte(p, 'porto', refPorto));
+  } else {
     await tela(desktop, async p => {
+      await arte(p, 'porto', refPorto);
       for (const [nome, seletor, checar, fechar] of [
         ['ilha-de-improviso', '#abrir-mare-a-mao', '#gerar-mare-a-mao', '#voltar-mare-a-mao'],
         ['som-e-musica', '#abrir-som-inicio', '#configuracao-jogo .painel-acao', '#fechar-som-inicio'],
@@ -108,6 +109,7 @@ try {
       assert.equal(await p.locator('#idioma-jogo').textContent(), 'PT');
       await arte(p, 'troca-de-idioma', '#idioma-jogo');
     });
+    await tela(celular, p => arte(p, 'porto-celular', refPorto));
     await tela(desktop, async p => {
       await botao(p, '#comecar');
       for (let i = 1; i <= 4; ++i) {
@@ -115,22 +117,29 @@ try {
         await arte(p, 'arquipelago-' + i, refHub);
         if (i < 4) await botao(p, '[data-pagina-hub="proxima"]');
       }
+      for (let i = 0; i < 3; ++i) await botao(p, '[data-pagina-hub="anterior"]');
+      // Voltar pelo próprio controle da seleção mantém o Chromium carregado entre mundos.
+      for (const [i, mundo] of mundos.entries()) {
+        const alvo = `button[data-regiao="${mundo}"]`;
+        const esperada = String(1 + Math.floor(i / 2));
+        for (let viradas = 0; viradas < 4 && !await p.locator(alvo).isVisible(); ++viradas) {
+          const atual = await p.locator('[data-pagina-hub-visual]').getAttribute('data-pagina-hub-visual');
+          assert.notEqual(atual, esperada, 'Carta não encontrada na página do mundo: ' + mundo);
+          await botao(p, `[data-pagina-hub="${Number(atual) < Number(esperada) ? 'proxima' : 'anterior'}"]`);
+        }
+        await botao(p, alvo);
+        await p.locator(`#seletor-fases[data-tema="${mundo}"]`).waitFor();
+        await arte(p, 'seletor-' + String(i+1).padStart(2, '0'), refSeletor);
+        if (i < mundos.length - 1) {
+          await botao(p, '#menu-praia');
+          await botao(p, '#comecar');
+        }
+      }
     }, saveArquipelago());
     await tela(celular, async p => {
       await botao(p, '#comecar');
       await arte(p, 'arquipelago-celular', refHub);
     }, saveArquipelago());
-    for (const [i, mundo] of mundos.entries()) {
-      await tela(desktop, async p => {
-        await botao(p, '#comecar');
-        const alvo = `button[data-regiao="${mundo}"]`;
-        for (let viradas = 0; viradas < 4 && !await p.locator(alvo).isVisible(); ++viradas)
-          await botao(p, '[data-pagina-hub="proxima"]');
-        await botao(p, alvo);
-        await p.locator(`#seletor-fases[data-tema="${mundo}"]`).waitFor();
-        await arte(p, 'seletor-' + String(i+1).padStart(2, '0'), refSeletor);
-      }, saveArquipelago());
-    }
   }
   assert.equal(lista.length, modo === 'porto' ? 1 : 19);
   await writeFile(join(saida, 'capturas.json'), JSON.stringify({ buildSha256: sha, browser: browser.version(), capturas: lista }, null, 2) + '\n');
