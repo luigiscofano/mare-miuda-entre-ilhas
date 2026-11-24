@@ -18,25 +18,6 @@
   box-shadow:0 3px #102f36;
 }
 #ferramentas-seletor button:focus-visible { outline:3px solid #fff3bf; outline-offset:2px; }
-#jogo[data-tela="praia"][data-configuracoes-seletor] #configuracao-jogo {
-  position:fixed;
-  z-index:1102;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:min(29rem,calc(100% - 24px));
-  max-height:calc(100dvh - 24px);
-  overflow:auto;
-  margin:0;
-  box-sizing:border-box;
-  padding:1rem;
-}
-#jogo[data-tela="praia"][data-configuracoes-seletor] #fechar-som-inicio {
-  display:inline-block;
-  min-height:44px;
-  margin-top:.55rem;
-}
-#jogo[data-tela="praia"][data-praia-direta] #configuracao-jogo:not([open]) { display:none; }
 .praia-direta-quina { display:none; }
 
 @media (width > 760px) {

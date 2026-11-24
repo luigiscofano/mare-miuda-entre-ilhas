@@ -21,16 +21,6 @@
 @media(max-height:340px){
  #acoes-vitoria-fase{top:auto;bottom:max(6px,env(safe-area-inset-bottom));}
 }
-#jogo[data-tela="fase"][data-ferramentas-campanha] #configuracao-jogo:not([open]){display:none}
-#jogo[data-tela="fase"][data-configuracoes-fase] #configuracao-jogo{
- position:fixed;z-index:1102;top:50%;left:50%;transform:translate(-50%,-50%);
- width:min(29rem,calc(100% - 24px));max-height:calc(100dvh - 24px);overflow:auto;
- box-sizing:border-box;margin:0;padding:1rem;
-}
-#jogo[data-tela="fase"][data-configuracoes-fase] #fechar-som-inicio{display:inline-block;min-height:44px;margin-top:.55rem}
-#fundo-configuracoes-fase{position:fixed;inset:0;z-index:1101;background:#173744a8}
-#fundo-configuracoes-fase[hidden]{display:none}
-body[data-configuracoes-fase] #placa-resultado-v3,body[data-configuracoes-fase] #acoes-vitoria-fase{visibility:hidden}
 #acoes-vitoria-fase button[aria-disabled="true"]{
  color:#536968;background:#dbdfd3;border-color:#7a8e88;box-shadow:none;cursor:not-allowed
 }

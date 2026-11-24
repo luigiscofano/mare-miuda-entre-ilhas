@@ -6,7 +6,7 @@
 
 ## Resultado e retorno na campanha
 
-A placa de vitória ou derrota fica no centro do tabuleiro e se ajusta ao espaço disponível. Na derrota, **Tentar novamente** e **Voltar à seleção de fases** aparecem ao fim da entrada da placa. Tentar de novo volta ao início da mesma fase; voltar abre a página e foca o cartão dessa fase. Os botões de vitória e configurações não mudaram.
+A placa de vitória ou derrota fica no centro do tabuleiro e se ajusta ao espaço disponível. Na derrota, **Tentar novamente** e **Voltar à seleção de fases** aparecem ao fim da entrada da placa. Tentar de novo volta ao início da mesma fase; voltar abre a página e foca o cartão dessa fase. Os botões de vitória não mudaram; **Configurações** abre o [painel de apoio](#painéis-de-apoio).
 
 Na campanha, o cabeçalho exibe apenas o nome da fase. O objetivo, a orientação e o mapa em símbolos estão em **Mapa em texto e ajuda**; o foco continua no título ao entrar na fase. O letreiro ilustrado não duplica o nome para leitores de tela e usa texto simples quando o dispositivo força uma paleta de alto contraste.
 
@@ -21,6 +21,20 @@ O Arquipélago seleciona o **mundo**. Dentro dele, a seleção de **fases** cont
 
 No computador, a seleção ocupa a janela; as quatro quinas de areia são recortes da arte de cada página e encostam nas bordas. O título, as pedras, a rota e os cartões mantêm a composição. O celular mantém a lista vertical.
 
-- **Configurações** abre a caixa de som na própria seleção. **Tab** percorre seus controles; **Esc**, fechar ou clicar no fundo encerra a caixa e devolve o foco ao botão de origem sem mudar a página.
+- **Configurações** abre o [painel de apoio](#painéis-de-apoio) dentro da seleção. Feche para continuar na mesma página, com foco no botão de origem.
 - **Voltar ao início** sai para o Porto. Ao continuar na mesma sessão, a seleção volta à página em que estava. Isso não regrava o progresso da campanha.
 - Brilhos em três tamanhos e espumas soltas são decorativos, sem área clicável nem anúncio ao leitor de tela. Com movimento reduzido, o fundo exibe um único quadro de espuma.
+
+## Painéis de apoio
+
+| Painel | Onde abrir | Controles |
+| --- | --- | --- |
+| **Configurações** | Na seleção de fases ou dentro da fase. | Ajustes separados de **Música** e **Efeitos**, com percentuais que acompanham os controles. |
+| **Som e música** | No Porto. | As duas regulagens de volume e a identificação da faixa **A Outra Margem**, para **violão de nylon**, sem ilustração de instrumento. |
+| **Créditos** | No Porto, pelo botão **Créditos**. | Créditos do jogo, sem revelar o desfecho da campanha. A apresentação de conclusão é separada e mantém **Voltar ao mapa**. |
+
+Cada painel aparece centralizado, sem ocupar toda a tela, e escurece em 55% a tela atrás. Se a janela for curta, a rolagem fica dentro do painel. A tela de fundo permanece visível, mas não recebe comandos enquanto o painel está aberto.
+
+**Tab** e **Shift+Tab** percorrem os controles do painel. **Esc**, o **X**, o botão **Fechar** (ou **Voltar** nos créditos do Porto) e o clique ou toque na área escurecida fecham o painel de apoio e devolvem o foco ao botão que o abriu. Na seleção, a página não muda; dentro da fase, nenhum movimento é executado por trás do painel.
+
+Ajustar volume mantém as preferências salvas já existentes, sem alterar o andamento da fase. Abrir ou fechar o painel não muda regras, estados de fase, seleção ou andamento do jogo. Não há atalho de depuração visível no menu.

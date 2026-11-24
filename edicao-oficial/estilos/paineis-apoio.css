@@ -1,0 +1,179 @@
+/* Janela em pixel art sem reaproveitar nem modificar a arte do cenário. */
+html:has(body[data-painel-apoio-aberto]) {overflow:hidden}
+#fundo-paineis-apoio {
+  position:fixed; inset:0; z-index:1101; background:rgb(9 30 39 / 55%);
+  touch-action:none;
+}
+#fundo-paineis-apoio[hidden], .painel-apoio [hidden], .painel-apoio[hidden], #bancada[hidden] {
+  display:none;
+}
+.painel-apoio {
+  --fundo:#112d38;
+  --escuro:#0d2530;
+  --cabecalho:#1e4650;
+  --cartao:#234f57;
+  --texto:#fdf0cb;
+  --texto-secundario:#b5cebd;
+  --selo:#81c5bb;
+  --areia:#dfac6f;
+  --dourado:#ffe2a3;
+  --aresta:#98613f;
+  --px:2px;
+  --px-letra:2px;
+  --recorte:var(--px);
+  --canto:polygon(
+    calc(3 * var(--recorte)) 0, calc(100% - 3 * var(--recorte)) 0,
+    calc(100% - 3 * var(--recorte)) var(--recorte), calc(100% - 2 * var(--recorte)) var(--recorte),
+    calc(100% - 2 * var(--recorte)) calc(2 * var(--recorte)), calc(100% - var(--recorte)) calc(2 * var(--recorte)),
+    calc(100% - var(--recorte)) calc(3 * var(--recorte)), 100% calc(3 * var(--recorte)),
+    100% calc(100% - 3 * var(--recorte)), calc(100% - var(--recorte)) calc(100% - 3 * var(--recorte)),
+    calc(100% - var(--recorte)) calc(100% - 2 * var(--recorte)), calc(100% - 2 * var(--recorte)) calc(100% - 2 * var(--recorte)),
+    calc(100% - 2 * var(--recorte)) calc(100% - var(--recorte)), calc(100% - 3 * var(--recorte)) calc(100% - var(--recorte)),
+    calc(100% - 3 * var(--recorte)) 100%, calc(3 * var(--recorte)) 100%,
+    calc(3 * var(--recorte)) calc(100% - var(--recorte)), calc(2 * var(--recorte)) calc(100% - var(--recorte)),
+    calc(2 * var(--recorte)) calc(100% - 2 * var(--recorte)), var(--recorte) calc(100% - 2 * var(--recorte)),
+    var(--recorte) calc(100% - 3 * var(--recorte)), 0 calc(100% - 3 * var(--recorte)),
+    0 calc(3 * var(--recorte)), var(--recorte) calc(3 * var(--recorte)),
+    var(--recorte) calc(2 * var(--recorte)), calc(2 * var(--recorte)) calc(2 * var(--recorte)),
+    calc(2 * var(--recorte)) var(--recorte), calc(3 * var(--recorte)) var(--recorte)
+  );
+  position:fixed; z-index:1102; inset:50% auto auto 50%; transform:translate(-50%,-50%);
+  width:min(calc(100vw - 2rem),clamp(476px,44.625vw,714px));
+  box-sizing:border-box; max-height:calc(100vh - 1.5rem); max-height:calc(100dvh - 1.5rem);
+  margin:0; padding:calc(4 * var(--px));
+  border:0; clip-path:var(--canto);
+  background:var(--aresta); color:var(--texto); isolation:isolate;
+  display:flex; flex-direction:column; min-height:0;
+}
+.painel-apoio::before, .painel-apoio::after {
+  content:""; position:absolute; z-index:-1; pointer-events:none; clip-path:var(--canto);
+}
+.painel-apoio::before {inset:var(--px); background:var(--dourado); --recorte:var(--px)}
+.painel-apoio::after {inset:calc(3 * var(--px)); background:var(--fundo); --recorte:var(--px)}
+.painel-apoio-cabecalho {
+  position:relative; flex:none; min-height:calc(32 * var(--px));
+  display:grid; place-items:center; padding:0 calc(5 * var(--px)) 0;
+  padding-inline-end:calc(18 * var(--px));
+  box-sizing:border-box; border-bottom:var(--px) solid #3d625c; background:var(--cabecalho);
+}
+.painel-apoio h2 {
+  margin:0; padding:calc(4 * var(--px)) 0; display:flex; align-items:center; gap:calc(5 * var(--px));
+  text-align:center; font:700 calc(15 * var(--px))/1.08 SeletorPraia, sans-serif;
+  color:var(--dourado); text-transform:uppercase; text-shadow:var(--px) var(--px) var(--escuro);
+}
+.painel-apoio h2 span:last-child {max-width:100%; overflow-wrap:anywhere}
+.painel-apoio h2 .painel-icone {width:calc(7 * var(--px));height:calc(7 * var(--px));color:var(--dourado)}
+.painel-icone {
+  flex:none; width:calc(7 * var(--px)); height:calc(7 * var(--px)); display:inline-block;
+  background:currentColor; color:var(--selo); image-rendering:pixelated;
+  mask:var(--figura) center / 100% 100% no-repeat;
+}
+.painel-icone[data-icone="nota"] {
+  --figura:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 7' shape-rendering='crispEdges'%3E%3Cpath d='M3 0h3v2H5V1H4v4H3v1H0V5h1V4h2z'/%3E%3C/svg%3E");
+}
+.painel-icone[data-icone="som"] {
+  --figura:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 7' shape-rendering='crispEdges'%3E%3Cpath d='M0 2h2V1h1v5H2V5H0zM4 2h1v3H4zM6 1h1v5H6z'/%3E%3C/svg%3E");
+}
+.painel-icone[data-icone="ajuste"] {
+  --figura:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 7' shape-rendering='crispEdges'%3E%3Cpath fill-rule='evenodd' d='M2 0h3v1h1v1h1v3H6v1H5v1H2V6H1V5H0V2h1V1h1zM2 2v3h3V2z'/%3E%3C/svg%3E");
+}
+.painel-icone[data-icone="concha"] {
+  --figura:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 7' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h3v1h1v1h1v2H6v1H5v1H4v1H3V6H2V5H1V4H0V2h1V1h1z'/%3E%3C/svg%3E");
+}
+.painel-apoio button {cursor:pointer}
+.painel-apoio :is(button,input):focus-visible {
+  outline:3px solid #fbf1bf; outline-offset:1px;
+}
+.painel-fechar-x {
+  position:absolute; top:50%; right:calc(4 * var(--px)); transform:translateY(-50%);
+  margin:0; padding:0; border:0; border-radius:0; width:44px; height:44px;
+  display:grid; place-items:center; background:#183843; color:var(--dourado);
+}
+.painel-fechar-x span {
+  display:block; width:calc(5 * var(--px)); height:calc(5 * var(--px)); background:currentColor;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 5' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h1v1H0zM4 0h1v1H4zM1 1h1v1H1zM3 1h1v1H3zM2 2h1v1H2zM1 3h1v1H1zM3 3h1v1H3zM0 4h1v1H0zM4 4h1v1H4z'/%3E%3C/svg%3E") center / 100% 100%;
+}
+.painel-apoio-conteudo {
+  min-height:0; overflow:auto; overscroll-behavior:contain;
+  display:grid; align-items:start; gap:calc(6 * var(--px));
+  padding:calc(7 * var(--px)) calc(8 * var(--px)) calc(9 * var(--px)); box-sizing:border-box;
+}
+.painel-cartao {
+  box-sizing:border-box; border:var(--px) solid #40716e; background:var(--cartao);
+  box-shadow:0 var(--px) var(--escuro); padding:calc(4 * var(--px)) calc(6 * var(--px));
+}
+.painel-volume {font:700 calc(10 * var(--px))/1.22 SeletorPraia, sans-serif; min-height:calc(28 * var(--px))}
+.painel-volume-dados {display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.25em}
+.painel-volume label {display:flex; align-items:center; gap:calc(4 * var(--px))}
+.painel-volume output {color:var(--dourado); font-variant-numeric:tabular-nums}
+.painel-volume input {
+  display:block; width:100%; height:24px; box-sizing:border-box; margin:0;
+  appearance:none; border:0; border-radius:0; background:transparent; color:var(--dourado);
+  accent-color:var(--dourado); cursor:pointer;
+  --trilho:linear-gradient(to right,var(--areia) 0 var(--nivel-volume,0%),var(--escuro) var(--nivel-volume,0%) 100%);
+}
+.painel-volume input::-webkit-slider-runnable-track {height:calc(4 * var(--px)); background:var(--trilho)}
+.painel-volume input::-moz-range-track {height:calc(4 * var(--px)); background:var(--trilho)}
+.painel-volume input::-webkit-slider-thumb {
+  appearance:none; width:calc(5 * var(--px)); height:calc(8 * var(--px));
+  margin-top:calc(-2 * var(--px)); border:var(--px) solid var(--aresta);
+  border-radius:0; background:var(--dourado);
+}
+.painel-volume input::-moz-range-thumb {
+  width:calc(4 * var(--px)); height:calc(7 * var(--px)); border:var(--px) solid var(--aresta);
+  border-radius:0; background:var(--dourado);
+}
+.painel-trilha, .painel-autoria, .painel-nota {font-family:system-ui,sans-serif}
+.painel-trilha {display:flex; align-items:center; gap:calc(5 * var(--px)); min-height:var(--px)}
+.painel-trilha strong, .painel-autoria strong {display:block; font-size:clamp(.95rem,2vw,1.62rem); line-height:1.3}
+.painel-trilha small, .painel-autoria :is(small,span) {display:block; color:var(--texto-secundario); font-size:clamp(.8rem,1.5vw,1.14rem); line-height:1.4}
+.painel-trilha div > small:first-child, .painel-autoria small {
+  color:var(--selo); text-transform:uppercase; font-weight:700; letter-spacing:.05em;
+}
+.painel-autoria {text-align:center; display:grid; gap:calc(2 * var(--px))}
+.painel-nota {margin:calc(2 * var(--px)) 0 0; text-align:center; color:var(--texto-secundario); font-size:clamp(.8rem,1.4vw,1.18rem); line-height:1.4}
+.painel-acao {
+  justify-self:center; min-width:var(--px); min-height:44px;
+  margin:calc(3 * var(--px)) 0 0; padding:calc(4 * var(--px)) calc(7 * var(--px));
+  border:var(--px) solid var(--aresta); border-radius:0; background:var(--areia); color:var(--fundo);
+  box-shadow:inset 0 var(--px) var(--dourado),0 var(--px) var(--escuro);
+  font:700 calc(10 * var(--px))/1.2 SeletorPraia, sans-serif;
+}
+.painel-apoio button:active {filter:brightness(1.09)}
+@media (max-width:760px) {
+  .painel-apoio {--px:2px; width:min(calc(100vw - 1.75rem),328px)}
+  .painel-apoio h2 {font-size:clamp(.85rem,5.3vw,1.62rem); gap:7px}
+  #configuracao-jogo h2 {font-size:clamp(.8rem,4.6vw,1.36rem)}
+  .painel-apoio-cabecalho {padding-inline:8px 48px}
+  .painel-fechar-x {right:3px}
+  .painel-trilha strong,.painel-autoria strong {font-size:1rem}
+  .painel-trilha small,.painel-autoria :is(small,span),.painel-nota {font-size:.78rem}
+}
+@media (max-width:350px) {
+  .painel-apoio {width:calc(100vw - 1.25rem)}
+  .painel-volume {font-size:1rem}
+  .painel-apoio-conteudo {padding-inline:10px}
+}
+@media (forced-colors:active) {
+  .painel-apoio {border:2px solid CanvasText; clip-path:none; color:CanvasText; background:Canvas}
+  .painel-apoio::before,.painel-apoio::after,.painel-icone {display:none}
+  .painel-apoio h2 {color:CanvasText; text-shadow:none}
+  .painel-apoio .painel-fechar-x span {forced-color-adjust:none; background:ButtonText}
+  .painel-volume input {appearance:auto}
+}
+@media (min-width:1280px) { .painel-apoio {--px:3px} }
+@media (min-width:1540px) { .painel-apoio {--px-letra:3px} }
+/* A imagem só veste o texto semântico; o rótulo original volta no alto contraste. */
+@media (forced-colors:none) {
+  .painel-apoio :is(h2 > span:last-child,.painel-acao,.painel-letra,.painel-digito) {
+    font-size:0; text-shadow:none;
+  }
+  .painel-apoio :is(h2 > span:last-child,.painel-acao,.painel-letra,.painel-digito)::before {
+    content:""; display:block;
+    width:calc(var(--letra-l) * var(--px-letra)); height:calc(var(--letra-a) * var(--px-letra));
+    background:var(--letra) center / 100% 100% no-repeat; image-rendering:pixelated;
+  }
+  .painel-acao::before {margin-inline:auto}
+  .painel-digito {display:inline-block; margin-inline:var(--px)}
+  .painel-digito::before {min-height:calc(7 * var(--px))}
+}
