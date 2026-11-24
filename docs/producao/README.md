@@ -1,5 +1,9 @@
 # Edição jogável de Maré Miúda
 
+## Filme de demonstração
+
+A documentação inclui [Os oito mundos](../arte/animacoes/README.md#os-oito-mundos), com partidas reproduzidas a partir dos módulos da edição oficial e telas de interface recompostas para a montagem. O MP4 não integra o build offline e não substitui os testes da campanha.
+
 ## Executar
 
 ```sh

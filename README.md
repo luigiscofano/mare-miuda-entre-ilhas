@@ -1,6 +1,8 @@
 # mare-miuda-entre-ilhas
 Quebra-cabeça de aventura por turnos em pixel art. Um siri, um arquipélago e uma maré que vira a cada três passos.
 
+[**Assistir a Maré Miúda: Entre Ilhas: Os oito mundos (MP4)**](docs/arte/animacoes/Mare-Miuda-Os-Oito-Mundos.mp4) · 24 vitórias da campanha, três por mundo, em 4min22,5s. [Ver capítulos](docs/arte/animacoes/README.md#os-oito-mundos).
+
 ## Documentação visual
 
 | Guia | Conteúdo |

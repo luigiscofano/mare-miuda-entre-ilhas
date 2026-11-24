@@ -1,5 +1,6 @@
 # Documentação de Maré Miúda
 
+- [Filme Os oito mundos](arte/animacoes/README.md#os-oito-mundos): replays de 24 vitórias, seletores da campanha e retorno ao Porto.
 - [Arte](arte/README.md): atlas e travessias.
 - [Interface](interface/README.md): seleção de mundos e fases, controles da campanha [painéis de apoio](interface/README.md#painéis-de-apoio) e [Ilha de Improviso](interface/README.md#ilha-de-improviso).
 - [Campanha](campanha/README.md): progressão e mecânicas.
