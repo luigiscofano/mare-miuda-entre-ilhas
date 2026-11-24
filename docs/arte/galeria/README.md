@@ -13,11 +13,15 @@ Os sprites foram recortados das mesmas folhas e coordenadas usadas pelo renderiz
 
 ## Telas
 
+A imagem que destaca o botão de idioma é uma composição editorial feita com as camadas localizadas, não uma captura de navegador.
+
 Os PNGs de computador são quadros da edição visual de [Os oito mundos](../animacoes/README.md#os-oito-mundos), preparados com a arte e os estados reais da interface para a montagem. Não são registro contínuo de uma sessão. As duas telas de celular são prévias aprovadas, não capturas em aparelho físico.
 
 - Porto de Partida: [computador](telas/porto.png) · [celular](telas/porto-celular.png).
 - Arquipélago: [página 1](telas/arquipelago-1.png) · [página 2](telas/arquipelago-2.png) · [página 3](telas/arquipelago-3.png) · [página 4](telas/arquipelago-4.png) · [celular](telas/arquipelago-celular.png).
 - Janelas: [Ilha de Improviso](telas/ilha-de-improviso.png) · [Som e música](telas/som-e-musica.png) · [Créditos](telas/creditos.png).
+
+- [Troca de idioma](telas/troca-de-idioma.png): controle **EN / PT** no jogo bilíngue.
 
 ## Seletores e travessias
 

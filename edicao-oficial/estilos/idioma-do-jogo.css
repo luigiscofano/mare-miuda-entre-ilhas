@@ -1,0 +1,18 @@
+/* O mesmo recurso aparece dentro de diálogos para continuar no ciclo de foco. */
+.alternar-idioma {
+  display:grid; place-items:center; min-width:44px; min-height:44px; padding:3px;
+  border:2px solid #b78055; border-radius:0; background:#163641; color:#ffe2a3;
+  font:700 14px/1 SeletorPraia, system-ui, sans-serif; image-rendering:pixelated;
+}
+#idioma-jogo {position:fixed;z-index:1100;inset:auto max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) auto;}
+body[data-painel-apoio-aberto] > #idioma-jogo {display:none}
+.idioma-no-painel {
+  position:absolute; left:9px; top:9px; z-index:2;
+  min-width:44px; min-height:44px; background:#183843; border-color:#52776e;
+}
+:is(.painel-apoio,#mare-a-mao):has(.idioma-no-painel) .painel-apoio-cabecalho {padding-inline-start:46px}
+@media(max-width:760px) {
+  .idioma-no-painel {position:static;justify-self:end;align-self:end;margin:0 8px 5px;order:3;min-height:34px}
+  :is(.painel-apoio,#mare-a-mao):has(.idioma-no-painel) .painel-apoio-cabecalho {padding-inline-start:8px}
+}
+html[lang="en"] .secundario[lang="en"] {display:none}
