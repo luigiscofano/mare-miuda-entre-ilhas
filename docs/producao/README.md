@@ -61,3 +61,13 @@ node edicao-oficial/testes/trilha.mjs dist/mare-miuda-prototipo.html
 ```
 
 O [catálogo de efeitos](../arte/efeitos-sonoros/README.md) descreve o vínculo entre os sons e os eventos. Na revisão manual, teste uma subida e uma descida da maré, a coleta, uma fenda e os resultados da fase. Provoque uma levada que permita retomar e outra que encerre a tentativa: o som de retorno é reservado para o reaparecimento, e a derrota toca no início do resultado. Teste um botão habilitado por mouse, toque e teclado e confirme um clique por ativação. Navegar com foco, passar o ponteiro ou tentar um botão bloqueado não deve tocar o clique. Ajuste o volume de **Efeitos** sem interromper ou modificar o volume de **A Outra Margem**.
+
+## Validação dos painéis de apoio
+
+Após gerar o HTML offline, execute:
+
+```sh
+node edicao-oficial/testes/paineis.mjs dist/mare-miuda-prototipo.html
+```
+
+No Porto, abra **Som e música** e **Créditos**; na seleção e durante uma fase, abra **Configurações**. Verifique os painéis em uma janela ampla e em uma janela estreita e curta: centro preservado, fundo escurecido em 55% e rolagem restrita ao painel, sem expandir para a tela inteira. Use teclado e toque: o foco não sai pelo **Tab**, fecha por **Esc**, pelo botão ou pela área escurecida e retorna ao acionador. Na fase, tente movimentar o Siri com o painel aberto; ao fechar, confira que o passo não foi executado. Repita na quarta página do seletor e confirme que ela permanece aberta. Ajuste os dois volumes, confira os percentuais e valide que a música continua e o progresso permanece. Veja os [painéis de apoio](../interface/README.md#painéis-de-apoio).

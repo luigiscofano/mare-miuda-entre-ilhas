@@ -22,7 +22,7 @@
   .hub-palco .hub-botao:not(:disabled):not([aria-disabled="true"]):active::before,
   .praia-direta-palco :is(.praia-direta-card,.praia-direta-seta):not(:disabled):not([aria-disabled="true"]):active,
   #jogo[data-tela="fase"] :is(.direcional button, #reiniciar, #voltar-fase, #seguir-fase, #nova-mare-a-mao):not(:disabled):active,
-  :is(#mare-a-mao, .configuracao:not([hidden]), #creditos) button:not(:disabled):active {
+  #mare-a-mao button:not(:disabled):active {
     animation: mare-placa-pressionada 90ms steps(1, end) both;
   }
 }

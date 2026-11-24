@@ -35,6 +35,12 @@ Na campanha, as placas de resultado são maiores e continuam centradas no tabule
 
 Veja [controles e acessibilidade](docs/interface/README.md#resultado-e-retorno-na-campanha) e [a verificação de resultado e retorno](docs/producao/README.md#validação-de-resultado-e-retorno).
 
+## Painéis de apoio
+
+Os painéis **Configurações**, **Som e música** e **Créditos** abrem no centro, com a tela anterior ainda visível sob um escurecimento de 55%. Eles não ocupam a tela inteira. No Porto, **Som e música** identifica a trilha e mostra os volumes; na seleção de fases e na partida, abra **Configurações** para ajustá-los. Fechar um painel de apoio devolve o foco ao botão de origem sem mudar a fase ou a página de seleção.
+
+[Ver controles e acessibilidade dos painéis](docs/interface/README.md#painéis-de-apoio).
+
 ## Trilha sonora
 
 [Ouvir A Outra Margem, em violão](docs/arte/trilha-sonora/a-outra-margem-violao.mp3).

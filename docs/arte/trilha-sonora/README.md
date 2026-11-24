@@ -16,6 +16,8 @@ Os efeitos de jogo permanecem separados da música. As indicações visuais e te
 
 [Ouça os 11 efeitos e veja quando são usados](../efeitos-sonoros/README.md). A faixa em violão não foi alterada pelo ajuste dos efeitos.
 
+[Regule os volumes em **Som e música** ou **Configurações**](../../interface/README.md#painéis-de-apoio). A imagem de capa desta documentação não aparece nesses painéis do jogo.
+
 ## Arquivo usado
 
 | Parâmetro | Valor |

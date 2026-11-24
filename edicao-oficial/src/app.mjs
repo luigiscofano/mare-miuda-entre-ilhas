@@ -266,6 +266,7 @@ import { campanhaConcluida, CAPITULO_FINAL, concluirFase, entradaEm, entradasDo,
 
 /* Interface antiga removida: d49eca8b */
 import { carregar, salvar } from '@@MARE:modulo:src/chave-save-195edf7f.mjs@@';
+import { criarPaineisDeApoio } from '@@MARE:modulo:src/interface/paineis-de-apoio.mjs@@';
 import { criarAudio, ativouBotao } from '@@MARE:modulo:src/criar-audio-a0d48b79.mjs@@';
 import { gerarMareAMao, DIFICULDADES_MARE_A_MAO, MUNDOS_MARE_A_MAO,                     } from '@@MARE:modulo:src/mundos-mare-a-mao-c249fd0f.mjs@@';
 import {
@@ -429,7 +430,7 @@ const escalaDaLogo = observarEscalaInteira(logo, buscar('#moldura-logo'), 180);
 
                                                                     
 const paineis                            = {
-  inicio: buscar('#inicio'), praia: buscar('#praia'), fase: buscar('#fase'), creditos: buscar('#creditos'),
+  inicio: buscar('#inicio'), praia: buscar('#praia'), fase: buscar('#fase'),
   'mare-a-mao': buscar('#mare-a-mao'),
 };
 const listaTestes = buscar('#fases-teste');
@@ -443,12 +444,10 @@ const volumes = {
 };
                                                      
 const TEXTOS_CREDITOS                                   = {
-  inicio: 'O caminho começa na Praia das Conchas.',
   praia: 'Você chegou à ponta da praia. A primeira viagem termina aqui; volte ao mapa para seguir à Enseadinha ou embarcar pelas próximas ilhas.',
   final: 'A luz voltou. Quando a maré subiu, o farol mostrou o caminho de casa. As ilhas continuam esperando por você.',
 };
 let tela       = 'inicio';
-let contextoCreditos                   = 'inicio';
 
 /* Interface antiga removida: fb93dbd7 */
 let bancada = false;
@@ -721,8 +720,7 @@ function atualizarAmbiente() {
 function trocarTela(destino      , focar = true)       {
 
 /* Interface antiga removida: c4827d95 */
-  if (tela === 'inicio' && destino !== 'inicio') buscar('#configuracao-jogo').open = false;
-  if(configuracoesEm)painelDeConfiguracoes(false,false);
+  paineisDeApoio.fechar({ restaurarFoco: false, notificar: false });
   if(tela==='fase' && destino!=='fase') audio.limparEfeitosDaCena();
   if (destino !== 'fase') { limparAcoesDerrota(); limparAcoesVitoria(); resultadoDaTravessia=undefined; desenharResultadoDaTravessia(); pararAnimacaoDaFase(); zerarPausaDeRecuperacao(); }
   tela = destino;
@@ -732,8 +730,6 @@ function trocarTela(destino      , focar = true)       {
   atualizarAmbiente();
   if (destino === 'inicio') {
     escalaDaLogo();
-    buscar('#configuracao-jogo').open = false;
-    buscar('#abrir-som-inicio').setAttribute('aria-expanded', 'false');
     const retomar = save.progresso.viuTutorial;
     buscar('#comecar').setAttribute('data-retomar', String(retomar));
     buscar('#porto-viagem-rotulo').textContent = retomar ? 'Continuar viagem' : 'Começar viagem';
@@ -1275,29 +1271,34 @@ const reiniciar = () => {
   if (tela === 'fase' && !configuracoesNaFaseAbertas()) prepararFase('Fase reiniciada. Maré baixa.');
 };
 const voltar = () => {
-  if(configuracoesEm){painelDeConfiguracoes(false);return;}
+  if (paineisDeApoio.fechar()) return;
   if (tela === 'fase' && desafioAvulso) {
     abrirMareAMao();
     return;
   }
   if (tela === 'fase' && !bancada) {
     abrirPraia('', fase.id);
-  } else if (tela === 'creditos' && contextoCreditos !== 'inicio') abrirPraia('', contextoCreditos === 'praia' ? 'ponta-da-garca' : contextoCreditos === 'final' ? CAPITULO_FINAL : undefined);
-  else if (tela !== 'inicio') {
-    const retorno = tela === 'creditos' ? '#creditos-inicio'
-      : tela === 'mare-a-mao' ? '#abrir-mare-a-mao'
+  } else if (tela !== 'inicio') {
+    const retorno = tela === 'mare-a-mao' ? '#abrir-mare-a-mao'
         : tela === 'fase' && bancada ? '#abrir-som-inicio' : '#comecar';
     trocarTela('inicio', false);
     buscar(retorno).focus();
   }
 };
 
-function abrirCreditos(contexto                  )       {
-  contextoCreditos = contexto;
-  buscar('#titulo-creditos').textContent = contexto === 'final' ? 'Desfecho e créditos' : 'Créditos';
-  buscar('#desfecho').textContent = TEXTOS_CREDITOS[contexto];
-  buscar('#voltar-creditos').textContent = contexto === 'inicio' ? 'Voltar à tela inicial' : 'Voltar ao mapa';
-  trocarTela('creditos');
+function abrirCreditos(contexto, abertura) {
+  const noPorto = contexto === 'inicio';
+  const painel = buscar('#creditos');
+  painel.setAttribute('data-modo', noPorto ? 'porto' : contexto);
+  const desfecho = buscar('#desfecho');
+  desfecho.hidden = noPorto;
+  desfecho.textContent = noPorto ? '' : TEXTOS_CREDITOS[contexto];
+  buscar('#rotulo-creditos').textContent = contexto === 'final' ? 'Desfecho e créditos' : 'Créditos';
+  buscar('#voltar-creditos').textContent = noPorto ? 'Voltar' : 'Voltar ao mapa';
+  paineisDeApoio.abrir({
+    painel, abertura, foco: buscar('#titulo-creditos'),
+    aoFechar: noPorto ? undefined : () => abrirPraia('', contexto === 'praia' ? 'ponta-da-garca' : CAPITULO_FINAL),
+  });
 }
 
 buscar('#comecar').addEventListener('click', () => {
@@ -1317,104 +1318,43 @@ buscar('#configurar-mare-a-mao').addEventListener('submit', evento => {
 buscar('#nova-mare-a-mao').addEventListener('click', () => {
   if (tela === 'fase' && desafioAvulso && estado.situacao !== 'jogando') jogarMareAMao(desafioAvulso.opcoes);
 });
-buscar('#creditos-inicio').addEventListener('click', () => abrirCreditos('inicio'));
-
-const comandoSomDoPorto = buscar('#abrir-som-inicio');
-const somDoJogo = buscar('#configuracao-jogo');
-// Painel do próprio jogo: mantém todos os volumes e listeners originais.
-const voltarSeletorNaFase = buscar('#voltar-seletor-fase');
-const abrirConfiguracoesNaFase = buscar('#abrir-configuracoes-fase');
-const abrirConfiguracoesNoSeletor = buscar('#abrir-configuracoes-seletor');
-const fundoConfiguracoes = buscar('#fundo-configuracoes-fase');
-const contextosDeConfiguracao = {
-  fase: { botao: abrirConfiguracoesNaFase, atributo:'data-configuracoes-fase' },
-  praia: { botao: abrirConfiguracoesNoSeletor, atributo:'data-configuracoes-seletor' },
-};
-let configuracoesEm;
+const paineisDeApoio = criarPaineisDeApoio({
+  jogo: buscar('#jogo'), fundo: buscar('#fundo-paineis-apoio'), corpo: document.body, documento: document,
+});
 
 function configuracoesNaFaseAbertas() {
-  return configuracoesEm === 'fase';
+  return tela === 'fase' && paineisDeApoio.aberto();
 }
-function painelDeConfiguracoes(abrir,restaurarFoco=true) {
-  const telaDoPainel = abrir ? tela : configuracoesEm;
-  const contexto = contextosDeConfiguracao[telaDoPainel];
-  if (!contexto) return;
-  if (abrir && ((tela==='fase'&&!modoCampanha()) ||
-                (tela==='praia'&&!seletorGraficoPara(mundoAtual(save.progresso))))) return;
 
-  const jogo = buscar('#jogo');
-  const painel = paineis[telaDoPainel];
-  const fechar = buscar('#fechar-som-inicio');
-  // Não troque a tela nem reconstrua o seletor; assim a página, o foco e
-  // o progresso continuam exatamente onde o jogador abriu o painel.
-  configuracoesEm = abrir ? telaDoPainel : undefined;
-  if (abrir) {
-    jogo.setAttribute(contexto.atributo,'');
-    document.body.setAttribute(contexto.atributo,'');
-    painel.setAttribute('inert','');
-    somDoJogo.setAttribute('role','dialog');
-    somDoJogo.setAttribute('aria-modal','true');
-    somDoJogo.setAttribute('aria-label','Configurações');
-    fechar.textContent = 'Fechar configurações';
-  } else {
-    jogo.removeAttribute(contexto.atributo);
-    document.body.removeAttribute(contexto.atributo);
-    painel.removeAttribute('inert');
-    somDoJogo.removeAttribute('role');
-    somDoJogo.removeAttribute('aria-modal');
-    somDoJogo.removeAttribute('aria-label');
-    fechar.textContent = 'Fechar som e música';
-  }
-  fundoConfiguracoes.hidden = !abrir;
-  contexto.botao.setAttribute('aria-expanded',String(abrir));
-  somDoJogo.open = abrir;
-  if (abrir) buscar('#volume-musica').focus({preventScroll:true});
-  else if (restaurarFoco && tela===telaDoPainel) contexto.botao.focus({preventScroll:true});
+function abrirPainelDeSom(tipo, abertura) {
+  if ((tela === 'fase' && !modoCampanha()) ||
+      (tela === 'praia' && !seletorGraficoPara(mundoAtual(save.progresso)))) return;
+  const noPorto = tipo === 'som';
+  const painel = buscar('#configuracao-jogo');
+  painel.setAttribute('data-modo', tipo);
+  buscar('#rotulo-configuracao-jogo').textContent = noPorto ? 'Som e música' : 'Configurações';
+  buscar('#icone-configuracao-jogo').setAttribute('data-icone', noPorto ? 'nota' : 'ajuste');
+  buscar('#trilha-no-painel').hidden = !noPorto;
+  buscar('#aviso-configuracao-jogo').hidden = noPorto;
+  paineisDeApoio.abrir({
+    painel, abertura, foco: volumes.musica,
+  });
 }
-voltarSeletorNaFase.addEventListener('click',()=>{if(tela==='fase'&&modoCampanha())voltar();});
-abrirConfiguracoesNaFase.addEventListener('click',()=>painelDeConfiguracoes(true));
-abrirConfiguracoesNoSeletor.addEventListener('click',()=>painelDeConfiguracoes(true));
-fundoConfiguracoes.addEventListener('click',()=>painelDeConfiguracoes(false));
 
-function painelDeSomDoPorto(abrir) {
-  somDoJogo.open = abrir;
-  comandoSomDoPorto.setAttribute('aria-expanded', String(abrir));
-  if (abrir) buscar('#volume-musica').focus();
-  else comandoSomDoPorto.focus();
+buscar('#creditos-inicio').addEventListener('click', () => abrirCreditos('inicio', buscar('#creditos-inicio')));
+buscar('#voltar-seletor-fase').addEventListener('click', () => {
+  if (tela === 'fase' && modoCampanha()) voltar();
+});
+for (const [id, tipo] of [
+  ['#abrir-configuracoes-fase', 'configuracao'],
+  ['#abrir-configuracoes-seletor', 'configuracao'],
+  ['#abrir-som-inicio', 'som'],
+]) {
+  const botao = buscar(id);
+  botao.addEventListener('click', () => abrirPainelDeSom(tipo, botao));
 }
-comandoSomDoPorto.addEventListener('click', () => painelDeSomDoPorto(!somDoJogo.open));
-buscar('#fechar-som-inicio').addEventListener('click', () => {
-  if(configuracoesEm)painelDeConfiguracoes(false);
-  else if(tela==='inicio')painelDeSomDoPorto(false);
-});
-somDoJogo.addEventListener('toggle', () => {
-  if(configuracoesEm&&!somDoJogo.open){painelDeConfiguracoes(false);return;}
-  if (tela === 'inicio') {
-    const estavaAberto = comandoSomDoPorto.getAttribute('aria-expanded') === 'true';
-    comandoSomDoPorto.setAttribute('aria-expanded', String(somDoJogo.open));
-    if (estavaAberto && !somDoJogo.open) comandoSomDoPorto.focus();
-  }
-});
-somDoJogo.addEventListener('keydown', evento => {
-  if(configuracoesEm){
-    if(evento.key==='Escape'){
-      evento.preventDefault();evento.stopPropagation();painelDeConfiguracoes(false);
-    }else if(evento.key==='Tab'){
-      const ordem=[somDoJogo.querySelector('summary'),volumes.musica,volumes.efeitos,buscar('#fechar-som-inicio')].filter(Boolean);
-      const idx=ordem.indexOf(document.activeElement), ultimo=ordem.length-1;
-      if((evento.shiftKey&&idx<=0)||(!evento.shiftKey&&idx===ultimo)){
-        evento.preventDefault();
-        ordem[evento.shiftKey?ultimo:0]?.focus();
-      }
-    }
-    return;
-  }
-  if (tela === 'inicio' && somDoJogo.open && evento.key === 'Escape') {
-    evento.preventDefault();
-    evento.stopPropagation();
-    painelDeSomDoPorto(false);
-  }
-});
+for (const id of ['#x-configuracao-jogo', '#fechar-som-inicio', '#x-creditos', '#voltar-creditos'])
+  buscar(id).addEventListener('click', () => paineisDeApoio.fechar());
 buscar('#voltar-vitoria-fase').addEventListener('click',()=>{
   if(mostrouAcoesVitoria&&!configuracoesNaFaseAbertas())voltar();
 });
@@ -1433,7 +1373,6 @@ buscar('#rever-desfecho').addEventListener('click', () => {
 });
 buscar('#menu-praia').addEventListener('click', voltar);
 buscar('#voltar-fase').addEventListener('click', voltar);
-buscar('#voltar-creditos').addEventListener('click', voltar);
 
 /* Interface antiga removida: ec19b3de */
 // Reutilize os fluxos que já restauram o foco e preservam o progresso.
@@ -1451,7 +1390,21 @@ controlesDaFase.forEach(botao => botao.addEventListener('click', () => mover(bot
 for (const canal of ['musica', 'efeitos']         ) {
   const controle = volumes[canal];
   controle.value = String(Math.round(save.audio[canal] * 100));
+  const marca = buscar(`#marca-volume-${canal}`);
+  const mostrarVolume = () => {
+    const digitos = Array.from(`${controle.value}%`, caractere => {
+      const digito = document.createElement('span');
+      digito.className = 'painel-digito';
+      digito.setAttribute('data-digito', caractere === '%' ? 'percentual' : caractere);
+      digito.textContent = caractere;
+      return digito;
+    });
+    marca.replaceChildren(...digitos);
+    controle.style.setProperty('--nivel-volume', `${controle.value}%`);
+  };
+  mostrarVolume();
   controle.addEventListener('input', () => {
+    mostrarVolume();
     save = { ...save, audio: { ...save.audio, [canal]: Number(controle.value) / 100 } };
     audio.volumes(save.audio);
   });

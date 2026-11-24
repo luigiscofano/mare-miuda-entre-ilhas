@@ -17,6 +17,8 @@
 <style id="particulas-do-seletor">@@MARE:texto:estilos/particulas-do-seletor.css@@</style>
 <style id="espumas-do-seletor">@@MARE:texto:estilos/espumas-do-seletor.css@@</style>
 <style id="claroes-do-seletor">@@MARE:texto:estilos/claroes-do-seletor.css@@</style>
+<style id="paineis-apoio">@@MARE:texto:estilos/paineis-apoio.css@@</style>
+<style id="paineis-letras">@@MARE:texto:estilos/paineis-letras.css@@</style>
 </head>
 <body>
   <a class="pular" href="#jogo">Pular para o jogo</a>
@@ -43,10 +45,10 @@
           <span class="porto-rotulo">Ilha de Improviso</span>
           <span class="porto-apoio">Gere uma travessia do seu jeito</span>
         </button>
-        <button type="button" class="porto-card" id="abrir-som-inicio" aria-expanded="false" aria-controls="configuracao-jogo">
+        <button type="button" class="porto-card" id="abrir-som-inicio" aria-haspopup="dialog" aria-expanded="false" aria-controls="configuracao-jogo">
           <span class="porto-rotulo">Som e música</span>
         </button>
-        <button type="button" class="porto-card" id="creditos-inicio">
+        <button type="button" class="porto-card" id="creditos-inicio" aria-haspopup="dialog" aria-expanded="false" aria-controls="creditos">
           <span class="porto-rotulo">Créditos</span>
         </button>
       </div>
@@ -225,25 +227,57 @@
       </details>
     </section>
 
-    <section id="creditos" class="painel" aria-labelledby="titulo-creditos" hidden>
-      <h2 id="titulo-creditos" tabindex="-1">Créditos</h2>
-      <p id="desfecho">O caminho continua a partir da Praia das Conchas.</p>
-      <p><strong>Jogo e direção:</strong> Luigi Scofano de Araujo.</p>
-      <p>Inspirado na mecânica do Maré Miúda de Miudezas, com código, arte provisória e áudio próprios.</p>
-      <button type="button" class="principal" id="voltar-creditos">Voltar à tela inicial</button>
+    <div id="fundo-paineis-apoio" aria-hidden="true" hidden></div>
+    <section id="configuracao-jogo" class="painel-apoio" data-modo="configuracao" role="dialog" aria-modal="true" aria-labelledby="titulo-configuracao-jogo" hidden>
+      <div class="painel-apoio-cabecalho">
+        <h2 id="titulo-configuracao-jogo"><span id="icone-configuracao-jogo" class="painel-icone" aria-hidden="true"></span><span id="rotulo-configuracao-jogo">Configurações</span></h2>
+        <button type="button" id="x-configuracao-jogo" class="painel-fechar-x" aria-label="Fechar painel" data-foco-painel><span aria-hidden="true"></span></button>
+      </div>
+      <div class="painel-apoio-conteudo">
+        <div id="trilha-no-painel" class="painel-cartao painel-trilha" hidden>
+          <span class="painel-icone" data-icone="nota" aria-hidden="true"></span>
+          <div><strong>A Outra Margem</strong><small>Violão de nylon</small></div>
+        </div>
+        <div class="painel-cartao painel-volume">
+          <div class="painel-volume-dados">
+            <label for="volume-musica"><span class="painel-icone" data-icone="nota" aria-hidden="true"></span><span class="painel-letra">Música</span></label>
+            <output id="marca-volume-musica" for="volume-musica" aria-hidden="true">35%</output>
+          </div>
+          <input id="volume-musica" type="range" min="0" max="100" step="1" value="35" data-foco-painel>
+        </div>
+        <div class="painel-cartao painel-volume">
+          <div class="painel-volume-dados">
+            <label for="volume-efeitos"><span class="painel-icone" data-icone="som" aria-hidden="true"></span><span class="painel-letra">Efeitos</span></label>
+            <output id="marca-volume-efeitos" for="volume-efeitos" aria-hidden="true">55%</output>
+          </div>
+          <input id="volume-efeitos" type="range" min="0" max="100" step="1" value="55" data-foco-painel>
+        </div>
+        <p id="aviso-configuracao-jogo" class="painel-nota">Alterações salvas no jogo</p>
+        <button type="button" id="fechar-som-inicio" class="painel-acao" data-foco-painel>Fechar</button>
+      </div>
     </section>
 
-    <div id="fundo-configuracoes-fase" aria-hidden="true" hidden></div>
-    <details id="configuracao-jogo" class="painel configuracao">
-      <summary>Som e música</summary>
-      <label for="volume-musica">Música</label>
-      <input id="volume-musica" type="range" min="0" max="100" step="1" value="35">
-      <label for="volume-efeitos">Efeitos</label>
-      <input id="volume-efeitos" type="range" min="0" max="100" step="1" value="55">
-      <p class="dica">O jogo inicia o áudio depois da primeira interação.</p>
-      <button type="button" id="fechar-som-inicio">Fechar som e música</button>
-      <button type="button" id="bancada">Bancada de testes</button>
-    </details>
+    <section id="creditos" class="painel-apoio" data-modo="porto" role="dialog" aria-modal="true" aria-labelledby="titulo-creditos" hidden>
+      <div class="painel-apoio-cabecalho">
+        <h2 id="titulo-creditos" tabindex="-1"><span class="painel-icone" data-icone="concha" aria-hidden="true"></span><span id="rotulo-creditos">Créditos</span></h2>
+        <button type="button" id="x-creditos" class="painel-fechar-x" aria-label="Fechar créditos" data-foco-painel><span aria-hidden="true"></span></button>
+      </div>
+      <div class="painel-apoio-conteudo">
+        <p id="desfecho" class="painel-nota" hidden></p>
+        <div class="painel-cartao painel-autoria">
+          <small>Jogo e direção</small>
+          <strong>Luigi Scofano de Araujo</strong>
+          <span>Design e arte pixelada</span>
+        </div>
+        <div class="painel-cartao painel-trilha">
+          <span class="painel-icone" data-icone="nota" aria-hidden="true"></span>
+          <div><small>Trilha original</small><strong>A Outra Margem</strong></div>
+        </div>
+        <p class="painel-nota">© 2026 Luigi Scofano de Araujo</p>
+        <button type="button" id="voltar-creditos" class="painel-acao" data-foco-painel>Voltar</button>
+      </div>
+    </section>
+    <button type="button" id="bancada" hidden tabindex="-1">Bancada de testes</button>
 
     <footer>© 2026 Luigi Scofano de Araujo. Todos os direitos reservados.</footer>
   </main>

@@ -102,8 +102,6 @@ body { background: #eae8df; }
 .principal { color: #fff; border-color: #204c4f; background: #24585e; }
 button:disabled { cursor: default; opacity: .64; }
 .botoes { display: flex; flex-wrap: wrap; gap: .46rem; margin-top: .52rem; }
-.configuracao label { font-weight: 650; margin-top: .3rem; display: block; }
-.configuracao input { width: min(100%, 220px); min-height: 30px; accent-color: #24585e; }
 .dica { color: #465b5a; font-size: .83rem; margin-top: .4rem; }
 #posicao-praia { font-weight: 620; margin-top: .45rem; }
 .direcional [data-mapa-direcao="cima"] { grid-column: 2; }
@@ -559,8 +557,6 @@ body:has(#jogo[data-tela="inicio"]) { background:#0f3946; }
   content:""; position:absolute; inset:min(0px,calc((var(--h)*var(--passo-porto) - 44px)/2)) 0;
 }
 .porto-card:focus-visible { outline:3px solid #fff0ad; outline-offset:4px; }
-#jogo[data-tela="inicio"] .configuracao:not([open]) { display:none; }
-#jogo[data-tela="inicio"] .configuracao { width:min(96%,34rem); margin:.7rem auto; }
 #jogo:not([data-tela="inicio"]) :is(#fechar-som-inicio,#bancada) { display:none; }
 #fechar-som-inicio { margin-top:.5rem; }
 #bancada { margin-top:.5rem; }
@@ -605,7 +601,6 @@ body:has(#jogo[data-tela="praia"][data-hub-cartoes]) { background:#0d303e; }
   position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap;
   margin:0; padding:0;
 }
-#jogo[data-tela="praia"][data-hub-cartoes] .configuracao { display:none; }
 .hub-palco {
   position:relative; width:100%; aspect-ratio:1024/576; container-type:inline-size;
   background:#0d303e var(--hub-cena) center / 100% 100% no-repeat; image-rendering:pixelated;
