@@ -43,7 +43,7 @@ With the game open, select **EN** in the lower-right corner to play in English. 
 
 ## Game gallery
 
-Crossing frames come from the official engine and camera. The interface images are browser screenshots of the offline HTML with the current typography, without the cursor, on desktop and at an emulated mobile viewport. [Image sources and resolutions](docs/arte/galeria/README.en.md).
+Crossing frames come from the official engine and camera. The interface images are browser screenshots of the offline HTML with the current typography, without the cursor, on desktop and at an emulated mobile viewport. Where needed, framing removes unused viewport space without cutting the interface shown. [Image sources and resolutions](docs/arte/galeria/README.en.md).
 
 <details open>
 <summary><strong>Starting Harbor, Archipelago, and support panels</strong></summary>

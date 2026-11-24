@@ -43,7 +43,7 @@ Com o jogo aberto, clique ou toque em **EN** no canto inferior direito para joga
 
 ## Galeria do jogo
 
-Os quadros de travessia vêm do motor e da câmera oficiais. As telas de navegação foram capturadas no HTML offline com a tipografia atual, sem cursor, em navegador de computador e em janela móvel emulada. [Origem e resolução das imagens](docs/arte/galeria/README.md).
+Os quadros de travessia vêm do motor e da câmera oficiais. As telas de navegação foram capturadas no HTML offline com a tipografia atual, sem cursor, em navegador de computador e em janela móvel emulada. O enquadramento retira as sobras da janela quando necessário, sem cortar o conteúdo da interface mostrado. [Origem e resolução das imagens](docs/arte/galeria/README.md).
 
 <details open>
 <summary><strong>Porto de Partida, Arquipélago e janelas de apoio</strong></summary>
