@@ -37,7 +37,7 @@ node edicao-oficial/testes/idiomas.mjs dist/mare-miuda-prototipo.html
 
 The automated test checks the three localized fields for each of the 231 levels and verifies that visible text and accessible attributes return to their original language.
 
-Open the offline HTML without a language parameter and check that it starts in Portuguese. Select **EN** in the lower-right corner and check menus, selectors, level titles, objectives, and the status panel. In each support dialog, use **Tab** to reach the language button inside the dialog. Switch back with **PT** and check that the filters, crab position, progress, and music have not reset. Select **EN** again and reload the file normally: the interface should return to Portuguese with progress intact. See the [language control guide](../interface/README.en.md#in-game-language).
+Open the offline HTML without a language parameter and check that it starts in Portuguese. At Starting Harbor, select **EN** in the lower-right corner. Check the menus, selectors, level titles, objectives and status panel. During a crossing, open **Settings**, use **Tab** to reach the language button and switch back with **PT**. Check that your position, move count, saved progress and music have not reset. Confirm there is no language button in Sound and Music, Credits or Improvisation Island, and no language footer in the Archipelago, level selectors or crossings. Select **EN** again and reload the file normally: the interface should return to Portuguese with progress intact. See the [language control guide](../interface/README.en.md#in-game-language).
 
 ## Revision parity
 

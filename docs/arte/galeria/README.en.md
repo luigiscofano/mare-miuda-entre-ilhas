@@ -17,9 +17,9 @@ The sprites were cropped from the same sheets and coordinates used by the render
 
 ## Screens
 
-The image highlighting the language button is an editorial composition using the localized artwork, not a browser screenshot.
+The language switch image is a browser screenshot of Starting Harbor in English, with the standalone **PT** button.
 
-All **19 interface screenshots** were taken in Chromium directly from the offline edition with current typography and without the cursor. Desktop captures started at **1600 × 900**, while the two mobile views used an emulated **390 × 844** viewport, not a physical phone. Framing on the Harbor, Archipelago and support dialogs removes only unused space outside the scene shown. The world selectors keep their illustrated surroundings and corners, and the language screenshot retains the footer control. Available cards were demonstrated with test progress in a disposable profile. [The Eight Worlds film](../animacoes/README.en.md#the-eight-worlds) is a separate record and retains its original presentation.
+The interface images were captured in Chromium from the offline build without the cursor. The mobile images use an emulated viewport, not a physical phone. Older screenshots show earlier layouts. Available cards were demonstrated with test progress in a disposable profile. [The Eight Worlds film](../animacoes/README.en.md#the-eight-worlds) is a separate record and retains its original presentation.
 
 - Current Shell Beach crossing: [desktop](telas/travessia-praia-computador.png) · [mobile](telas/travessia-praia-celular.png).
 - Porto de Partida: [desktop](telas/porto.png) · [mobile](telas/porto-celular.png). Both views show the standalone language button; the desktop scene uses four different sand-tile arrangements.

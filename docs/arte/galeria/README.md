@@ -15,9 +15,9 @@ Os sprites foram recortados das mesmas folhas e coordenadas usadas pelo renderiz
 
 ## Telas
 
-A imagem que destaca o botão de idioma é uma composição editorial feita com as camadas localizadas, não uma captura de navegador.
+A imagem de troca de idioma é uma captura do Porto de Partida em inglês, com o botão **PT** sem faixa.
 
-As **19 imagens de navegação** foram capturadas no Chromium, diretamente da edição offline com a tipografia atual e sem cursor. A captura de computador partiu de **1600 × 900**; as duas telas móveis partiram de uma janela emulada de **390 × 844**, não de um celular físico. O enquadramento do Porto, do Arquipélago e das janelas de apoio exclui apenas o espaço externo ao que está em exibição. Os seletores preservam a paisagem e os cantos ilustrados, e a captura de idioma mantém o botão no rodapé. Os cartões acessíveis foram demonstrados com progresso de teste em um perfil descartável. O [filme Os oito mundos](../animacoes/README.md#os-oito-mundos) é um registro separado e mantém a apresentação da gravação original.
+As imagens da interface foram capturadas no Chromium, direto da edição offline e sem cursor. As imagens para celular usam uma janela emulada, não um aparelho físico. Capturas antigas registram disposições anteriores. As fases disponíveis foram demonstradas com progresso de teste em um perfil descartável. O [filme Os oito mundos](../animacoes/README.md#os-oito-mundos) é um registro separado e mantém a apresentação da gravação original.
 
 - Travessia atual da Praia das Conchas: [computador](telas/travessia-praia-computador.png) · [celular](telas/travessia-praia-celular.png).
 - Porto de Partida: [computador](telas/porto.png) · [celular](telas/porto-celular.png). As duas telas mostram o botão de idioma sem faixa. No computador, cada quina tem um arranjo diferente de células de areia.
