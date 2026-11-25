@@ -1,5 +1,5 @@
 import { reduzirReflexos } from '@@MARE:modulo:src/selecionar-espalhados-8db16b0e.mjs@@';
-import { brilhoDaEspuma } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
+import { brilhoDaEspuma, faseDosReflexosDaPraia } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
 import { pintarCristaRetangular } from '@@MARE:modulo:src/render/espuma-solta.mjs@@';
 import { CASA_PRAIA, MAR_PRAIA, PALETA_PRAIA } from '@@MARE:modulo:src/render/praia-oficial-terreno.mjs@@';
                                                                                    
@@ -30,15 +30,15 @@ export function pintarMarPraia(pintar        , mapa                   , quadro  
     const l = [16, 26, 21, 14, 19][k % 5];
     const espuma = [0, 4, 9, 15, 19, 23].includes(k);
     const caixa            = [x, y, l, espuma ? 7 : 4];
-    if (reservas.some(r => !separado(caixa, r, 7))) return;
+    if (reservas.some(r => !separado(caixa, r, 13))) return;
     reservas.push(caixa);
     if (!espuma) {
       reflexos.push([x,y,l,k % 3 ? 3 : 4]);
       return;
     }
-    pintarCristaRetangular(pintar, { x, y, largura: l, pontaBranca: k % 2 === 1 }, ['#8bbeb1', '#eef0d9']);
+    pintarCristaRetangular(pintar, { x, y, largura: l, pontaBranca: k % 2 === 1 }, ['#73a8a3', '#c2d9ce']);
   });
-  for(const faixa of reduzirReflexos(reflexos))pintar('#205464',...faixa);
+  for(const [x,y,w,h] of reduzirReflexos(reflexos))pintar(faseDosReflexosDaPraia(x,y)?'#205464':'#194b60',x,y,w,h);
 }
 
 // Parâmetros do pincel aprovados, sem qualquer pixel ou estado pré-renderizado.

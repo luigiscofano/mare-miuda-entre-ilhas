@@ -244,7 +244,7 @@ let resultadoDaTravessia;
 import { criarViradaDirecional, quadroDaViradaDirecional, comViradaDirecional } from '@@MARE:modulo:src/render/mare-direcional.mjs@@';
 import { pausaParaRecuperacao, DURACAO_DA_LEVADA_DA_MARE, quadroDoRetornoDaMare, comRetornoDaMare } from '@@MARE:modulo:src/render/retorno-da-mare.mjs@@';
 import { quadroDosPerigos, pintarPerigos, DURACAO_DO_BOTE_DA_GARCA, IMPACTO_DO_BOTE_DA_GARCA_MS } from '@@MARE:modulo:src/render/efeitos-de-perigo.mjs@@';
-import { comQuadroAnimado, posesDeFenda, proximoQuadroDeFenda, posesDaPassada, proximaPoseDaPassada, ENTRADA_DA_FENDA_MS, SAIDA_DA_FENDA_MS } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
+import { comQuadroAnimado, posesDeFenda, proximoQuadroDeFenda, posesDaPassada, proximaPoseDaPassada, ENTRADA_DA_FENDA_MS, SAIDA_DA_FENDA_MS, DURACAO_DA_PASSADA } from '@@MARE:modulo:src/render/animacao-visual.mjs@@';
 import { regioesDoHub, jogarRegiao, regiaoDoMarco, renderizarHub } from '@@MARE:modulo:src/regioes-do-hub-f824aa75.mjs@@';
 import { ehSeletorDaPraia, paginaDaFase, idDaFaseSeguinte, seletorGraficoPara, totalDePaginas, regioesDaPraia, desenharSeletorGrafico } from '@@MARE:modulo:src/interface/seletor-grafico.mjs@@';
 import { desenharFarolPrevia, quadroDoFarol } from '@@MARE:modulo:src/render/farol-oficial.mjs@@';
@@ -474,11 +474,20 @@ const SETAS_DO_PAINEL = { cima:'↑', esquerda:'←', baixo:'↓', direita:'→'
 const movimentoReduzidoDoJogo=window.matchMedia?.('(prefers-reduced-motion: reduce)');
 let relogioAmbiente, pisadaDaTravessia, perigosDaTravessia, retornoDaMare, inicioDaPausaDeRecuperacao;
 let bloquearDirecaoAte=0, viradaDaTravessia, relogioDaTrava;
+const praiaPolida = () => modoCampanha() && temaDaFase() === 'praia';
+let mareVisivel;
+let chaveRelogio;
 const agoraDaTravessia=()=>globalThis.performance?.now?.() ?? Date.now();
+let quadroDaPassadaPendente;
+function cancelarQuadroDaPassada() {
+  if (quadroDaPassadaPendente !== undefined) window.cancelAnimationFrame?.(quadroDaPassadaPendente);
+  quadroDaPassadaPendente = undefined;
+}
 const podeAnimarTravessia=()=>tela==='fase' && (modoCampanha() || retornoDaMare || resultadoDaTravessia) && !document.hidden
   && !movimentoReduzidoDoJogo?.matches && typeof window.setTimeout==='function'
   && typeof window.clearTimeout==='function';
 function pararAnimacaoDaFase() {
+  cancelarQuadroDaPassada();
   if (relogioAmbiente!==undefined) window.clearTimeout?.(relogioAmbiente);
   relogioAmbiente=undefined;
   pisadaDaTravessia=undefined;
@@ -538,7 +547,8 @@ function mostrarAcoesDerrota(){
   const focado=document.activeElement;
   const reiniciar=buscar('#reiniciar'), voltar=buscar('#voltar-seletor-fase');
   const estavaNoJogo=focado===reiniciar||focado===buscar('#tabuleiro')
-     ||focado===document.body;
+     ||focado===document.body||(praiaPolida()&&focado===buscar('#nome-fase'));
+  atualizarMotivoDaDerrota();
   grupo.hidden=false;
   reiniciar.hidden=true;
   voltar.hidden=true;
@@ -560,8 +570,20 @@ function desenharResultadoDaTravessia(resultado) {
     resultadoDaTravessia.somTocado=true;
     audio.efeito('derrota');
   }
+  if(resultado?.tipo==='vitoria' && resultado.polido && !resultado.pendente && !resultado.placa
+      && resultadoDaTravessia && !resultadoDaTravessia.somTocado) {
+    resultadoDaTravessia.somTocado=true;
+    audio.efeito('vitoria',45,1.15);
+  }
   if(resultado?.tipo==='derrota'&&resultado.placa&&resultado.ate===Infinity)mostrarAcoesDerrota();
-  if(resultado?.tipo==='vitoria'&&resultado.placa&&!mostrouAcoesVitoria)prepararAcoesVitoria(true);
+  if(resultado?.tipo==='vitoria'&&resultado.placa&&!mostrouAcoesVitoria&&(!resultado.polido||resultado.ate===Infinity)) {
+    prepararAcoesVitoria(true);
+    if(resultado.polido&&!configuracoesNaFaseAbertas()) {
+      const proximo=buscar('#proximo-nivel');
+      const acao=proximo.hidden||proximo.getAttribute('aria-disabled')==='true'?buscar('#voltar-vitoria-fase'):proximo;
+      acao.focus({preventScroll:true});
+    }
+  }
   pintarPlacaNaTela(buscar('#placa-resultado-v3'),resultado,buscar('#legenda-resultado'));
   if(!resultado||resultado.pendente||resultado.placa)return;
   const canvas=buscar('#tabuleiro');
@@ -571,8 +593,9 @@ function desenharResultadoDaTravessia(resultado) {
   pintarResultado(tabuleiro.ctx,resultado,grade);
 }
 function pintarFase() {
+  cancelarQuadroDaPassada();
   if (!podeAnimarTravessia()) {
-    if(tela==='fase'&&estado.situacao==='vitoria'&&modoCampanha())prepararAcoesVitoria(true);
+    if(tela==='fase'&&estado.situacao==='vitoria'&&modoCampanha()&&!praiaPolida())prepararAcoesVitoria(true);
     pararAnimacaoDaFase();
     pintarQuadroDaFase();
     if(!document.hidden)desenharResultadoDaTravessia(quadroDoResultado(resultadoDaTravessia,0,false,true));
@@ -589,7 +612,16 @@ function pintarFase() {
   if(perigosDaTravessia&&!perigos.some(Boolean))perigosDaTravessia=undefined;
   const retorno=quadroDoRetornoDaMare(retornoDaMare,agora);
   if(retornoDaMare&&!retorno)retornoDaMare=undefined;
-  const inundacao=quadroDaViradaDirecional(viradaDaTravessia,agora);
+  // Guarda a costa antiga até o pouso. O motor já tem o estado novo.
+  const tempoDaAgua=viradaDaTravessia?.quando ?? agora;
+  const inundacao=quadroDaViradaDirecional(viradaDaTravessia,Math.max(tempoDaAgua,agora));
+  if (praiaPolida()) {
+    const visivel=inundacao ? !viradaDaTravessia.alta : mareAlta(estado.passos);
+    if (mareVisivel !== visivel || inundacao || estado.situacao!=='jogando') {
+      mareVisivel=visivel;
+      atualizarRelogioDeMare(visivel,passosAteVirada(estado.passos),estado.situacao!=='jogando'&&!inundacao,Boolean(inundacao));
+    }
+  }
   if(viradaDaTravessia&&!inundacao)viradaDaTravessia=undefined;
   const perigosVisuais=inundacao?perigos.filter(p=>p?.tipo!=='mare'):perigos;
   // Mantem os indices da equipe mesmo ao suprimir a onda antiga.
@@ -601,7 +633,7 @@ function pintarFase() {
   if(resultadoDaTravessia&&!resultado)resultadoDaTravessia=undefined;
   const pulosPintados=resultado?.tipo==='vitoria'&&!resultado.pendente?pulosDoResultado(resultado):pulos;
   comViradaDirecional(inundacao,()=>comRetornoDaMare(retorno,()=>
-    comQuadroAnimado({ambiente:Math.floor(agora/250)%4,pulos:pulosPintados,fendas,perigos:perigosPorSiri},pintarQuadroDaFase)));
+    comQuadroAnimado({ambiente:Math.floor(agora/250)%4, agora:praiaPolida()?agora:undefined, ocultarDestinos:praiaPolida()&&(!!inundacao||!!retorno),pulos:pulosPintados,fendas,perigos:perigosPorSiri},pintarQuadroDaFase)));
   const fimDaVirada=inundacao?.ate??Infinity;
   const fimDoRetorno=retorno ? retorno.ate-agora : Infinity;
   if(perigos.some(Boolean)){
@@ -613,6 +645,16 @@ function pintarFase() {
   const fimDoResultado=resultado&&!resultado.pendente ? resultado.ate-resultado.t : Infinity;
   const fimDoPerigo=Math.min(Infinity,...perigos.filter(Boolean).map(x=>x.ate-tempoDoPerigo));
   if (relogioAmbiente!==undefined) window.clearTimeout(relogioAmbiente);
+  // Sincroniza o deslocamento com a tela. O cenário ocioso fica no relógio
+  // econômico da edição oficial e a passada preserva a duração original.
+  if (praiaPolida() && (pulos.some(Boolean)||!!inundacao||!!retorno||(resultado&&!resultado.placa&&!resultado.pendente)) && typeof window.requestAnimationFrame==='function') {
+    relogioAmbiente = undefined;
+    quadroDaPassadaPendente = window.requestAnimationFrame(() => {
+      quadroDaPassadaPendente = undefined;
+      if (podeAnimarTravessia()) pintarFase();
+    });
+    return;
+  }
   // Fora da passada, no máximo quatro pinturas por segundo.
   const proximo=250-agora%250;
   const fimDoPasso=pulos.some(Boolean) ? proximaPoseDaPassada(tempoQuePassou,campanha)-tempoQuePassou : Infinity;
@@ -903,6 +945,49 @@ function descricao(evento        )         {
   }
 }
 
+function atualizarRelogioDeMare(alta, faltam, finalizada, mudando=false) {
+  const relogio = buscar('#relogio-de-mare');
+  const coesao = praiaPolida();
+  if(relogio.hidden===coesao)relogio.hidden=!coesao;
+  buscar('#fase').classList.toggle('fase-coesao', coesao);
+  if (relogio.hidden) return;
+  const en = (document.documentElement.getAttribute("lang") ?? "pt-BR").startsWith('en');
+  const chave=[en,alta,faltam,finalizada,mudando].join('/');
+  if(chaveRelogio===chave)return;
+  chaveRelogio=chave;
+  relogio.dataset.virada = String(faltam === 1 && !finalizada);
+  relogio.dataset.mudando = String(mudando);
+  buscar('#mare-relogio-atual').textContent = en ? (alta ? 'High tide' : 'Low tide') : (alta ? 'Maré alta' : 'Maré baixa');
+  buscar('#mare-relogio-proxima').textContent = finalizada ? (en ? 'Attempt ended' : 'Tentativa encerrada') : mudando ? (en ? 'Tide turning' : 'Virando agora') : en
+    ? `Tide ${alta ? 'falls' : 'rises'} in ${faltam} ${faltam === 1 ? 'move' : 'moves'}`
+    : `${alta ? 'Desce' : 'Sobe'} em ${faltam} ${faltam === 1 ? 'passo' : 'passos'}`;
+  [...relogio.querySelectorAll('i')].forEach((marca, indice) => {
+    marca.dataset.gasto = String(indice < 3 - faltam);
+  });
+}
+function atualizarObjetivoPolido() {
+  const no=buscar('#objetivo-polido');
+  no.hidden=!praiaPolida();
+  if(no.hidden)return;
+  const en=(document.documentElement.getAttribute('lang')??'pt-BR').startsWith('en');
+  no.textContent=totalFragmentos(fase)
+    ? (en?'Collect the pearls, then reach the oyster.':'Recolha as pérolas e alcance a ostra.')
+    : (en?'Reach the bright shell.':'Alcance a concha brilhante.');
+}
+
+function atualizarMotivoDaDerrota() {
+  const motivo = buscar('#motivo-da-derrota');
+  const causas = resultadoDaTravessia?.causa ?? [];
+  const en = (document.documentElement.getAttribute("lang") ?? "pt-BR").startsWith('en');
+  motivo.hidden = temaDaFase() !== 'praia' || estado.situacao !== 'derrota' || !causas.length;
+  if (motivo.hidden) return;
+  const agua = causas.includes('mare'), garca = causas.includes('garca');
+  if (agua && garca) motivo.textContent = en ? 'The tide and the heron caught you on that move.' : 'A maré e a garça alcançaram o Siri no mesmo passo.';
+  else if (agua) motivo.textContent = en ? 'The tide rose with the crab on a tidal flat.' : 'A maré subiu enquanto o Siri estava no baixio.';
+  else if (garca) motivo.textContent = en ? 'The heron struck the marked tile.' : 'A garça atingiu a casa marcada.';
+  else motivo.hidden = true;
+}
+
 function atualizarFase(eventos                    = [], mensagem = '')       {
   const alta = mareAlta(estado.passos);
   const faltam = passosAteVirada(estado.passos);
@@ -910,6 +995,8 @@ function atualizarFase(eventos                    = [], mensagem = '')       {
   const finalizada = estado.situacao !== 'jogando';
   const fragmento = buscar('#fragmento');
   buscar('#mare').textContent = alta ? 'Alta' : 'Baixa';
+  atualizarRelogioDeMare(viradaDaTravessia&&praiaPolida() ? !viradaDaTravessia.alta : alta, faltam, finalizada&&!viradaDaTravessia, Boolean(viradaDaTravessia));
+  atualizarObjetivoPolido();
   buscar('#passos').textContent = String(estado.passos);
   buscar('#erros').textContent = `${estado.levadas} / ${LIMITE_LEVADAS}`;
   const total = totalFragmentos(fase);
@@ -1009,10 +1096,13 @@ function atualizarFase(eventos                    = [], mensagem = '')       {
   seguir.textContent = fase.id === CAPITULO_FINAL ? 'Ver desfecho' : 'Concluir viagem';
   buscar('#nova-mare-a-mao').hidden = !desafioAvulso || estado.situacao === 'jogando';
   if(estado.situacao==='vitoria'&&modoCampanha())
-    prepararAcoesVitoria(!podeAnimarTravessia());
+    prepararAcoesVitoria(!podeAnimarTravessia()&&!praiaPolida());
 
   pintarFase();
-  audio.eventos(eventos);
+  // A maré e a vitória são sonorizadas nos respectivos quadros da travessia.
+  audio.eventos(praiaPolida()
+    ? eventos.filter(evento=>!(evento.tipo==='virada'&&viradaDaTravessia)&&!(evento.tipo==='vitoria'&&podeAnimarTravessia()))
+    : eventos);
 }
 
 function selecionarFase(novoIndice        , mensagem         , focar = true)       {
@@ -1028,6 +1118,8 @@ function prepararFase(mensagem         , focar = true)       {
   desenharResultadoDaTravessia();
   zerarPausaDeRecuperacao();
   estado = iniciar(fase);
+  mareVisivel=undefined;
+  chaveRelogio=undefined;
   ultimaDirecaoDoPainel = undefined;
   const campanha = modoCampanha();
   atualizarTituloIluminado(buscar('#nome-fase'), fase.nome, campanha);
@@ -1221,8 +1313,12 @@ function jogarAcao(acao         )       {
     const agora=agoraDaTravessia();
     const comCenaNormal=modoCampanha()&&podeAnimarTravessia();
     const virada=transicao.eventos.find(e=>e.tipo==='virada');
-    if(virada&&comCenaNormal&&buscar('#tabuleiro').dataset.arte)
-      viradaDaTravessia=criarViradaDirecional(fase.mapa,agora,virada.alta,viradaDaTravessia,foiMare);
+    if(virada&&comCenaNormal&&buscar('#tabuleiro').dataset.arte) {
+      const tempoDePouso=praiaPolida()&&pisadaDaTravessia?.passadas.some(Boolean)&&!foiMare ? DURACAO_DA_PASSADA : 0;
+      viradaDaTravessia=criarViradaDirecional(fase.mapa,agora+tempoDePouso,virada.alta,viradaDaTravessia,foiMare);
+      if(praiaPolida()&&viradaDaTravessia)audio.efeito(virada.alta?'mare-subindo':'mare-descendo',tempoDePouso,.85);
+    }
+    if(praiaPolida() && pisadaDaTravessia?.passadas.some(Boolean))audio.efeito('passo-areia',podeAnimarTravessia()?DURACAO_DA_PASSADA-18:0,.19);
     const duracaoDoPerigo=comCenaNormal?Math.max(
       foiMare?(viradaDaTravessia?.duracao??DURACAO_DA_LEVADA_DA_MARE):0,
       foiGarca?DURACAO_DO_BOTE_DA_GARCA:0
@@ -1274,7 +1370,7 @@ function jogarAcao(acao         )       {
     const siris=posicoesDosSiris(estado);
     const alvos=siris.filter(p=>['C','G','T','Y'].includes(fase.mapa[p.linha]?.[p.coluna]));
     const causa=transicao.eventos.filter(e=>e.tipo==='levada').flatMap(e=>e.motivos);
-    resultadoDaTravessia={tipo:estado.situacao,siris,causa,alvos:alvos.length===siris.length?alvos:siris};
+    resultadoDaTravessia={tipo:estado.situacao,siris,causa,polido:praiaPolida(),alvos:alvos.length===siris.length?alvos:siris};
   }
   atualizarFase(transicao.eventos);
 }
@@ -1455,6 +1551,13 @@ registrarTextosDaCampanha([...TODAS_AS_FASES, ...FASES_BANCADA], textoDaColeta);
 ligarIdioma(document, () => {
   if (tela !== 'fase') return;
   // Reaplica só os letreiros; fase, comandos, progresso, som e foco continuam.
+  if (praiaPolida()) {
+    const emVirada = Boolean(viradaDaTravessia);
+    atualizarRelogioDeMare(mareVisivel ?? mareAlta(estado.passos), passosAteVirada(estado.passos),
+      estado.situacao !== 'jogando' && !emVirada, emVirada);
+    atualizarObjetivoPolido();
+    atualizarMotivoDaDerrota();
+  }
   atualizarTituloIluminado(buscar('#nome-fase'), fase.nome, modoCampanha());
   pintarFase();
 }, new URLSearchParams(globalThis.location?.search ?? '').get('lang'));

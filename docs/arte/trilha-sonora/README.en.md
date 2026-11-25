@@ -30,7 +30,7 @@ Sound starts after a gesture. The track keeps playing across screen and world ch
 
 Game effects remain separate from the music. Visual and text cues let players continue without sound.
 
-[Listen to the 11 effects and see what triggers them](../efeitos-sonoros/README.en.md). The guitar track was not changed when the effects were revised.
+[Listen to the 11 original effects and see what triggers them](../efeitos-sonoros/README.en.md). The guitar track was not changed when the effects were revised.
 
 [Adjust volumes in **Som e música** (Sound and Music) or **Configurações** (Settings)](../../interface/README.en.md#support-panels).
 

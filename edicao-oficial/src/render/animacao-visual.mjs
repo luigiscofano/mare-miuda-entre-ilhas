@@ -13,7 +13,7 @@ export function puloDoSiri(indice) { return atual?.pulos?.[indice] ?? 0; }
 // A previsão continua sendo calculada pelo motor. Só os cantos e suas
 // insígnias esperam a equipe pousar, inclusive nas travessias por fenda.
 export function mostrarCantosDeDestino() {
-  return !atual?.pulos?.some(pose => pose && typeof pose === 'object')
+  return !atual?.ocultarDestinos && !atual?.pulos?.some(pose => pose && typeof pose === 'object')
     && !atual?.fendas?.some(Boolean);
 }
 
@@ -28,9 +28,15 @@ export function oscilacaoDoVapor(x,y,dy) {
   return (([0,1,2,1][f%4]) * ((x+y)%5<2?-1:1));
 }
 
+// Os reflexos acompanham a água em outro compasso que a espuma.
+export function faseDosReflexosDaPraia(x,y) {
+  if(atual?.agora===undefined)return false;
+  return Math.floor((atual.agora+((x+y)%7)*180)/900)%4===1;
+}
+
 // Reduz ou abre apenas a parte clara de uma crista solta dentro da própria máscara.
 export function apararCristaSolta(x,y,largura) {
-  const f=atual?.ambiente??0;
+  const f=atual?.agora===undefined ? (atual?.ambiente??0) : Math.floor((atual.agora+((x+y)%11)*23)/380)%4;
   if(!f||largura<2)return [0,largura];
   const avanco=Math.min(largura-1,[0,2,4,2][f%4]);
   return [(f+x+y)%2?avanco:0,largura-avanco];

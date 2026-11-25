@@ -1,7 +1,7 @@
 const CLIQUE = 'clique-botao';
 const EFEITOS = [
   CLIQUE, 'cavar', 'sair-fenda', 'levada', 'retorno', 'garca', 'derrota',
-  'mare-subindo', 'mare-descendo', 'perola', 'vitoria',
+  'mare-subindo', 'mare-descendo', 'perola', 'vitoria', 'passo-areia',
 ];
 const LIMITE_PRIMEIRO_CLIQUE_MS = 180;
 
@@ -38,16 +38,22 @@ export function criarEfeitosDaTravessia(ctx, destino, carregar = carregarEfeito)
   let pendentes = [];
   let cliqueFalhou = false;
 
-  function reproduzir(nome, atrasoMs = 0) {
+  function reproduzir(nome, atrasoMs = 0, volume = 1) {
     const buffer = sons.get(nome);
     if (!buffer || ctx.state !== 'running') return false;
     const fonte = ctx.createBufferSource();
     fonte.buffer = buffer;
-    fonte.connect(destino);
+    const ganho = volume === 1 ? undefined : ctx.createGain();
+    if (ganho) {
+      ganho.gain.value=volume;
+      fonte.connect(ganho);
+      ganho.connect(destino);
+    } else fonte.connect(destino);
     fontes.set(fonte, nome);
     fonte.onended = () => {
       fontes.delete(fonte);
       fonte.disconnect();
+      ganho?.disconnect();
     };
     fonte.start(ctx.currentTime + Math.max(.008, atrasoMs / 1000));
     return true;

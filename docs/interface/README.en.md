@@ -18,6 +18,12 @@ At Starting Harbor, the **EN** button sits directly over the ocean in the lower-
 
 [See the language switch in the gallery](../arte/galeria/README.en.md#screens).
 
+## Shell Beach layout
+
+The **Shell Beach** campaign uses a compact status panel, a three-move tide forecast and shorter end-of-level animations. The board stays the focus: on desktop the status sits to the right, while on mobile it fits above the crossing. The other worlds retain their existing layouts.
+
+The state strip shows the objective, turns left before the tide changes, moves, and mistakes. It confirms the new tide when the water animation finishes. The shortest mobile labels keep their full accessible names. Victory begins with a shell glint; defeat shows the cause, then offers a retry. Both keep keyboard focus on the next available action.
+
 ## Movement
 
 Use the **arrow keys** or **WASD**, or swipe on the board on mobile. One swipe in a clear direction sends one move. Short touches, unresolved diagonals and cancelled gestures do not move the crab. You can still scroll outside the board.

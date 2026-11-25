@@ -1,5 +1,7 @@
 # Animações de Entre Ilhas
 
+Na edição atual da Praia das Conchas, a passada, a virada e o resultado acompanham os quadros do navegador. O vídeo original documenta as versões anteriores.
+
 **Português** · [English](README.en.md)
 
 ## Os oito mundos

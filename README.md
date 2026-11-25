@@ -45,6 +45,8 @@ Com o jogo aberto, clique ou toque em **EN** no canto inferior direito para joga
 
 ## Galeria do jogo
 
+A campanha da **Praia das Conchas** tem painel compacto, previsão da virada em três passos e cenas de fim de fase mais curtas. No computador, o estado acompanha a travessia à direita; no celular, cabe acima do tabuleiro. Os demais mundos mantêm a disposição anterior. [Veja computador e celular na galeria](docs/arte/galeria/README.md#telas).
+
 Os quadros de travessia vêm do motor e da câmera oficiais. As telas de navegação foram capturadas no HTML offline com a tipografia atual, sem cursor, em navegador de computador e em janela móvel emulada. O enquadramento retira as sobras da janela quando necessário, sem cortar o conteúdo da interface mostrado. [Origem e resolução das imagens](docs/arte/galeria/README.md).
 
 <details open>
@@ -281,11 +283,13 @@ O gráfico usa os **76 eventos da composição oficial**, separados em baixo, no
 </details>
 
 <details>
-<summary><strong>Efeitos sonoros · 11 sons de jogo e interface</strong></summary>
+<summary><strong>Efeitos sonoros · jogo e interface</strong></summary>
 
 Os efeitos sinalizam eventos como maré, fendas, coleta, erro, retorno, vitória e derrota. O clique de botão é separado dos dez efeitos da travessia e não toca com a simples passagem do cursor. A ação continua compreensível sem som.
 
-[Ouvir os 11 efeitos (MP3)](docs/arte/efeitos-sonoros/Mare-Miuda-Efeitos-Mais-Sutis.mp3) · [Catálogo dos efeitos e seus eventos](docs/arte/efeitos-sonoros/README.md).
+A Praia das Conchas acrescenta uma passada suave na areia, distinta dos sons da maré e do resultado.
+
+[Ouvir os 11 efeitos originais (MP3)](docs/arte/efeitos-sonoros/Mare-Miuda-Efeitos-Mais-Sutis.mp3) · [Catálogo dos efeitos e seus eventos](docs/arte/efeitos-sonoros/README.md).
 
 </details>
 

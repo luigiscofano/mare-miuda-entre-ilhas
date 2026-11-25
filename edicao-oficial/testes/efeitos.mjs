@@ -16,6 +16,7 @@ const recibos = {
   levada: 'a8f9a755c3e4344a59f11164cc0d684e76bf6bc311276d1476ba9c513c92539d',
   'mare-descendo': '12d6b34d315d45cc0f550a6faf44715746cad54e81572bcaf90ecd55d17ff710',
   'mare-subindo': '3196f5dc4dc9bd6dd48de442322dca17fdb1712498132801b7904680f24898aa',
+  'passo-areia': 'db526b4a68475d8e51d4de7cd1e7320c886170332ddf74decc69bd81f2cbe601',
   perola: '3e6ab9a62b24d1cb6530beacb8942c73f1c099b7e2b15c8f4035e56a42e355ab',
   retorno: '2297d969af88f8f9f3c8a0f9da0dad71a5afa5af2e9b5a5e66bc8cfe6bb7ff2a',
   'sair-fenda': '586988bbf44939d96ea76d8c315641f1d1d2cf86ef66e7ef9c56f3475b9a460b',
@@ -136,6 +137,9 @@ audio.volumes({ musica:0, efeitos:.55 });
 audio.eventos([{tipo:'virada',alta:true},{tipo:'fragmento'},{tipo:'levada'},{tipo:'vitoria'},{tipo:'virada',alta:false}]);
 assert.deepEqual(tocarados().slice(-4), ['mare-subindo','perola','vitoria','mare-descendo']);
 assert(ctx.fontes.slice(-4).every(f => f.canal===efeitos && !f.loop));
+audio.efeito('passo-areia',187,.19);
+assert.equal(ctx.fontes.at(-1).iniciou,ctx.currentTime+.187);
+assert.equal(ctx.fontes.at(-1).canal.gain.value,.19);
 audio.efeito('sair-fenda',335);
 assert.equal(ctx.fontes.at(-1).iniciou,ctx.currentTime+.335);
 audio.limparEfeitosDaCena();
@@ -149,4 +153,4 @@ audio.clique();
 audio.eventos([{tipo:'vitoria'}]);
 audio.efeito('derrota');
 assert.equal(ctx.fontes.length,total);
-console.log('11 WAV aprovados, único clique nativo, primeiro gesto, volume isolado e ausência de bipes duplicados: OK.');
+console.log('11 WAV oficiais e novo passo de areia, mix e único clique nativo, primeiro gesto, volume isolado e ausência de bipes duplicados: OK.');
