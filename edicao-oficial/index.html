@@ -25,6 +25,7 @@
 <style id="arte-en">@@MARE:texto:estilos/arte-en.css@@</style>
 <style id="tipografia-normal">@@MARE:texto:estilos/tipografia-normal.css@@</style>
 <style id="porto-sem-margens">@@MARE:texto:estilos/porto-sem-margens.css@@</style>
+<style id="coesao-praia">@@MARE:texto:estilos/coesao-praia.css@@</style>
 </head>
 <body>
   <a class="pular" href="#jogo">Pular para o jogo</a>
@@ -86,7 +87,7 @@
       <img id="arte-arquipelago" src="data:image/png;base64,@@MARE:b64:assets/image/ccacb68fc1ab16378652.png@@" width="512" height="384" alt="" hidden>
       <div id="ferramentas-seletor" role="group" aria-label="Controles da seleção de fases" hidden>
         <button type="button" id="menu-praia">Voltar ao início</button>
-        <button type="button" id="abrir-configuracoes-seletor" aria-haspopup="dialog" aria-expanded="false" aria-controls="configuracao-jogo">Configurações</button>
+        <button type="button" id="abrir-configuracoes-seletor" aria-haspopup="dialog" aria-expanded="false" aria-controls="configuracao-jogo"><span class="rotulo-fase-completo">Configurações</span><span class="rotulo-fase-curto" aria-hidden="true"><span lang="pt-BR">Config.</span><span lang="en">Settings</span></span></button>
       </div>
       <nav id="seletor-fases" aria-label="Seleção de fases" hidden></nav>
       <nav id="cartoes-arquipelago" aria-label="Seletor de mundos" hidden></nav>
@@ -112,13 +113,21 @@
         <p id="objetivo"></p><p id="lembrete-fase" class="dica" hidden></p>
       </div>
       <div id="ferramentas-fase" role="group" aria-label="Controles da fase" hidden>
-        <button id="voltar-seletor-fase" type="button">Voltar à seleção de fases</button>
+        <button id="voltar-seletor-fase" type="button"><span class="rotulo-fase-completo">Voltar à seleção de fases</span><span class="rotulo-fase-curto" aria-hidden="true"><span lang="pt-BR">Voltar</span><span lang="en">Back</span></span></button>
         <button id="abrir-configuracoes-fase" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="configuracao-jogo">Configurações</button>
       </div>
       </div>
       <aside class="camera-lateral" aria-label="Estado e ações da fase">
       <section class="painel-estado-fase" aria-label="Estado da fase">
       <h3 class="painel-hud-titulo" aria-hidden="true">Estado da fase</h3>
+      <div id="relogio-de-mare" class="relogio-de-mare" hidden>
+          <div class="mare-relogio-texto">
+            <strong id="mare-relogio-atual"></strong>
+            <span id="mare-relogio-proxima"></span>
+          </div>
+          <div class="mare-relogio-ciclo" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+      <p class="objetivo-polido" id="objetivo-polido" hidden></p>
       <dl class="indicadores">
         <div><dt>Maré</dt><dd id="mare"></dd></div>
         <div><dt>Passos</dt><dd id="passos"></dd></div>
@@ -165,6 +174,7 @@
         <button type="button" id="seguir-fase" class="principal" hidden>Concluir viagem</button>
       </div>
       <div id="acoes-derrota-fase" role="group" aria-label="Ações após a derrota" hidden>
+        <p class="motivo-da-derrota" id="motivo-da-derrota" hidden></p>
         <button type="button" id="tentar-novamente-fase" class="principal">Tentar novamente</button>
         <button type="button" id="voltar-derrota-fase">Voltar à seleção de fases</button>
       </div>
@@ -325,5 +335,6 @@
 <script type="application/octet-stream" id="efeito-offline-perola">@@MARE:b64:assets/audio/efeitos/perola.wav@@</script>
 <script type="application/octet-stream" id="efeito-offline-vitoria">@@MARE:b64:assets/audio/efeitos/vitoria.wav@@</script>
 <script type="application/octet-stream" id="efeito-offline-clique-botao">@@MARE:b64:assets/audio/efeitos/clique-botao.wav@@</script>
+<script type="application/octet-stream" id="efeito-offline-passo-areia">@@MARE:b64:recursos/passo-areia.wav@@</script>
 </body>
 </html>

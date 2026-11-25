@@ -18,6 +18,12 @@ No Porto, o botão **EN** fica sozinho no canto inferior direito, por cima do ma
 
 [Veja o botão de idioma na galeria](../arte/galeria/README.md#telas).
 
+## Disposição na Praia das Conchas
+
+A campanha da **Praia das Conchas** tem painel compacto, previsão da virada em três passos e cenas de fim de fase mais curtas. No computador, o estado acompanha a travessia à direita; no celular, cabe acima do tabuleiro. Os demais mundos mantêm a disposição anterior.
+
+O painel mostra o objetivo, os passos até a virada, o total de passos e os erros. A maré nova é confirmada no fim do movimento da água. Os rótulos curtos no celular preservam seus nomes acessíveis completos. Na vitória, a concha brilha antes da placa; na derrota, aparece a causa e a opção de tentar de novo. Nos dois casos, o foco de teclado vai para a próxima ação disponível.
+
 ## Movimento
 
 Mova com as **setas** ou **WASD** no teclado, ou deslize sobre o tabuleiro no celular. Um gesto completo em direção clara aciona um passo; toques curtos, diagonais sem direção dominante e gestos cancelados não acionam jogadas. A rolagem permanece disponível fora do tabuleiro.

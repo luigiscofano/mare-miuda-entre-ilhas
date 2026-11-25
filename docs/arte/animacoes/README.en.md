@@ -1,5 +1,7 @@
 # Between Islands animations
 
+In the current Shell Beach build, the walk, tide and outcome use the browser frame clock. The original reel documents earlier behavior.
+
 [Português](README.md) · **English**
 
 ## The eight worlds

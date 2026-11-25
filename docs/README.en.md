@@ -7,7 +7,7 @@
 - [Interface](interface/README.en.md): world and level selection, campaign controls, [support panels](interface/README.en.md#support-panels), and [Improvisation Island](interface/README.en.md#improvisation-island).
 - [Campaign](campanha/README.en.md): progression and mechanics.
 - [Soundtrack](arte/trilha-sonora/README.en.md): composition, notes, and loop for **A Outra Margem**.
-- [Sound effects](arte/efeitos-sonoros/README.en.md): clips and the action that triggers each of the eleven sounds.
+- [Sound effects](arte/efeitos-sonoros/README.en.md): clips and the action that triggers the original sounds and the new Shell Beach footstep.
 - [Animation footage](arte/animacoes/README.en.md): examples of tide patterns and in-game movement.
 - [Build and verification](producao/README.en.md): how to build and test the playable edition.
 

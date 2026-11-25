@@ -4,7 +4,9 @@
 
 [Voltar ao guia de arte](../README.md) · [Trilha de violão](../trilha-sonora/README.md) · [Validação técnica](../../producao/README.md#validação-dos-efeitos-sonoros)
 
-[**Ouvir os 11 efeitos sonoros (MP3)**](Mare-Miuda-Efeitos-Mais-Sutis.mp3)
+[**Ouvir os 11 efeitos sonoros originais (MP3)**](Mare-Miuda-Efeitos-Mais-Sutis.mp3)
+
+A Praia das Conchas acrescenta [uma passada suave na areia](../../../edicao-oficial/recursos/passo-areia.wav) e ajusta o tempo e o volume dos sons da maré e do resultado. O MP3 é anterior a essa mudança.
 
 O catálogo apresenta separadamente os sons usados na edição offline. Os efeitos têm ataques mais suaves e o clique tem um toque mecânico curto. Todos passam pelo controle **Efeitos**, separado de **Música** em **Configurações**. A trilha **A Outra Margem**, em violão de nylon, permanece como estava.
 

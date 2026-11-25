@@ -45,6 +45,8 @@ With the game open, select **EN** in the lower-right corner to play in English. 
 
 ## Game gallery
 
+The **Shell Beach** campaign uses a compact status panel, a three-move tide forecast and shorter end-of-level animations. The board stays the focus: on desktop the status sits to the right, while on mobile it fits above the crossing. The other worlds retain their existing layouts. [Compare desktop and mobile in the gallery](docs/arte/galeria/README.en.md#screens).
+
 Crossing frames come from the official engine and camera. The interface images are browser screenshots of the offline HTML with the current typography, without the cursor, on desktop and at an emulated mobile viewport. Where needed, framing removes unused viewport space without cutting the interface shown. [Image sources and resolutions](docs/arte/galeria/README.en.md).
 
 <details open>
@@ -274,11 +276,13 @@ The chart uses the **76 note events in the official composition**, split into ba
 </details>
 
 <details>
-<summary><strong>Sound effects · 11 game and interface sounds</strong></summary>
+<summary><strong>Sound effects · game and interface</strong></summary>
 
 The effects signal events such as tide changes, burrows, collection, mistakes, recovery, victory, and defeat. The button click is distinct from the ten crossing sounds and does not play when the pointer only hovers. The action remains understandable without sound.
 
-[Listen to the 11 effects (MP3)](docs/arte/efeitos-sonoros/Mare-Miuda-Efeitos-Mais-Sutis.mp3) · [Sound effects and their triggers](docs/arte/efeitos-sonoros/README.en.md).
+Shell Beach adds a soft landing sound, distinct from the tide cue and result sounds.
+
+[Listen to the original 11 effects (MP3)](docs/arte/efeitos-sonoros/Mare-Miuda-Efeitos-Mais-Sutis.mp3) · [Sound effects and their triggers](docs/arte/efeitos-sonoros/README.en.md).
 
 </details>
 

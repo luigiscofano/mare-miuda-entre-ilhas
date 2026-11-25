@@ -19,6 +19,7 @@ A imagem que destaca o botão de idioma é uma composição editorial feita com 
 
 As **19 imagens de navegação** foram capturadas no Chromium, diretamente da edição offline com a tipografia atual e sem cursor. A captura de computador partiu de **1600 × 900**; as duas telas móveis partiram de uma janela emulada de **390 × 844**, não de um celular físico. O enquadramento do Porto, do Arquipélago e das janelas de apoio exclui apenas o espaço externo ao que está em exibição. Os seletores preservam a paisagem e os cantos ilustrados, e a captura de idioma mantém o botão no rodapé. Os cartões acessíveis foram demonstrados com progresso de teste em um perfil descartável. O [filme Os oito mundos](../animacoes/README.md#os-oito-mundos) é um registro separado e mantém a apresentação da gravação original.
 
+- Travessia atual da Praia das Conchas: [computador](telas/travessia-praia-computador.png) · [celular](telas/travessia-praia-celular.png).
 - Porto de Partida: [computador](telas/porto.png) · [celular](telas/porto-celular.png). As duas telas mostram o botão de idioma sem faixa. No computador, cada quina tem um arranjo diferente de células de areia.
 - Arquipélago: [página 1](telas/arquipelago-1.png) · [página 2](telas/arquipelago-2.png) · [página 3](telas/arquipelago-3.png) · [página 4](telas/arquipelago-4.png) · [celular](telas/arquipelago-celular.png).
 - Janelas: [Ilha de Improviso](telas/ilha-de-improviso.png) · [Som e música](telas/som-e-musica.png) · [Créditos](telas/creditos.png).

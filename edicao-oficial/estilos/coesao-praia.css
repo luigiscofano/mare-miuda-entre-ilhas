@@ -1,0 +1,213 @@
+/* Camada de direção visual. Não altera a câmera, os sprites ou os mapas. */
+#jogo {
+  --acoes-fundo:#193c4c; --acoes-fundo-hover:#255367; --acoes-borda:#6b9298;
+  --acoes-texto:#eef3e7; --acoes-areia:#f4d497; --acoes-areia-hover:#ffe5ad;
+  --acoes-areia-tinta:#26343c; --acoes-foco:#fff1b5;
+}
+#inicio #comecar, #inicio #abrir-mare-a-mao, #inicio #abrir-som-inicio,
+#inicio #creditos-inicio, #cartoes-arquipelago .hub-inicio,
+#cartoes-arquipelago button:has(.hub-rotulo-normal):not([aria-disabled="true"]),
+#seletor-fases .praia-direta-viagens button,
+#ferramentas-seletor button, #fase.fase-coesao #ferramentas-fase button,
+#fase.fase-coesao #acoes-vitoria-fase button, #fase.fase-coesao #acoes-derrota-fase button,
+.painel-apoio .painel-acao {
+  background:var(--acoes-fundo) !important; color:var(--acoes-texto) !important;
+  border:1px solid var(--acoes-borda) !important; border-radius:4px !important;
+  box-shadow:0 3px 0 #0e2633 !important; text-shadow:none !important;
+}
+#inicio #comecar, #cartoes-arquipelago button.hub-regiao:not([aria-disabled="true"]),
+#fase.fase-coesao #acoes-vitoria-fase .principal:not([aria-disabled="true"]),
+#fase.fase-coesao #acoes-derrota-fase #tentar-novamente-fase, #mare-a-mao #gerar-mare-a-mao {
+  background:var(--acoes-areia) !important; color:var(--acoes-areia-tinta) !important;
+  border-color:#ffe4a6 !important;
+}
+#jogo button:focus-visible {
+  outline:3px solid var(--acoes-foco) !important; outline-offset:3px;
+}
+#jogo button[aria-disabled="true"], #jogo button:disabled {
+  box-shadow:none !important; cursor:not-allowed;
+}
+@media(hover:hover) {
+  #fase.fase-coesao #ferramentas-fase button:hover:not([aria-disabled="true"]),
+  #ferramentas-seletor button:hover {background:var(--acoes-fundo-hover) !important}
+  #inicio #comecar:hover, #fase.fase-coesao #tentar-novamente-fase:hover,
+  #fase.fase-coesao #proximo-nivel:hover:not([aria-disabled="true"]) {background:var(--acoes-areia-hover) !important}
+}
+#inicio #comecar .porto-apoio{color:#334955 !important;text-shadow:none}
+#inicio #abrir-mare-a-mao .porto-apoio{color:#b9d2d3 !important;text-shadow:none}
+#relogio-de-mare[hidden], #motivo-da-derrota[hidden]{display:none}
+.relogio-de-mare {
+  display:flex;align-items:center;gap:14px;min-width:0;box-sizing:border-box;
+  padding:8px 12px;background:#183c4a;color:#eef8f4;border:1px solid #678690;
+  border-radius:4px;font:normal .83rem/1.25 system-ui,sans-serif;text-shadow:none;
+}
+.mare-relogio-texto{display:flex;flex-wrap:wrap;gap:2px 12px;align-items:baseline}
+#mare-relogio-proxima{color:#c0e2e6}
+.mare-relogio-ciclo{display:flex;gap:4px;flex:none}
+.mare-relogio-ciclo i{width:11px;height:9px;border:1px solid #83bec6;background:#245565;display:block}
+.mare-relogio-ciclo i[data-gasto="true"]{background:#a2dae2;border-color:#a2dae2}
+.relogio-de-mare[data-virada="true"]{border-color:#e2bb72}
+.relogio-de-mare[data-virada="true"] #mare-relogio-proxima{color:#ffe2a6}
+.fase-coesao .painel-hud-avisos > .painel-hud-aviso:has(#hud-aviso-mare){display:none}
+.fase-coesao .painel-hud-ultima{opacity:.72}
+#jogo[data-tela="fase"] .fase-coesao .camera-topo{background:#122e3e}
+.motivo-da-derrota{color:#f1e4f6;font:.9rem/1.35 system-ui,sans-serif;text-shadow:none;margin:.15rem 0 .3rem}
+@media(max-width:760px) {
+  .fase-coesao .relogio-de-mare{width:100%;justify-content:space-between;padding:5px 8px}
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .camera-travessia{
+    height:clamp(270px,calc(100svh - 17rem),630px);
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  #jogo button{animation:none !important;transition:none !important;transform:none !important}
+}
+
+/* A previsão no topo já informa a maré; deixamos os demais contadores no painel. */
+#jogo[data-ferramentas-campanha] .fase-coesao .indicadores > div:has(#mare) {
+  position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;
+}
+@media(max-width:760px){
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .painel-estado-fase .indicadores{
+    grid-template-columns:repeat(auto-fit,minmax(3.9rem,1fr));
+  }
+}
+#jogo[data-tela="praia"][data-praia-direta] #praia:has(#seletor-fases[data-tema="praia"])::before {
+  opacity:.6; /* Só os reflexos externos; as cartas e o mapa conservam as cores. */
+}
+.fase-coesao:has(#acoes-derrota-fase:not([hidden])) #feedback {
+  position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);
+}
+
+/* A travessia é a superfície principal; as leituras se apoiam no mesmo
+   fundo, sem uma segunda moldura ornamental disputando o olhar. */
+#jogo[data-tela="fase"][data-ferramentas-campanha] #fase.fase-coesao {background:#142e47}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .camera-topo {
+  background:#142e47;min-height:68px; padding-block:.55rem; gap:.4rem 1rem;
+}
+#jogo[data-ferramentas-campanha] .fase-coesao .painel-estado-fase {
+  padding:0;filter:none;isolation:auto;
+}
+#jogo[data-ferramentas-campanha] .fase-coesao .painel-estado-fase::before,
+#jogo[data-ferramentas-campanha] .fase-coesao .painel-estado-fase::after,
+#jogo[data-ferramentas-campanha] .fase-coesao .indicadores > div::before {display:none}
+#jogo[data-ferramentas-campanha] .fase-coesao .painel-hud-titulo {
+  padding:.15rem 0 .66rem;color:#d2ddd5;background:none;clip-path:none;
+  font:700 .72rem/1.1 system-ui,sans-serif;letter-spacing:.10em;
+  border-bottom:1px solid #41616c;
+}
+#jogo[data-ferramentas-campanha] .fase-coesao .relogio-de-mare {
+  padding:.56rem 0 .5rem; border:0; border-radius:0; background:none;
+  font-size:.87rem; justify-content:space-between; min-height:3rem;
+}
+.fase-coesao .mare-relogio-texto {display:grid;gap:2px}
+.fase-coesao #mare-relogio-atual {color:#edf5eb;font-size:1.05rem}
+.fase-coesao .relogio-de-mare[data-virada="true"] i:last-child {border-color:#ffd897;background:#92714d}
+.fase-coesao .relogio-de-mare[data-mudando="true"] i {border-color:#b3e1df;background:#6396a3}
+.fase-coesao .objetivo-polido {margin:0;padding:.38rem 0 .58rem;font:500 .9rem/1.3 system-ui,sans-serif;color:#f1e1ba}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .painel-estado-fase .indicadores {
+  grid-template-columns:minmax(0,1fr);padding:0;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .indicadores > div {
+  min-height:2rem;padding:.35rem 0; border-color:#375363;
+}
+#jogo[data-ferramentas-campanha] .fase-coesao .indicadores dt {
+  font:500 .86rem/1.2 system-ui,sans-serif;text-transform:none;
+}
+#jogo[data-ferramentas-campanha] .fase-coesao .indicadores dd {font:700 1rem/1.2 system-ui,sans-serif;font-variant-numeric:tabular-nums}
+#jogo[data-ferramentas-campanha] .fase-coesao .painel-hud-avisos {padding:.35rem 0 0}
+#jogo[data-ferramentas-campanha] .fase-coesao .painel-hud-avisos:not(:has(#hud-faixa-garca:not([hidden]),#hud-fendas:not([hidden]))) {display:none}
+#jogo[data-ferramentas-campanha] .fase-coesao .painel-hud-ultima {display:none}
+#jogo[data-ferramentas-campanha] .fase-coesao .camera-lateral > #sinal-concha {
+  position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);margin:0;
+}
+#jogo[data-ferramentas-campanha] .fase-coesao #reiniciar {
+  background:#193c4c; color:#eef3e7; border:1px solid #6b9298; border-radius:4px;
+}
+#jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .camera-travessia {
+  height:max(340px,calc(100svh - 68px));
+}
+#jogo[data-tela="praia"][data-praia-direta] #praia:has(#seletor-fases[data-tema="praia"])::before {opacity:.38}
+#seletor-fases[data-tema="praia"] { --claroes-palco:none!important }
+#seletor-fases[data-tema="praia"] button[data-estado="disponivel"] {outline-offset:3px}
+#jogo #seletor-fases[data-tema="praia"] button[aria-disabled="true"],
+#jogo #cartoes-arquipelago button[aria-disabled="true"] {opacity:.72}
+#jogo[data-tela="fase"] .fase-coesao .camera-travessia #placa-resultado-v3 {animation:none}
+@media (max-width:760px) {
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .camera-topo {
+    min-height:0; padding:.4rem .65rem .25rem;
+  }
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .camera-topo .descricao {margin:0}
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao #ferramentas-fase {
+    display:flex; flex-wrap:wrap; gap:.35rem;
+  }
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao #ferramentas-fase button:not([hidden]) {
+    min-height:44px; min-width:0; width:auto; font-size:.75rem; padding:.28rem .48rem;
+  }
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .camera-lateral {
+    display:contents;
+  }
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .painel-estado-fase {
+    grid-column:1;grid-row:2;display:grid;grid-template-columns:minmax(0,1fr) auto;
+    gap:.15rem .45rem;align-items:center;padding:.25rem .65rem .35rem; border-top:1px solid #375363;
+  }
+  #jogo[data-ferramentas-campanha] .fase-coesao .painel-estado-fase .painel-hud-titulo {display:none}
+  #jogo[data-ferramentas-campanha] .fase-coesao .relogio-de-mare {
+    padding:0;gap:.35rem;justify-content:flex-start;min-height:1.2rem;font-size:.71rem;
+  }
+  .fase-coesao .mare-relogio-texto #mare-relogio-atual {font-size:.81rem}
+  .fase-coesao .mare-relogio-ciclo {gap:2px}
+  .fase-coesao .mare-relogio-ciclo i {width:6px;height:6px}
+  .fase-coesao .objetivo-polido {
+    padding:0;font-size:.73rem;grid-column:1/-1;grid-row:2;
+  }
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .painel-estado-fase .indicadores {
+    display:flex;align-items:start;gap:.42rem;grid-row:1;grid-column:2;
+  }
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .indicadores > div {
+    display:grid;gap:1px;border:0;min-height:0;padding:0;
+  }
+  #jogo[data-ferramentas-campanha] .fase-coesao .indicadores dt {font-size:.67rem}
+  #jogo[data-ferramentas-campanha] .fase-coesao .indicadores dd {font-size:.8rem}
+  #jogo[data-ferramentas-campanha] .fase-coesao .painel-hud-avisos {padding:0;grid-column:1/-1}
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .camera-travessia {
+    grid-row:3;
+    height:clamp(240px,calc(100svh - 10.5rem),720px);
+  }
+  #jogo[data-ferramentas-campanha] .fase-coesao .camera-lateral > :is(.feedback,.acoes,.botoes,#acoes-vitoria-fase,#acoes-derrota-fase) {
+    order:0;grid-column:1;padding-inline:.65rem;margin-inline:0;
+  }
+  #jogo[data-ferramentas-campanha] .fase-coesao .camera-lateral > :is(#acoes-vitoria-fase,#acoes-derrota-fase):not([hidden]) {padding-block:.4rem}
+}
+/* Encurta só a leitura visual dos controles. O nome completo e traduzido
+   continua disponível para leitores de tela. */
+.rotulo-fase-curto {display:none}
+html:lang(en) .rotulo-fase-curto [lang="pt-BR"],
+html:not(:lang(en)) .rotulo-fase-curto [lang="en"] {display:none}
+@media (max-width:760px) {
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao #ferramentas-fase {
+    flex-wrap:nowrap;max-width:100%;
+  }
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao #ferramentas-fase button {
+    flex:0 0 auto; min-width:44px; white-space:nowrap;
+  }
+  .fase-coesao #ferramentas-fase .rotulo-fase-curto {display:inline}
+  .fase-coesao #ferramentas-fase .rotulo-fase-completo {
+    position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;
+  }
+}
+
+/* No celular a ação do desfecho entra acima do idioma, sem obrigar a
+   rolar o tabuleiro para tocar em "Tentar novamente" ou "Próximo nível". */
+@media (max-width:760px) {
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao .camera-lateral > :is(#acoes-vitoria-fase,#acoes-derrota-fase):not([hidden]) {
+    position:fixed; z-index:1030; inset:auto 0 env(safe-area-inset-bottom,0px) 0;
+    width:100%; transform:none; margin:0; padding:.45rem .65rem;
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.35rem .45rem;
+    background:#142e47; border:0; border-top:1px solid #607a7c; border-radius:0; box-shadow:none;
+  }
+  #jogo[data-tela="fase"][data-ferramentas-campanha] .fase-coesao :is(#acoes-vitoria-fase,#acoes-derrota-fase) > button {
+    width:100%; min-height:44px; font-size:.76rem;
+  }
+  .fase-coesao #motivo-da-derrota {grid-column:1/-1; margin:0; font-size:.76rem}
+  .fase-coesao #seguir-fase:not([hidden]) {grid-column:1/-1}
+}

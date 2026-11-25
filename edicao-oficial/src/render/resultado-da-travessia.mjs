@@ -418,12 +418,14 @@ export function quadroDoResultado(base,agora,esperando,estatico=false) {
  if(esperando)return {pendente:true,ate:Infinity};
  base.inicio??=agora;
  const t=agora-base.inicio;
- const tabela=base.tipo==='vitoria'?VITORIA:DERROTA;
+ // As cenas da Praia ficam breves; a causa ainda tem seu quadro próprio.
+ const tabela=base.polido ? (base.tipo==='vitoria'?[0,43,82,122,162,201,238,279,314,350]:[0,40,79,124,168,215])
+   : base.tipo==='vitoria'?VITORIA:DERROTA;
  const i=tabela.findLastIndex(a=>a<=t);
  if(i<0)return undefined;
  if(i===tabela.length-1){
   const entrada=t-tabela.at(-1);
-  const marcos=[0,35,72,110,151,192,232];
+  const marcos=base.polido?[0,20,40,56,77,96,117]:[0,35,72,110,151,192,232];
   const etapa=marcos.findLastIndex(a=>a<=entrada);
   return {...base,placa:true,deslocamento:[12,8,4,1,-2,1,0][etapa],t,
    ate:etapa<marcos.length-1?tabela.at(-1)+marcos[etapa+1]:Infinity};
@@ -458,7 +460,14 @@ function pintarBrilhos(ctx,q,grade) {
  for(const [i,p] of marcas.entries()){
   const frame=Math.max(0,q.i-i%2);
   const x=origemX+p.coluna*lado,y=origemY+p.linha*lado;
+  // Primeiro a própria concha responde com uma luz dourada em três pixels.
+  // O Siri fica no centro, livre de qualquer filtro de opacidade.
+  if(q.polido && frame<3){
+   const meio=x+Math.round(lado*.58), topo=y+Math.round(lado*.26);
+   brilhar(ctx,meio,topo,frame+1,'#f4d487','#fff4bc');
+  }
   for(const [u,v,tempos,cor] of ESTRELAS){
+   if(q.polido&&frame<2)continue;
    const k=tempos[frame];
    const cx=x+Math.round(u*lado/48),cy=y+Math.round(v*lado/48);
    brilhar(ctx,cx,cy-(k>1?q.i%2:0),k,cor,'#fffdf6');

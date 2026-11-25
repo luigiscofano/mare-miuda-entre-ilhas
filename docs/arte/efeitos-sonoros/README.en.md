@@ -4,7 +4,9 @@
 
 [Back to the art guide](../README.en.md) · [Guitar soundtrack](../trilha-sonora/README.en.md) · [Technical checks](../../producao/README.en.md#sound-effects-checks)
 
-[**Listen to all 11 sound effects (MP3)**](Mare-Miuda-Efeitos-Mais-Sutis.mp3)
+[**Listen to the original 11 sound effects (MP3)**](Mare-Miuda-Efeitos-Mais-Sutis.mp3)
+
+Shell Beach adds [a soft landing sound](../../../edicao-oficial/recursos/passo-areia.wav) and adjusts the timing and balance of the tide and outcome sounds. The MP3 predates that change.
 
 The catalog presents the sounds used in the offline edition one by one. The effects have softer attacks, and the click is a short mechanical sound. All use the **Efeitos** (Effects) volume, separate from **Música** (Music) in **Configurações** (Settings). The nylon-string guitar track **A Outra Margem** is unchanged.
 

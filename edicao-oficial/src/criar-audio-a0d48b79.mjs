@@ -66,8 +66,8 @@ export function criarAudio() {
       ambienteAtivo = ativo;
       sincronizar();
     },
-    efeito(nome, atrasoMs = 0) {
-      if (efeitosAudiveis()) amostras?.tocar(nome, atrasoMs);
+    efeito(nome, atrasoMs = 0, volume = 1) {
+      if (efeitosAudiveis()) amostras?.tocar(nome, atrasoMs, volume);
     },
     clique() {
       if (efeitosAudiveis()) amostras?.clicar();
