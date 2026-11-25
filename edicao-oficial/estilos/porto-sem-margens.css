@@ -1,5 +1,5 @@
-/* O mar ocupa a área do Porto toda. O palco central mantém escala e
-   proporções; as quinas da própria arte acompanham as bordas reais. */
+/* O oceano ocupa toda a tela. As quinas da costa ancoram nas bordas,
+   independentemente do tamanho da composição central. */
 #inicio {
   --largura-porto:960px;
   --largura-quina:96px;
@@ -30,10 +30,10 @@
 .porto-quinas > [data-quina^="inferior"] { bottom:0; }
 .porto-quinas > [data-quina$="esquerda"] { left:0; }
 .porto-quinas > [data-quina$="direita"] { right:0; }
-.porto-quinas > [data-quina="superior-esquerda"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-superior-esquerda.png@@'); }
-.porto-quinas > [data-quina="superior-direita"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-superior-direita.png@@'); }
-.porto-quinas > [data-quina="inferior-esquerda"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-inferior-esquerda.png@@'); }
-.porto-quinas > [data-quina="inferior-direita"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-inferior-direita.png@@'); }
+.porto-quinas > [data-quina="superior-esquerda"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:estilos/porto/superior-esquerda.png@@'); }
+.porto-quinas > [data-quina="superior-direita"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:estilos/porto/superior-direita.png@@'); }
+.porto-quinas > [data-quina="inferior-esquerda"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:estilos/porto/inferior-esquerda.png@@'); }
+.porto-quinas > [data-quina="inferior-direita"] { --arte-quina:url('data:image/png;base64,@@MARE:b64:estilos/porto/inferior-direita.png@@'); }
 @media (width <= 760px) {
   #inicio { --largura-porto:384px; --largura-quina:64px; }
   .porto-quinas > [data-quina] { width:min(var(--largura-quina),16.66667cqw); aspect-ratio:64/56; }
@@ -60,4 +60,53 @@
     left:calc(50% + min(203px,21.145833cqw));
     --arte-rocha:url('data:image/png;base64,@@MARE:b64:assets/image/porto-sem-margens/desktop-rocha-direita.png@@');
   }
+}
+
+/* Em telas largas, a altura disponível também limita a ampliação.
+   A tipografia acompanha a escala da arte sem estourar os botões. */
+@media (width > 760px) {
+  #inicio { --largura-porto:1380px; --largura-quina:144px; }
+  #inicio .porto-palco {
+    width:min(calc(100% - 24px),var(--largura-porto),max(760px,calc(100svh * 16 / 9)));
+  }
+  #inicio .porto-palco h2 { font-size:clamp(11px,calc(13 * var(--passo-porto)),19px); }
+  #inicio .porto-palco p { font-size:clamp(11px,calc(14 * var(--passo-porto)),20px); }
+  #inicio .porto-card .porto-rotulo { font-size:clamp(13px,calc(19 * var(--passo-porto)),28px); }
+  #inicio .porto-card .porto-apoio { font-size:clamp(10px,calc(11 * var(--passo-porto)),14px); right:8%; }
+  #inicio :is(#abrir-som-inicio,#creditos-inicio) .porto-rotulo {
+    font-size:clamp(10px,calc(12 * var(--passo-porto)),15px);
+  }
+  .porto-quinas > [data-quina] { width:min(var(--largura-quina),13cqw); }
+}
+
+/* No Porto, o quadrado de idioma fica sobre o oceano; nas outras telas,
+   a faixa continua reservando espaço fora da área jogável. */
+body:has(> #jogo[data-tela="inicio"]) { --reserva-idioma:0px; }
+body > #jogo[data-tela="inicio"] ~ .barra-idioma {
+  position:fixed;
+  inset:auto max(10px,env(safe-area-inset-right,0px)) max(6px,env(safe-area-inset-bottom,0px)) auto;
+  width:auto; height:auto; padding:0; background:transparent; border:0;
+}
+
+/* O dourado dá prioridade à viagem. Os outros atalhos ficam no azul
+   do menu, sem levar essa camada visual para os seletores ou fases. */
+@media (forced-colors:none) {
+  #inicio :is(#comecar,#abrir-mare-a-mao,#abrir-som-inicio,#creditos-inicio) {
+    background:#193c4c !important; color:#eef3e7 !important;
+    border:1px solid #6b9298 !important; border-radius:4px !important;
+    box-shadow:0 3px 0 #0e2633 !important; text-shadow:none !important;
+  }
+  #inicio #comecar {
+    background:#f4d497 !important; color:#26343c !important;
+    border-color:#ffe4a6 !important;
+  }
+  #inicio .porto-card:focus-visible {
+    outline:3px solid #fff1b5 !important; outline-offset:3px;
+  }
+  #inicio #comecar .porto-apoio { color:#334955 !important; text-shadow:none; }
+  #inicio #abrir-mare-a-mao .porto-apoio { color:#b9d2d3 !important; text-shadow:none; }
+}
+
+@media (hover:hover) and (forced-colors:none) {
+  #inicio #comecar:hover { background:#ffe5ad !important; }
 }

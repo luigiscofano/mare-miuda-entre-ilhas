@@ -10,11 +10,11 @@
 
 ## Starting Harbor
 
-At Starting Harbor, the scene’s ocean fills the screen down to the language footer. The composition and control sizes stay intact, while the four sand corners meet the outer edges. On short screens, the central area scrolls so no controls are cut off.
+At Starting Harbor, the ocean fills the screen with no footer strip. On desktop, the logo, crab and controls scale together based on the available width and height. Each corner uses a different arrangement of 48 px sand tiles from the board. Mobile keeps the more compact scene.
 
 ## In-game language
 
-Outside support dialogs, the **EN** button is in the lower-right corner of a footer outside the play area. In **Settings**, **Sound and Music**, **Credits**, and **Improvisation Island**, the switch is at the bottom of the dialog and stays in its keyboard navigation order. Once you switch to English, its label becomes **PT**. Titles, objectives, alerts, and actions are translated without recreating the crossing or rewriting the save. Portuguese is the default when you open or reload the HTML normally.
+At Starting Harbor, the **EN** button sits directly over the ocean in the lower-right corner. Other screens retain a footer strip outside the play area. In **Settings**, **Sound and Music**, **Credits**, and **Improvisation Island**, the switch is at the bottom of the dialog and stays in its keyboard navigation order. Once you switch to English, its label becomes **PT**. Titles, objectives, alerts, and actions are translated without recreating the crossing or rewriting the save. Portuguese is the default when you open or reload the HTML normally.
 
 [See the language switch in the gallery](../arte/galeria/README.en.md#screens).
 

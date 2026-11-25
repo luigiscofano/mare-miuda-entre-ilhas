@@ -10,11 +10,11 @@ A montagem [Os oito mundos](../arte/animacoes/README.md#os-oito-mundos) apresent
 
 ## Porto de Partida
 
-No Porto, o mar da própria cena preenche a tela até o rodapé de idioma. A composição e o tamanho dos controles são preservados, e as quatro quinas de areia acompanham as bordas reais. Em telas curtas, a área central rola para não cortar controles.
+No Porto, o oceano preenche a tela sem faixa de rodapé. No computador, a logo, o Siri e os controles crescem juntos conforme a largura e a altura disponíveis. Cada canto usa um arranjo distinto das células de areia de 48 px do tabuleiro. No celular, a composição continua mais compacta.
 
 ## Idioma do jogo
 
-Fora das janelas de apoio, o botão **EN** fica no canto inferior direito, na faixa de rodapé fora da área jogável. Em **Configurações**, **Som e música**, **Créditos** e **Ilha de Improviso**, a troca aparece no rodapé da própria janela e faz parte da navegação por teclado. Depois de mudar para inglês, o rótulo passa a **PT**. A tradução acompanha títulos, objetivos, avisos e ações sem recriar a travessia ou regravar o save. O português é o padrão ao abrir ou recarregar o HTML normalmente.
+No Porto, o botão **EN** fica sozinho no canto inferior direito, por cima do mar. As demais telas conservam a faixa de rodapé fora da área jogável. Em **Configurações**, **Som e música**, **Créditos** e **Ilha de Improviso**, a troca aparece no rodapé da própria janela e faz parte da navegação por teclado. Depois de mudar para inglês, o rótulo passa a **PT**. A tradução acompanha títulos, objetivos, avisos e ações sem recriar a travessia ou regravar o save. O português é o padrão ao abrir ou recarregar o HTML normalmente.
 
 [Veja o botão de idioma na galeria](../arte/galeria/README.md#telas).
 
