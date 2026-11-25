@@ -35,7 +35,7 @@ node edicao-oficial/testes/idiomas.mjs dist/mare-miuda-prototipo.html
 
 O teste automatizado confere a presença dos três textos de cada uma das 231 fases e o retorno de textos e atributos acessíveis ao idioma original.
 
-Abra o HTML offline sem parâmetro de idioma e confirme o português como padrão. Selecione **EN** no canto inferior direito e confira menus, seletores, títulos, objetivos e painel da fase. Em cada janela de apoio, percorra os controles com **Tab** e use o botão de idioma da própria janela. Volte com **PT** e verifique que os filtros, a posição, o progresso e a música não foram reiniciados. Selecione **EN** novamente e recarregue o arquivo normalmente: a interface deve voltar ao português, com progresso preservado. Consulte o [guia do controle](../interface/README.md#idioma-do-jogo).
+Abra o HTML offline sem parâmetro de idioma e confirme o português como padrão. No Porto de Partida, selecione **EN** no canto inferior direito e confira menus, seletores, títulos, objetivos e painel da fase. Durante uma travessia, abra **Configurações**, use **Tab** para chegar ao botão de idioma e volte com **PT**. Verifique que posição, contagem de passos, progresso salvo e música não foram reiniciados. Confirme que Som e música, Créditos e Ilha de Improviso não têm botão de idioma e que Arquipélago, seletores e travessias não têm faixa de idioma. Selecione **EN** novamente e recarregue o arquivo normalmente: a interface deve voltar ao português, com progresso preservado. Consulte o [guia do controle](../interface/README.md#idioma-do-jogo).
 
 ## Paridade da revisão
 
