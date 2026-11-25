@@ -37,7 +37,7 @@ A blocked move does not spend a step. Corner marks show valid destinations and a
 
 At Starting Harbor, the language switch sits in the lower-right corner with no footer strip. On desktop, the logo and controls have more room, framed by four distinct corners made from the board’s sand tiles.
 
-With the game open, select **EN** in the lower-right corner to play in English. The button changes to **PT** to switch back to Portuguese. Outside Starting Harbor, the switch sits in its own footer, clear of the board. A support dialog has its own switch at the bottom. The change is immediate and does not restart the level or change saved progress. When you open or reload the HTML normally, the game starts in Portuguese.
+With the game open, select **EN** in the lower-right corner to play in English. The button changes to **PT** to switch back to Portuguese. The only other switch is inside **Settings**. There is no language button or footer strip on other screens. The change is immediate and does not restart the level or change saved progress. When you open or reload the HTML normally, the game starts in Portuguese.
 
 [![Game screen showing the language switch in the lower-right corner](docs/arte/galeria/telas/troca-de-idioma.png)](docs/arte/galeria/telas/troca-de-idioma.png)
 

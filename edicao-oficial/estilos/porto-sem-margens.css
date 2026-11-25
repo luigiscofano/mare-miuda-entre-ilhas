@@ -8,8 +8,8 @@
   container-type:inline-size;
   display:grid;
   place-items:center;
-  min-block-size:calc(100svh - var(--reserva-idioma));
-  min-block-size:calc(100dvh - var(--reserva-idioma));
+  min-block-size:100svh;
+  min-block-size:100dvh;
 }
 #inicio .porto-palco { width:min(100%, var(--largura-porto)); }
 .porto-quinas {
@@ -77,15 +77,6 @@
     font-size:clamp(10px,calc(12 * var(--passo-porto)),15px);
   }
   .porto-quinas > [data-quina] { width:min(var(--largura-quina),13cqw); }
-}
-
-/* No Porto, o quadrado de idioma fica sobre o oceano; nas outras telas,
-   a faixa continua reservando espaço fora da área jogável. */
-body:has(> #jogo[data-tela="inicio"]) { --reserva-idioma:0px; }
-body > #jogo[data-tela="inicio"] ~ .barra-idioma {
-  position:fixed;
-  inset:auto max(10px,env(safe-area-inset-right,0px)) max(6px,env(safe-area-inset-bottom,0px)) auto;
-  width:auto; height:auto; padding:0; background:transparent; border:0;
 }
 
 /* O dourado dá prioridade à viagem. Os outros atalhos ficam no azul
