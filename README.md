@@ -35,7 +35,9 @@ Um movimento bloqueado não gasta passo. Os tracinhos indicam destinos possívei
 
 ## Idioma do jogo
 
-Com o jogo aberto, clique ou toque em **EN** no canto inferior direito para jogar em inglês. O botão passa a mostrar **PT** para voltar ao português. O controle ocupa uma faixa própria no rodapé e não cobre o tabuleiro. Nas janelas de apoio, fica no rodapé da própria janela. A mudança é imediata e não reinicia a partida nem muda o progresso salvo. Ao abrir ou recarregar o HTML normalmente, o jogo começa em português.
+No Porto de Partida, a troca de idioma fica no canto inferior direito, sem faixa de fundo. No computador, a logo e os controles têm mais espaço, com quatro quinas montadas com as células de areia do tabuleiro.
+
+Com o jogo aberto, clique ou toque em **EN** no canto inferior direito para jogar em inglês. O botão passa a mostrar **PT** para voltar ao português. Fora do Porto, o controle ocupa uma faixa própria no rodapé e não cobre o tabuleiro. Nas janelas de apoio, fica no rodapé da própria janela. A mudança é imediata e não reinicia a partida nem muda o progresso salvo. Ao abrir ou recarregar o HTML normalmente, o jogo começa em português.
 
 [![Tela do jogo mostrando o botão de idioma no canto inferior direito](docs/arte/galeria/telas/troca-de-idioma.png)](docs/arte/galeria/telas/troca-de-idioma.png)
 
