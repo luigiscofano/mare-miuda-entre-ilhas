@@ -1,49 +1,49 @@
-/* O mesmo recurso aparece dentro de diálogos para continuar no ciclo de foco. */
+/* O Porto e a janela de Configurações compartilham o mesmo controle. */
 .alternar-idioma {
   display:grid; place-items:center; min-width:44px; min-height:44px; padding:3px;
   border:2px solid #b78055; border-radius:0; background:#163641; color:#ffe2a3;
   font:700 14px/1 SeletorPraia, system-ui, sans-serif; image-rendering:pixelated;
 }
-/* Uma faixa de verdade, fora do jogo rolável, nunca cobre direção ou ação da fase. */
+/* O jogo usa a altura disponível, sem reservar uma faixa para o idioma. */
 html {block-size:100%}
 body {
-  --reserva-idioma:calc(52px + env(safe-area-inset-bottom,0px));
   display:flex;flex-direction:column;block-size:100svh;block-size:100dvh;
   overflow:hidden;
 }
 body > #jogo {flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain}
-.barra-idioma {
-  display:flex;flex:0 0 var(--reserva-idioma);justify-content:flex-end;align-items:flex-start;
-  padding:4px max(10px,env(safe-area-inset-right)) 0;
-  background:#102b39;border-top:1px solid #31515c;z-index:1100;
+.barra-idioma { display:none; }
+body:not([data-painel-apoio-aberto]) > #jogo[data-tela="inicio"] ~ .barra-idioma {
+  display:block; position:fixed; z-index:1100;
+  right:max(10px,env(safe-area-inset-right,0px));
+  bottom:max(6px,env(safe-area-inset-bottom,0px));
 }
-body[data-painel-apoio-aberto] .barra-idioma #idioma-jogo {visibility:hidden}
+
 body[data-painel-apoio-aberto] > #jogo {overflow:hidden}
 
-/* O seletor e a câmera terminam na borda acima da faixa, não atrás dela. */
+/* O seletor e a câmera terminam na borda da tela. */
 body > #jogo[data-tela="praia"][data-praia-direta] {min-height:0}
 #jogo[data-tela="fase"][data-ferramentas-campanha] .camera-travessia {
-  height:max(340px,calc(100svh - 92px - var(--reserva-idioma)));
+  height:max(340px,calc(100svh - 92px));
 }
 @media (width > 760px) {
   #jogo[data-tela="praia"][data-praia-direta] #praia {
-    min-height:calc(100svh - var(--reserva-idioma));
+    min-height:100svh;
   }
   #jogo[data-tela="praia"][data-praia-direta] {
-    --miolo:min(100%,clamp(650px,calc((100svh - 118px - var(--reserva-idioma)) * 16 / 9),1280px));
+    --miolo:min(100%,clamp(650px,calc((100svh - 118px) * 16 / 9),1280px));
   }
   #jogo[data-tela="praia"][data-praia-direta] .praia-direta-quina[data-quina^="inferior"] {
-    bottom:var(--reserva-idioma);
+    bottom:0;
   }
 }
 @media (max-width:760px) {
   #jogo[data-tela="fase"][data-ferramentas-campanha] .camera-travessia {
-    height:clamp(270px,calc(100svh - 15rem - var(--reserva-idioma)),630px);
+    height:clamp(270px,calc(100svh - 15rem),630px);
   }
 }
 
-/* O controle dos diálogos é o último no foco, separado do conteúdo rolável. */
-.painel-rodape-idioma {
+/* Em Configurações, o controle é o último no ciclo de foco. */
+.painel-rodape-idioma:not([hidden]) {
   flex:none;display:flex;justify-content:flex-end;
   padding:0 8px 3px;
 }

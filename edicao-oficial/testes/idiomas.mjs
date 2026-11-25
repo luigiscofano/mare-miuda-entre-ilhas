@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const html = readFileSync(process.argv[2] ?? 'dist/mare-miuda-prototipo.html', 'utf8');
+// A edição oferece dois controles de idioma, sem duplicá-los nos painéis auxiliares.
+assert.equal([...html.matchAll(/<button[^>]*\bdata-idioma-jogo\b/g)].length, 2);
+assert.match(html, /<div class="barra-idioma"><button id="idioma-jogo"/);
+assert.match(html, /<section id="configuracao-jogo"[\s\S]*?<div class="painel-rodape-idioma" hidden>/);
 const uri = /data:text\/javascript;base64,[A-Za-z0-9+/]+=*/;
 const entrada = html.match(/<script type="module" src="([^"]+)"><\/script>/)?.[1];
 assert(entrada, 'Arquivo offline sem módulo de entrada');

@@ -14,7 +14,7 @@ No Porto, o oceano preenche a tela sem faixa de rodapé. No computador, a logo, 
 
 ## Idioma do jogo
 
-No Porto, o botão **EN** fica sozinho no canto inferior direito, por cima do mar. As demais telas conservam a faixa de rodapé fora da área jogável. Em **Configurações**, **Som e música**, **Créditos** e **Ilha de Improviso**, a troca aparece no rodapé da própria janela e faz parte da navegação por teclado. Depois de mudar para inglês, o rótulo passa a **PT**. A tradução acompanha títulos, objetivos, avisos e ações sem recriar a travessia ou regravar o save. O português é o padrão ao abrir ou recarregar o HTML normalmente.
+No Porto, o botão **EN** fica sozinho no canto inferior direito, por cima do mar. A única outra troca fica no rodapé de **Configurações**, na ordem de navegação por teclado da janela. Arquipélago, seletores e travessias não têm faixa de idioma; **Som e música**, **Créditos** e **Ilha de Improviso** não oferecem troca. Depois de mudar para inglês, o rótulo passa a **PT**. A tradução acompanha títulos, objetivos, avisos e ações sem recriar a travessia ou regravar o save. O português é o padrão ao abrir ou recarregar o HTML normalmente.
 
 [Veja o botão de idioma na galeria](../arte/galeria/README.md#telas).
 

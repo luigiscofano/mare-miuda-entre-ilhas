@@ -1348,6 +1348,8 @@ function abrirPainelDeSom(tipo, abertura) {
   const noPorto = tipo === 'som';
   const painel = buscar('#configuracao-jogo');
   painel.setAttribute('data-modo', tipo);
+  // Configurações compartilha a janela com Som e música, mas não o seletor de idioma.
+  painel.querySelector('.painel-rodape-idioma').hidden = noPorto;
   buscar('#rotulo-configuracao-jogo').textContent = noPorto ? 'Som e música' : 'Configurações';
   buscar('#icone-configuracao-jogo').setAttribute('data-icone', noPorto ? 'nota' : 'ajuste');
   buscar('#trilha-no-painel').hidden = !noPorto;
