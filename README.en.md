@@ -8,11 +8,15 @@
 
 **8 worlds · 231 campaign levels · Offline edition for desktop and mobile**
 
-[How to play](#how-to-play) · [In-game language](#in-game-language) · [Gallery](#game-gallery) · [The Eight Worlds film](docs/arte/animacoes/Mare-Miuda-Os-Oito-Mundos.mp4) · [All PDFs and videos](#pdfs-and-videos)
+[**Play now**](https://luigiscofano.github.io/mare-miuda-entre-ilhas/?lang=en) · [Download the offline game](https://luigiscofano.github.io/mare-miuda-entre-ilhas/downloads/Mare-Miuda-Offline.zip) · [How to play](#how-to-play) · [In-game language](#in-game-language) · [Gallery](#game-gallery) · [The Eight Worlds film](docs/arte/animacoes/Mare-Miuda-Os-Oito-Mundos.mp4) · [All PDFs and videos](#pdfs-and-videos)
 
-**Contents:** [Campaign and design](#campaign-and-design) · [Art and interface](#art-and-interface) · [Audio](#audio) · [Architecture and code](#architecture-and-code) · [Full documentation](docs/README.en.md)
+**Contents:** [Campaign and design](#campaign-and-design) · [Art and interface](#art-and-interface) · [Audio](#audio) · [Architecture and code](#architecture-and-code) · [Milestone editions](docs/versoes-marcantes/README.en.md) · [Full documentation](docs/README.en.md)
 
 The original title is *Maré Miúda: Entre Ilhas*. This page and its linked guides are in English. The game also supports English and Brazilian Portuguese. The archived screenshots, PDF guides, and videos retain their original language.
+
+## Play now
+
+[**Play now**](https://luigiscofano.github.io/mare-miuda-entre-ilhas/?lang=en) in your browser. No installation required. [Download the offline game](https://luigiscofano.github.io/mare-miuda-entre-ilhas/downloads/Mare-Miuda-Offline.zip). Online and offline saves are stored separately by the browser.
 
 ## How to play
 
@@ -32,6 +36,16 @@ Open `dist/mare-miuda-prototipo.html` in a browser. This edition bundles the art
 | Adjust sound or go back | **Settings** (Configurações) and the relevant back buttons. |
 
 A blocked move does not spend a step. Corner marks show valid destinations and appear once all crabs have landed. Before replacing an offline copy, keep the previous HTML: some browsers associate saved progress with the file path. See the [build instructions](docs/producao/README.en.md#run-the-game).
+
+<details>
+<summary><strong>Milestone editions</strong></summary>
+
+Frozen playable copies of milestones, kept even after the current game changes.
+
+- **[First Playthrough · 2026-11-26](docs/versoes-marcantes/primeira-partida-2026-11-26/README.en.md)**: lighter startup, first tide hint and clear recovery feedback.
+- [Full archive](docs/versoes-marcantes/README.en.md)
+
+</details>
 
 ## In-game language
 

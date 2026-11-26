@@ -8,11 +8,15 @@
 
 **8 mundos · 231 fases de campanha · Edição offline para computador e celular**
 
-[Como jogar](#como-jogar) · [Idioma do jogo](#idioma-do-jogo) · [Galeria](#galeria-do-jogo) · [Filme dos oito mundos](docs/arte/animacoes/Mare-Miuda-Os-Oito-Mundos.mp4) · [Todos os PDFs e vídeos](#pdfs-e-vídeos)
+[**Jogar agora**](https://luigiscofano.github.io/mare-miuda-entre-ilhas/) · [Baixar para jogar offline](https://luigiscofano.github.io/mare-miuda-entre-ilhas/downloads/Mare-Miuda-Offline.zip) · [Como jogar](#como-jogar) · [Idioma do jogo](#idioma-do-jogo) · [Galeria](#galeria-do-jogo) · [Filme dos oito mundos](docs/arte/animacoes/Mare-Miuda-Os-Oito-Mundos.mp4) · [Todos os PDFs e vídeos](#pdfs-e-vídeos)
 
-**Sumário:** [Campanha e design](#campanha-e-design) · [Arte e interface](#arte-e-interface) · [Áudio](#áudio) · [Arquitetura e código](#arquitetura-e-código) · [Documentação completa](docs/README.md)
+**Sumário:** [Campanha e design](#campanha-e-design) · [Arte e interface](#arte-e-interface) · [Áudio](#áudio) · [Arquitetura e código](#arquitetura-e-código) · [Versões marcantes](docs/versoes-marcantes/README.md) · [Documentação completa](docs/README.md)
 
 <a id="jogar-a-edição-oficial-offline"></a>
+
+## Jogar agora
+
+[**Jogar agora**](https://luigiscofano.github.io/mare-miuda-entre-ilhas/) no navegador, sem instalar nada. [Baixar para jogar offline](https://luigiscofano.github.io/mare-miuda-entre-ilhas/downloads/Mare-Miuda-Offline.zip). O navegador guarda o progresso da edição online e da offline separadamente.
 
 ## Como jogar
 
@@ -32,6 +36,16 @@ Abra `dist/mare-miuda-prototipo.html` no navegador. A edição inclui arte e áu
 | Regular som ou retornar | **Configurações** e botões de retorno. |
 
 Um movimento bloqueado não gasta passo. Os tracinhos indicam destinos possíveis e só aparecem depois que todos os siris pousam. Ao trocar de cópia offline, guarde o HTML anterior: alguns navegadores associam o progresso ao caminho do arquivo. [Instruções de produção](docs/producao/README.md#executar).
+
+<details>
+<summary><strong>Versões marcantes</strong></summary>
+
+Cópias jogáveis congeladas de momentos marcantes, preservadas mesmo quando o jogo atual mudar.
+
+- **[Primeira Partida · 26/11/2026](docs/versoes-marcantes/primeira-partida-2026-11-26/README.md)**: abertura mais leve, orientação da primeira maré e indicação de recuperação.
+- [Acervo completo](docs/versoes-marcantes/README.md)
+
+</details>
 
 ## Idioma do jogo
 

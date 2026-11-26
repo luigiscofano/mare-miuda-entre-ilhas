@@ -1,0 +1,73 @@
+name: Publicar Maré Miúda no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'edicao-oficial/**'
+      - 'docs/versoes-marcantes/**'
+      - '.github/workflows/jogar-no-navegador.yml'
+  pull_request:
+    paths:
+      - 'edicao-oficial/**'
+      - 'docs/versoes-marcantes/**'
+      - '.github/workflows/jogar-no-navegador.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mare-miuda-pages-${{ github.event_name == 'pull_request' && github.ref || 'producao' }}
+  cancel-in-progress: false
+
+jobs:
+  conferir:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obter fontes e a revisão histórica fixada
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Conferir montagem e replays da edição oficial
+        run: |
+          python3 edicao-oficial/montar.py dist/mare-miuda-prototipo.html --verificar
+          for teste in edicao-oficial/testes/*.mjs; do
+            node "$teste" dist/mare-miuda-prototipo.html
+          done
+      - name: Montar site e reconstituir a versão marcada
+        run: |
+          python3 edicao-oficial/montar.py dist/site/index.html --web
+          python3 docs/versoes-marcantes/primeira-partida-2026-11-26/reconstruir.py dist/marco
+          mkdir -p dist/site/downloads dist/site/versoes
+          mv dist/marco/web dist/site/versoes/primeira-partida-2026-11-26
+          cp dist/marco/Jogar-agora.html dist/site/versoes/primeira-partida-2026-11-26/
+          python3 -m zipfile -c dist/site/downloads/Mare-Miuda-Offline.zip dist/mare-miuda-prototipo.html
+          (
+            cd dist/marco
+            python3 -m zipfile -c ../site/downloads/Mare-Miuda-Primeira-Partida-Arquivo.zip Jogar-agora.html Outras-travessias.html TESTE-COM-3-JOGADORES.txt
+          )
+          printf '%s\n' "${GITHUB_SHA}" > dist/site/versao.txt
+      # Em pull requests somente validamos a montagem. O deploy é exclusivo
+      # do branch oficial, com as permissões isoladas no job publicar.
+      - name: Preparar artefato estático
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/site
+
+  publicar:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: conferir
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - name: Publicar no GitHub Pages
+        id: pages
+        uses: actions/deploy-pages@v4

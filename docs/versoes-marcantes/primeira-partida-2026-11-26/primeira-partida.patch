@@ -1,0 +1,461 @@
+--- a/edicao-oficial/index.html
++++ b/edicao-oficial/index.html
+@@ -26,6 +26,7 @@
+ <style id="tipografia-normal">@@MARE:texto:estilos/tipografia-normal.css@@</style>
+ <style id="porto-sem-margens">@@MARE:texto:estilos/porto-sem-margens.css@@</style>
+ <style id="coesao-praia">@@MARE:texto:estilos/coesao-praia.css@@</style>
++<style>@@MARE:texto:estilos/previa-primeira-partida.css@@</style>
+ </head>
+ <body>
+   <a class="pular" href="#jogo">Pular para o jogo</a>
+@@ -52,18 +53,19 @@
+       <div class="porto-palco">
+         <h2 id="titulo-inicio" class="porto-so-leitor" tabindex="-1">Porto de partida</h2>
+         <p class="porto-so-leitor">Um passo de cada vez. Uma maré de cada vez.</p>
+-        <button type="button" class="porto-card" id="comecar">
++        <p id="carregando-previa" role="status">Preparando a travessia…</p>
++        <button disabled type="button" class="porto-card" id="comecar">
+           <span class="porto-rotulo" id="porto-viagem-rotulo">Começar viagem</span>
+           <span class="porto-apoio" id="porto-viagem-apoio">A campanha de Entre Ilhas</span>
+         </button>
+-        <button type="button" class="porto-card" id="abrir-mare-a-mao" aria-haspopup="dialog" aria-expanded="false" aria-controls="mare-a-mao">
++        <button disabled type="button" class="porto-card" id="abrir-mare-a-mao" aria-haspopup="dialog" aria-expanded="false" aria-controls="mare-a-mao">
+           <span class="porto-rotulo">Ilha de Improviso</span>
+           <span class="porto-apoio">Gere uma travessia do seu jeito</span>
+         </button>
+-        <button type="button" class="porto-card" id="abrir-som-inicio" aria-haspopup="dialog" aria-expanded="false" aria-controls="configuracao-jogo">
++        <button disabled type="button" class="porto-card" id="abrir-som-inicio" aria-haspopup="dialog" aria-expanded="false" aria-controls="configuracao-jogo">
+           <span class="porto-rotulo">Som e música</span>
+         </button>
+-        <button type="button" class="porto-card" id="creditos-inicio" aria-haspopup="dialog" aria-expanded="false" aria-controls="creditos">
++        <button disabled type="button" class="porto-card" id="creditos-inicio" aria-haspopup="dialog" aria-expanded="false" aria-controls="creditos">
+           <span class="porto-rotulo">Créditos</span>
+         </button>
+       </div>
+@@ -183,6 +185,7 @@
+         <canvas id="tabuleiro" width="256" height="192" role="img" aria-label="Mapa da fase" aria-describedby="posicao previsao">
+           Texto alternativo do mapa disponível em “Mapa em texto e ajuda”.
+         </canvas>
++        <p id="aviso-de-jogada" class="aviso-de-jogada" role="status" hidden></p>
+         <canvas id="tabuleiro-camera" aria-hidden="true" width="1" height="1"></canvas>
+         <canvas id="placa-resultado-v3" width="248" height="84" hidden aria-hidden="true"></canvas>
+         <p id="legenda-resultado" hidden aria-hidden="true"></p>
+--- a/edicao-oficial/montar_previa.py
++++ b/edicao-oficial/montar_previa.py
+@@ -0,0 +1,90 @@
++"""Monta a prévia Web ou offline com um único exemplar de cada módulo."""
++from argparse import ArgumentParser
++from base64 import b64decode, b64encode
++from functools import cache
++from hashlib import sha256
++from pathlib import Path
++from zipfile import ZipFile
++import json
++import re
++
++from montar import MARCADOR
++
++p = ArgumentParser(description=__doc__)
++p.add_argument('destino', type=Path)
++p.add_argument('--web', action='store_true')
++args = p.parse_args()
++raiz = Path(__file__).resolve().parent
++midia = {}
++for pacote in ('assets.zip', 'assets-tipografia.zip'):
++    with ZipFile(raiz / pacote) as zip:
++        midia.update({n: zip.read(n) for n in zip.namelist()})
++mapa = {}
++
++@cache
++def dados(nome):
++    return midia[nome] if nome.startswith('assets/') else (raiz / nome).read_bytes()
++
++@cache
++def externo(nome):
++    arquivo = args.destino.parent / nome
++    arquivo.parent.mkdir(parents=True, exist_ok=True)
++    arquivo.write_bytes(dados(nome))
++    return ('./' + nome).encode()
++
++def separar_letreiros(conteudo):
++    # A abertura não decodifica todos os títulos. O navegador busca apenas
++    # a imagem da fase visível, preservando o PNG original byte por byte.
++    cabecalho, catalogo = conteudo.decode().split(' = ', 1)
++    catalogo = json.loads(catalogo.strip().removesuffix(';'))
++    for nome, camadas in catalogo.items():
++        for i, imagem in enumerate(camadas):
++            png = b64decode(imagem)
++            nome_do_arquivo = f'assets/letreiros/{sha256(png).hexdigest()[:24]}.png'
++            destino = args.destino.parent / nome_do_arquivo
++            destino.parent.mkdir(parents=True, exist_ok=True)
++            destino.write_bytes(png)
++            camadas[i] = './' + nome_do_arquivo
++    return (cabecalho + ' = ' + json.dumps(catalogo, ensure_ascii=False) + ';\n').encode()
++
++
++@cache
++def resolver(modo, nome):
++    if modo == b'b64':
++        return b64encode(dados(nome))
++    if modo == b'texto':
++        return montar(dados(nome))
++    # As importações usam o mesmo identificador em toda a árvore: nenhum
++    # módulo acaba embutido de novo dentro de quem o importa.
++    alias = 'mare/' + nome
++    if args.web:
++        caminho = args.destino.parent / nome
++        caminho.parent.mkdir(parents=True, exist_ok=True)
++        conteudo = dados(nome)
++        if nome in ('src/interface/letreiros-luz.mjs', 'src/idiomas/letreiros-en.mjs'):
++            conteudo = separar_letreiros(conteudo)
++        caminho.write_bytes(montar(conteudo))
++        mapa[alias] = './' + nome
++    else:
++        mapa[alias] = 'data:text/javascript;base64,' + b64encode(montar(dados(nome))).decode()
++    return alias.encode()
++
++def montar(origem):
++    if args.web:
++        origem = re.sub(rb'data:(?:image/png|font/woff);base64,@@MARE:b64:([a-z0-9_./-]+)@@',
++                        lambda m: externo(m[1].decode()), origem)
++        origem = re.sub(rb'(<script type="application/octet-stream" id="[^"]+")>@@MARE:b64:([a-z0-9_./-]+)@@</script>',
++                        lambda m: m[1] + b' data-src="' + externo(m[2].decode()) + b'"></script>', origem)
++    return MARCADOR.sub(lambda m: resolver(m[1], m[2].decode()), origem)
++
++html = montar(dados('index.html'))
++# O src de uma tag script não resolve aliases; import() resolve e permite
++# apresentar um aviso local se os módulos não puderem ser lidos.
++local = b'<script type="module" src="mare/src/app.mjs"></script>'
++inicializador = b'<script type="module">import("mare/src/app.mjs").catch(() => { document.getElementById("carregando-previa").textContent = "N\xc3\xa3o foi poss\xc3\xadvel carregar a pr\xc3\xa9via."; });</script>'
++html = html.replace(local, b'<script type="importmap">' + json.dumps({'imports': mapa}).encode()
++                    + b'</script>' + inicializador)
++assert b'@@MARE:' not in html and local not in html
++args.destino.parent.mkdir(parents=True, exist_ok=True)
++args.destino.write_bytes(html)
++print(f'{args.destino.name}: {len(html):,} bytes; {len(mapa)} módulos únicos')
+--- a/edicao-oficial/estilos/previa-primeira-partida.css
++++ b/edicao-oficial/estilos/previa-primeira-partida.css
+@@ -0,0 +1,19 @@
++/* Sinais de interação da prévia: não alteram a escala ou a área de toque. */
++#jogo[data-tela="inicio"]:not([data-previa-pronta]) .porto-card {pointer-events:none; opacity:.65}
++#jogo[data-previa-pronta] #carregando-previa {display:none}
++#carregando-previa {color:#c8e1e2;font:500 .87rem/1.3 system-ui,sans-serif}
++#moldura .aviso-de-jogada {
++  position:absolute; z-index:5; left:50%; top:clamp(13px, 3%, 28px);
++  transform:translateX(-50%); width:max-content; max-width:calc(100% - 30px);
++  padding:.36rem .6rem; margin:0; pointer-events:none; box-sizing:border-box;
++  background:#142e47; border:1px solid #88bac1; color:#eef8f4;
++  font:600 .82rem/1.25 system-ui,sans-serif; text-align:center;
++}
++#moldura .aviso-de-jogada[data-aviso="virada"] {border-color:#b5e7eb;color:#d0f6fa}
++#moldura .aviso-de-jogada[data-aviso="bloqueado"] {border-color:#dfb37b;color:#ffe3b9}
++#moldura .aviso-de-jogada[data-aviso="recuperando"] {border-color:#c4a9d4;color:#f2ddff}
++#jogo #seletor-fases button[data-estado="disponivel"]:not([aria-disabled="true"]) {
++  color:var(--acoes-areia-tinta) !important;
++}
++#jogo #ferramentas-fase #reiniciar:hover {border-color:var(--acoes-foco)}
++#jogo button:active:not(:disabled,[aria-disabled="true"]) {filter:brightness(.93)}
+--- a/edicao-oficial/src/app.mjs
++++ b/edicao-oficial/src/app.mjs
+@@ -267,7 +267,7 @@
+ 
+ /* Interface antiga removida: d49eca8b */
+ import { carregar, salvar } from '@@MARE:modulo:src/chave-save-195edf7f.mjs@@';
+-import { ligarIdioma, registrarTextosDaCampanha } from '@@MARE:modulo:src/idiomas/idioma.mjs@@';
++import { faseEmIngles, ligarIdioma, registrarTextosDaCampanha } from '@@MARE:modulo:src/idiomas/idioma.mjs@@';
+ import { criarPaineisDeApoio } from '@@MARE:modulo:src/interface/paineis-de-apoio.mjs@@';
+ import { criarAudio, ativouBotao } from '@@MARE:modulo:src/criar-audio-a0d48b79.mjs@@';
+ import { gerarMareAMao, DIFICULDADES_MARE_A_MAO, MUNDOS_MARE_A_MAO,                     } from '@@MARE:modulo:src/mundos-mare-a-mao-c249fd0f.mjs@@';
+@@ -336,7 +336,21 @@
+   return { ctx, escala, ajustarQuadro };
+ }
+ 
++// Os atalhos de inspeção ficam totalmente fora do progresso, inclusive o
++// progresso desta prévia. A campanha normal usa uma chave só da prévia.
++const amostrasDaPrevia = {
++  garca: { id: 'enseada-sombra-restinga', mundo: 'enseada' },
++  farol: { id: 'farol-turno-dos-guardioes', mundo: 'farol' },
++};
++const nomeDaAmostra = new URLSearchParams(location.search).get('amostra');
++const amostraDaPrevia = Object.hasOwn(amostrasDaPrevia, nomeDaAmostra)
++  ? amostrasDaPrevia[nomeDaAmostra] : undefined;
++
+ function storageLocal() {
++  if (amostraDaPrevia) {
++    const memoria = new Map();
++    return { getItem: chave => memoria.get(chave), setItem: (chave, valor) => memoria.set(chave, valor) };
++  }
+   try { return window.localStorage; } catch { return undefined; }
+ }
+ 
+@@ -401,6 +415,7 @@
+   ctxDaCamera.imageSmoothingEnabled = false;
+   paintCameraBackground(ctxDaCamera,metadadosDaCamera.width,metadadosDaCamera.height,{phase:fase.id,world:temaDaFase(),camera:metadadosDaCamera});
+   ctxDaCamera.drawImage(origemDaCamera, left, top, origemDaCamera.width*scale, origemDaCamera.height*scale);
++  marcarBaixiosDaPrimeiraVirada(ctxDaCamera, {left, top, scale});
+   decorateCamera(ctxDaCamera,{...metadadosDaCamera,phase:fase.id,world:temaDaFase(),canvas:origemDaCamera});
+   ctxDaCamera.drawImage(ultimaMoldura,0,0);
+ }
+@@ -474,7 +489,8 @@
+ const movimentoReduzidoDoJogo=window.matchMedia?.('(prefers-reduced-motion: reduce)');
+ let relogioAmbiente, pisadaDaTravessia, perigosDaTravessia, retornoDaMare, inicioDaPausaDeRecuperacao;
+ let bloquearDirecaoAte=0, viradaDaTravessia, relogioDaTrava;
+-const praiaPolida = () => modoCampanha() && temaDaFase() === 'praia';
++const praiaPolida = () => modoCampanha() && (temaDaFase() === 'praia'
++  || (amostraDaPrevia && fase.id === amostraDaPrevia.id));
+ let mareVisivel;
+ let chaveRelogio;
+ const agoraDaTravessia=()=>globalThis.performance?.now?.() ?? Date.now();
+@@ -686,6 +702,7 @@
+   // Clicar e deslizar nunca enfileiram movimentos durante a recuperação.
+   const travada=resto>0&&tela==='fase'&&modoCampanha()&&estado.situacao==='jogando';
+   buscar('#moldura').classList.toggle('recuperando-siri', travada);
++  atualizarAvisoDeJogada();
+   if(travada)relogioDaTrava=window.setTimeout?.(atualizarTravaDeRecuperacao,resto);
+ }
+ function zerarPausaDeRecuperacao(){
+@@ -970,6 +987,11 @@
+   no.hidden=!praiaPolida();
+   if(no.hidden)return;
+   const en=(document.documentElement.getAttribute('lang')??'pt-BR').startsWith('en');
++  // A regra de chegada dos dois Siris não cabe no texto curto da Praia.
++  if (amostraDaPrevia?.id === fase.id) {
++    no.textContent = en ? faseEmIngles(fase.id)?.objetivo ?? fase.objetivo : fase.objetivo;
++    return;
++  }
+   no.textContent=totalFragmentos(fase)
+     ? (en?'Collect the pearls, then reach the oyster.':'Recolha as pérolas e alcance a ostra.')
+     : (en?'Reach the bright shell.':'Alcance a concha brilhante.');
+@@ -979,7 +1001,7 @@
+   const motivo = buscar('#motivo-da-derrota');
+   const causas = resultadoDaTravessia?.causa ?? [];
+   const en = (document.documentElement.getAttribute("lang") ?? "pt-BR").startsWith('en');
+-  motivo.hidden = temaDaFase() !== 'praia' || estado.situacao !== 'derrota' || !causas.length;
++  motivo.hidden = !praiaPolida() || estado.situacao !== 'derrota' || !causas.length;
+   if (motivo.hidden) return;
+   const agua = causas.includes('mare'), garca = causas.includes('garca');
+   if (agua && garca) motivo.textContent = en ? 'The tide and the heron caught you on that move.' : 'A maré e a garça alcançaram o Siri no mesmo passo.';
+@@ -1159,6 +1181,7 @@
+   buscar('#voltar-fase').textContent = desafioAvulso ? 'Editar filtros' : bancada ? 'Tela inicial' : mundoAtual(save.progresso) === 'praia' ? 'Voltar à praia' : 'Voltar ao mapa';
+   niveis.forEach((botao, i) => botao.setAttribute('aria-pressed', String(indice === i)));
+   trocarTela('fase', focar);
++  sinalizarAcao();
+   atualizarFase([], mensagem ?? 'Fase selecionada. Maré baixa.');
+ }
+ 
+@@ -1255,13 +1278,72 @@
+   jogarAcao(direcao);
+ }
+ 
++let avisoDeAcao;
++let tempoDoAviso;
++let jogouOPrimeiroPasso = false;
++
++// O aviso não participa da grade nem deixa um movimento em fila.
++function atualizarAvisoDeJogada() {
++  const aviso = buscar('#aviso-de-jogada');
++  const emJogo = tela === 'fase' && estado.situacao === 'jogando' && praiaPolida();
++  const primeiraFase = fase.id === 'primeira-onda';
++  const gesto = window.matchMedia?.('(hover: none) and (pointer: coarse)').matches;
++  const tipo = !emJogo ? undefined
++    : bloquearDirecaoAte > agoraDaTravessia() ? 'recuperando'
++    : avisoDeAcao || (primeiraFase && !jogouOPrimeiroPasso ? 'inicio'
++      : primeiraFase && estado.passos === 2 ? 'virada' : undefined);
++  aviso.hidden = !tipo;
++  if (!tipo) return;
++  const en = document.documentElement.lang.startsWith('en');
++  const textos = {
++    inicio: gesto ? ['Deslize no tabuleiro para mover o Siri.', 'Swipe on the board to move the crab.']
++      : ['Use as setas para mover o Siri.', 'Use the arrow keys to move the crab.'],
++    aceito: ['Passo aceito', 'Move accepted'],
++    bloqueado: ['Caminho bloqueado. A maré não avançou.', 'Path blocked. The tide did not advance.'],
++    recuperando: ['Siri se recuperando…', 'Crab recovering…'],
++    virada: ['Este baixio alaga no próximo passo.', 'This tidal flat floods on the next move.'],
++  };
++  const texto = textos[tipo][Number(en)];
++  if (aviso.textContent !== texto) aviso.textContent = texto;
++  aviso.dataset.aviso = tipo;
++}
++
++function sinalizarAcao(tipo, duracao) {
++  clearTimeout(tempoDoAviso);
++  avisoDeAcao = tipo;
++  atualizarAvisoDeJogada();
++  if (tipo) tempoDoAviso = setTimeout(() => sinalizarAcao(), duracao);
++}
++
++function marcarBaixiosDaPrimeiraVirada(ctx, {left, top, scale}) {
++  if (fase.id !== 'primeira-onda' || estado.passos !== 2 || estado.situacao !== 'jogando') return;
++  const {origemX, origemY} = quadroDaPraia(fase.mapa);
++  // Um filete central não vira uma moldura nem imita os tracinhos das quinas.
++  ctx.fillStyle = '#b5e7eb';
++  fase.mapa.forEach((linha, y) => Array.from(linha).forEach((casa, x) => {
++    if (casa !== '=') return;
++    const px = Math.round(left + scale * (origemX + 48 * x + 16));
++    const py = Math.round(top + scale * (origemY + 48 * y + 9));
++    ctx.fillRect(px, py, Math.max(4, Math.round(16 * scale)), Math.max(1, Math.round(2 * scale)));
++  }));
++}
++
+ function jogarAcao(acao         )       {
+   if (tela !== 'fase' || estado.situacao !== 'jogando' || configuracoesNaFaseAbertas()) return;
+   // Comando descartado antes do motor, sem fila.
+-  if(agoraDaTravessia()<bloquearDirecaoAte)return;
++  if (agoraDaTravessia() < bloquearDirecaoAte) {
++    atualizarAvisoDeJogada();
++    return;
++  }
+   const antes = estado;
+   const transicao = executarPasso(fase, estado, acao);
+   estado = transicao.estado;
++  if (estado.passos !== antes.passos) {
++    if (fase.id === 'primeira-onda') jogouOPrimeiroPasso = true;
++    sinalizarAcao('aceito', DURACAO_DA_PASSADA);
++  } else if (transicao.eventos.some(evento => ['bloqueado', 'fenda-bloqueada'].includes(evento.tipo))) {
++    sinalizarAcao('bloqueado', 1050);
++  }
+   // Só uma direção consumida pelo motor conta no histórico visual.
+   if (estado.passos !== antes.passos && Object.hasOwn(SETAS_DO_PAINEL, acao)) ultimaDirecaoDoPainel = acao;
+   if (modoCampanha() && estado.situacao === 'vitoria' && ehIdFase(fase.id)) {
+@@ -1526,8 +1608,12 @@
+ 
+ conectarTeclado(window, mover, reiniciar, () => {}, voltar, () => tela === 'fase' && !configuracoesNaFaseAbertas());
+ const cancelarDeslizeNaFase = conectarDeslizeNoTabuleiro(buscar('#moldura'), window, mover,
+-  () => tela === 'fase' && estado.situacao === 'jogando' && !configuracoesNaFaseAbertas()
+-    && agoraDaTravessia() >= bloquearDirecaoAte);
++  () => tela === 'fase' && estado.situacao === 'jogando' && !configuracoesNaFaseAbertas(),
++  () => {
++    const liberado = agoraDaTravessia() >= bloquearDirecaoAte;
++    if (!liberado) atualizarAvisoDeJogada();
++    return liberado;
++  });
+ // No toque a ativação acontece no fim do gesto. Clique também cobre o
+ // acionamento por tecnologia assistiva, sem depender de mouse ou gesto anterior.
+ window.addEventListener('pointerdown', evento => {
+@@ -1559,8 +1645,19 @@
+     atualizarMotivoDaDerrota();
+   }
+   atualizarTituloIluminado(buscar('#nome-fase'), fase.nome, modoCampanha());
++  atualizarAvisoDeJogada();
+   pintarFase();
+ }, new URLSearchParams(globalThis.location?.search ?? '').get('lang'));
++buscar('#jogo').setAttribute('data-previa-pronta', '');
++for (const botao of document.querySelectorAll('#inicio .porto-card[disabled]')) botao.disabled = false;
++if (amostraDaPrevia) {
++  const indiceDaAmostra = TODAS_AS_FASES.findIndex(item => item.id === amostraDaPrevia.id);
++  if (indiceDaAmostra >= 0) {
++    save = { ...save, progresso: { ...save.progresso, mundo: amostraDaPrevia.mundo } };
++    selecionarFase(indiceDaAmostra);
++  }
++}
++
+ 
+ 
+ // Borda e arte usam pixels físicos. O frame é desenhado depois da torre,
+--- a/edicao-oficial/src/chave-save-195edf7f.mjs
++++ b/edicao-oficial/src/chave-save-195edf7f.mjs
+@@ -1,7 +1,7 @@
+ import { criarProgresso, ehIdFase, normalizarPosicao, mundoValido } from '@@MARE:modulo:src/mundo-valido-900be48c.mjs@@';
+                                                       
+ 
+-export const CHAVE_SAVE = 'mare-miuda-entre-ilhas/praia-v1';
++export const CHAVE_SAVE = 'mare-miuda-previa-primeira-partida/v1';
+                                                                   
+                                                                            
+ const VERSAO = 1;
+--- a/edicao-oficial/src/chave-historico-mare-6680ef92.mjs
++++ b/edicao-oficial/src/chave-historico-mare-6680ef92.mjs
+@@ -2,7 +2,7 @@
+   DIFICULDADES_MARE_A_MAO, MUNDOS_MARE_A_MAO,                     
+ } from '@@MARE:modulo:src/mundos-mare-a-mao-c249fd0f.mjs@@';
+ 
+-export const CHAVE_HISTORICO_MARE = 'mare-miuda-entre-ilhas/mare-a-mao-v1';
++export const CHAVE_HISTORICO_MARE = 'mare-miuda-previa-primeira-partida/mare-a-mao-v1';
+                                                                                     
+ const LIMITE_HISTORICO = 12;
+ 
+--- a/edicao-oficial/src/trilhas-1cd0b6cc.mjs
++++ b/edicao-oficial/src/trilhas-1cd0b6cc.mjs
+@@ -2,7 +2,13 @@
+ const SUBIDA_DE_GANHO = 0.02;
+ 
+ export function carregarTrilha() {
+-  const embutido = document.querySelector(PISTA_EMBUTIDA)?.textContent;
++  const fonte = document.querySelector(PISTA_EMBUTIDA);
++  // Na Web o WAV original só é requisitado quando o áudio é habilitado.
++  if (fonte?.dataset?.src) return fetch(fonte.dataset.src).then(resposta => {
++    if (!resposta.ok) throw new Error('Não foi possível carregar o áudio.');
++    return resposta.arrayBuffer();
++  });
++  const embutido = fonte?.textContent;
+   if (!embutido) throw new Error('Trilha offline indisponível.');
+   const binario = atob(embutido.trim());
+   const dados = new Uint8Array(binario.length);
+--- a/edicao-oficial/src/efeitos-da-travessia.mjs
++++ b/edicao-oficial/src/efeitos-da-travessia.mjs
+@@ -6,7 +6,13 @@
+ const LIMITE_PRIMEIRO_CLIQUE_MS = 180;
+ 
+ function carregarEfeito(nome) {
+-  const embutido = document.querySelector(`#efeito-offline-${nome}`)?.textContent;
++  const fonte = document.querySelector(`#efeito-offline-${nome}`);
++  // Na Web o WAV original só é requisitado quando o áudio é habilitado.
++  if (fonte?.dataset?.src) return fetch(fonte.dataset.src).then(resposta => {
++    if (!resposta.ok) throw new Error('Não foi possível carregar o áudio.');
++    return resposta.arrayBuffer();
++  });
++  const embutido = fonte?.textContent;
+   if (!embutido) throw new Error('Efeito offline indisponível.');
+   const binario = atob(embutido.trim());
+   const dados = new Uint8Array(binario.length);
+--- a/edicao-oficial/src/interface/deslize-no-tabuleiro.mjs
++++ b/edicao-oficial/src/interface/deslize-no-tabuleiro.mjs
+@@ -9,7 +9,7 @@
+   if (y >= LIMIAR && y >= x * DOMINANCIA) return dy > 0 ? 'baixo' : 'cima';
+ }
+ 
+-export function conectarDeslizeNoTabuleiro(tabuleiro, janela, mover, podeMover) {
++export function conectarDeslizeNoTabuleiro(tabuleiro, janela, mover, podeMover, comandoLivre = () => true) {
+   let gesto;
+   function cancelar(id = gesto?.id) {
+     if (!gesto || gesto.id !== id) return;
+@@ -22,14 +22,15 @@
+   }, true);
+   tabuleiro.addEventListener('pointerdown', evento => {
+     if (gesto || evento.pointerType === 'mouse' || !evento.isPrimary || evento.button !== 0 || !podeMover()) return;
+-    gesto = { id: evento.pointerId, x: evento.clientX, y: evento.clientY };
++    gesto = { id: evento.pointerId, x: evento.clientX, y: evento.clientY, livre: comandoLivre() };
+     tabuleiro.setPointerCapture?.(gesto.id);
+   });
+   tabuleiro.addEventListener('pointerup', evento => {
+     if (!gesto || evento.pointerId !== gesto.id) return;
+     const direcao = direcaoDoDeslize(evento.clientX - gesto.x, evento.clientY - gesto.y);
++    const comecouLivre = gesto.livre;
+     cancelar();
+-    if (direcao && podeMover()) mover(direcao);
++    if (direcao && podeMover() && comandoLivre() && comecouLivre) mover(direcao);
+   });
+   for (const tipo of ['pointercancel', 'lostpointercapture'])
+     tabuleiro.addEventListener(tipo, evento => cancelar(evento.pointerId));
+--- a/edicao-oficial/src/interface/titulos-luz.mjs
++++ b/edicao-oficial/src/interface/titulos-luz.mjs
+@@ -3,7 +3,8 @@
+ import { emIngles } from '@@MARE:modulo:src/idiomas/idioma.mjs@@';
+ import { LETREIROS_EN } from '@@MARE:modulo:src/idiomas/letreiros-en.mjs@@';
+ 
+-const URI_DA_ARTE = 'data:image/png;base64,';
++const uriDoLetreiro = (valor) => valor.startsWith('./assets/letreiros/')
++  ? valor : 'data:image/png;base64,' + valor;
+ export function atualizarTituloIluminado(heading,nome,iluminado) {
+  const texto=heading.querySelector('.titulo-luz-texto');
+  const desenho=heading.querySelector('.titulo-luz');
+@@ -16,7 +17,7 @@
+  const camadas=iluminado && Object.hasOwn(catalogo,nome) ? catalogo[nome] : undefined;
+  desenho.hidden=!camadas;
+  if(!camadas){heading.removeAttribute('data-titulo-luz');return;}
+- figura.setAttribute('src', URI_DA_ARTE+camadas[0]);
+- reduzido.setAttribute('srcset', URI_DA_ARTE+camadas[1]);
++ figura.setAttribute('src', uriDoLetreiro(camadas[0]));
++ reduzido.setAttribute('srcset', uriDoLetreiro(camadas[1]));
+  heading.setAttribute('data-titulo-luz','');
+ }

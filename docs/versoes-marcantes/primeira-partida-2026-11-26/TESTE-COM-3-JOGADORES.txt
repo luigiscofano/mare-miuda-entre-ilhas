@@ -1,0 +1,22 @@
+TESTE CEGO | MARÉ MIÚDA
+
+Use um navegador ou perfil novo para cada pessoa. Comece no Porto, sem
+dizer para onde ir nem explicar a maré. Ideal: 1 pessoa no teclado e
+2 no toque (pelo menos um celular físico). Peça que pensem em voz alta.
+
+Diga só: “Jogue até chegar à concha. Se errar, tente de novo.”
+Na primeira fase, depois do segundo passo e antes do terceiro, pergunte:
+“O que vai mudar no próximo movimento? Em qual casa?”
+No Ramal, se houver erro, espere a pessoa reagir antes de explicar.
+
+Anote por pessoa (sem nomes, se possível):
+- Encontrou a Praia e abriu a fase sem ajuda?
+- Fez o primeiro movimento sem ajuda? Quanto tempo levou?
+- Previu qual casa alagaria e que faltava um passo?
+- Distinguiu caminho bloqueado de Siri se recuperando?
+- Reiniciou sozinha? Que comando pareceu não responder?
+- Dispositivo, navegador e qualquer engasgo observado.
+
+Critério inicial de aceite: 3/3 chegam à fase, preveem a casa que
+alaga e sabem tentar de novo sem explicação do observador.
+Não declare esse resultado sem fazer o teste com pessoas reais.

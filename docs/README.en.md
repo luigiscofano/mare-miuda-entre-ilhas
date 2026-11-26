@@ -2,6 +2,7 @@
 
 [Português](README.md) · **English**
 
+- [Milestone editions](versoes-marcantes/README.en.md): frozen playable versions, with reproducible builds and checksums.
 - [The Eight Worlds film](arte/animacoes/README.en.md#the-eight-worlds): replays of 24 campaign victories, the level selectors, and the return to the harbor.
 - [Art](arte/README.en.md): atlas, [game gallery](arte/galeria/README.en.md), and crossings.
 - [Interface](interface/README.en.md): world and level selection, campaign controls, [support panels](interface/README.en.md#support-panels), and [Improvisation Island](interface/README.en.md#improvisation-island).
