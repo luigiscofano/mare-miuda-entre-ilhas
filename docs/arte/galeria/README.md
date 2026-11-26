@@ -15,6 +15,8 @@ Os sprites foram recortados das mesmas folhas e coordenadas usadas pelo renderiz
 
 ## Telas
 
+As capturas registram a interface na data da montagem, sem a dica inicial que aparece na edição atual.
+
 A imagem de troca de idioma é uma captura do Porto de Partida em inglês, com o botão **PT** sem faixa.
 
 As imagens da interface foram capturadas no Chromium, direto da edição offline e sem cursor. As imagens para celular usam uma janela emulada, não um aparelho físico. Capturas antigas registram disposições anteriores. As fases disponíveis foram demonstradas com progresso de teste em um perfil descartável. O [filme Os oito mundos](../animacoes/README.md#os-oito-mundos) é um registro separado e mantém a apresentação da gravação original.

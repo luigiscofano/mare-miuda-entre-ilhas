@@ -21,6 +21,13 @@ The [campaign](../campanha/README.en.md) preserves the identifiers used in saves
 
 The offline build reads the original `edicao-oficial/assets.zip` and the separate `edicao-oficial/assets-tipografia.zip` with localized background layers for normal type. Both packages are required; duplicate resource paths are rejected. The detailed pixel-art titles remain in the game.
 
+The standalone HTML embeds each module once through an import map. The Web build serves modules, WAV files and title images separately. Both use the same rules and content. Test the Web build with a local server, not with a file URL.
+
+```sh
+python3 edicao-oficial/montar.py dist/web/index.html --web
+python3 -m http.server 8000 --directory dist/web
+```
+
 ## Movement controls
 
 ```sh

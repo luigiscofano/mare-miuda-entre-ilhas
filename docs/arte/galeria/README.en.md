@@ -17,6 +17,8 @@ The sprites were cropped from the same sheets and coordinates used by the render
 
 ## Screens
 
+The captures show the interface at the time of export, without the new one-time movement hint.
+
 The language switch image is a browser screenshot of Starting Harbor in English, with the standalone **PT** button.
 
 The interface images were captured in Chromium from the offline build without the cursor. The mobile images use an emulated viewport, not a physical phone. Older screenshots show earlier layouts. Available cards were demonstrated with test progress in a disposable profile. [The Eight Worlds film](../animacoes/README.en.md#the-eight-worlds) is a separate record and retains its original presentation.

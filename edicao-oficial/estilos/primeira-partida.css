@@ -1,0 +1,19 @@
+/* Sinais de interação da travessia: não alteram a escala ou a área de toque. */
+#jogo[data-tela="inicio"]:not([data-jogo-pronto]) .porto-card {pointer-events:none; opacity:.65}
+#jogo[data-jogo-pronto] #carregando-jogo {display:none}
+#carregando-jogo {color:#c8e1e2;font:500 .87rem/1.3 system-ui,sans-serif}
+#moldura .aviso-de-jogada {
+  position:absolute; z-index:5; left:50%; top:clamp(13px, 3%, 28px);
+  transform:translateX(-50%); width:max-content; max-width:calc(100% - 30px);
+  padding:.36rem .6rem; margin:0; pointer-events:none; box-sizing:border-box;
+  background:#142e47; border:1px solid #88bac1; color:#eef8f4;
+  font:600 .82rem/1.25 system-ui,sans-serif; text-align:center;
+}
+#moldura .aviso-de-jogada[data-aviso="virada"] {border-color:#b5e7eb;color:#d0f6fa}
+#moldura .aviso-de-jogada[data-aviso="bloqueado"] {border-color:#dfb37b;color:#ffe3b9}
+#moldura .aviso-de-jogada[data-aviso="recuperando"] {border-color:#c4a9d4;color:#f2ddff}
+#jogo #seletor-fases button[data-estado="disponivel"]:not([aria-disabled="true"]) {
+  color:var(--acoes-areia-tinta) !important;
+}
+#jogo #ferramentas-fase #reiniciar:hover {border-color:var(--acoes-foco)}
+#jogo button:active:not(:disabled,[aria-disabled="true"]) {filter:brightness(.93)}

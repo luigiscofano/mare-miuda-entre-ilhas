@@ -1,11 +1,10 @@
+import { lerModulosOffline } from './apoio/importmap.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const html = readFileSync(process.argv[2] ?? 'dist/mare-miuda-prototipo.html', 'utf8');
-const uri = /data:text\/javascript;base64,[A-Za-z0-9+/]+=*/;
-const entrada = Buffer.from(html.match(uri)[0].split(',')[1], 'base64').toString('utf8');
-const modulo = entrada.split('\n').find(linha => linha.startsWith('import { criarPaineisDeApoio }')).match(uri)[0];
-const { criarPaineisDeApoio } = await import(modulo);
+const { importarPor } = lerModulosOffline(html);
+const { criarPaineisDeApoio } = await importarPor('criarPaineisDeApoio');
 
 assert.match(html, /background:rgb\(9 30 39 \/ 79%\)/);
 assert.equal((html.match(/class="painel-brilhos" aria-hidden="true"/g) ?? []).length, 3);

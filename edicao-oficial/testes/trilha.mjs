@@ -1,15 +1,13 @@
+import { lerModulosOffline } from './apoio/importmap.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 
 const html = readFileSync(process.argv[2] ?? 'dist/mare-miuda-prototipo.html', 'utf8');
-const uri = /data:text\/javascript;base64,[A-Za-z0-9+/]+=*/;
-const fonte = url => Buffer.from(url.split(',')[1], 'base64').toString('utf8');
-const entrada = fonte(html.match(uri)[0]);
-const controlador = entrada.split('\n').find(linha => linha.startsWith('import { criarAudio,')).match(uri)[0];
-const trilha = fonte(controlador).split('\n').find(linha => linha.startsWith('import { criarTrilha ')).match(uri)[0];
-const { criarAudio } = await import(controlador);
-const { criarTrilha } = await import(trilha);
+const { encontrar, importarPor } = lerModulosOffline(html);
+const controlador = encontrar('criarAudio,');
+const { criarAudio } = await importarPor('criarAudio,');
+const { criarTrilha } = await importarPor('criarTrilha ', controlador);
 const pista = html.match(/<script type="application\/octet-stream" id="trilha-offline-violao">([A-Za-z0-9+/=]+)<\/script>/);
 assert(pista);
 assert.equal((html.match(/id="trilha-offline-/g) ?? []).length, 1);

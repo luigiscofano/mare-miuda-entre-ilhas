@@ -26,6 +26,7 @@
 <style id="tipografia-normal">@@MARE:texto:estilos/tipografia-normal.css@@</style>
 <style id="porto-sem-margens">@@MARE:texto:estilos/porto-sem-margens.css@@</style>
 <style id="coesao-praia">@@MARE:texto:estilos/coesao-praia.css@@</style>
+<style>@@MARE:texto:estilos/primeira-partida.css@@</style>
 </head>
 <body>
   <a class="pular" href="#jogo">Pular para o jogo</a>
@@ -52,18 +53,19 @@
       <div class="porto-palco">
         <h2 id="titulo-inicio" class="porto-so-leitor" tabindex="-1">Porto de partida</h2>
         <p class="porto-so-leitor">Um passo de cada vez. Uma maré de cada vez.</p>
-        <button type="button" class="porto-card" id="comecar">
+        <p id="carregando-jogo" role="status">Preparando a travessia…</p>
+        <button disabled type="button" class="porto-card" id="comecar">
           <span class="porto-rotulo" id="porto-viagem-rotulo">Começar viagem</span>
           <span class="porto-apoio" id="porto-viagem-apoio">A campanha de Entre Ilhas</span>
         </button>
-        <button type="button" class="porto-card" id="abrir-mare-a-mao" aria-haspopup="dialog" aria-expanded="false" aria-controls="mare-a-mao">
+        <button disabled type="button" class="porto-card" id="abrir-mare-a-mao" aria-haspopup="dialog" aria-expanded="false" aria-controls="mare-a-mao">
           <span class="porto-rotulo">Ilha de Improviso</span>
           <span class="porto-apoio">Gere uma travessia do seu jeito</span>
         </button>
-        <button type="button" class="porto-card" id="abrir-som-inicio" aria-haspopup="dialog" aria-expanded="false" aria-controls="configuracao-jogo">
+        <button disabled type="button" class="porto-card" id="abrir-som-inicio" aria-haspopup="dialog" aria-expanded="false" aria-controls="configuracao-jogo">
           <span class="porto-rotulo">Som e música</span>
         </button>
-        <button type="button" class="porto-card" id="creditos-inicio" aria-haspopup="dialog" aria-expanded="false" aria-controls="creditos">
+        <button disabled type="button" class="porto-card" id="creditos-inicio" aria-haspopup="dialog" aria-expanded="false" aria-controls="creditos">
           <span class="porto-rotulo">Créditos</span>
         </button>
       </div>
@@ -183,6 +185,7 @@
         <canvas id="tabuleiro" width="256" height="192" role="img" aria-label="Mapa da fase" aria-describedby="posicao previsao">
           Texto alternativo do mapa disponível em “Mapa em texto e ajuda”.
         </canvas>
+        <p id="aviso-de-jogada" class="aviso-de-jogada" role="status" hidden></p>
         <canvas id="tabuleiro-camera" aria-hidden="true" width="1" height="1"></canvas>
         <canvas id="placa-resultado-v3" width="248" height="84" hidden aria-hidden="true"></canvas>
         <p id="legenda-resultado" hidden aria-hidden="true"></p>

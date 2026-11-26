@@ -1,17 +1,10 @@
+import { lerModulosOffline } from './apoio/importmap.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const arquivo = process.argv[2] ?? 'dist/mare-miuda-prototipo.html';
 const html = readFileSync(arquivo, 'utf8');
-const uri = /data:text\/javascript;base64,[A-Za-z0-9+/]+=*/;
-const entrada = Buffer.from(html.match(uri)[0].split(',')[1], 'base64').toString('utf8');
-
-function importarPor(nome) {
-  // O teste lê o mesmo módulo que o navegador usa na edição offline.
-  const linha = entrada.split('\n').find(l => l.startsWith('import {') && l.includes(nome));
-  assert(linha, nome);
-  return import(linha.match(uri)[0]);
-}
+const { importarPor } = lerModulosOffline(html);
 const { TODAS_AS_FASES } = await importarPor('TODAS_AS_FASES');
 const { executarPasso, iniciar, mareAlta } = await importarPor('executarPasso');
 const { paginaDaFase } = await importarPor('paginaDaFase');

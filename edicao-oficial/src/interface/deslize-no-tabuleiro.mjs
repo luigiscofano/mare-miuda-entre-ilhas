@@ -9,7 +9,7 @@ export function direcaoDoDeslize(dx, dy) {
   if (y >= LIMIAR && y >= x * DOMINANCIA) return dy > 0 ? 'baixo' : 'cima';
 }
 
-export function conectarDeslizeNoTabuleiro(tabuleiro, janela, mover, podeMover) {
+export function conectarDeslizeNoTabuleiro(tabuleiro, janela, mover, podeMover, comandoLivre = () => true) {
   let gesto;
   function cancelar(id = gesto?.id) {
     if (!gesto || gesto.id !== id) return;
@@ -22,14 +22,15 @@ export function conectarDeslizeNoTabuleiro(tabuleiro, janela, mover, podeMover) 
   }, true);
   tabuleiro.addEventListener('pointerdown', evento => {
     if (gesto || evento.pointerType === 'mouse' || !evento.isPrimary || evento.button !== 0 || !podeMover()) return;
-    gesto = { id: evento.pointerId, x: evento.clientX, y: evento.clientY };
+    gesto = { id: evento.pointerId, x: evento.clientX, y: evento.clientY, livre: comandoLivre() };
     tabuleiro.setPointerCapture?.(gesto.id);
   });
   tabuleiro.addEventListener('pointerup', evento => {
     if (!gesto || evento.pointerId !== gesto.id) return;
     const direcao = direcaoDoDeslize(evento.clientX - gesto.x, evento.clientY - gesto.y);
+    const comecouLivre = gesto.livre;
     cancelar();
-    if (direcao && podeMover()) mover(direcao);
+    if (direcao && podeMover() && comandoLivre() && comecouLivre) mover(direcao);
   });
   for (const tipo of ['pointercancel', 'lostpointercapture'])
     tabuleiro.addEventListener(tipo, evento => cancelar(evento.pointerId));

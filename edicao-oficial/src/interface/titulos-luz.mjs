@@ -3,7 +3,8 @@ import { LETREIROS } from '@@MARE:modulo:src/interface/letreiros-luz.mjs@@';
 import { emIngles } from '@@MARE:modulo:src/idiomas/idioma.mjs@@';
 import { LETREIROS_EN } from '@@MARE:modulo:src/idiomas/letreiros-en.mjs@@';
 
-const URI_DA_ARTE = 'data:image/png;base64,';
+const uriDoLetreiro = (valor) => valor.startsWith('./assets/letreiros/')
+  ? valor : 'data:image/png;base64,' + valor;
 export function atualizarTituloIluminado(heading,nome,iluminado) {
  const texto=heading.querySelector('.titulo-luz-texto');
  const desenho=heading.querySelector('.titulo-luz');
@@ -16,7 +17,7 @@ export function atualizarTituloIluminado(heading,nome,iluminado) {
  const camadas=iluminado && Object.hasOwn(catalogo,nome) ? catalogo[nome] : undefined;
  desenho.hidden=!camadas;
  if(!camadas){heading.removeAttribute('data-titulo-luz');return;}
- figura.setAttribute('src', URI_DA_ARTE+camadas[0]);
- reduzido.setAttribute('srcset', URI_DA_ARTE+camadas[1]);
+ figura.setAttribute('src', uriDoLetreiro(camadas[0]));
+ reduzido.setAttribute('srcset', uriDoLetreiro(camadas[1]));
  heading.setAttribute('data-titulo-luz','');
 }

@@ -45,7 +45,7 @@ With the game open, select **EN** in the lower-right corner to play in English. 
 
 ## Game gallery
 
-The **Shell Beach** campaign uses a compact status panel, a three-move tide forecast and shorter end-of-level animations. The board stays the focus: on desktop the status sits to the right, while on mobile it fits above the crossing. The other worlds retain their existing layouts. [Compare desktop and mobile in the gallery](docs/arte/galeria/README.en.md#screens).
+The **Shell Beach** campaign uses a compact status panel, a three-move tide forecast and shorter end-of-level animations. The board stays the focus: on desktop the status sits to the right, while on mobile it fits above the crossing. The same panel appears in **Shadow in the Restinga** and **The Guardians’ Turn**. Other crossings retain their existing layouts. [Compare desktop and mobile in the gallery](docs/arte/galeria/README.en.md#screens).
 
 Crossing frames come from the official engine and camera. The interface images are browser screenshots of the offline HTML with the current typography, without the cursor, on desktop and at an emulated mobile viewport. Where needed, framing removes unused viewport space without cutting the interface shown. [Image sources and resolutions](docs/arte/galeria/README.en.md).
 

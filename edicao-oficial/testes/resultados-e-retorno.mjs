@@ -1,14 +1,9 @@
+import { lerModulosOffline } from './apoio/importmap.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 
 const html=readFileSync(process.argv[2]??'dist/mare-miuda-prototipo.html','utf8');
-const url=/data:text\/javascript;base64,[A-Za-z0-9+/]+=*/;
-const entrada=Buffer.from(html.match(url)[0].split(',')[1],'base64').toString('utf8');
-const importar=(nome)=>{
- const linha=entrada.split('\n').find(l=>l.startsWith('import {')&&l.includes(nome));
- assert(linha,nome);
- return import(linha.match(url)[0]);
-};
+const { entrada, importarPor: importar } = lerModulosOffline(html);
 const {quadroDoRetornoDaMare,pausaParaRecuperacao}=await importar('quadroDoRetornoDaMare');
 const {quadroDoResultado}=await importar('quadroDoResultado');
 const {DURACAO_DO_BOTE_DA_GARCA}=await importar('DURACAO_DO_BOTE_DA_GARCA');
