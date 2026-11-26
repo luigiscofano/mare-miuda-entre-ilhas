@@ -45,7 +45,7 @@ Com o jogo aberto, clique ou toque em **EN** no canto inferior direito para joga
 
 ## Galeria do jogo
 
-A campanha da **Praia das Conchas** tem painel compacto, previsão da virada em três passos e cenas de fim de fase mais curtas. No computador, o estado acompanha a travessia à direita; no celular, cabe acima do tabuleiro. Os demais mundos mantêm a disposição anterior. [Veja computador e celular na galeria](docs/arte/galeria/README.md#telas).
+A campanha da **Praia das Conchas** tem painel compacto, previsão da virada em três passos e cenas de fim de fase mais curtas. No computador, o estado acompanha a travessia à direita; no celular, cabe acima do tabuleiro. O mesmo painel aparece em **Sombra na restinga** e **Turno dos guardiões**. As outras travessias mantêm a disposição anterior. [Veja computador e celular na galeria](docs/arte/galeria/README.md#telas).
 
 Os quadros de travessia vêm do motor e da câmera oficiais. As telas de navegação foram capturadas no HTML offline com a tipografia atual, sem cursor, em navegador de computador e em janela móvel emulada. O enquadramento retira as sobras da janela quando necessário, sem cortar o conteúdo da interface mostrado. [Origem e resolução das imagens](docs/arte/galeria/README.md).
 

@@ -1,13 +1,11 @@
+import { lerModulosOffline } from './apoio/importmap.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 
 const html = readFileSync(process.argv[2] ?? 'dist/mare-miuda-prototipo.html', 'utf8');
-const uri = /data:text\/javascript;base64,[A-Za-z0-9+/]+=*/;
-const textoDaUri = url => Buffer.from(url.split(',')[1], 'base64').toString('utf8');
-const entrada = textoDaUri(html.match(uri)[0]);
-const controlador = entrada.split('\n').find(linha => linha.startsWith('import { criarAudio, ativouBotao }')).match(uri)[0];
-const { criarAudio, ativouBotao } = await import(controlador);
+const { importarPor } = lerModulosOffline(html);
+const { criarAudio, ativouBotao } = await importarPor('criarAudio, ativouBotao');
 const recibos = {
   cavar: '1a96bf2c210507c3104363ad5decf6c0b50e91d581e6f159887d6c2f6a4e6745',
   'clique-botao': 'c7ce544a16c37f1931cfea6b7b4aef65efaa587f9a6228ba5910da1837695132',

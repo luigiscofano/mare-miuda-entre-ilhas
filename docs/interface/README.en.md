@@ -20,9 +20,11 @@ At Starting Harbor, the **EN** button sits directly over the ocean in the lower-
 
 ## Shell Beach layout
 
-The **Shell Beach** campaign uses a compact status panel, a three-move tide forecast and shorter end-of-level animations. The board stays the focus: on desktop the status sits to the right, while on mobile it fits above the crossing. The other worlds retain their existing layouts.
+The **Shell Beach** campaign uses a compact status panel, a three-move tide forecast and shorter end-of-level animations. The board stays the focus: on desktop the status sits to the right, while on mobile it fits above the crossing. The same panel appears in **Shadow in the Restinga** and **The Guardians’ Turn**. Other crossings retain their existing layouts.
 
 The state strip shows the objective, turns left before the tide changes, moves, and mistakes. It confirms the new tide when the water animation finishes. The shortest mobile labels keep their full accessible names. Victory begins with a shell glint; defeat shows the cause, then offers a retry. Both keep keyboard focus on the next available action.
+
+On the first level, the arrow-key or swipe hint goes away after the first valid move. A cyan bar marks the tidal flat that will flood one move before the first tide change. It is not a destination marker. The compact panel distinguishes an accepted move, a blocked route, and a crab recovering. Recovery still discards commands rather than queuing them.
 
 ## Movement
 

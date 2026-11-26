@@ -1,12 +1,11 @@
+import { lerModulosOffline } from './apoio/importmap.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 // Exercita a animação carregada pelo navegador, não uma cópia do algoritmo.
 const html = readFileSync(process.argv[2] ?? 'dist/mare-miuda-prototipo.html','utf8');
-const uri = /data:text\/javascript;base64,[A-Za-z0-9+/]+=*/;
-const entrada = Buffer.from(html.match(uri)[0].split(',')[1], 'base64').toString('utf8');
-const linha = entrada.split('\n').find(l => l.startsWith('import {') && l.includes('posesDaPassada'));
-const { posesDaPassada, proximaPoseDaPassada, DURACAO_DA_PASSADA } = await import(linha.match(uri)[0]);
+const { importarPor } = lerModulosOffline(html);
+const { posesDaPassada, proximaPoseDaPassada, DURACAO_DA_PASSADA } = await importarPor('posesDaPassada');
 assert.equal(DURACAO_DA_PASSADA,205);
 for(const [campanha,janela,a,b] of [[true,205,66,136],[false,165,53,109]]) {
  for (const [dx,dy] of [[48,0],[-48,0],[0,48],[0,-48]]) {

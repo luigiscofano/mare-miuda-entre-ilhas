@@ -1,13 +1,10 @@
+import { lerModulosOffline } from './apoio/importmap.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const html = readFileSync(process.argv[2] ?? 'dist/mare-miuda-prototipo.html', 'utf8');
-const entrada = html.match(/<script type="module" src="(data:text\/javascript;base64,[^"]+)">/)?.[1];
-assert(entrada, 'Módulo de entrada ausente');
-const fonte = Buffer.from(entrada.split(',')[1], 'base64').toString('utf8');
-const modulo = fonte.match(/import \{ conectarDeslizeNoTabuleiro \} from '(data:text\/javascript;base64,[^']+)'/)?.[1];
-assert(modulo, 'Controle de deslize ausente');
-const { conectarDeslizeNoTabuleiro } = await import(modulo);
+const { entrada: fonte, importarPor } = lerModulosOffline(html);
+const { conectarDeslizeNoTabuleiro } = await importarPor('conectarDeslizeNoTabuleiro');
 assert(!html.includes('id="direcoes-da-fase"'));
 assert(!/data-direcao="(?:cima|baixo|esquerda|direita)"/.test(html));
 assert(fonte.includes("conectarDeslizeNoTabuleiro(buscar('#moldura'), window, mover,"));

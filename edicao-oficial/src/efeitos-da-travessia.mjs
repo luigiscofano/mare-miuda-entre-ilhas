@@ -6,7 +6,13 @@ const EFEITOS = [
 const LIMITE_PRIMEIRO_CLIQUE_MS = 180;
 
 function carregarEfeito(nome) {
-  const embutido = document.querySelector(`#efeito-offline-${nome}`)?.textContent;
+  const fonte = document.querySelector(`#efeito-offline-${nome}`);
+  // Na Web o WAV original só é requisitado quando o áudio é habilitado.
+  if (fonte?.dataset?.src) return fetch(fonte.dataset.src).then(resposta => {
+    if (!resposta.ok) throw new Error('Não foi possível carregar o áudio.');
+    return resposta.arrayBuffer();
+  });
+  const embutido = fonte?.textContent;
   if (!embutido) throw new Error('Efeito offline indisponível.');
   const binario = atob(embutido.trim());
   const dados = new Uint8Array(binario.length);

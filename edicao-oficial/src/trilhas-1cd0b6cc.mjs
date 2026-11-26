@@ -2,7 +2,13 @@ const PISTA_EMBUTIDA = '#trilha-offline-violao';
 const SUBIDA_DE_GANHO = 0.02;
 
 export function carregarTrilha() {
-  const embutido = document.querySelector(PISTA_EMBUTIDA)?.textContent;
+  const fonte = document.querySelector(PISTA_EMBUTIDA);
+  // Na Web o WAV original só é requisitado quando o áudio é habilitado.
+  if (fonte?.dataset?.src) return fetch(fonte.dataset.src).then(resposta => {
+    if (!resposta.ok) throw new Error('Não foi possível carregar o áudio.');
+    return resposta.arrayBuffer();
+  });
+  const embutido = fonte?.textContent;
   if (!embutido) throw new Error('Trilha offline indisponível.');
   const binario = atob(embutido.trim());
   const dados = new Uint8Array(binario.length);

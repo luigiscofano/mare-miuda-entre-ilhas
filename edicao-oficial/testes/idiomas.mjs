@@ -1,3 +1,4 @@
+import { lerModulosOffline } from './apoio/importmap.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
@@ -6,16 +7,7 @@ const html = readFileSync(process.argv[2] ?? 'dist/mare-miuda-prototipo.html', '
 assert.equal([...html.matchAll(/<button[^>]*\bdata-idioma-jogo\b/g)].length, 2);
 assert.match(html, /<div class="barra-idioma"><button id="idioma-jogo"/);
 assert.match(html, /<section id="configuracao-jogo"[\s\S]*?<div class="painel-rodape-idioma" hidden>/);
-const uri = /data:text\/javascript;base64,[A-Za-z0-9+/]+=*/;
-const entrada = html.match(/<script type="module" src="([^"]+)"><\/script>/)?.[1];
-assert(entrada, 'Arquivo offline sem módulo de entrada');
-const fonte = Buffer.from(entrada.split(',')[1], 'base64').toString('utf8');
-
-function importarPor(nome) {
-  const linha = fonte.split('\n').find(l => l.startsWith('import {') && l.includes(nome));
-  assert(linha, nome);
-  return import(linha.match(uri)[0]);
-}
+const { importarPor } = lerModulosOffline(html);
 const { TODAS_AS_FASES } = await importarPor('TODAS_AS_FASES');
 const { faseEmIngles, ligarIdioma, registrarTextosDaCampanha, traduzir } = await importarPor('ligarIdioma');
 for (const fase of TODAS_AS_FASES) {

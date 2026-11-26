@@ -267,7 +267,7 @@ import { campanhaConcluida, CAPITULO_FINAL, concluirFase, entradaEm, entradasDo,
 
 /* Interface antiga removida: d49eca8b */
 import { carregar, salvar } from '@@MARE:modulo:src/chave-save-195edf7f.mjs@@';
-import { ligarIdioma, registrarTextosDaCampanha } from '@@MARE:modulo:src/idiomas/idioma.mjs@@';
+import { faseEmIngles, ligarIdioma, registrarTextosDaCampanha } from '@@MARE:modulo:src/idiomas/idioma.mjs@@';
 import { criarPaineisDeApoio } from '@@MARE:modulo:src/interface/paineis-de-apoio.mjs@@';
 import { criarAudio, ativouBotao } from '@@MARE:modulo:src/criar-audio-a0d48b79.mjs@@';
 import { gerarMareAMao, DIFICULDADES_MARE_A_MAO, MUNDOS_MARE_A_MAO,                     } from '@@MARE:modulo:src/mundos-mare-a-mao-c249fd0f.mjs@@';
@@ -336,6 +336,9 @@ function montarCanvas(seletor        , moldura        ) {
   return { ctx, escala, ajustarQuadro };
 }
 
+// As duas travessias aprovadas usam o mesmo painel da Praia. As outras
+// fases conservam sua disposição e seus sinais anteriores.
+const travessiasComPainelCompacto = new Set(['enseada-sombra-restinga', 'farol-turno-dos-guardioes']);
 function storageLocal() {
   try { return window.localStorage; } catch { return undefined; }
 }
@@ -401,6 +404,7 @@ function apresentarTravessia() {
   ctxDaCamera.imageSmoothingEnabled = false;
   paintCameraBackground(ctxDaCamera,metadadosDaCamera.width,metadadosDaCamera.height,{phase:fase.id,world:temaDaFase(),camera:metadadosDaCamera});
   ctxDaCamera.drawImage(origemDaCamera, left, top, origemDaCamera.width*scale, origemDaCamera.height*scale);
+  marcarBaixiosDaPrimeiraVirada(ctxDaCamera, {left, top, scale});
   decorateCamera(ctxDaCamera,{...metadadosDaCamera,phase:fase.id,world:temaDaFase(),canvas:origemDaCamera});
   ctxDaCamera.drawImage(ultimaMoldura,0,0);
 }
@@ -474,7 +478,8 @@ const SETAS_DO_PAINEL = { cima:'↑', esquerda:'←', baixo:'↓', direita:'→'
 const movimentoReduzidoDoJogo=window.matchMedia?.('(prefers-reduced-motion: reduce)');
 let relogioAmbiente, pisadaDaTravessia, perigosDaTravessia, retornoDaMare, inicioDaPausaDeRecuperacao;
 let bloquearDirecaoAte=0, viradaDaTravessia, relogioDaTrava;
-const praiaPolida = () => modoCampanha() && temaDaFase() === 'praia';
+const praiaPolida = () => modoCampanha() && (temaDaFase() === 'praia'
+  || travessiasComPainelCompacto.has(fase.id));
 let mareVisivel;
 let chaveRelogio;
 const agoraDaTravessia=()=>globalThis.performance?.now?.() ?? Date.now();
@@ -686,6 +691,7 @@ function atualizarTravaDeRecuperacao(){
   // Clicar e deslizar nunca enfileiram movimentos durante a recuperação.
   const travada=resto>0&&tela==='fase'&&modoCampanha()&&estado.situacao==='jogando';
   buscar('#moldura').classList.toggle('recuperando-siri', travada);
+  atualizarAvisoDeJogada();
   if(travada)relogioDaTrava=window.setTimeout?.(atualizarTravaDeRecuperacao,resto);
 }
 function zerarPausaDeRecuperacao(){
@@ -970,6 +976,11 @@ function atualizarObjetivoPolido() {
   no.hidden=!praiaPolida();
   if(no.hidden)return;
   const en=(document.documentElement.getAttribute('lang')??'pt-BR').startsWith('en');
+  // A regra de chegada dos dois Siris não cabe no texto curto da Praia.
+  if (travessiasComPainelCompacto.has(fase.id)) {
+    no.textContent = en ? faseEmIngles(fase.id)?.objetivo ?? fase.objetivo : fase.objetivo;
+    return;
+  }
   no.textContent=totalFragmentos(fase)
     ? (en?'Collect the pearls, then reach the oyster.':'Recolha as pérolas e alcance a ostra.')
     : (en?'Reach the bright shell.':'Alcance a concha brilhante.');
@@ -979,7 +990,7 @@ function atualizarMotivoDaDerrota() {
   const motivo = buscar('#motivo-da-derrota');
   const causas = resultadoDaTravessia?.causa ?? [];
   const en = (document.documentElement.getAttribute("lang") ?? "pt-BR").startsWith('en');
-  motivo.hidden = temaDaFase() !== 'praia' || estado.situacao !== 'derrota' || !causas.length;
+  motivo.hidden = !praiaPolida() || estado.situacao !== 'derrota' || !causas.length;
   if (motivo.hidden) return;
   const agua = causas.includes('mare'), garca = causas.includes('garca');
   if (agua && garca) motivo.textContent = en ? 'The tide and the heron caught you on that move.' : 'A maré e a garça alcançaram o Siri no mesmo passo.';
@@ -1159,6 +1170,7 @@ function prepararFase(mensagem         , focar = true)       {
   buscar('#voltar-fase').textContent = desafioAvulso ? 'Editar filtros' : bancada ? 'Tela inicial' : mundoAtual(save.progresso) === 'praia' ? 'Voltar à praia' : 'Voltar ao mapa';
   niveis.forEach((botao, i) => botao.setAttribute('aria-pressed', String(indice === i)));
   trocarTela('fase', focar);
+  sinalizarAcao();
   atualizarFase([], mensagem ?? 'Fase selecionada. Maré baixa.');
 }
 
@@ -1255,13 +1267,72 @@ function mover(direcao) {
   jogarAcao(direcao);
 }
 
+let avisoDeAcao;
+let tempoDoAviso;
+let jogouOPrimeiroPasso = false;
+
+// O aviso não participa da grade nem deixa um movimento em fila.
+function atualizarAvisoDeJogada() {
+  const aviso = buscar('#aviso-de-jogada');
+  const emJogo = tela === 'fase' && estado.situacao === 'jogando' && praiaPolida();
+  const primeiraFase = fase.id === 'primeira-onda';
+  const gesto = window.matchMedia?.('(hover: none) and (pointer: coarse)').matches;
+  const tipo = !emJogo ? undefined
+    : bloquearDirecaoAte > agoraDaTravessia() ? 'recuperando'
+    : avisoDeAcao || (primeiraFase && !jogouOPrimeiroPasso ? 'inicio'
+      : primeiraFase && estado.passos === 2 ? 'virada' : undefined);
+  aviso.hidden = !tipo;
+  if (!tipo) return;
+  const en = document.documentElement.lang.startsWith('en');
+  const textos = {
+    inicio: gesto ? ['Deslize no tabuleiro para mover o Siri.', 'Swipe on the board to move the crab.']
+      : ['Use as setas para mover o Siri.', 'Use the arrow keys to move the crab.'],
+    aceito: ['Passo aceito', 'Move accepted'],
+    bloqueado: ['Caminho bloqueado. A maré não avançou.', 'Path blocked. The tide did not advance.'],
+    recuperando: ['Siri se recuperando…', 'Crab recovering…'],
+    virada: ['Este baixio alaga no próximo passo.', 'This tidal flat floods on the next move.'],
+  };
+  const texto = textos[tipo][Number(en)];
+  if (aviso.textContent !== texto) aviso.textContent = texto;
+  aviso.dataset.aviso = tipo;
+}
+
+function sinalizarAcao(tipo, duracao) {
+  clearTimeout(tempoDoAviso);
+  avisoDeAcao = tipo;
+  atualizarAvisoDeJogada();
+  if (tipo) tempoDoAviso = setTimeout(() => sinalizarAcao(), duracao);
+}
+
+function marcarBaixiosDaPrimeiraVirada(ctx, {left, top, scale}) {
+  if (fase.id !== 'primeira-onda' || estado.passos !== 2 || estado.situacao !== 'jogando') return;
+  const {origemX, origemY} = quadroDaPraia(fase.mapa);
+  // Um filete central não vira uma moldura nem imita os tracinhos das quinas.
+  ctx.fillStyle = '#b5e7eb';
+  fase.mapa.forEach((linha, y) => Array.from(linha).forEach((casa, x) => {
+    if (casa !== '=') return;
+    const px = Math.round(left + scale * (origemX + 48 * x + 16));
+    const py = Math.round(top + scale * (origemY + 48 * y + 9));
+    ctx.fillRect(px, py, Math.max(4, Math.round(16 * scale)), Math.max(1, Math.round(2 * scale)));
+  }));
+}
+
 function jogarAcao(acao         )       {
   if (tela !== 'fase' || estado.situacao !== 'jogando' || configuracoesNaFaseAbertas()) return;
   // Comando descartado antes do motor, sem fila.
-  if(agoraDaTravessia()<bloquearDirecaoAte)return;
+  if (agoraDaTravessia() < bloquearDirecaoAte) {
+    atualizarAvisoDeJogada();
+    return;
+  }
   const antes = estado;
   const transicao = executarPasso(fase, estado, acao);
   estado = transicao.estado;
+  if (estado.passos !== antes.passos) {
+    if (fase.id === 'primeira-onda') jogouOPrimeiroPasso = true;
+    sinalizarAcao('aceito', DURACAO_DA_PASSADA);
+  } else if (transicao.eventos.some(evento => ['bloqueado', 'fenda-bloqueada'].includes(evento.tipo))) {
+    sinalizarAcao('bloqueado', 1050);
+  }
   // Só uma direção consumida pelo motor conta no histórico visual.
   if (estado.passos !== antes.passos && Object.hasOwn(SETAS_DO_PAINEL, acao)) ultimaDirecaoDoPainel = acao;
   if (modoCampanha() && estado.situacao === 'vitoria' && ehIdFase(fase.id)) {
@@ -1526,8 +1597,12 @@ for (const canal of ['musica', 'efeitos']         ) {
 
 conectarTeclado(window, mover, reiniciar, () => {}, voltar, () => tela === 'fase' && !configuracoesNaFaseAbertas());
 const cancelarDeslizeNaFase = conectarDeslizeNoTabuleiro(buscar('#moldura'), window, mover,
-  () => tela === 'fase' && estado.situacao === 'jogando' && !configuracoesNaFaseAbertas()
-    && agoraDaTravessia() >= bloquearDirecaoAte);
+  () => tela === 'fase' && estado.situacao === 'jogando' && !configuracoesNaFaseAbertas(),
+  () => {
+    const liberado = agoraDaTravessia() >= bloquearDirecaoAte;
+    if (!liberado) atualizarAvisoDeJogada();
+    return liberado;
+  });
 // No toque a ativação acontece no fim do gesto. Clique também cobre o
 // acionamento por tecnologia assistiva, sem depender de mouse ou gesto anterior.
 window.addEventListener('pointerdown', evento => {
@@ -1559,10 +1634,11 @@ ligarIdioma(document, () => {
     atualizarMotivoDaDerrota();
   }
   atualizarTituloIluminado(buscar('#nome-fase'), fase.nome, modoCampanha());
+  atualizarAvisoDeJogada();
   pintarFase();
 }, new URLSearchParams(globalThis.location?.search ?? '').get('lang'));
-
-
+buscar('#jogo').setAttribute('data-jogo-pronto', '');
+for (const botao of document.querySelectorAll('#inicio .porto-card[disabled]')) botao.disabled = false;
 // Borda e arte usam pixels físicos. O frame é desenhado depois da torre,
 // por isso a última linha de pedra entra um pixel sob a moldura inferior.
 export function posicionarFarolNaBorda(d,originais,adicionais=[],fonte) {

@@ -20,9 +20,11 @@ No Porto, o botão **EN** fica sozinho no canto inferior direito, por cima do ma
 
 ## Disposição na Praia das Conchas
 
-A campanha da **Praia das Conchas** tem painel compacto, previsão da virada em três passos e cenas de fim de fase mais curtas. No computador, o estado acompanha a travessia à direita; no celular, cabe acima do tabuleiro. Os demais mundos mantêm a disposição anterior.
+A campanha da **Praia das Conchas** tem painel compacto, previsão da virada em três passos e cenas de fim de fase mais curtas. No computador, o estado acompanha a travessia à direita; no celular, cabe acima do tabuleiro. O mesmo painel aparece em **Sombra na restinga** e **Turno dos guardiões**. As outras travessias mantêm a disposição anterior.
 
 O painel mostra o objetivo, os passos até a virada, o total de passos e os erros. A maré nova é confirmada no fim do movimento da água. Os rótulos curtos no celular preservam seus nomes acessíveis completos. Na vitória, a concha brilha antes da placa; na derrota, aparece a causa e a opção de tentar de novo. Nos dois casos, o foco de teclado vai para a próxima ação disponível.
+
+Na primeira fase, a dica de setas ou deslize some após o primeiro movimento válido. Um filete ciano marca o baixio que alaga no próximo passo, apenas na primeira virada. Não é um indicador de destino. O painel compacto distingue passo aceito, caminho bloqueado e Siri se recuperando. A recuperação continua descartando comandos, sem fila.
 
 ## Movimento
 

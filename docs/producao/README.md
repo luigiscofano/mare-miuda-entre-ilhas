@@ -19,6 +19,13 @@ A [campanha](../campanha/README.md) preserva os identificadores usados nos saves
 
 O montador lê o `edicao-oficial/assets.zip` original e o `edicao-oficial/assets-tipografia.zip`, que reúne as bases localizadas para o texto normal. Ambos são necessários; caminhos de recursos repetidos são rejeitados. Os letreiros detalhados em pixel art continuam no jogo.
 
+O HTML independente inclui cada módulo uma única vez por meio de um importmap. A edição Web serve módulos, WAVs e imagens dos títulos separadamente. As duas usam as mesmas regras e conteúdo. Teste a Web com servidor local, não por uma URL de arquivo.
+
+```sh
+python3 edicao-oficial/montar.py dist/web/index.html --web
+python3 -m http.server 8000 --directory dist/web
+```
+
 ## Validação dos controles
 
 ```sh
