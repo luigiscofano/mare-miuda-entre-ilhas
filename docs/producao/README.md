@@ -110,3 +110,7 @@ No Porto, escolha filtros diferentes dos padrões na [Ilha de Improviso](../inte
 ## Praia das Conchas: verificação do fluxo
 
 No computador e a 320 px, confira o aviso de virada em três passos, a animação completa da maré, uma vitória e uma derrota com nova tentativa. Abra Configurações no meio da partida, alterne o idioma e confirme que a contagem de passos e o progresso salvo foram preservados. Volte ao seletor e confira o retorno à mesma página e ao foco na mesma fase.
+
+## GitHub Pages
+
+O workflow do Pages verifica a edição atual e reconstrói o marco histórico. Pull requests só validam; a publicação é exclusiva da `main`. Jogo online, download offline e versão histórica têm URLs separadas.

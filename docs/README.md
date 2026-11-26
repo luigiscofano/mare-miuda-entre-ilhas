@@ -2,6 +2,7 @@
 
 **Português** · [English](README.en.md)
 
+- [Versões marcantes](versoes-marcantes/README.md): cópias jogáveis congeladas, com reconstrução e verificação de integridade.
 - [Filme Os oito mundos](arte/animacoes/README.md#os-oito-mundos): replays de 24 vitórias, seletores da campanha e retorno ao Porto.
 - [Arte](arte/README.md): atlas, [galeria do jogo](arte/galeria/README.md) e travessias.
 - [Interface](interface/README.md): seleção de mundos e fases, controles da campanha, [painéis de apoio](interface/README.md#painéis-de-apoio) e [Ilha de Improviso](interface/README.md#ilha-de-improviso).

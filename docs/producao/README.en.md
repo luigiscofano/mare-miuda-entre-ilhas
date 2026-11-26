@@ -111,3 +111,7 @@ In Porto, choose non-default filters in [Ilha de Improviso](../interface/README.
 ## Shell Beach: end-to-end check
 
 On desktop and at 320 px, check the three-step tide cue, the completed tide animation, a win and a retry after defeat. Open Settings in the middle of a level, switch languages, and confirm that the current step count and saved progression are unchanged. Return to the selector and check that the same page and level regain focus.
+
+## GitHub Pages
+
+The Pages workflow verifies the current build and rebuilds the historical snapshot. Pull requests validate only; publishing is exclusive to `main`. The online game, offline download and archive use separate URLs.
